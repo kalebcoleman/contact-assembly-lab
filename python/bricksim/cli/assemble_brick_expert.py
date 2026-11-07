@@ -162,8 +162,6 @@ def main() -> int:
     Returns:
         Process exit code.
     """
-    import isaacsim_rtx_compat  # noqa: F401, I001
-
     from isaaclab.app import AppLauncher
 
     parser = build_argument_parser()

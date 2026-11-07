@@ -2,13 +2,13 @@
 name = "bricksim-dev"
 version = "0.0.0"
 description = "BrickSim development environment"
-requires-python = ">=3.11,<3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
-    "bricksim[all,stablelego]",
-    "lerobot==0.4.4",
-    "torch==2.7.0+cu128",
-    "torchvision==0.22.0+cu128",
-    "torchaudio==2.7.0+cu128",
+    "bricksim[isaacsim,stablelego]",
+    "lerobot>=0.5.1",
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "torchaudio==2.11.0",
     "opencv-python==4.11.0.86",
 ]
 
@@ -26,23 +26,22 @@ environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
 exclude-dependencies = [
     # LeRobot introduces it, but it conflicts with openv-python
     "opencv-python-headless",
+    # Isaac Sim 6.2 introduces this cv2 build (an index-only pre-release); it conflicts with opencv-python too.
+    "opencv-python-headless-noffmpeg",
 ]
 override-dependencies = [
-    # Work around Isaac Sim's unconditional pywin32 dependency on non-Windows platforms.
-    "pywin32==306 ; sys_platform == 'win32'",
-    # LeRobot requires packaging>=24.2 while Isaac Lab pins packaging<24.
-    "packaging==24.2",
-    # Isaac Sim requires numpy 1.x.
-    "numpy==1.26.4",
+    # IsaacSim vs Lerobot
+    "packaging==26.0",
+    "numpy==2.3.1",
 ]
 
 [tool.uv.sources]
 bricksim = { path = "python", editable = true }
-torch = { index = "pytorch-cu128" }
-torchvision = { index = "pytorch-cu128" }
-torchaudio = { index = "pytorch-cu128" }
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+torchaudio = { index = "pytorch-cu130" }
 
 [[tool.uv.index]]
-name = "pytorch-cu128"
-url = "https://download.pytorch.org/whl/cu128"
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
 explicit = true
