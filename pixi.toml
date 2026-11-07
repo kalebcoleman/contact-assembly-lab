@@ -5,7 +5,10 @@ platforms = ["linux-64"]
 version = "0.1.0"
 
 [system-requirements]
-libc = { family = "glibc", version = "2.35" }
+# conda-forge has no glibc 2.35 sysroot, and Isaac Sim 6.2's libpython3.12.so needs
+# hypot@GLIBC_2.35, so build against the 2.39 sysroot. AbiCheck.cmake rejects any
+# symbol newer than GLIBC 2.35, so outputs still run on Ubuntu 22.04.
+libc = { family = "glibc", version = "2.39" }
 
 [tasks]
 format-native = { cmd = "cmake --workflow --preset format", cwd = "native" }
@@ -17,7 +20,7 @@ test-native-debug = "scripts/build.sh debug-tests"
 test-native-release = "scripts/build.sh release-tests"
 
 [dependencies]
-python = "==3.11.15"
+python = "==3.12.13"
 cmake = "==4.3.1"
 ninja = "==1.13.2"
 clangxx = "==22.1.3"

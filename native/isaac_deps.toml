@@ -3,8 +3,8 @@ namespace = "bricksim/isaac-deps"
 
 [[artifacts]]
 name = "kit"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/kit-kernel%40107.3.3%2Bisaac.229672.69cbf6ad.gl.manylinux_2_35_x86_64.release.zip"
-sha256 = "d25c458933838dee75eabb941f9193865444653265eed5ddd60c6ca7c212d661"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/kit-kernel%40110.4.0%2Bfeature.manylinux_2_35_x86_64.release.zip"
+sha256 = "b356850964ed4b876244f449f176f551a5c1f66b4d89c56edef85fe8af151706"
 
 [[artifacts.patches]]
 path = "sdk_patches/kit_include.patch"
@@ -12,23 +12,23 @@ root = "dev/include"
 
 [[artifacts]]
 name = "carb"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/carb_sdk%2Bplugins.manylinux_2_35_x86_64%40206.6%2Brelease.9587.07f17b1b.gl.7z"
-sha256 = "88399f41325b0569e57d4cf38999a613ea47baf744caeac1039bc82d684270fd"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/carb_sdk%2Bplugins.manylinux_2_35_x86_64%40210.4.11%2Brelease.15522.174283e4.gl.7z"
+sha256 = "58f9240d6a7c1ba34a049e251ee9f895846cc0568fe83e7cd28c78aaaa559604"
 
 [[artifacts]]
 name = "omni_client"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/omni_client_library.linux-x86_64%402.67.0.7z"
-sha256 = "41967c3e9904ac9f85d56c60a422cabf43425e29e27ac50f37a502f81170096b"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/omni_client_library.manylinux_2_35_x86_64%402.74.0.7z"
+sha256 = "b1a1438bc8d1c21b6aea26f647ee9d6171368c125691ffa0aad071c5335e0061"
 
 [[artifacts]]
 name = "physx"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/physxsdk%405.6.1.f9c67de2-release-107.3-linux-x86_64.zip"
-sha256 = "d5abba06e8c2b09f51776de8697661f340cdf3e78182ec5b0d237ac4a6c23906"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/physxsdk%405.9.2.94859732-release-omni-110.4-linux-x86_64.zip"
+sha256 = "0b6f0287dfff108d22ee5f80ad627df52cbc47b34b8601aee74d23977981ddc9"
 
 [[artifacts]]
 name = "usd"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/usd.py311.manylinux_2_35_x86_64.stock.release%400.24.05.kit.7-gl.16400%2B05f48f24.7z"
-sha256 = "66723886655415aa634bba6b9dd225d37b295cfc3a522aa4abc6c37de6d53809"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/usd.py312.manylinux_2_35_x86_64.stock.release%400.25.11.kit.5-gl.21188.7z"
+sha256 = "7428854f1a73959f0fe3f47b87c003b76e32f6492e29283c22cb2552e7dad9a7"
 
 [[artifacts.patches]]
 path = "sdk_patches/usd_include.patch"
@@ -36,25 +36,25 @@ root = "include"
 
 [[artifacts]]
 name = "usd_ext_physics"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/usd_ext_physics%4024.05%2Brelease.40469.09c54277.gl.manylinux_2_35_x86_64.release.7z"
-sha256 = "de5bafc6a132c1a180b12953ee581f062ddf4d4d5364d35459ada4f2aa0b414c"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/usd_ext_physics%4025.11%2Bfeature.78482.ea68db0a.gl.manylinux_2_35_x86_64.release.7z"
+sha256 = "dea231ab5398197d6f6470255229a29aa2f7d6c77139863717bef9fb9e538aea"
 
 [[artifacts]]
 name = "omni_physics"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/omni_physics%40107.3.26-36011981-release_107.3-3a61992c-manylinux_2_35_x86_64.7z"
-sha256 = "720062a96cf03bcd36cfb439ed9aac2640cb8c37da8de0e7b4e8b28f52972397"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/omni_physics%40110.4.4-71920476-release_omni_110.4-fb296f7d-manylinux_2_35_x86_64.7z"
+sha256 = "ff53917b059db0620d64c9c787cdde7f7659c95dd9a252fef2bce914a6e3fac9"
 
 [[artifacts]]
 name = "python"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/python%403.11.13%2Bnv1-linux-x86_64.7z"
-sha256 = "f8db1b23d8b4bf0c39fa60aec179e25e61582ea96727ca67a044bc9af3074650"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/python%403.12.14%2Bnv3-manylinux_2_35_x86_64.7z"
+sha256 = "a6a558fd95f971054b7a4619e21c7ba055e22ac25782216a0d627f4379b0bbf0"
 
 [[artifacts]]
 name = "omni_usd_core"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/omni.usd.core-9ce8448d1db810d8.zip"
-sha256 = "9606a5faa889114bd7c39677e7b1d25971964767b08b21983bfa673b513e2d42"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/omni.usd.core-b98bb4f47c107289.zip"
+sha256 = "332ddf8d908714e87c0c0d623b5eb4585702a5f5838e52e3479b74713b5f0acd"
 
 [[artifacts]]
 name = "omni_usd_schema_audio"
-url = "https://d4i3qtqj3r0z5.cloudfront.net/omni.usd.schema.audio-e6f3b0dc8dc66d41.zip"
-sha256 = "3f26cb31b604507148a5113427b4b143c9c36eef4a9fa0561d1e1341d1e4f519"
+url = "https://d4i3qtqj3r0z5.cloudfront.net/omni.usd.schema.audio-89c4ec758fc1fb4d.zip"
+sha256 = "1086677b46eda6814c281d2086d2405ec51c7dc3221293f6e8858f2aef3023a1"
