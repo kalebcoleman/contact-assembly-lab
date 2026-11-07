@@ -90,7 +90,7 @@ SPECS = {
         (W, 1, (0, 0), 0),
         (D, 2, (4, 0), 0),
     ],
-    # Mixed 2x2, 2x4 and 2x6 bricks, each centered on the one below.
+    # Mixed 2x2, 2x4 and 2x6 bricks; offsets auto-found (smallest valid, not centered).
     "mixed_tower": [(D, None, (9, 9), 0)]
     + [(size, i, None, 0) for i, size in enumerate([A, W, B, D, A, W, D])],
 }

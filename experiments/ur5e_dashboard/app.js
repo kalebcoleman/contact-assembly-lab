@@ -817,7 +817,7 @@ function showStructure(name) {
         <td>${trial.breakage === null || trial.breakage === undefined ? "—" : trial.breakage ? "on" : "off"}</td>
         <td>${escapeText(trialLabel(trial))}</td>
         <td>${escapeText(trial.outcome)}</td>
-        <td>${escapeText(trial.failure || "")}</td>
+        <td title="${escapeText(trial.failure || "")}">${escapeText((trial.failure || "").replace(/: connected=[\s\S]*$/, ""))}</td>
         <td>${escapeText(trial.notes || "")}</td>
         <td>${trial.run_id ? `<button class="case-link" type="button" data-run="${escapeText(trial.run_id)}">Open run</button>` : ""}</td>
       </tr>`,

@@ -38,7 +38,8 @@ Add a real-robot trial by hand, with the same fields:
 }
 ```
 
-`outcome` is `completed` when every brick connected and the run ended cleanly,
+`bricks_connected` counts bricks still connected at the end, so a joint that broke
+after forming is not counted. `outcome` is `completed` when every brick connected and the run ended cleanly,
 otherwise `failed` (or `incomplete`/`timeout` for simulation). `breakage` is the
 simulator's breakage model (`true`/`false`); use `null` for real trials.
 

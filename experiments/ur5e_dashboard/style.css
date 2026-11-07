@@ -1087,6 +1087,8 @@ footer span {
   text-align: center;
 }
 .structure-layer svg {
+  /* The global icon stroke would be 1.7 studs wide in this stud-unit viewBox. */
+  stroke: none;
   display: block;
   width: 168px;
   height: 168px;

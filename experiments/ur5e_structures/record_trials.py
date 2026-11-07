@@ -1,9 +1,10 @@
 """Add simulation trials of structures to `trials.json` from recorded runs.
 
 Each recording under `outputs/ur5e_lego/` whose experiment is `structure_<name>`
-(or `dog_ten*`, recorded as structure `dog`) becomes one trial. Connections and
-the end status come from the recording's last sample; the first failure message
-comes from the matching console log under `outputs/ur5e_dog/`. Trials already in
+(or `dog_ten*`, recorded as structure `dog`) becomes one trial. Connections are
+the bricks still connected in the recording's last sample, so a joint that broke
+after forming is not counted. The first failure message comes from the matching
+console log under `outputs/ur5e_dog/`; a run with one is `failed`. Trials already in
 the file (same recording) are kept unchanged. Real-robot trials are added to the
 same file by hand; see README.md.
 
@@ -122,6 +123,9 @@ def main() -> None:
             "failure": failures.get(path.name),
             "notes": "",
         }
+        # A run that raised never writes its end record.
+        if trial["outcome"] == "incomplete" and trial["failure"]:
+            trial["outcome"] = "failed"
         trials.append(trial)
         print(
             f"{name}: {trial['bricks_connected']}/{trial['bricks_total']} "
