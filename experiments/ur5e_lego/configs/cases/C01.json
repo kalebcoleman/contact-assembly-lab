@@ -1,0 +1,42 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ],
+    [
+      -0.55,
+      -0.48
+    ],
+    [
+      -0.32,
+      -0.5
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ],
+    [
+      9,
+      8
+    ],
+    [
+      15,
+      8
+    ]
+  ],
+  "experiment_name": "case_C01",
+  "case": {
+    "id": "C01",
+    "category": "nominal",
+    "title": "Nominal: three bricks on the baseplate",
+    "expected_outcome": "connected",
+    "prediction_basis": "Existing scene, no injected error."
+  }
+}

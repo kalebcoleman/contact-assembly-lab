@@ -1,0 +1,53 @@
+{
+  "robot_tool_frame": [
+    {
+      "brick": 1,
+      "samples": 141,
+      "axis_range_mm": [
+        1.2352,
+        0.7079,
+        0.0225
+      ]
+    },
+    {
+      "brick": 2,
+      "samples": 175,
+      "axis_range_mm": [
+        1.566,
+        0.7192,
+        0.0631
+      ]
+    },
+    {
+      "brick": 3,
+      "samples": 251,
+      "axis_range_mm": [
+        0.7113,
+        2.252,
+        0.1621
+      ]
+    }
+  ],
+  "gripper_hand_frame": [
+    {
+      "brick": 1,
+      "samples": 141,
+      "axis_range_mm": [
+        0.0245,
+        0.1515,
+        0.0274
+      ]
+    },
+    {
+      "brick": 2,
+      "samples": 175,
+      "axis_range_mm": [
+        0.0661,
+        0.2206,
+        0.0715
+      ]
+    }
+  ],
+  "method": "Two fixed-scene replays. While the closed-target brick origin was more than 40.5 mm above the tabletop, sample its position in the robot tool frame or gripper hand frame; report per-axis peak-to-peak ranges. The samples are not an applied disturbance or a finger contact-force measurement.",
+  "joint_observation": "During the third brick grasp, the physics-callback readings around 6.22-6.34 s reported position near -0.3438 rad and velocity near +1.7908 rad/s. These values are inconsistent with a simple finite-difference interpretation and need further diagnosis."
+}

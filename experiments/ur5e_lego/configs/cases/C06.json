@@ -1,0 +1,28 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "placement_error_yaw_rad": 0.05235987755982989,
+  "experiment_name": "case_C06",
+  "case": {
+    "id": "C06",
+    "category": "rotation_within_tolerance",
+    "title": "Placement yaw +3 degrees",
+    "expected_outcome": "connected",
+    "prediction_basis": "3 degrees is inside the 5 degree yaw tolerance.",
+    "representative_video_case": "C01"
+  }
+}

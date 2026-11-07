@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Experiment results</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Recorded runs">
+        <div class="brand">
+          <img src="/icon.svg" width="37" height="37" alt="" />
+          <div><strong>BrickSim</strong><span>EXPERIMENT REVIEW</span></div>
+        </div>
+        <div class="side-heading">
+          <span>RUN LIBRARY</span><span id="run-count" class="count">—</span>
+        </div>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 4 4" />
+          </svg>
+          <input
+            id="search"
+            type="search"
+            placeholder="Search experiments"
+            aria-label="Search experiments"
+          />
+        </div>
+        <div class="filter-row" role="group" aria-label="Filter runs">
+          <button
+            class="filter active"
+            type="button"
+            data-filter="all"
+            aria-pressed="true"
+          >
+            All runs
+          </button>
+          <button
+            class="filter"
+            type="button"
+            data-filter="completed"
+            aria-pressed="false"
+          >
+            Completed
+          </button>
+          <button
+            class="filter"
+            type="button"
+            data-filter="cases"
+            aria-pressed="false"
+          >
+            Test cases
+          </button>
+          <button
+            class="filter"
+            type="button"
+            data-filter="other"
+            aria-pressed="false"
+          >
+            Other
+          </button>
+        </div>
+        <div id="run-list" class="run-list" aria-live="polite">
+          <p class="side-message">Finding recorded runs…</p>
+        </div>
+        <div class="sidebar-bottom">
+          <span class="local-dot"></span
+          ><span>LOCAL RESULTS <small>Read-only viewer</small></span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <span class="eyebrow">RISE LAB</span
+            ><span class="topbar-separator">/</span
+            ><span>Experiment results</span>
+          </div>
+          <button
+            id="refresh"
+            class="refresh"
+            type="button"
+            title="Refresh recorded runs"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 7v5h-5M4 17v-5h5" />
+              <path
+                d="M5.6 9a7 7 0 0 1 12.2-2L20 12M4 12l2.2 5a7 7 0 0 0 12.2-2"
+              />
+            </svg>
+            Refresh runs
+          </button>
+        </header>
+
+        <div id="loading" class="empty-state">
+          <div class="loader"></div>
+          <h1>Loading your experiments</h1>
+          <p>Reading recorded runs and their measurements.</p>
+        </div>
+        <div id="empty" class="empty-state" hidden>
+          <div class="empty-icon">◇</div>
+          <h1>No recorded runs found</h1>
+          <p>
+            Choose the experiment root that contains the recordings, then
+            refresh this page.
+          </p>
+          <code
+            >python3 experiments/ur5e_dashboard/server.py --experiment-root
+            /path/to/experiment-root</code
+          >
+        </div>
+        <div id="error" class="empty-state" hidden>
+          <div class="empty-icon">!</div>
+          <h1>Could not load results</h1>
+          <p id="error-message"></p>
+          <button id="retry" class="button button-primary" type="button">
+            Try again
+          </button>
+        </div>
+
+        <div id="content" class="content" hidden>
+          <div class="page-heading">
+            <div>
+              <div class="breadcrumb">
+                RESULTS <span>/</span>
+                <span id="breadcrumb-name">EXPERIMENT</span>
+              </div>
+              <div class="title-row">
+                <h1 id="experiment-name">Experiment</h1>
+                <span id="scenario-badge" class="scenario-badge" hidden
+                  >Intentional test</span
+                >
+                <span id="status" class="status"></span>
+              </div>
+              <p class="subheading">
+                <span id="run-date"></span><span class="dot-separator">•</span
+                ><span id="run-file"></span>
+              </p>
+            </div>
+            <a id="download" class="button button-outline" download>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3" />
+              </svg>
+              Download log
+            </a>
+          </div>
+
+          <div class="notice">
+            <span class="notice-icon">i</span
+            ><span
+              >Simulation data <strong>·</strong> Poses, forces, and connections
+              shown here are simulated. Video playback and log time are
+              independent.</span
+            >
+          </div>
+
+          <section
+            id="scenario-notice"
+            class="scenario-notice"
+            hidden
+            aria-labelledby="scenario-title"
+          >
+            <strong id="scenario-title">Intentional failure test</strong>
+            <p id="scenario-text">
+              The required simulated assembly force was deliberately raised from
+              1 N to 1,000 N before brick 2 to check that its connection would
+              be rejected. The interruption / failure shown below is the
+              recorded controller outcome. This test does not model physical
+              brick breakage.
+            </p>
+          </section>
+
+          <section
+            id="case-panel"
+            class="panel case-panel"
+            hidden
+            aria-labelledby="case-title"
+          >
+            <div class="panel-header">
+              <div>
+                <p class="section-label">SIMULATION TEST CASE</p>
+                <h2 id="case-title">Test case</h2>
+              </div>
+              <span id="case-badge" class="small-badge">—</span>
+            </div>
+            <p id="case-basis" class="panel-copy"></p>
+            <p id="case-failure" class="case-failure" hidden></p>
+            <div class="case-grid">
+              <div>
+                <h3>Inputs</h3>
+                <dl id="case-inputs" class="settings"></dl>
+              </div>
+              <div>
+                <h3>Outcome</h3>
+                <dl id="case-outcome" class="settings"></dl>
+              </div>
+            </div>
+            <h3>Measurements by brick</h3>
+            <div class="case-table-wrap">
+              <table id="case-measurements" class="case-table"></table>
+            </div>
+            <p class="fine-print">
+              Lateral, gap and yaw are in the support frame, taken from the last
+              sample before connection. "Final" values after a connection reflect
+              the snap and weld. Force is a solver output, not a calibrated
+              physical force.
+            </p>
+            <div class="case-grid">
+              <div>
+                <h3>What is physics and what is assisted</h3>
+                <dl id="case-evidence" class="settings"></dl>
+              </div>
+              <div>
+                <h3>Limitations</h3>
+                <ul id="case-limitations" class="case-list"></ul>
+                <h3>Provenance</h3>
+                <dl id="case-provenance" class="settings"></dl>
+                <h3>Supporting files</h3>
+                <p id="case-files" class="case-files"></p>
+              </div>
+            </div>
+            <details class="metadata" open>
+              <summary>All test cases</summary>
+              <div class="case-table-wrap">
+                <table id="case-overview" class="case-table"></table>
+              </div>
+            </details>
+          </section>
+
+          <section class="metrics" aria-label="Run overview">
+            <div class="metric">
+              <span class="metric-label">OUTCOME</span
+              ><strong id="metric-outcome">—</strong
+              ><span id="metric-outcome-note" class="metric-note"
+                >Recorded result</span
+              >
+            </div>
+            <div class="metric">
+              <span class="metric-label">CONNECTIONS</span
+              ><strong id="metric-connections">—</strong
+              ><span class="metric-note">At last recorded sample</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">SIMULATION TIME</span
+              ><strong id="metric-duration">—</strong
+              ><span class="metric-note">Recorded duration</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">SAMPLES</span
+              ><strong id="metric-samples">—</strong
+              ><span class="metric-note">Physics-step records</span>
+            </div>
+          </section>
+
+          <div class="overview-grid">
+            <section class="panel video-panel" aria-labelledby="video-title">
+              <div class="panel-header">
+                <div>
+                  <p class="section-label">EXPERIMENT RECORDING</p>
+                  <h2 id="video-title">See the run</h2>
+                </div>
+                <span class="panel-tag"
+                  ><span class="tag-dot"></span> RECORDED</span
+                >
+              </div>
+              <div class="video-frame">
+                <video
+                  id="video"
+                  controls
+                  playsinline
+                  preload="metadata"
+                  aria-label="Experiment recording"
+                ></video>
+                <div id="video-empty" class="video-empty" hidden>
+                  <span>▷</span><strong>No video available</strong>
+                  <p>This recording has no associated video.</p>
+                </div>
+              </div>
+              <p id="video-note" class="video-note"></p>
+            </section>
+
+            <section
+              class="panel connections-panel"
+              aria-labelledby="connections-title"
+            >
+              <div class="panel-header">
+                <div>
+                  <p class="section-label">ASSEMBLY</p>
+                  <h2 id="connections-title">Connection results</h2>
+                </div>
+                <span id="connections-badge" class="small-badge">—</span>
+              </div>
+              <p class="panel-copy">
+                Last recorded connection state and alignment just before each
+                connection.
+              </p>
+              <div id="connections" class="connections"></div>
+              <p class="fine-print">
+                XY error is in the support frame. Z is the gap from the seated
+                pose; the model has a 1.7 mm stud-height collider. Poses may
+                update at the render rate.
+              </p>
+            </section>
+          </div>
+
+          <section class="panel motion-panel" aria-labelledby="motion-title">
+            <div class="panel-header motion-header">
+              <div>
+                <p class="section-label">RECORDED TELEMETRY</p>
+                <h2 id="motion-title">Motion &amp; signals</h2>
+                <p class="panel-copy">
+                  Explore the simulated measurements across the run.
+                </p>
+              </div>
+              <label class="select-label"
+                >Signal
+                <select id="signal">
+                  <option value="joints">Robot joint positions</option>
+                  <option value="joint_commands">Robot joint commands</option>
+                  <option value="joint_velocities">
+                    Robot joint velocities
+                  </option>
+                  <option value="joint_efforts">Robot joint efforts</option>
+                  <option value="tool">Tool position</option>
+                  <option value="tool_target">Tool target position</option>
+                  <option value="gripper">Gripper joint position</option>
+                  <option value="gripper_target">Gripper joint target</option>
+                  <option value="force">Contact force</option>
+                  <option value="required_force">
+                    Required assembly force
+                  </option>
+                </select></label
+              >
+            </div>
+            <div
+              id="chart-legend"
+              class="chart-legend"
+              aria-label="Chart series"
+            ></div>
+            <div class="chart-axis-heading">
+              <span id="chart-unit" class="chart-unit"></span>
+              <span id="chart-range" class="chart-range"></span>
+            </div>
+            <div class="chart-wrap">
+              <canvas
+                id="chart"
+                aria-label="Recorded signal over simulation time"
+                role="img"
+              ></canvas>
+              <div id="chart-empty" class="chart-empty" hidden>
+                No measurements available for this signal.
+              </div>
+            </div>
+            <div class="chart-footer">
+              <span id="chart-note">Time shown is simulated elapsed time.</span
+              ><span>RECORDED STEP END (s) →</span>
+            </div>
+          </section>
+
+          <div class="lower-grid">
+            <section
+              class="panel timeline-panel"
+              aria-labelledby="timeline-title"
+            >
+              <div class="panel-header">
+                <div>
+                  <p class="section-label">RUN SEQUENCE</p>
+                  <h2 id="timeline-title">Phase history</h2>
+                </div>
+                <span id="phase-count" class="small-badge">—</span>
+              </div>
+              <p class="panel-copy">
+                Recorded phase changes in simulation time.
+              </p>
+              <div id="timeline" class="timeline"></div>
+            </section>
+            <section
+              class="panel settings-panel"
+              aria-labelledby="settings-title"
+            >
+              <div class="panel-header">
+                <div>
+                  <p class="section-label">CONFIGURATION</p>
+                  <h2 id="settings-title">Assembly settings</h2>
+                </div>
+                <span class="small-badge">LAST SAMPLE</span>
+              </div>
+              <p class="panel-copy">
+                Values recorded by the simulation at the end of this run.
+              </p>
+              <dl id="settings" class="settings"></dl>
+              <details class="metadata">
+                <summary>View run metadata and all settings</summary>
+                <pre id="metadata"></pre>
+              </details>
+            </section>
+          </div>
+          <footer>
+            Recorded experiment viewer <span>·</span> Research data stays on
+            this computer
+          </footer>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

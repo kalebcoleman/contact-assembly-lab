@@ -1,0 +1,38 @@
+{
+  "output": "",
+  "result": {
+    "connections": [
+      {
+        "stud": 0,
+        "hole": 1,
+        "present": true,
+        "offset": [
+          3,
+          8
+        ],
+        "yaw": 0
+      },
+      {
+        "stud": 1,
+        "hole": 2,
+        "present": true,
+        "offset": [
+          0,
+          0
+        ],
+        "yaw": 0
+      },
+      {
+        "stud": 2,
+        "hole": 3,
+        "present": true,
+        "offset": [
+          0,
+          0
+        ],
+        "yaw": 0
+      }
+    ],
+    "disassembly_events": 0
+  }
+}

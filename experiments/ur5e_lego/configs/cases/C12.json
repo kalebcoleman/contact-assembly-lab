@@ -1,0 +1,26 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.93,
+      -0.78
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "experiment_name": "case_C12",
+  "case": {
+    "id": "C12",
+    "category": "unreachable",
+    "title": "Brick on the table beyond the arm's reach",
+    "expected_outcome": "target_not_reached",
+    "prediction_basis": "1.21 m from the base at the table's far corner; the UR5e reach is about 0.85 m."
+  }
+}

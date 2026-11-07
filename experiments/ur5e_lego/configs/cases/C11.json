@@ -1,0 +1,28 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "source_yaw_rad": 0.08726646259971647,
+  "experiment_name": "case_C11",
+  "case": {
+    "id": "C11",
+    "category": "rotation_at_pick",
+    "title": "Brick starts rotated 5 degrees at pick",
+    "expected_outcome": "connected",
+    "prediction_basis": "The closing fingers should square the brick; placement then uses its measured pose.",
+    "representative_video_case": "C01"
+  }
+}

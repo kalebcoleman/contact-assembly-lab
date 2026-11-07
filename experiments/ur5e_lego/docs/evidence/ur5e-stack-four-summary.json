@@ -1,0 +1,239 @@
+{
+  "source": "ur5e-stack-four-run.jsonl.gz",
+  "experiment": "stack_four",
+  "status": "completed",
+  "sample_count": 12236,
+  "final_simulation_s": 101.96667198464274,
+  "force_threshold_n": 1.0,
+  "pre_connection_errors_frame": "support part",
+  "connections": [
+    {
+      "brick": 1,
+      "simulation_s": 27.158334749750793,
+      "pre_connection_error_m": [
+        -0.00013715815544128318,
+        -4.79650497436368e-05,
+        0.001697904064045444
+      ],
+      "pre_connection_lateral_mm": 0.14530315069180277,
+      "offset_studs": [
+        3,
+        8
+      ],
+      "yaw": 0
+    },
+    {
+      "brick": 2,
+      "simulation_s": 48.62500253599137,
+      "pre_connection_error_m": [
+        -0.00017175078392028809,
+        -7.408857345581055e-05,
+        0.0019154758095741263
+      ],
+      "pre_connection_lateral_mm": 0.18704932101975277,
+      "offset_studs": [
+        0,
+        0
+      ],
+      "yaw": 0
+    },
+    {
+      "brick": 3,
+      "simulation_s": 69.60833696369082,
+      "pre_connection_error_m": [
+        -0.00017952919006347656,
+        -7.12275505065918e-05,
+        0.001531487786769866
+      ],
+      "pre_connection_lateral_mm": 0.19314267792493967,
+      "offset_studs": [
+        0,
+        0
+      ],
+      "yaw": 0
+    },
+    {
+      "brick": 4,
+      "simulation_s": 90.79167140182108,
+      "pre_connection_error_m": [
+        -0.00018599629402160645,
+        -4.4345855712890625e-05,
+        0.0016327300012111655
+      ],
+      "pre_connection_lateral_mm": 0.19120977043205817,
+      "offset_studs": [
+        0,
+        0
+      ],
+      "yaw": 0
+    }
+  ],
+  "phases": [
+    {
+      "simulation_s": 0.008333333767950535,
+      "phase": "calibration",
+      "brick": 0
+    },
+    {
+      "simulation_s": 12.00833395961672,
+      "phase": "approach",
+      "brick": 1
+    },
+    {
+      "simulation_s": 15.74166748765856,
+      "phase": "grasp",
+      "brick": 1
+    },
+    {
+      "simulation_s": 19.741667696274817,
+      "phase": "lift",
+      "brick": 1
+    },
+    {
+      "simulation_s": 20.74166774842888,
+      "phase": "transfer",
+      "brick": 1
+    },
+    {
+      "simulation_s": 22.858334525488317,
+      "phase": "alignment",
+      "brick": 1
+    },
+    {
+      "simulation_s": 23.35833455156535,
+      "phase": "press",
+      "brick": 1
+    },
+    {
+      "simulation_s": 29.341668196953833,
+      "phase": "release",
+      "brick": 1
+    },
+    {
+      "simulation_s": 33.34166840557009,
+      "phase": "retreat",
+      "brick": 1
+    },
+    {
+      "simulation_s": 34.358335125260055,
+      "phase": "approach",
+      "brick": 2
+    },
+    {
+      "simulation_s": 36.858335255645216,
+      "phase": "grasp",
+      "brick": 2
+    },
+    {
+      "simulation_s": 40.85833546426147,
+      "phase": "lift",
+      "brick": 2
+    },
+    {
+      "simulation_s": 41.841668848879635,
+      "phase": "transfer",
+      "brick": 2
+    },
+    {
+      "simulation_s": 44.3583356468007,
+      "phase": "alignment",
+      "brick": 2
+    },
+    {
+      "simulation_s": 44.85833567287773,
+      "phase": "press",
+      "brick": 2
+    },
+    {
+      "simulation_s": 50.84166931826621,
+      "phase": "release",
+      "brick": 2
+    },
+    {
+      "simulation_s": 54.84166952688247,
+      "phase": "retreat",
+      "brick": 2
+    },
+    {
+      "simulation_s": 55.858336246572435,
+      "phase": "approach",
+      "brick": 3
+    },
+    {
+      "simulation_s": 58.09166969638318,
+      "phase": "grasp",
+      "brick": 3
+    },
+    {
+      "simulation_s": 62.091669904999435,
+      "phase": "lift",
+      "brick": 3
+    },
+    {
+      "simulation_s": 63.0916699571535,
+      "phase": "transfer",
+      "brick": 3
+    },
+    {
+      "simulation_s": 65.25833673682064,
+      "phase": "alignment",
+      "brick": 3
+    },
+    {
+      "simulation_s": 65.75833676289767,
+      "phase": "press",
+      "brick": 3
+    },
+    {
+      "simulation_s": 71.74167040828615,
+      "phase": "release",
+      "brick": 3
+    },
+    {
+      "simulation_s": 75.74167061690241,
+      "phase": "retreat",
+      "brick": 3
+    },
+    {
+      "simulation_s": 76.75833733659238,
+      "phase": "approach",
+      "brick": 4
+    },
+    {
+      "simulation_s": 79.12500412669033,
+      "phase": "grasp",
+      "brick": 4
+    },
+    {
+      "simulation_s": 83.12500433530658,
+      "phase": "lift",
+      "brick": 4
+    },
+    {
+      "simulation_s": 84.10833771992475,
+      "phase": "transfer",
+      "brick": 4
+    },
+    {
+      "simulation_s": 86.4750045100227,
+      "phase": "alignment",
+      "brick": 4
+    },
+    {
+      "simulation_s": 86.97500453609973,
+      "phase": "press",
+      "brick": 4
+    },
+    {
+      "simulation_s": 92.95833818148822,
+      "phase": "release",
+      "brick": 4
+    },
+    {
+      "simulation_s": 96.95833839010447,
+      "phase": "retreat",
+      "brick": 4
+    }
+  ],
+  "note": "Pose samples are from simulation; USD poses may update at render rate."
+}

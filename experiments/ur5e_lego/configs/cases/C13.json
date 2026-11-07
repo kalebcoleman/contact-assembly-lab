@@ -1,0 +1,33 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "grasp_error_xy_m": [
+    0.0,
+    0.002
+  ],
+  "ground_truth_xy_correction": false,
+  "experiment_name": "case_C13",
+  "case": {
+    "id": "C13",
+    "category": "assistance_removed",
+    "title": "Grasp +2 mm, held brick not measured, no XY correction",
+    "expected_outcome": "rejected",
+    "prediction_basis": "C10 connected because the plan read the held brick's true pose. Without it, the 2 mm grasp error reaches the placement: about 1 mm baseline plus 2 mm exceeds the 2 mm tolerance. Source and support poses are still ground truth.",
+    "representative_video_case": "C05"
+  },
+  "held_brick_pose_assumed_from_grasp": true
+}

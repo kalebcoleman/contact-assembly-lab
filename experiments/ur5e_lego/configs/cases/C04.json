@@ -1,0 +1,31 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "placement_error_xy_m": [
+    0.0,
+    0.001
+  ],
+  "experiment_name": "case_C04",
+  "case": {
+    "id": "C04",
+    "category": "offset_within_tolerance",
+    "title": "Placement +1 mm in world Y",
+    "expected_outcome": "connected",
+    "prediction_basis": "1 mm is inside the 2 mm position tolerance.",
+    "representative_video_case": "C01"
+  }
+}

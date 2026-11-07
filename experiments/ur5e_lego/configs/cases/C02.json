@@ -1,0 +1,27 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "experiment_name": "case_C02",
+  "case": {
+    "id": "C02",
+    "category": "nominal",
+    "title": "Nominal: one brick (offset-case baseline)",
+    "expected_outcome": "connected",
+    "prediction_basis": "Same placement as the offset cases, no injected error.",
+    "representative_video_case": "C01"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "placement_error_yaw_rad": 0.13962634015954636,
+  "experiment_name": "case_C07",
+  "case": {
+    "id": "C07",
+    "category": "rotation_beyond_tolerance",
+    "title": "Placement yaw +8 degrees",
+    "expected_outcome": "rejected",
+    "prediction_basis": "8 degrees is outside the 5 degree yaw tolerance.",
+    "representative_video_case": "C05"
+  }
+}

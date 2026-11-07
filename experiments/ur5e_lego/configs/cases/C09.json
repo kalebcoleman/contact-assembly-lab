@@ -1,0 +1,28 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "ground_truth_xy_correction": false,
+  "experiment_name": "case_C09",
+  "case": {
+    "id": "C09",
+    "category": "assistance_removed",
+    "title": "Ground-truth XY correction disabled",
+    "expected_outcome": "connected",
+    "prediction_basis": "An earlier baseline without correction measured about 1 mm lateral error, inside tolerance.",
+    "representative_video_case": "C01"
+  }
+}

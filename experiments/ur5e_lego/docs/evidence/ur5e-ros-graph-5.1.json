@@ -1,0 +1,141 @@
+{
+  "client": "separate rclpy process",
+  "topics": [
+    "/clock",
+    "/joint_states",
+    "/parameter_events",
+    "/rg2/joint_states",
+    "/rosout",
+    "/tf",
+    "/tf_static"
+  ],
+  "publishers": {
+    "/clock": [
+      "_Graph_isaac_mcp_ros2_clock_PublishClock"
+    ],
+    "/joint_states": [
+      "_Graph_isaac_mcp_ros2_PublishJointState"
+    ],
+    "/rg2/joint_states": [
+      "_Graph_isaac_mcp_ros2_rg2_94022b_PublishJointState"
+    ],
+    "/tf": [
+      "_Graph_isaac_mcp_ros2_rg2_94022b_TFRobotLinks",
+      "_Graph_isaac_mcp_ros2_TFRobotLinks"
+    ]
+  },
+  "sampled_seconds": 14.00555921898922,
+  "clock": {
+    "messages": 840,
+    "rate_hz": 59.97618423269376,
+    "first_s": 42.400002211,
+    "last_s": 56.383336273,
+    "monotonic": true
+  },
+  "joint_states": {
+    "/joint_states": {
+      "messages": 839,
+      "rate_hz": 59.90478401336913,
+      "names": [
+        "shoulder_pan_joint",
+        "shoulder_lift_joint",
+        "elbow_joint",
+        "wrist_1_joint",
+        "wrist_2_joint",
+        "wrist_3_joint"
+      ],
+      "first_position_rad": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "last_position_rad": [
+        0.25,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "largest_change_rad": 0.25
+    },
+    "/rg2/joint_states": {
+      "messages": 839,
+      "rate_hz": 59.90478401336913,
+      "names": [
+        "rg2_gripper_joint",
+        "rg2_l_finger_passive_joint",
+        "rg2_r_finger_1_joint",
+        "rg2_r_finger_passive_joint",
+        "rg2_l_finger_2_joint",
+        "rg2_r_finger_2_joint"
+      ],
+      "first_position_rad": [
+        0.9992,
+        0.9992,
+        -0.9992,
+        -0.9992,
+        -0.9992,
+        0.9992
+      ],
+      "last_position_rad": [
+        1.0,
+        1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        1.0
+      ],
+      "largest_change_rad": 0.0008000000000000229
+    }
+  },
+  "tf": {
+    "counts": {
+      "/tf": 1679,
+      "/tf_static": 1
+    },
+    "dynamic_child_frames": [
+      "forearm_link",
+      "rg2_hand_link",
+      "rg2_l_finger_link",
+      "rg2_l_moment_arm_link",
+      "rg2_l_truss_arm_link",
+      "rg2_r_finger_link",
+      "rg2_r_moment_arm_link",
+      "rg2_r_truss_arm_link",
+      "shoulder_link",
+      "upper_arm_link",
+      "wrist_1_link",
+      "wrist_2_link",
+      "wrist_3_link"
+    ],
+    "static_edges": [
+      [
+        "world",
+        "base_link"
+      ]
+    ],
+    "lookup": {
+      "fixed_frame": "world",
+      "target_frame": "wrist_3_link",
+      "transform": {
+        "translation_m": [
+          -0.7341767614775119,
+          -0.4278365722510596,
+          0.0627998640980834
+        ],
+        "rotation_xyzw": [
+          0.7015898322119416,
+          0.08815738168592221,
+          0.08815730312089375,
+          0.7015898184106957
+        ],
+        "stamp_s": 56.383336273
+      },
+      "error": null
+    }
+  }
+}

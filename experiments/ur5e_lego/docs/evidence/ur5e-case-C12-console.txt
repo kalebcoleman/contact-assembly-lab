@@ -1,0 +1,19 @@
+UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010740.751262Z-case_C12.jsonl
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/1 approach
+UR5e case failure: Tool target not reached: position error 0.2401 m, rotation error 3.024 rad
+UR5e case finished
+    raise RuntimeError(
+2026-11-04T01:08:22Z [54,151ms] [Error] [omni.kit.app._impl] [py stderr]: RuntimeError: Tool target not reached: position error 0.2401 m, rotation error 3.024 rad
+UR5e baseplate: resetting scene
+UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010825.091281Z-case_C12.jsonl
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/1 approach

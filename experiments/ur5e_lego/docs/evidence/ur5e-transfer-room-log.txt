@@ -1,0 +1,14 @@
+Physics-step run summary: 20261031T232526.064454Z-transfer.jsonl
+Experiment: transfer; source: simulation; created: 2026-10-31T23:25:26.064454+00:00
+0.008 s: phase=calibration brick=0
+12.008 s: phase=approach brick=1
+14.725 s: phase=grasp brick=1
+15.742 s: phase=grasp_close brick=1
+19.742 s: phase=lift brick=1
+20.742 s: phase=transfer brick=1
+22.025 s: phase=place brick=1
+23.058 s: phase=release brick=1
+27.058 s: phase=retreat brick=1
+Run status: completed
+Final logged simulation time: 32.067 s
+Final part poses (world m): {"/World/managed/Parts/Part_0": [-0.24955414235591888, -0.3488917946815491, -0.08547467738389969], "/World/managed/Parts/Part_1": [-0.5500003099441528, -0.48000001907348633, -0.08547468483448029], "/World/managed/Parts/Part_2": [-0.32000038027763367, -0.5000000596046448, -0.08547467738389969]}

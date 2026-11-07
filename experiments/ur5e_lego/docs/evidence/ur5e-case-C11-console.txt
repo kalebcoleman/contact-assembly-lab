@@ -1,0 +1,27 @@
+UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010628.158489Z-case_C11.jsonl
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/1 approach
+UR5e baseplate: brick 1/1 grasp
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.3411 velocity_rad_s=1.7639
+UR5e baseplate: brick 1/1 grasp center error=0.0001 m
+UR5e baseplate: brick 1/1 transfer support=/World/managed/Parts/Part_0 offset=[3, 8] tool_target_m=[-0.299516056045916, -0.31691975778357784, 0.15006509590336897]
+UR5e baseplate: brick 1/1 prepress XY correction m=[-0.0011199634075164666, 0.00022712349891662598]
+UR5e baseplate: brick 1/1 press
+UR5e baseplate: brick 1/1 connected offset=[3, 8] yaw=0; press held=1.00 s; peak contact force=1.48 N
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9997 velocity_rad_s=0.0000
+UR5e baseplate: 1/1 bricks secured
+UR5e baseplate: assembly succeeded; all 1 bricks connected
+UR5e case finished
+UR5e baseplate: resetting scene
+UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010709.731624Z-case_C11.jsonl
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/1 approach
+UR5e baseplate: brick 1/1 grasp

@@ -1,0 +1,564 @@
+#usda 1.0
+(
+    customLayerData = {
+        dictionary metricsAssembler = {
+            dictionary "/World/Vention/Bench" = {
+            }
+            int version = 1
+        }
+    }
+    endTimeCode = 1000000
+    metersPerUnit = 1
+    startTimeCode = 0
+    timeCodesPerSecond = 60
+    upAxis = "Z"
+)
+
+def PhysicsScene "physicsScene" (
+    prepend apiSchemas = ["NewtonSceneAPI", "PhysxSceneAPI"]
+)
+{
+    vector3f physics:gravityDirection = (0, 0, -1)
+    float physics:gravityMagnitude = 9.81
+    uniform token physxScene:broadphaseType = "MBP"
+    bool physxScene:enableCCD = 0
+    bool physxScene:enableGPUDynamics = 0
+    bool physxScene:enableStabilization = 0
+    uniform token physxScene:solverType = "TGS"
+    uint physxScene:timeStepsPerSecond = 120
+}
+
+def "World"
+{
+    def Xform "defaultGroundPlane" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </World/Looks/visual_material> (
+            bindMaterialAs = "strongerThanDescendants"
+        )
+        token visibility = "invisible"
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Mesh "geom" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding:physics = </World/Physics_Materials/physics_material> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)]
+            point3f[] points = [(-5000, -5000, 0), (5000, -5000, 0), (5000, 5000, 0), (-5000, 5000, 0)]
+            color3f[] primvars:displayColor = [(0, 0, 0)]
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Plane "collisionPlane" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            uniform token purpose = "guide"
+        }
+    }
+
+    def "Physics_Materials"
+    {
+        def Material "physics_material" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.5
+            float physics:restitution = 0.8
+            float physics:staticFriction = 0.5
+        }
+    }
+
+    def "Looks"
+    {
+        def Material "visual_material"
+        {
+            token outputs:surface.connect = </World/Looks/visual_material/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                float3 inputs:diffuseColor = (0.5, 0.5, 0.5)
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "UR5e" (
+        prepend references = @robot/ur5e.usd@
+    )
+    {
+        quatd xformOp:orient = (6.123233995736766e-17, 0, 0, 1)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        over "root_joint"
+        {
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        over "base_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (0, 0, 0)
+            vector3f physics:velocity = (0, 0, 0)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0, 0, 0)
+        }
+
+        over "shoulder_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (1.4693982e-11, 1.2845887e-18, 0.00012326207)
+            vector3f physics:velocity = (0, 0, 0)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (-4.048741091816277e-8, 1.6799526640856646e-23, -3.8432833550375275e-16, 0.9999999999999992)
+            double3 xformOp:translate = (-2.7071433194437737e-47, 2.210550275662005e-31, 0.16249999403953552)
+        }
+
+        over "upper_arm_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (1.1397489e-11, 0.00002776041, 0.00012326207)
+            vector3f physics:velocity = (2.9688357e-7, -4.571574e-7, 1.0295843e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (-2.9802322548507575e-8, -2.980232243099286e-8, 0.7071068286895688, 0.707106733683522)
+            double3 xformOp:translate = (0, 0, 0.16249999403953552)
+        }
+
+        over "forearm_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (9.114456e-12, 0.000046724348, 0.00012326207)
+            vector3f physics:velocity = (1.5059605e-8, -0.0000013361906, 3.6583526e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (-2.9802322548507575e-8, -2.980232243099286e-8, 0.7071068286895688, 0.707106733683522)
+            double3 xformOp:translate = (0.42500007152557373, 8.940696721513344e-8, 0.1625000238418579)
+        }
+
+        over "wrist_1_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (5.441398e-12, 0.00006435092, 0.00012326207)
+            vector3f physics:velocity = (2.867727e-7, -0.000001758067, 5.2575376e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (-2.9579318710889267e-8, -3.0248330106229466e-8, 0.7071068286895688, 0.707106733683522)
+            double3 xformOp:translate = (0.8172001838684082, 0.13330020010471355, 0.1625000536441803)
+        }
+
+        over "wrist_2_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-1.1629133e-11, 0.00006435092, 0.0002905249)
+            vector3f physics:velocity = (1.7479614e-7, -0.000001758067, 5.2575376e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (4.730614290884157e-10, -4.2156447283173865e-8, 0.9999999999999991, 7.005498255727138e-20)
+            double3 xformOp:translate = (0.8172001838684082, 0.13330018520355236, 0.06280004233121872)
+        }
+
+        over "wrist_3_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-4.2531496e-11, 0.0002533111, 0.00029052488)
+            vector3f physics:velocity = (5.637129e-7, -0.000001758067, 5.2575365e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (3.012067024149932e-8, -3.01342489172895e-8, 0.7071068286895689, 0.7071067336835217)
+            double3 xformOp:translate = (0.8172001838684082, 0.23290021717548381, 0.06280006468296051)
+        }
+
+        over "joints"
+        {
+            over "shoulder_pan_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 10
+                float drive:angular:physics:maxForce = 200
+                float drive:angular:physics:stiffness = 100
+                float state:angular:physics:position = -3.6944093e-7
+                float state:angular:physics:velocity = 0.00012326207
+            }
+
+            over "shoulder_lift_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 10
+                float drive:angular:physics:maxForce = 200
+                float drive:angular:physics:stiffness = 100
+                float state:angular:physics:position = 8.33848e-7
+                float state:angular:physics:velocity = -0.00002776041
+            }
+
+            over "elbow_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 10
+                float drive:angular:physics:maxForce = 200
+                float drive:angular:physics:stiffness = 100
+                float state:angular:physics:position = 2.2507251e-7
+                float state:angular:physics:velocity = -0.000018963945
+            }
+
+            over "wrist_1_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 10
+                float drive:angular:physics:maxForce = 200
+                float drive:angular:physics:stiffness = 100
+                float state:angular:physics:position = -7.2278866e-8
+                float state:angular:physics:velocity = -0.000017626593
+            }
+
+            over "wrist_2_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 10
+                float drive:angular:physics:maxForce = 200
+                float drive:angular:physics:stiffness = 100
+                float state:angular:physics:position = 1.6969663e-8
+                float state:angular:physics:velocity = -0.00016726287
+            }
+
+            over "wrist_3_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 10
+                float drive:angular:physics:maxForce = 200
+                float drive:angular:physics:stiffness = 100
+                float state:angular:physics:position = 1.5181328e-9
+                float state:angular:physics:velocity = -0.0001889601
+            }
+
+            over "robot_gripper_joint"
+            {
+                rel physics:body0 = </World/UR5e/wrist_3_link>
+                rel physics:body1 = </World/QuickChanger/quick_changer_link>
+                uniform bool physics:excludeFromArticulation = 1
+                bool physics:jointEnabled = 1
+                point3f physics:localPos0 = (0, 0, 2.7755576e-17)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (-0.49999997, 0.5, 0.5, 0.5)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+            }
+
+            def PhysicsFixedJoint "adapter_gripper_joint"
+            {
+                rel physics:body0 = </World/QuickChanger/quick_changer_link>
+                rel physics:body1 = </World/RG2_Gripper/rg2_base_link>
+                uniform bool physics:excludeFromArticulation = 1
+                bool physics:jointEnabled = 1
+                point3f physics:localPos0 = (0.01592, 0, 0)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (1, 0, 0, 0)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+            }
+        }
+    }
+
+    def Xform "RG2_Gripper" (
+        prepend references = @gripper/husarion_rg2/rg2_gripper_fixed.usd@
+    )
+    {
+        quatd xformOp:orient = (-0.7071067671376023, 5.900651702050303e-8, -3.090861701619453e-8, 0.7071067952354896)
+        double3 xformOp:translate = (-0.8172000056870775, -0.24882003836154926, 0.06280000571091976)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        over "rg2_base_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-0.0009578236, 0.00056016893, 0.0017341827)
+            float3 physics:diagonalInertia = (0.001, 0.001, 0.001)
+            float physics:mass = 0.5
+            vector3f physics:velocity = (0.0000011159233, -4.3706765e-7, 3.4101998e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.999999999999991, -1.0609057920774515e-8, -2.2612445009092823e-8, -1.3176394886186382e-7)
+            double3 xformOp:translate = (2.06904421207188e-7, -1.78181330912075e-7, 6.642259046951704e-8)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        over "joints"
+        {
+            over "rg2_gripper_joint"
+            {
+                float drive:angular:physics:damping = 1000
+                float drive:angular:physics:maxForce = 1
+                float drive:angular:physics:stiffness = 10000
+                float physxJoint:maxJointVelocity = 114.59
+                float state:angular:physics:position = 3.4780875e-8
+                float state:angular:physics:velocity = -0.00024734938
+            }
+
+            over "rg2_l_finger_2_joint"
+            {
+                float physxJoint:maxJointVelocity = 114.59
+                float physxMimicJoint:rotZ:dampingRatio = 1
+                float physxMimicJoint:rotZ:naturalFrequency = 1000
+                float state:angular:physics:position = -3.809701e-7
+                float state:angular:physics:velocity = 0.00035473926
+            }
+
+            over "rg2_l_finger_passive_joint"
+            {
+                float physxJoint:maxJointVelocity = 114.59
+                float physxMimicJoint:rotZ:dampingRatio = 1
+                float physxMimicJoint:rotZ:naturalFrequency = 1000
+                float state:angular:physics:position = -0.0000030549502
+                float state:angular:physics:velocity = -0.00004983101
+            }
+
+            over "rg2_r_finger_1_joint"
+            {
+                float physxJoint:maxJointVelocity = 114.59
+                float physxMimicJoint:rotZ:dampingRatio = 1
+                float physxMimicJoint:rotZ:naturalFrequency = 1000
+                float state:angular:physics:position = 0.0000012125645
+                float state:angular:physics:velocity = 0.0015733229
+            }
+
+            over "rg2_r_finger_2_joint"
+            {
+                float physxJoint:maxJointVelocity = 114.59
+                float physxMimicJoint:rotZ:dampingRatio = 1
+                float physxMimicJoint:rotZ:naturalFrequency = 1000
+                float state:angular:physics:position = -0.0000051240813
+                float state:angular:physics:velocity = -0.00023637357
+            }
+
+            over "rg2_r_finger_passive_joint"
+            {
+                float physxJoint:maxJointVelocity = 114.59
+                float physxMimicJoint:rotZ:dampingRatio = 1
+                float physxMimicJoint:rotZ:naturalFrequency = 1000
+                float state:angular:physics:position = 0.0000034520835
+                float state:angular:physics:velocity = 0.00024734938
+            }
+        }
+
+        def Material "PhysicsMaterial" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.6
+            float physics:restitution = 0
+            float physics:staticFriction = 0.5
+            uniform token physxMaterial:frictionCombineMode = "max"
+            uniform token physxMaterial:restitutionCombineMode = "min"
+        }
+
+        over "rg2_l_finger_link" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysxRigidBodyAPI"]
+        )
+        {
+            rel material:binding:physics = </World/RG2_Gripper/PhysicsMaterial> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            vector3f physics:angularVelocity = (-0.0009578235, 0.000560169, 0.0018415725)
+            vector3f physics:velocity = (0.0000063592634, 4.2502418e-7, 0.0000030074036)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.999999999999991, -1.5544376560909272e-8, -2.1675336116902433e-8, -1.3143121836336835e-7)
+            double3 xformOp:translate = (0.1540002792644619, 0.04299980950034821, 0.010000078586019576)
+        }
+
+        over "rg2_r_finger_link" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysxRigidBodyAPI"]
+        )
+        {
+            rel material:binding:physics = </World/RG2_Gripper/PhysicsMaterial> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            vector3f physics:angularVelocity = (-0.00095782324, 0.0005601689, 0.0030711323)
+            vector3f physics:velocity = (0.000008446284, -0.0000019069569, 0.0000036491908)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.9999999999999984, -1.5759742203782962e-8, -2.369750818718704e-8, -4.794458363922813e-8)
+            double3 xformOp:translate = (0.15400025287947203, -0.04300021577202251, 0.01000007510090671)
+        }
+
+        over "rg2_hand_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-0.0009578236, 0.00056016893, 0.0017341827)
+            vector3f physics:velocity = (0.000002989476, -4.332471e-7, 0.0000013745863)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.9999999999999764, -1.0677879792062186e-8, -2.2621839620572856e-8, -2.1603179419788757e-7)
+            double3 xformOp:translate = (2.2180558240103565e-7, -1.7818133024594118e-7, 6.642258987277216e-8)
+        }
+
+        over "rg2_l_moment_arm_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-0.0009578236, 0.00056016893, 0.0014868333)
+            vector3f physics:velocity = (0.000004732304, 2.3846175e-7, 0.000002151836)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.9999999999999984, -1.597335290135878e-8, -2.227351776083914e-8, -4.8552722607457065e-8)
+            double3 xformOp:translate = (0.10500025550207728, 0.016999784665079565, 0.010000077226963389)
+        }
+
+        over "rg2_l_truss_arm_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-0.0009578236, 0.00056016893, 0.0016843517)
+            vector3f physics:velocity = (0.0000054868706, 1.6183797e-7, 0.0000025694003)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.9999999999999764, -7.76397453346976e-9, -2.3266737514161057e-8, -2.1608766849110542e-7)
+            double3 xformOp:translate = (0.12200027541002642, 0.007999841607383207, 0.01000008285759825)
+        }
+
+        over "rg2_r_moment_arm_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-0.00095782324, 0.0005601689, 0.003307506)
+            vector3f physics:velocity = (0.000005272636, -0.0000013259046, 0.0000026093314)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.999999999999991, -1.549869019175645e-8, -2.330495452916561e-8, -1.311574728929348e-7)
+            double3 xformOp:translate = (0.10500025685311468, -0.017000194830923188, 0.010000080354133703)
+        }
+
+        over "rg2_r_truss_arm_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (-0.0009578235, 0.00056016893, 0.001981532)
+            vector3f physics:velocity = (0.000005606556, -0.0000010989212, 0.000002963132)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.9999999999999986, -8.13484423580549e-9, -2.2349513773852727e-8, -4.8175755389583194e-8)
+            double3 xformOp:translate = (0.12200027604581262, -0.008000250422188215, 0.010000080823039312)
+        }
+    }
+
+    def Xform "QuickChanger" (
+        prepend references = @gripper/QuickChanger.usd@
+    )
+    {
+        quatd xformOp:orient = (-0.7071067671376023, 5.900651702050303e-8, -3.090861701619453e-8, 0.7071067952354896)
+        double3 xformOp:translate = (-0.8172000050544739, -0.23290003836154927, 0.06280000507831573)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        over "quick_changer_link" (
+            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+        )
+        {
+            vector3f physics:angularVelocity = (0.00050732377, 0.00051477714, 0.0017011999)
+            vector3f physics:velocity = (7.5988305e-7, -5.1832865e-7, 4.8236626e-7)
+            bool physxRigidBody:disableGravity = 1
+            quatd xformOp:orient = (0.9999999999999947, -1.4200464207245342e-8, -9.055648351521221e-8, -4.7497485681447546e-8)
+            double3 xformOp:translate = (1.6391278481742155e-7, -2.384185789905402e-7, 5.2154027346817955e-8)
+        }
+    }
+
+    def Camera "workspace_camera_sim" (
+        prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+    )
+    {
+        float2 clippingRange = (0.1, 10000)
+        float exposure:fStop = 5
+        float exposure:responsivity = 1.1026709
+        float exposure:time = 0.02
+        float focalLength = 25.995302
+        float horizontalAperture = 36
+        custom string omni:lensdistortion:model = "opencvPinhole"
+        custom float omni:lensdistortion:opencvPinhole:cx = 640
+        custom float omni:lensdistortion:opencvPinhole:cy = 360
+        custom float omni:lensdistortion:opencvPinhole:fx = 924.2774
+        custom float omni:lensdistortion:opencvPinhole:fy = 925.73846
+        custom int2 omni:lensdistortion:opencvPinhole:imageSize = (1280, 720)
+        custom float omni:lensdistortion:opencvPinhole:k1 = 0
+        custom float omni:lensdistortion:opencvPinhole:k2 = 0
+        custom float omni:lensdistortion:opencvPinhole:k3 = 0
+        custom float omni:lensdistortion:opencvPinhole:k4 = 0
+        custom float omni:lensdistortion:opencvPinhole:k5 = 0
+        custom float omni:lensdistortion:opencvPinhole:k6 = 0
+        custom float omni:lensdistortion:opencvPinhole:p1 = 0
+        custom float omni:lensdistortion:opencvPinhole:p2 = 0
+        custom float omni:lensdistortion:opencvPinhole:s1 = 0
+        custom float omni:lensdistortion:opencvPinhole:s2 = 0
+        custom float omni:lensdistortion:opencvPinhole:s3 = 0
+        custom float omni:lensdistortion:opencvPinhole:s4 = 0
+        token projection = "perspective"
+        float verticalAperture = 20.21804
+        quatd xformOp:orient = (0.8261, 0.4842, 0.1458, 0.2488)
+        double3 xformOp:translate = (0.6293466593898318, -1.2106887168521516, 0.8575915712414524)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Camera "person_view" (
+        prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+    )
+    {
+        float2 clippingRange = (0.1, 10000)
+        float exposure:fStop = 5
+        float exposure:responsivity = 1.1026709
+        float exposure:time = 0.02
+        float focalLength = 25.995302
+        float focusDistance = 0
+        float fStop = 0
+        float horizontalAperture = 36
+        token projection = "perspective"
+        float verticalAperture = 20.21804
+        matrix4d xformOp:transform = ( (1, -0, 0, 0), (0, 0.42808634473904467, 0.9037378388935389, 0), (-0, -0.9037378388935389, 0.42808634473904467, 0), (0, -2.2, 1.2, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+
+    def Xform "Vention"
+    {
+        double3 xformOp:translate = (0.2252, -0.11364, -0.8860686827890708)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Xform "Bench" (
+            prepend references = @workstation/vention.usd@
+        )
+        {
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:scale:unitsResolve"]
+        }
+    }
+}
+
+def "Environment"
+{
+    def DistantLight "defaultLight"
+    {
+        float inputs:angle = 1
+        color3f inputs:color = (1, 1, 1)
+        float inputs:intensity = 3000
+        quatd xformOp:orient = (0.6532814824381883, 0.2705980500730985, 0.27059805007309845, 0.6532814824381882)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+}

@@ -1,0 +1,33 @@
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/3 approach
+UR5e baseplate: brick 1/3 grasp
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.3411 velocity_rad_s=1.7891
+UR5e baseplate: brick 1/3 grasp center error=0.0001 m
+UR5e baseplate: brick 1/3 transfer support=/World/managed/Parts/Part_0 offset=[3, 8] tool_target_m=[-0.2966597275084707, -0.3163097305433226, 0.1501376596899561]
+UR5e baseplate: brick 1/3 press
+UR5e baseplate: brick 1/3 connected offset=[3, 8] yaw=0; press held=1.00 s; peak contact force=1.20 N
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9993 velocity_rad_s=0.0000
+UR5e baseplate: 1/3 bricks secured
+UR5e baseplate: brick 2/3 approach
+UR5e baseplate: brick 2/3 grasp
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.3437 velocity_rad_s=1.7911
+UR5e baseplate: brick 2/3 grasp center error=0.0003 m
+UR5e baseplate: brick 2/3 transfer support=/World/managed/Parts/Part_0 offset=[9, 8] tool_target_m=[-0.23655786677712298, -0.3160981353768031, 0.15018260487763196]
+UR5e baseplate: brick 2/3 press
+UR5e baseplate: brick 2/3 connected offset=[9, 8] yaw=0; press held=1.00 s; peak contact force=1.69 N
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9997 velocity_rad_s=0.0000
+UR5e baseplate: 2/3 bricks secured
+UR5e baseplate: brick 3/3 approach
+UR5e baseplate: brick 3/3 grasp
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.3409 velocity_rad_s=1.7537
+UR5e baseplate: brick 3/3 grasp center error=0.0002 m
+UR5e baseplate: brick 3/3 transfer support=/World/managed/Parts/Part_0 offset=[15, 8] tool_target_m=[-0.200592186491178, -0.3165918628200277, 0.15019526928776575]
+UR5e baseplate: brick 3/3 press
+UR5e baseplate: brick 3/3 connected offset=[15, 8] yaw=0; press held=1.00 s; peak contact force=1.25 N
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9991 velocity_rad_s=0.0000
+UR5e baseplate: 3/3 bricks secured
+UR5e baseplate: assembly succeeded; all 3 bricks connected

@@ -1,0 +1,35 @@
+{
+  "output": "",
+  "result": {
+    "connections": [
+      {
+        "brick": 1,
+        "present": true,
+        "offset": [
+          3,
+          8
+        ],
+        "yaw": 0
+      },
+      {
+        "brick": 2,
+        "present": true,
+        "offset": [
+          9,
+          8
+        ],
+        "yaw": 0
+      },
+      {
+        "brick": 3,
+        "present": true,
+        "offset": [
+          15,
+          8
+        ],
+        "yaw": 0
+      }
+    ],
+    "disassembly_events": 0
+  }
+}

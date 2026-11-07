@@ -1,0 +1,26 @@
+UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010949.706702Z-case_C13.jsonl
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/1 approach
+UR5e baseplate: brick 1/1 grasp
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.3405 velocity_rad_s=1.7815
+UR5e baseplate: brick 1/1 grasp center error=0.0019 m
+UR5e baseplate: brick 1/1 transfer support=/World/managed/Parts/Part_0 offset=[3, 8] tool_target_m=[-0.3053180251105986, -0.316478461809017, 0.1500407959315016]
+UR5e baseplate: brick 1/1 prepress XY correction m=[0.0, 0.0]
+UR5e baseplate: brick 1/1 press
+UR5e case failure: Brick 1 did not complete the press: connected=False, held=0.00 s, brick=[-0.29798862 -0.3326299  -0.0807648 ], tool=[-0.30540422 -0.31659317  0.149916  ], target=[-0.30531803 -0.31647846  0.1495408 ], debug=[(-0.00019448824003221571, -6.965605700319708, 0.002795083375581331, 0.018825639046036832, 0.002513051339751392, [3, 8]), (-0.00019520177958568647, -6.963184559775204, 0.002794812797035969, 0.018819190387017064, 0.0024842873813644213, [3, 8])]
+UR5e case finished
+    raise RuntimeError(
+2026-11-04T01:10:33Z [54,512ms] [Error] [omni.kit.app._impl] [py stderr]: RuntimeError: Brick 1 did not complete the press: connected=False, held=0.00 s, brick=[-0.29798862 -0.3326299  -0.0807648 ], tool=[-0.30540422 -0.31659317  0.149916  ], target=[-0.30531803 -0.31647846  0.1495408 ], debug=[(-0.00019448824003221571, -6.965605700319708, 0.002795083375581331, 0.018825639046036832, 0.002513051339751392, [3, 8]), (-0.00019520177958568647, -6.963184559775204, 0.002794812797035969, 0.018819190387017064, 0.0024842873813644213, [3, 8])]
+UR5e baseplate: resetting scene
+UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T011034.641311Z-case_C13.jsonl
+UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
+UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9999 velocity_rad_s=0.0000
+UR5e baseplate: fingertip offset=0.0648 m; finger center offset=0.0122 m; assembly force threshold=1.00 N
+UR5e baseplate: brick 1/1 approach
+UR5e baseplate: brick 1/1 grasp

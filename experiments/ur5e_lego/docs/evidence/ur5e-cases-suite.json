@@ -1,0 +1,931 @@
+{
+  "suite_id": "20261104T010938Z",
+  "source": "simulation",
+  "commit": "754f904ae8d2d64f2379b32f117b9d3f31952ae2",
+  "tracked_changes_at_start": true,
+  "environment": {
+    "isaacsim": "5.1.0.0",
+    "isaaclab": "2.3.2.post1",
+    "native_sha256": "4e62dc33ee02270993c20e3cfd658e6d6ef0ea9780e53ad15cedde12f41b2455",
+    "isaac_mcp_root": "/home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/isaac-mcp-af85e6b",
+    "isaac_mcp_commit": "af85e6b6",
+    "launcher_args": [],
+    "asset_strict": "1",
+    "lab_assets": {
+      "robot/ur5e.usd": {
+        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/robot/ur5e.usd",
+        "sha256": "4de699a43bfa583446e8d330e841d6a513f97909fe3d4f60b386d98ed32b06d0",
+        "matches_reference": true
+      },
+      "gripper/husarion_rg2/rg2_gripper_fixed.usd": {
+        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/gripper/husarion_rg2/rg2_gripper_fixed.usd",
+        "sha256": "c6f3d59a851965ae07d25ca5fac7f067bf8d1676639b68eba738f1be1c719e70",
+        "matches_reference": true
+      },
+      "gripper/QuickChanger.usd": {
+        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/gripper/QuickChanger.usd",
+        "sha256": "8c94c82fb295c596c0cf7e8d7d8d7ee6334dac054bae81ed49bcbe36c0b3a52f",
+        "matches_reference": true
+      },
+      "workstation/vention.usd": {
+        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/workstation/vention.usd",
+        "sha256": "5e6ceeaf04643733a8eae35bdea93099d39564fc7fa612edb2669d61cf31d6d7",
+        "matches_reference": true
+      }
+    }
+  },
+  "evidence_classes": {
+    "contact_physics": "PhysX rigid-body simulation. The RG2 holds a brick through friction and a force-limited joint drive; no attachment joint is created at grasp. Brick contact forces and motion are solver outputs, not sensor readings.",
+    "simulated_connection": "Stud insertion is not simulated. The brick is pressed against the support; when gap, tilt, yaw, position and force thresholds pass, the assembly checker snaps it to the nearest stud position and adds a weld constraint, closing the recorded pre-connection gap. Breakage checking is off.",
+    "ground_truth_corrections": "The controller reads exact simulated brick and support poses: at the grasp, when planning placement from the held brick's true pose, and to correct the held brick's XY before descent. Inputs can disable the last two (C09, C10, C13), but source and support poses stay ground truth in every case. Hardware has no such measurement.",
+    "other_assumptions": "Fixed lab scene and rigid base at the USD pose; kinematic baseplate; RMPflow commands applied to simulated joint drives with no controller latency, backlash or calibration error; invisible tabletop collider; simulated mass and friction are not measured from real bricks."
+  },
+  "limitations": [
+    "Simulation only. These results do not establish physical robot performance.",
+    "Each case ran once in a fixed scene: this is not a success rate.",
+    "Injected errors are commanded offsets, not measured real-world error models.",
+    "Thresholds of 2 mm, 5 degrees and 1 N are simulator settings, not brick tolerances measured on hardware.",
+    "Simulated force values are not calibrated to physical force."
+  ],
+  "cases": [
+    {
+      "id": "C01",
+      "category": "nominal",
+      "title": "Nominal: three bricks on the baseplate",
+      "expected_outcome": "connected",
+      "prediction_basis": "Existing scene, no injected error.",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ],
+          [
+            -0.55,
+            -0.48
+          ],
+          [
+            -0.32,
+            -0.5
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            15,
+            8
+          ]
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C01.json",
+      "created_utc": "2026-11-04T00:53:23.783761+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 81.0166708920151,
+      "wall_time_s": 115.37930391804548,
+      "samples": 9722,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.1499473143044361,
+          "pre_connection_gap_mm": 1.6989396947484163,
+          "pre_connection_yaw_deg": 0.8116786415203417,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.1213168662099684
+        },
+        {
+          "brick": 2,
+          "target_offset_studs": [
+            9,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            9,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.16342160499799718,
+          "pre_connection_gap_mm": 1.7568009036641268,
+          "pre_connection_yaw_deg": 0.8348031273166274,
+          "final_lateral_error_mm": 1.3113021835042815e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.2973699042082627
+        },
+        {
+          "brick": 3,
+          "target_offset_studs": [
+            15,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            15,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.18031799048062436,
+          "pre_connection_gap_mm": 1.9650371807675509,
+          "pre_connection_yaw_deg": 1.7506802279558182,
+          "final_lateral_error_mm": 1.4880165551040619e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.038575863316424
+        }
+      ],
+      "run_log": "ur5e-case-C01-run.jsonl.gz",
+      "console_log": "ur5e-case-C01-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C02",
+      "category": "nominal",
+      "title": "Nominal: one brick (offset-case baseline)",
+      "expected_outcome": "connected",
+      "prediction_basis": "Same placement as the offset cases, no injected error.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C02.json",
+      "created_utc": "2026-11-04T00:55:19.771698+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.33333533257246,
+      "wall_time_s": 71.3912839369732,
+      "samples": 4600,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.12245825570222026,
+          "pre_connection_gap_mm": 1.7090277808766512,
+          "pre_connection_yaw_deg": 0.8617211601540827,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.1898924534823956
+        }
+      ],
+      "run_log": "ur5e-case-C02-run.jsonl.gz",
+      "console_log": "ur5e-case-C02-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C03",
+      "category": "offset_within_tolerance",
+      "title": "Placement +1 mm in world X",
+      "expected_outcome": "connected",
+      "prediction_basis": "1 mm is inside the 2 mm position tolerance.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "placement_error_xy_m": [
+          0.001,
+          0.0
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C03.json",
+      "created_utc": "2026-11-04T00:56:31.610495+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.33333533257246,
+      "wall_time_s": 72.40364181000041,
+      "samples": 4600,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.8841007640255738,
+          "pre_connection_gap_mm": 1.709042682037845,
+          "pre_connection_yaw_deg": 0.8613933460639638,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.19915032093188
+        }
+      ],
+      "run_log": "ur5e-case-C03-run.jsonl.gz",
+      "console_log": "ur5e-case-C03-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C04",
+      "category": "offset_within_tolerance",
+      "title": "Placement +1 mm in world Y",
+      "expected_outcome": "connected",
+      "prediction_basis": "1 mm is inside the 2 mm position tolerance.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "placement_error_xy_m": [
+          0.0,
+          0.001
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C04.json",
+      "created_utc": "2026-11-04T00:57:45.080592+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.33333533257246,
+      "wall_time_s": 72.65227979997871,
+      "samples": 4600,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.9809974079308609,
+          "pre_connection_gap_mm": 1.7089309233288912,
+          "pre_connection_yaw_deg": 0.8605555205787662,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.2097652743134133
+        }
+      ],
+      "run_log": "ur5e-case-C04-run.jsonl.gz",
+      "console_log": "ur5e-case-C04-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C05",
+      "category": "offset_beyond_tolerance",
+      "title": "Placement +3 mm in world X",
+      "expected_outcome": "rejected",
+      "prediction_basis": "3 mm is outside the 2 mm position tolerance and short of the next stud.",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "placement_error_xy_m": [
+          0.003,
+          0.0
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C05.json",
+      "created_utc": "2026-11-04T00:58:57.232334+00:00",
+      "observed_outcome": "rejected",
+      "as_predicted": true,
+      "recorded_status": "interrupted_or_failed",
+      "failure": "Brick 1 did not complete the press: connected=False, held=0.00 s, brick=[-0.29605654 -0.33043578 -0.08075033], tool=[-0.29492825 -0.31614354  0.15000008], target=[-0.29475963 -0.31604413  0.14963766], debug=[(-1.4153320747077374e-05, -4.85822726780481, 0.002249993553084026, 0.014724891246679547, 0.019777009076176882, [3, 8]), (-1.4256534095847878e-05, -4.8573255985879955, 0.0022498902641657046, 0.01472573937473313, 0.019762872424846336, [3, 8])]",
+      "simulation_duration_s": 43.33333559334278,
+      "wall_time_s": 78.8385919299908,
+      "samples": 5200,
+      "last_phase": "press",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": false,
+          "connected_offset_studs": null,
+          "connected_yaw_index": null,
+          "pre_connection_lateral_mm": null,
+          "pre_connection_gap_mm": null,
+          "pre_connection_yaw_deg": null,
+          "final_lateral_error_mm": 1.9914611096667592,
+          "final_gap_mm": 1.5243055361371187,
+          "final_yaw_deg": 0.8433215640738497,
+          "peak_simulated_contact_force_n": 9.76162740341282
+        }
+      ],
+      "run_log": "ur5e-case-C05-run.jsonl.gz",
+      "console_log": "ur5e-case-C05-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C06",
+      "category": "rotation_within_tolerance",
+      "title": "Placement yaw +3 degrees",
+      "expected_outcome": "connected",
+      "prediction_basis": "3 degrees is inside the 5 degree yaw tolerance.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "placement_error_yaw_rad": 0.05235987755982989
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C06.json",
+      "created_utc": "2026-11-04T01:00:16.241751+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.33333533257246,
+      "wall_time_s": 72.41369111300446,
+      "samples": 4600,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.19692031116427153,
+          "pre_connection_gap_mm": 1.7055483597378878,
+          "pre_connection_yaw_deg": 3.492596416557554,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.2112057322379937
+        }
+      ],
+      "run_log": "ur5e-case-C06-run.jsonl.gz",
+      "console_log": "ur5e-case-C06-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C07",
+      "category": "rotation_beyond_tolerance",
+      "title": "Placement yaw +8 degrees",
+      "expected_outcome": "rejected",
+      "prediction_basis": "8 degrees is outside the 5 degree yaw tolerance.",
+      "representative_video_case": "C05",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "placement_error_yaw_rad": 0.13962634015954636
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C07.json",
+      "created_utc": "2026-11-04T01:01:29.008526+00:00",
+      "observed_outcome": "rejected",
+      "as_predicted": true,
+      "recorded_status": "interrupted_or_failed",
+      "failure": "Brick 1 did not complete the press: connected=False, held=0.00 s, brick=[-0.29925454 -0.3304706  -0.08079155], tool=[-0.2998562  -0.31625602  0.15007876], target=[-0.29970426 -0.3161465   0.14963766], debug=[(-0.00014110466652417892, -7.296480304931387, 0.001957071853977214, 0.15200234728705359, 0.012212218065658401, [3, 8]), (-0.00014089154296657142, -7.296107924932573, 0.001957177201173478, 0.15200232968356245, 0.012229941087201171, [3, 8])]",
+      "simulation_duration_s": 43.400002263486385,
+      "wall_time_s": 78.42710390704451,
+      "samples": 5208,
+      "last_phase": "press",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": false,
+          "connected_offset_studs": null,
+          "connected_yaw_index": null,
+          "pre_connection_lateral_mm": null,
+          "pre_connection_gap_mm": null,
+          "pre_connection_yaw_deg": null,
+          "final_lateral_error_mm": 1.3402822397335081,
+          "final_gap_mm": 1.4830740231137423,
+          "final_yaw_deg": 8.708959447163338,
+          "peak_simulated_contact_force_n": 9.584755397638025
+        }
+      ],
+      "run_log": "ur5e-case-C07-run.jsonl.gz",
+      "console_log": "ur5e-case-C07-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C08",
+      "category": "offset_wrong_stud",
+      "title": "Placement +8 mm in world X (one stud)",
+      "expected_outcome": "wrong_stud",
+      "prediction_basis": "One stud pitch aligns with a neighboring stud; the script must flag the wrong offset.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "placement_error_xy_m": [
+          0.008,
+          0.0
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C08.json",
+      "created_utc": "2026-11-04T01:02:48.424723+00:00",
+      "observed_outcome": "wrong_stud",
+      "as_predicted": true,
+      "recorded_status": "interrupted_or_failed",
+      "failure": "Brick 1 connected at [4, 8], yaw 0; expected (3, 8), yaw 0",
+      "simulation_duration_s": 38.38333533518016,
+      "wall_time_s": 72.42504536599154,
+      "samples": 4606,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            4,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 7.893375044634854,
+          "pre_connection_gap_mm": 1.7093034523587374,
+          "pre_connection_yaw_deg": 0.8604735824896623,
+          "final_lateral_error_mm": 8.000008344661016,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.1844850086316834
+        }
+      ],
+      "run_log": "ur5e-case-C08-run.jsonl.gz",
+      "console_log": "ur5e-case-C08-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C09",
+      "category": "assistance_removed",
+      "title": "Ground-truth XY correction disabled",
+      "expected_outcome": "connected",
+      "prediction_basis": "An earlier baseline without correction measured about 1 mm lateral error, inside tolerance.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "ground_truth_xy_correction": false
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C09.json",
+      "created_utc": "2026-11-04T01:04:01.954598+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.33333533257246,
+      "wall_time_s": 73.45363071700558,
+      "samples": 4600,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 1.0283592869691034,
+          "pre_connection_gap_mm": 1.7090054291348604,
+          "pre_connection_yaw_deg": 0.8597136059629497,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.2035410968602622
+        }
+      ],
+      "run_log": "ur5e-case-C09-run.jsonl.gz",
+      "console_log": "ur5e-case-C09-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C10",
+      "category": "offset_beyond_tolerance",
+      "title": "Grasp +2 mm along the brick, no XY correction",
+      "expected_outcome": "rejected",
+      "prediction_basis": "Models an uncorrected pick error: about 1 mm baseline plus 2 mm exceeds the 2 mm tolerance.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "grasp_error_xy_m": [
+          0.0,
+          0.002
+        ],
+        "ground_truth_xy_correction": false
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C10.json",
+      "created_utc": "2026-11-04T01:05:14.915637+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": false,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.31666866503656,
+      "wall_time_s": 73.47443667805055,
+      "samples": 4598,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.9946868145235056,
+          "pre_connection_gap_mm": 1.7055856126408724,
+          "pre_connection_yaw_deg": 1.0833893676479502,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.5733213647212867
+        }
+      ],
+      "run_log": "ur5e-case-C10-run.jsonl.gz",
+      "console_log": "ur5e-case-C10-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C11",
+      "category": "rotation_at_pick",
+      "title": "Brick starts rotated 5 degrees at pick",
+      "expected_outcome": "connected",
+      "prediction_basis": "The closing fingers should square the brick; placement then uses its measured pose.",
+      "representative_video_case": "C01",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "source_yaw_rad": 0.08726646259971647
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C11.json",
+      "created_utc": "2026-11-04T01:06:28.158489+00:00",
+      "observed_outcome": "connected",
+      "as_predicted": true,
+      "recorded_status": "completed",
+      "failure": null,
+      "simulation_duration_s": 38.33333533257246,
+      "wall_time_s": 72.4484470160096,
+      "samples": 4600,
+      "last_phase": "retreat",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": true,
+          "connected_offset_studs": [
+            3,
+            8
+          ],
+          "connected_yaw_index": 0,
+          "pre_connection_lateral_mm": 0.14198854600734231,
+          "pre_connection_gap_mm": 1.708655251846805,
+          "pre_connection_yaw_deg": 0.9622421203866487,
+          "final_lateral_error_mm": 1.529227990752218e-05,
+          "final_gap_mm": -1.2976069303262394e-06,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": 1.4826083900164162
+        }
+      ],
+      "run_log": "ur5e-case-C11-run.jsonl.gz",
+      "console_log": "ur5e-case-C11-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C12",
+      "category": "unreachable",
+      "title": "Brick on the table beyond the arm's reach",
+      "expected_outcome": "target_not_reached",
+      "prediction_basis": "1.21 m from the base at the table's far corner; the UR5e reach is about 0.85 m.",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.93,
+            -0.78
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ]
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C12.json",
+      "created_utc": "2026-11-04T01:07:40.751262+00:00",
+      "observed_outcome": "target_not_reached",
+      "as_predicted": true,
+      "recorded_status": "interrupted_or_failed",
+      "failure": "Tool target not reached: position error 0.2401 m, rotation error 3.024 rad",
+      "simulation_duration_s": 42.000002190470695,
+      "wall_time_s": 75.42983361001825,
+      "samples": 5040,
+      "last_phase": "approach",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": false,
+          "connected_offset_studs": null,
+          "connected_yaw_index": null,
+          "pre_connection_lateral_mm": null,
+          "pre_connection_gap_mm": null,
+          "pre_connection_yaw_deg": null,
+          "final_lateral_error_mm": 775.837455444659,
+          "final_gap_mm": -3.2000182134051176,
+          "final_yaw_deg": 0.0,
+          "peak_simulated_contact_force_n": null
+        }
+      ],
+      "run_log": "ur5e-case-C12-run.jsonl.gz",
+      "console_log": "ur5e-case-C12-console.txt",
+      "commit": "5f7f411b2a1997cb9c68056abb04dced872ffba9",
+      "suite_id": "20261104T005311Z"
+    },
+    {
+      "id": "C13",
+      "category": "assistance_removed",
+      "title": "Grasp +2 mm, held brick not measured, no XY correction",
+      "expected_outcome": "rejected",
+      "prediction_basis": "C10 connected because the plan read the held brick's true pose. Without it, the 2 mm grasp error reaches the placement: about 1 mm baseline plus 2 mm exceeds the 2 mm tolerance. Source and support poses are still ground truth.",
+      "representative_video_case": "C05",
+      "inputs": {
+        "baseplate_xy_m": [
+          -0.25,
+          -0.33
+        ],
+        "brick_positions_xy_m": [
+          [
+            -0.45,
+            -0.35
+          ]
+        ],
+        "placement_offsets": [
+          [
+            3,
+            8
+          ]
+        ],
+        "grasp_error_xy_m": [
+          0.0,
+          0.002
+        ],
+        "ground_truth_xy_correction": false,
+        "held_brick_pose_assumed_from_grasp": true
+      },
+      "config_file": "experiments/ur5e_lego/configs/cases/C13.json",
+      "commit": "754f904ae8d2d64f2379b32f117b9d3f31952ae2",
+      "created_utc": "2026-11-04T01:09:49.706702+00:00",
+      "observed_outcome": "rejected",
+      "as_predicted": true,
+      "recorded_status": "interrupted_or_failed",
+      "failure": "Brick 1 did not complete the press: connected=False, held=0.00 s, brick=[-0.29798862 -0.3326299  -0.0807648 ], tool=[-0.30540422 -0.31659317  0.149916  ], target=[-0.30531803 -0.31647846  0.1495408 ], debug=[(-0.00019448824003221571, -6.965605700319708, 0.002795083375581331, 0.018825639046036832, 0.002513051339751392, [3, 8]), (-0.00019520177958568647, -6.963184559775204, 0.002794812797035969, 0.018819190387017064, 0.0024842873813644213, [3, 8])]",
+      "simulation_duration_s": 43.31666892580688,
+      "wall_time_s": 75.51633411902003,
+      "samples": 5198,
+      "last_phase": "press",
+      "placements": [
+        {
+          "brick": 1,
+          "target_offset_studs": [
+            3,
+            8
+          ],
+          "connected": false,
+          "connected_offset_studs": null,
+          "connected_yaw_index": null,
+          "pre_connection_lateral_mm": null,
+          "pre_connection_gap_mm": null,
+          "pre_connection_yaw_deg": null,
+          "final_lateral_error_mm": 2.629704474895805,
+          "final_gap_mm": 1.5098588603596834,
+          "final_yaw_deg": 1.0769407620824782,
+          "peak_simulated_contact_force_n": 9.140059471276281
+        }
+      ],
+      "run_log": "ur5e-case-C13-run.jsonl.gz",
+      "console_log": "ur5e-case-C13-console.txt",
+      "suite_id": "20261104T010938Z"
+    }
+  ],
+  "run_notes": "C01-C12 ran at 5f7f411 with a clean tree. C13 ran at 754f904 with uncommitted dashboard-only edits. Top-level commit and suite_id describe the last invocation; each case records its own commit. C08's and C10's representative videos were changed to C01 after the run because both connected; their recorded metadata still names C05. Per-case suite_id values were backfilled from the two invocations."
+}

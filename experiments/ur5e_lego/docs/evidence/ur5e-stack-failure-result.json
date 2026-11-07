@@ -1,0 +1,11 @@
+{
+  "output": "",
+  "result": {
+    "playing": true,
+    "required_force_N": 1000.0,
+    "displayed_force_N": 1000.0,
+    "plate_to_red": true,
+    "red_to_blue": false,
+    "disassembly_events": 0
+  }
+}

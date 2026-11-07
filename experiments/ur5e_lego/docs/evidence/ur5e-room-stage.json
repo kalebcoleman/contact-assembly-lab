@@ -1,0 +1,17 @@
+{
+  "output": "",
+  "result": {
+    "asset_root": "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1",
+    "room_children": 62,
+    "built_in_tables": [
+      {
+        "name": "table_low_327",
+        "active": false
+      }
+    ],
+    "enabled_collisions": [],
+    "enabled_rigid_bodies": []
+  },
+  "scene": "Simple Room",
+  "recorded_date": "2026-10-31"
+}

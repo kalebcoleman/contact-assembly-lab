@@ -1,0 +1,32 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "grasp_error_xy_m": [
+    0.0,
+    0.002
+  ],
+  "ground_truth_xy_correction": false,
+  "experiment_name": "case_C10",
+  "case": {
+    "id": "C10",
+    "category": "offset_beyond_tolerance",
+    "title": "Grasp +2 mm along the brick, no XY correction",
+    "expected_outcome": "rejected",
+    "prediction_basis": "Models an uncorrected pick error: about 1 mm baseline plus 2 mm exceeds the 2 mm tolerance.",
+    "representative_video_case": "C01"
+  }
+}

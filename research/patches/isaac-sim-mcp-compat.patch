@@ -1,0 +1,80 @@
+diff --git a/exts/ur5e-dt/ur5e_dt/extension.py b/exts/ur5e-dt/ur5e_dt/extension.py
+index 8c93539..cc06b4f 100644
+--- a/exts/ur5e-dt/ur5e_dt/extension.py
++++ b/exts/ur5e-dt/ur5e_dt/extension.py
+@@ -628,6 +628,10 @@ class LogRedirector:
+     def flush(self):
+         self._original.flush()
+ 
++    def isatty(self):
++        """Preserve terminal detection for logging integrations such as uvicorn."""
++        return self._original.isatty()
++
+ 
+ # Module-level handle to the live extension instance, so socket-driven
+ # execute_python_code can drive individual build steps (load_ur5e, import_adapter,
+@@ -768,8 +772,9 @@ class DigitalTwin(omni.ext.IExt):
+         # keeps ur5e-dt off the permanent base bridge's 8766 socket.
+         # Handlers are resolved from the stable `_cmd_<name>` convention.
+         self._mcp = McpBridge()
++        registrar = self._mcp.register_owner(ext_id, "ur5e", display_name="RISE UR5e Digital Twin")
+         for _name, _schema in MCP_TOOL_REGISTRY.items():
+-            self._mcp.register_tool(ToolDefinition(
++            registrar.add(ToolDefinition(
+                 name=_name,
+                 description=_schema["description"],
+                 parameters=_schema.get("parameters", {}),
+@@ -2346,15 +2351,15 @@ class DigitalTwin(omni.ext.IExt):
+     async def load_scene(self):
+         stage = omni.usd.get_context().get_stage()
+ 
+-        # Only initialize simulation context if physics scene doesn't exist yet
+-        physics_scene_prim = stage.GetPrimAtPath("/physicsScene")
+-        if not physics_scene_prim or not physics_scene_prim.IsValid():
++        # A USD PhysicsScene can exist without an initialized Python World.
++        world = World.instance()
++        if world is None:
+             world = World()
++        if world.get_physics_context() is None:
+             await world.initialize_simulation_context_async()
+             print("Initialized simulation context and physics scene")
+         else:
+-            world = World()
+-            print("Physics scene already exists, skipping initialization")
++            print("Simulation context already initialized")
+ 
+         # Check for ground plane on stage and add if missing
+         ground_prim = stage.GetPrimAtPath("/World/defaultGroundPlane")
+@@ -2845,6 +2850,7 @@ class DigitalTwin(omni.ext.IExt):
+         if world is None:
+             print("World not initialized. Creating simulation context for existing stage...")
+             world = World()
++        if world.get_physics_context() is None:
+             await world.initialize_simulation_context_async()
+             # Note: Not adding ground plane here - assumes existing scene has one or user doesn't want it
+             print("Simulation context initialized.")
+diff --git a/isaac_mcp/server.py b/isaac_mcp/server.py
+index 93adb1b..b3b62a3 100644
+--- a/isaac_mcp/server.py
++++ b/isaac_mcp/server.py
+@@ -80,6 +80,7 @@ if BASE_OUTPUT_DIR:
+ 
+ def _inject_output_dir(name, params):
+     """Inject the run's output dir for tools that save files. Never blocks."""
++    name = name.removeprefix("ur5e.")
+     if BASE_OUTPUT_DIR and name in ("save_scene_state", "restore_scene_state", "start_recording"):
+         params["output_dir"] = BASE_OUTPUT_DIR
+     return None
+@@ -91,8 +92,10 @@ def _inject_output_dir(name, params):
+ # first, then run the checkpoint gates.
+ if not getattr(kit_server, "_isaac_policy_registered", False):
+     kit_server.register_pre_dispatch_hook(_inject_output_dir)
+-    kit_server.register_pre_dispatch_hook(gates.check_tool_call)
+-    kit_server.register_meta_category_hook(gates.tool_meta_category)
++    kit_server.register_pre_dispatch_hook(
++        lambda name, params: gates.check_tool_call(name.removeprefix("ur5e."), params))
++    kit_server.register_meta_category_hook(
++        lambda name: gates.tool_meta_category(name.removeprefix("ur5e.")))
+     kit_server._isaac_policy_registered = True
+ 
+ 

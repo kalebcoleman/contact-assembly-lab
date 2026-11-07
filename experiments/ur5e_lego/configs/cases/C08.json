@@ -1,0 +1,31 @@
+{
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.45,
+      -0.35
+    ]
+  ],
+  "placement_offsets": [
+    [
+      3,
+      8
+    ]
+  ],
+  "placement_error_xy_m": [
+    0.008,
+    0.0
+  ],
+  "experiment_name": "case_C08",
+  "case": {
+    "id": "C08",
+    "category": "offset_wrong_stud",
+    "title": "Placement +8 mm in world X (one stud)",
+    "expected_outcome": "wrong_stud",
+    "prediction_basis": "One stud pitch aligns with a neighboring stud; the script must flag the wrong offset.",
+    "representative_video_case": "C01"
+  }
+}

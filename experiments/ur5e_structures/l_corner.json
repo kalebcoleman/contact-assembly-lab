@@ -1,0 +1,106 @@
+{
+  "experiment_name": "structure_l_corner",
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "part_names": [
+    "l_corner_0",
+    "l_corner_1",
+    "l_corner_2",
+    "l_corner_3"
+  ],
+  "brick_dimensions": [
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      4,
+      2,
+      3
+    ]
+  ],
+  "brick_colors": [
+    [
+      200,
+      30,
+      30
+    ],
+    [
+      188,
+      40,
+      30
+    ],
+    [
+      176,
+      50,
+      30
+    ],
+    [
+      164,
+      60,
+      30
+    ]
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.52,
+      -0.55
+    ],
+    [
+      -0.52,
+      -0.48
+    ],
+    [
+      -0.52,
+      -0.41
+    ],
+    [
+      -0.52,
+      -0.34
+    ]
+  ],
+  "support_bricks": [
+    null,
+    null,
+    0,
+    1
+  ],
+  "placement_offsets": [
+    [
+      6,
+      6
+    ],
+    [
+      6,
+      12
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "placement_yaws": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "min_same_layer_gap_studs": 2
+}
