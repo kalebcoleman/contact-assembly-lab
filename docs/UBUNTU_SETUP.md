@@ -1,6 +1,7 @@
 # Ubuntu workstation setup
 
-Configured on 2026-10-26.
+Configured on 2026-10-26 for Isaac Sim 5.1. Kept as a record of that workstation;
+the current Isaac Sim 6.2 setup is in [ISAACSIM_6.2_PORT.md](ISAACSIM_6.2_PORT.md).
 
 ## Machine
 

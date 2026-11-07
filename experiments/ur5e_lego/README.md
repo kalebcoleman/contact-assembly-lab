@@ -48,7 +48,7 @@ From the repository root, choose an experiment:
 See also the [meeting brief](docs/ur5e-meeting-brief.md) and the
 [isaac-mcp 5.1 tool report](docs/isaac-mcp-5.1-tool-report.md).
 
-The guides describe the Isaac Sim 5.1 and lab asset requirements, controls,
+The guides describe the Isaac Sim 6.2 and lab asset requirements, controls,
 results, and limitations. `configs/` contains the scene and placement settings,
 `assets/` contains the workstation layout, and `docs/evidence/` contains the
 versioned results. Earlier local recordings remain under the ignored
