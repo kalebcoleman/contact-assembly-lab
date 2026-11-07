@@ -47,6 +47,14 @@ time, so a later local re-run is labeled as not in the published suite. A video
 is labeled either as this run's recording or as a representative recording of
 another case.
 
+The **Structures** filter lists every recipe in `experiments/ur5e_structures/`
+(and the dog). A structure page draws each layer on the 20 × 20 stud baseplate
+from above, lists the structure's trials from
+`experiments/ur5e_structures/trials.json` (simulation and real robot), opens a
+trial's run when its recording is in the library, and shows the latest result
+per setting for all structures. See
+[the structures README](../ur5e_structures/README.md) for adding trials.
+
 All current logs are simulation data. Tool and part poses are in the world
 frame, placement errors are in the support frame, joint angles are radians,
 positions are meters, and force is in newtons. The viewer converts placement
