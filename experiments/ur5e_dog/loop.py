@@ -29,9 +29,10 @@ def main() -> None:
     output.mkdir(parents=True)
     environment = dict(os.environ)
     environment["PYTHONPATH"] = str(root / "python") + os.pathsep + str(root)
-    environment.setdefault("ISAAC_MCP_ROOT", "/home/kaleb/isaac-workspace/isaac-mcp")
+    workspace = Path.home() / "isaac-workspace"
+    environment.setdefault("ISAAC_MCP_ROOT", str(workspace / "isaac-mcp"))
     environment.setdefault(
-        "ISAAC_MCP_ASSET_PATH", "/home/kaleb/isaac-workspace/isaac-mcp-assets"
+        "ISAAC_MCP_ASSET_PATH", str(workspace / "isaac-mcp-assets")
     )
     environment["ISAAC_MCP_ASSET_STRICT"] = "1"
     environment["DOG_CONFIG"] = args.config

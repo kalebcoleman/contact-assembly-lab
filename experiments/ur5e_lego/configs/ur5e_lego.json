@@ -1,6 +1,6 @@
 {
   "workstation_scene": "experiments/ur5e_lego/assets/ur5e_workstation.usda",
-  "isaac_mcp_root": "~/Desktop/isaac-mcp",
+  "isaac_mcp_root": "~/isaac-workspace/isaac-mcp",
   "table_mesh": "/World/Vention/Bench/VentionAssembly_393251_v88_0/imported_PANEL_B2F52AEB2A0D_804849_271/Mesh_91",
   "brick_positions_xy_m": [[-0.45, -0.35], [-0.55, -0.48], [-0.32, -0.5]],
   "destination_xy_m": [-0.25, -0.35]
