@@ -2,9 +2,9 @@
 
 import os
 import subprocess
-from distutils.errors import DistutilsSetupError
 from pathlib import Path
 
+from distutils.errors import DistutilsSetupError
 from setuptools import Extension, find_namespace_packages, setup
 from setuptools.command.build_ext import build_ext
 from setuptools.command.sdist import sdist

@@ -120,9 +120,6 @@ else:
     from . import (
         core as _core,  # noqa: F401  # Load native library
     )
-    from . import (
-        envs as _envs,  # noqa: F401  # Register all environments
-    )
 
     # Ensure extension class is registered with Omniverse.
     from .extension import BrickSimExtension as BrickSimExtension

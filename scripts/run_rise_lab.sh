@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 workspace=$(cd .. && pwd)
-ros_lib="$PWD/.venv/lib/python3.11/site-packages/isaacsim/exts/isaacsim.ros2.bridge/jazzy/lib"
+ros_lib="$PWD/.venv/lib/python3.12/site-packages/isaacsim/exts/isaacsim.ros2.core/jazzy/lib"
 export LD_LIBRARY_PATH="$ros_lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export ROS_DISTRO=jazzy
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp

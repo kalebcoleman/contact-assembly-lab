@@ -1,11 +1,5 @@
 include = ["*.py"]
 extend-exclude = [
-    "demos/demo_assembly.py",
-    "demos/demo_inhand.py",
-    "demos/demo_keyboard_teleop.py",
-    "demos/demo_teleop.py",
-    "experiments/evaluate_stability.py",
-    "experiments/static_analysis.py",
     # Vendored from upstream isaacsim-6.0; not written to this lint profile.
     "scripts/resolve_isaacsim_deps.py",
 ]

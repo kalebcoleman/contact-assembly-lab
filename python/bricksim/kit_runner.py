@@ -107,8 +107,8 @@ def run(
 
     Args:
         target: Module name or filesystem path, optionally with ":func" suffix,
-                e.g. "demos.demo_r1lite", "demos.demo_r1lite:main",
-                "/abs/path/to/demo_r1lite.py", or "/abs/path/to/demo_r1lite.py:main".
+                e.g. "experiments.ur5e_dog.run", "experiments.ur5e_dog.run:main",
+                "/abs/path/to/run.py", or "/abs/path/to/run.py:main".
         cli_args: CLI arguments exposed to the target via sys.argv.
 
     Returns:

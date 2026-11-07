@@ -4,10 +4,7 @@ version = "0.1.0"
 description = "BrickSim: A Physics-Based Simulator for Manipulating Interlocking Brick Assemblies"
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    "accelerate",
-    "gymnasium>=1.2",
     "numpy>=2",
-    "opencv-python>=4.11",
     "requests",
     "scipy",
     "torch>=2.7",
@@ -21,14 +18,12 @@ all = [
     "isaacsim[all,extscache]==6.2.0.0",
     "isaaclab==3.0.0",
 ]
-stablelego = ["gurobipy==12.0.3"]
 
 [project.urls]
 Repository = "https://github.com/intelligent-control-lab/BrickSim.git"
 
 [project.scripts]
 bricksim = "bricksim.__main__:main"
-bricksim-assemble-brick-expert = "bricksim.cli.assemble_brick_expert:main"
 bricksim-convert-topology = "bricksim.cli.convert_topology:main"
 bricksim-type-configs = "bricksim.cli.type_configs:main"
 

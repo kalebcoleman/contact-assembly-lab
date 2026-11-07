@@ -38,7 +38,6 @@ PACKAGES = (
     "torchvision",
     "torchaudio",
     "numpy",
-    "lerobot",
     "opencv-python",
     "bricksim",
 )
