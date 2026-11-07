@@ -1,5 +1,8 @@
-# Core pxr internal namespace (blanket for most USD internals)
-leak:pxrInternal_v0_24__pxrReserved__::
+# Core pxr internal namespace (blanket for most USD internals, any USD version)
+leak:pxrInternal_v0_
+# Isaac Sim's USD libraries are stripped, so their static-init stacks carry no
+# function names; match the library instead.
+leak:libusd_tf.so
 
 # USD subsystems commonly flagged by LSAN in short-lived binaries
 leak:Usd

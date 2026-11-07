@@ -1084,6 +1084,20 @@ class PhysicsLegoGraph<type_list<Ps...>, Hooks> {
 			    rb_b->getGlobalPose() * rb_b->getCMassLocalPose();
 			physx::PxVec3 F0_W, tau0_W_atP;
 			constraint->getForce(F0_W, tau0_W_atP);
+			physx::PxScene *scene = constraint->getScene();
+			if (scene->getSolverType() == physx::PxSolverType::eTGS &&
+			    !(scene->getFlags() &
+			      physx::PxSceneFlag::eENABLE_GPU_DYNAMICS)) {
+				// The CPU TGS writeback (writeBack1DStep, DyTGSContactPrep.cpp,
+				// PhysX 5.6-5.9) zeroes ang0 of linear rows and adds
+				// lin0.cross(rAWorld), i.e. -rA x F, before subtracting
+				// body0WorldOffset x F. The torque it reports about P is thus
+				// short by 2 rA x F, with rA = cA2w.p - bA2w.p (the weld
+				// prep's cA2wOut). The PGS and GPU writebacks are correct.
+				physx::PxVec3 rA_W =
+				    bA2w.transform(weld_data->parentLocal).p - bA2w.p;
+				tau0_W_atP += rA_W.cross(F0_W) * 2.0f;
+			}
 			physx::PxVec3 P_W = bB2w.transform(weld_data->childLocal).p;
 			physx::PxVec3 com0_W = bA2w.p;
 			physx::PxVec3 r0_W = P_W - com0_W;
