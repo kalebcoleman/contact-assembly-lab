@@ -1,58 +1,41 @@
-<div align="center">
-
 # contact-assembly-lab
 
-### UR5e brick-assembly experiments on Isaac Sim 6.2
+[![Isaac Sim 6.2](https://img.shields.io/badge/Isaac%20Sim-6.2-76B900?logo=nvidia&logoColor=white)](https://docs.isaacsim.omniverse.nvidia.com/6.2.0/index.html)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](https://docs.python.org/3.12/)
+[![MIT License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
-<p>
-  <a href="https://docs.isaacsim.omniverse.nvidia.com/6.2.0/index.html"><img src="https://img.shields.io/badge/Isaac%20Sim-6.2-76B900?logo=nvidia&amp;logoColor=white" alt="Isaac Sim 6.2"></a>
-  <a href="https://docs.python.org/3.12/"><img src="https://img.shields.io/badge/python-3.12-3776AB?logo=python&amp;logoColor=white" alt="Python 3.12"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT License"></a>
-  <a href="https://arxiv.org/abs/2603.16853"><img src="https://img.shields.io/badge/built%20on-BrickSim-b31b1b.svg?logo=arxiv" alt="Built on BrickSim"></a>
-</p>
+Research on assembling complex brick structures with a UR5e (RG2 gripper,
+Vention bench) in Isaac Sim 6.2. The simulator is a port of BrickSim from Isaac
+Sim 5.1 / Python 3.11 to Isaac Sim 6.2.0.0 / Python 3.12.
 
-</div>
+**Credit.** The brick physics (connection and breakage model), the C++ native
+extension, the simulator UI and the Isaac Sim 6.0 groundwork of this port come
+from
+[BrickSim](https://github.com/intelligent-control-lab/BrickSim) by Haowei Wen,
+Ruixuan Liu, Weiyi Piao, Siyu Li and Changliu Liu (Intelligent Control Lab,
+Carnegie Mellon University), released under the MIT License. Please cite it
+([below](#citation)) if you use this work.
 
-> **Built on BrickSim.** This repository is a derivative of
-> [BrickSim](https://github.com/intelligent-control-lab/BrickSim) by Haowei Wen,
-> Ruixuan Liu, Weiyi Piao, Siyu Li and Changliu Liu (Intelligent Control Lab,
-> Carnegie Mellon University). The brick physics, connection model, breakage
-> solver, native extension and simulator UI are their work, released under the
-> MIT License (see [LICENSE](LICENSE), copyright retained). This repository adds
-> the following:
-> - a port to Isaac Sim 6.2 / Python 3.12;
-> - UR5e (RG2 gripper, Vention bench) assembly experiments and structure test cases;
-> - a results dashboard.
->
-> Please cite BrickSim (below) if you use this work.
+All results are simulation, judged by simulator ground truth, unless a document
+says otherwise.
 
-## What is here
+## Roadmap (planned)
 
-| Path | Purpose |
-|---|---|
-| `native/` | C++26 native extension (from BrickSim; PhysX 5.9.2 offsets for Isaac Sim 6.2) |
-| `python/bricksim/` | Isaac Sim extension and Python API (from BrickSim) |
-| `experiments/ur5e_dog/` | UR5e assembly controller and fresh-scene attempt loop |
-| `experiments/ur5e_structures/` | Structure test cases (JSON) built from 2×4 bricks |
-| `experiments/ur5e_lego/` | UR5e scene, recording format, single-case experiments and test-case suite |
-| `experiments/ur5e_dashboard/` | Read-only browser dashboard for recorded runs |
-| `docs/ISAACSIM_6.2_PORT.md` | What the Isaac Sim 5.1 → 6.2 move changed, and how to rebuild |
-| `demos/` | BrickSim demos |
+1. Build more complex structures in simulation and document each run in the
+   dashboard.
+2. Build the same structures on the real UR5e and compare what fails against
+   simulation.
+3. Add more advanced contact physics and demos such as Jenga.
 
-All results in this repository are simulation results, judged by simulator
-ground truth, unless a document says otherwise.
+## Requirements
 
-## Setup
-
-Requirements:
 - x86-64 Linux with glibc ≥ 2.35 (Ubuntu 22.04+).
 - An NVIDIA driver that meets the
   [Isaac Sim 6.2 requirements](https://docs.isaacsim.omniverse.nvidia.com/6.2.0/installation/requirements.html#system-requirements).
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/) and
   [`pixi`](https://pixi.prefix.dev/latest/installation/).
 
-The native extension has no prebuilt binary for this port, so build it from
-source:
+## Build
 
 ```bash
 git clone https://github.com/kalebcoleman/contact-assembly-lab.git
@@ -62,32 +45,62 @@ pixi run build-native
 uv sync --locked
 ```
 
-See [docs/ISAACSIM_6.2_PORT.md](docs/ISAACSIM_6.2_PORT.md) for the following:
-- why the glibc override is needed;
-- how to keep pixi, caches and build output inside the checkout;
-- how the Isaac Sim SDK pins were derived.
+[docs/ISAACSIM_6.2_PORT.md](docs/ISAACSIM_6.2_PORT.md) explains the glibc
+override, the version changes (Kit 110.4, omni.physx 110.4.4, PhysX SDK 5.9.2,
+torch 2.11 cu130) and how the Isaac Sim SDK pins are regenerated.
 
 The UR5e experiments also need the lab assets (UR5e with `tool0`, RG2 gripper,
 Vention bench) and an `isaac-mcp` checkout; see
 [experiments/ur5e_lego/README.md](experiments/ur5e_lego/README.md).
 
-## Run
+## Build a structure
 
 ```bash
-# One fresh-scene assembly of a structure; logs go to outputs/ur5e_dog/<time>/
 OMNI_KIT_ACCEPT_EULA=YES bash experiments/ur5e_dog/run_loop.sh \
   --attempts 1 --config experiments/ur5e_structures/column.json
-
-# Browse recorded runs at http://127.0.0.1:8765
-python3 experiments/ur5e_dashboard/server.py
-
-# Open an empty stage with the extension loaded
-uv run bricksim
 ```
 
-Controller settings are environment variables documented in
-`experiments/ur5e_dog/controller.py`: `DOG_BREAKAGE`, `DOG_PRESS_HOLD_S`,
-`DOG_RELEASE_RAMP_S`, `DOG_FREEZE_ON_CONNECTION` and `DOG_REQUIRED_FORCE_N`.
+Each attempt starts a fresh scene. Console logs and outcomes go to
+`outputs/ur5e_dog/<time>/`, per-step recordings to `outputs/ur5e_lego/`.
+`--attempts` takes 1–5; the loop stops at the first failure. Structures are in
+[experiments/ur5e_structures/](experiments/ur5e_structures/README.md); the
+ten-piece dog (the default config) is in
+[experiments/ur5e_dog/](experiments/ur5e_dog/README.md), with results in
+[RESULTS.md](experiments/ur5e_dog/RESULTS.md).
+
+Controller settings (environment variables, read in
+`experiments/ur5e_dog/controller.py` and `run.py`):
+
+| Variable | Default | Effect |
+|---|---|---|
+| `DOG_BREAKAGE` | `1` | `0` disables breakage, so joints cannot break under load |
+| `DOG_REQUIRED_FORCE_N` | `1.0` | Press force (N) needed to form a connection |
+| `DOG_PRESS_DEPTH_M` | `0.0005` | Press target below the seated pose (m) |
+| `DOG_PRESS_HOLD_S` | `0.05` | Time (s) a connection must hold before release |
+| `DOG_FREEZE_ON_CONNECTION` | `1` | Stop descending once the connection forms |
+| `DOG_RELEASE_RAMP_S` | `1.0` | Gripper opening time (s) |
+| `DOG_HOLD_S` | `10` | Time (s) the finished structure stays on screen |
+
+## Case suite
+
+Thirteen single-case experiments (C01–C13), each with a prediction written
+before it runs; see
+[experiments/ur5e_lego/docs/ur5e-cases.md](experiments/ur5e_lego/docs/ur5e-cases.md).
+
+```bash
+.venv/bin/python experiments/ur5e_lego/scripts/run_ur5e_cases.py
+.venv/bin/python experiments/ur5e_lego/scripts/run_ur5e_cases.py --case C01 C05
+```
+
+## Dashboard
+
+```bash
+python3 experiments/ur5e_dashboard/server.py
+```
+
+Open http://127.0.0.1:8765. The read-only viewer lists recorded runs and the
+case suite; Isaac Sim need not be running. See
+[experiments/ur5e_dashboard/README.md](experiments/ur5e_dashboard/README.md).
 
 ## Development
 
@@ -95,15 +108,26 @@ Controller settings are environment variables documented in
 pixi run build-native          # rebuild after C++ changes
 pixi run test-native-release   # and test-native-debug
 uv run ruff check
-python -m unittest experiments.ur5e_dog.test_geometry
-python -m unittest discover -s experiments/ur5e_dashboard -p 'test_*.py'
+python3 -m unittest experiments.ur5e_dog.test_geometry
+python3 -m unittest discover -s experiments/ur5e_dashboard -p 'test_*.py'
 ```
 
-Coding rules for the C++ modules and Python are in [AGENTS.md](AGENTS.md).
+Coding rules are in [AGENTS.md](AGENTS.md).
+
+## Repository layout
+
+| Path | Contents |
+|---|---|
+| `native/` | C++26 native extension: brick connection and breakage physics, PhysX 5.9.2 patches, tests |
+| `python/bricksim/` | Isaac Sim extension, launcher and Python API |
+| `experiments/ur5e_dog/` | UR5e assembly controller and fresh-scene attempt loop |
+| `experiments/ur5e_structures/` | Structure specs (JSON) built from 2×4 bricks |
+| `experiments/ur5e_lego/` | UR5e scene, recording format, case suite C01–C13 |
+| `experiments/ur5e_dashboard/` | Results dashboard |
+| `docs/ISAACSIM_6.2_PORT.md` | Isaac Sim 5.1 → 6.2 changes and rebuild notes |
+| `scripts/` | Native build, Isaac Sim pin resolver, environment parity check |
 
 ## Citation
-
-This work builds on BrickSim. Please cite:
 
 ```
 @article{wen2026bricksim,
@@ -118,16 +142,7 @@ This work builds on BrickSim. Please cite:
 }
 ```
 
-BrickSim: [website](https://intelligent-control-lab.github.io/BrickSim/),
-[paper](https://arxiv.org/abs/2603.16853),
-[code](https://github.com/intelligent-control-lab/BrickSim),
-[video](https://www.youtube.com/watch?v=VGuHfz4yxLU).
-
-The Isaac Sim 6.0 groundwork (SDK pins resolver, Python 3.12 build changes)
-comes from BrickSim's `isaacsim-6.0` branch.
-
 ## License
 
-MIT, see [LICENSE](LICENSE). The copyright notice of the original BrickSim
-authors is retained; changes in this repository are released under the same
-license.
+MIT, see [LICENSE](LICENSE). The original BrickSim copyright notice is retained
+there; changes in this repository are released under the same license.
