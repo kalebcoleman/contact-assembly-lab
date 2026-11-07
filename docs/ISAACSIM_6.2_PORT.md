@@ -1,8 +1,11 @@
 # Isaac Sim 6.2 port
 
 This checkout targets Isaac Sim 6.2.0.0 and Python 3.12. It started from the
-upstream `isaacsim-6.0` branch (commits `03e1a5a`, `0b577ea`, `2dccda1`) and was
-then retargeted to the 6.2 builds.
+`isaacsim-6.0` branch of
+[BrickSim](https://github.com/intelligent-control-lab/BrickSim) (commits
+`03e1a5a`, `0b577ea`, `2dccda1`, by the BrickSim authors) and was then retargeted
+to the 6.2 builds. The code before the move is BrickSim at
+`kalebcoleman/BrickSim@4d7d629` (`feat/ur5e-dog-assembly`), on Isaac Sim 5.1.
 
 ## Versions
 
