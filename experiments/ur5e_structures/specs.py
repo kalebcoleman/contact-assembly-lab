@@ -75,6 +75,24 @@ SPECS = {
         (W, 5, (0, 0), 0),
         (D, 6, (2, 0), 0),
     ],
+    # Ten 2x4 bricks stacked aligned: joint load grows with height.
+    "column_10": [(A, None, (9, 8), 0)] + [(A, i, (0, 0), 0) for i in range(9)],
+    # Each 2x4 shifted 2 studs along y (4-stud joints): the overturning moment on
+    # the lower joints grows with every brick.
+    "lean_6": [(A, None, (9, 4), 0)] + [(A, i, (0, 2), 0) for i in range(5)],
+    # Alternating +2 / -2 stud shifts: shear at every joint, little net moment.
+    "zigzag_6": [(A, None, (9, 6), 0)]
+    + [(A, i, (0, 2 if i % 2 == 0 else -2), 0) for i in range(5)],
+    # A 2x6 resting on one 2x2 by its end (4 studs), a 2x2 load at the free tip.
+    "cantilever": [
+        (D, None, (9, 9), 0),
+        (D, 0, (0, 0), 0),
+        (W, 1, (0, 0), 0),
+        (D, 2, (4, 0), 0),
+    ],
+    # Mixed 2x2, 2x4 and 2x6 bricks, each centered on the one below.
+    "mixed_tower": [(D, None, (9, 9), 0)]
+    + [(size, i, None, 0) for i, size in enumerate([A, W, B, D, A, W, D])],
 }
 
 

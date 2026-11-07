@@ -64,6 +64,14 @@
           >
             Other
           </button>
+          <button
+            class="filter"
+            type="button"
+            data-filter="structures"
+            aria-pressed="false"
+          >
+            Structures
+          </button>
         </div>
         <div id="run-list" class="run-list" aria-live="polite">
           <p class="side-message">Finding recorded runs…</p>
@@ -121,6 +129,66 @@
           <button id="retry" class="button button-primary" type="button">
             Try again
           </button>
+        </div>
+
+        <div id="structure-view" class="content" hidden>
+          <div class="page-heading">
+            <div>
+              <div class="breadcrumb">
+                STRUCTURES <span>/</span>
+                <span id="structure-breadcrumb">STRUCTURE</span>
+              </div>
+              <div class="title-row">
+                <h1 id="structure-name">Structure</h1>
+                <span id="structure-status" class="small-badge"></span>
+              </div>
+              <p class="subheading" id="structure-subheading"></p>
+            </div>
+          </div>
+          <div class="notice">
+            <span class="notice-icon">i</span
+            ><span
+              >Simulation trials use simulator ground truth for poses and
+              connections. Real-robot trials are entered by hand in
+              <code>experiments/ur5e_structures/trials.json</code>.</span
+            >
+          </div>
+          <p id="structure-error" class="case-failure" hidden></p>
+          <section class="panel" aria-labelledby="layers-title">
+            <div class="panel-header">
+              <div>
+                <span class="section-label">BUILD PLAN</span>
+                <h2 id="layers-title">Layers, top view</h2>
+              </div>
+            </div>
+            <p class="panel-copy">
+              One square per layer on the 20 × 20 stud baseplate. Numbers give
+              the build order; grey outlines are the bricks below.
+            </p>
+            <div id="structure-layers" class="structure-layers"></div>
+          </section>
+          <section class="panel" aria-labelledby="trials-title">
+            <div class="panel-header">
+              <div>
+                <span class="section-label">RESULTS</span>
+                <h2 id="trials-title">Trials</h2>
+              </div>
+            </div>
+            <div class="case-table-wrap">
+              <table id="structure-trials" class="case-table"></table>
+            </div>
+          </section>
+          <section class="panel" aria-labelledby="structure-overview-title">
+            <div class="panel-header">
+              <div>
+                <span class="section-label">ALL STRUCTURES</span>
+                <h2 id="structure-overview-title">Latest result per setting</h2>
+              </div>
+            </div>
+            <div class="case-table-wrap">
+              <table id="structure-overview" class="case-table"></table>
+            </div>
+          </section>
         </div>
 
         <div id="content" class="content" hidden>

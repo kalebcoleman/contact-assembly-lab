@@ -9,7 +9,40 @@ dog showed the gripper can place beside. Each brick rests on one brick below wit
 least 4 studs of contact and may overhang toward a neighbor. Touching same-layer
 bricks were dropped from the first draft.
 
-## Results (simulation, one run each)
+## Trials
+
+Every attempt at a structure, in simulation or on the real UR5e, is one entry in
+[trials.json](trials.json); the dashboard (`python3 experiments/ur5e_dashboard/server.py`,
+**Structures** filter) shows each structure's layers and trials, and an overview of
+the latest result per setting.
+
+After simulation runs, add them from their recordings:
+
+    .venv/bin/python -m experiments.ur5e_structures.record_trials
+
+Add a real-robot trial by hand, with the same fields:
+
+```json
+{
+  "structure": "tower",
+  "kind": "real",
+  "platform": "UR5e (lab)",
+  "date_utc": "2026-11-10T15:00:00+00:00",
+  "breakage": null,
+  "bricks_total": 6,
+  "bricks_connected": 5,
+  "outcome": "failed",
+  "failure": "Brick 6 did not seat; brick 4 lifted with it",
+  "recording": null,
+  "notes": "Operator-fed bricks; video: <path or link>"
+}
+```
+
+`outcome` is `completed` when every brick connected and the run ended cleanly,
+otherwise `failed` (or `incomplete`/`timeout` for simulation). `breakage` is the
+simulator's breakage model (`true`/`false`); use `null` for real trials.
+
+## Results on Isaac Sim 5.1 (simulation, one run each)
 
 | Structure | Bricks | Connections | Outcome |
 |---|---|---|---|

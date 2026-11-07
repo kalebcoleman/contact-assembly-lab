@@ -1075,3 +1075,25 @@ footer span {
   font-weight: 400;
   text-align: left;
 }
+.structure-layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.structure-layer {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.structure-layer svg {
+  display: block;
+  width: 168px;
+  height: 168px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fafafa;
+}
+#structure-view .panel {
+  margin-top: 14px;
+}

@@ -6,6 +6,8 @@ let selectedId = null;
 let currentRun = null;
 let activeFilter = "all";
 let requestVersion = 0;
+let structures = [];
+let selectedStructure = null;
 
 /** Escape recorded text before inserting it into an HTML fragment. */
 function escapeText(value) {
@@ -411,6 +413,7 @@ async function selectRun(id) {
       byId("loading").hidden = true;
       byId("empty").hidden = true;
       byId("error").hidden = true;
+      byId("structure-view").hidden = true;
       byId("content").hidden = false;
       const metadata = run.metadata || {};
       const [status, category] = describeStatus(run.status);
@@ -702,6 +705,197 @@ async function selectRun(id) {
   }
 }
 
+/** Return the latest trial of one kind, optionally with one breakage setting. */
+function latestTrial(structure, kind, breakage) {
+  const matching = structure.trials.filter(
+    (trial) =>
+      trial.kind === kind && (breakage === null || trial.breakage === breakage),
+  );
+  return matching.length ? matching[matching.length - 1] : null;
+}
+
+/** Summarize a trial as connected bricks and a completed or failed mark. */
+function trialLabel(trial) {
+  if (!trial) return "not run";
+  const mark = trial.outcome === "completed" ? "✓" : "✗";
+  return `${trial.bricks_connected}/${trial.bricks_total} ${mark}`;
+}
+
+/** Render the sidebar list of structures matching the search term. */
+function renderStructureList() {
+  const term = byId("search").value.trim().toLowerCase();
+  const list = byId("run-list");
+  list.replaceChildren();
+  byId("run-count").textContent = String(structures.length);
+  const filtered = structures.filter((structure) =>
+    structure.name.toLowerCase().includes(term),
+  );
+  if (!filtered.length) {
+    const message = document.createElement("p");
+    message.className = "side-message";
+    message.textContent = "No structures match this search.";
+    list.append(message);
+    return;
+  }
+  for (const structure of filtered) {
+    const button = document.createElement("button");
+    button.type = "button";
+    const active = structure.name === selectedStructure;
+    button.className = `run${active ? " active" : ""}`;
+    button.setAttribute("aria-current", active ? "true" : "false");
+    const sim = latestTrial(structure, "simulation", null);
+    const real = latestTrial(structure, "real", null);
+    button.innerHTML = `<span class="run-top"><span class="run-title">${escapeText(structure.name)}</span></span>
+      <span class="run-date">${structure.brick_count} bricks · ${structure.layers} layers</span>
+      <span class="run-status">Sim ${escapeText(trialLabel(sim))} <span>·</span> Real ${escapeText(trialLabel(real))}</span>`;
+    button.addEventListener("click", () => showStructure(structure.name));
+    list.append(button);
+  }
+}
+
+/** Draw one top-view square per layer: this layer filled, lower layers outlined. */
+function drawLayers(structure) {
+  const container = byId("structure-layers");
+  container.replaceChildren();
+  for (let layer = 0; layer < structure.layers; layer += 1) {
+    // Stud grid: x right, y up; SVG y grows downward, so flip y.
+    const rect = (brick, attributes) =>
+      `<rect x="${brick.x}" y="${20 - brick.y - brick.depth}" width="${brick.width}" height="${brick.depth}" ${attributes}/>`;
+    const below = structure.bricks
+      .filter((brick) => brick.layer < layer)
+      .map((brick) =>
+        rect(brick, 'fill="none" stroke="#c4c4c4" stroke-width="0.12"'),
+      );
+    const current = structure.bricks
+      .filter((brick) => brick.layer === layer)
+      .map((brick) => {
+        const [r, g, b] = brick.color;
+        const label = `<text x="${brick.x + brick.width / 2}" y="${20 - brick.y - brick.depth / 2 + 0.55}" font-size="1.5" text-anchor="middle" fill="#fff">${brick.index + 1}</text>`;
+        return (
+          rect(brick, `fill="rgb(${r},${g},${b})" stroke="#111" stroke-width="0.12"`) +
+          label
+        );
+      });
+    const figure = document.createElement("figure");
+    figure.className = "structure-layer";
+    figure.innerHTML = `<svg viewBox="0 0 20 20" role="img" aria-label="Layer ${layer + 1}">
+      <rect x="0" y="0" width="20" height="20" fill="#f0f0f0"/>
+      ${below.join("")}${current.join("")}</svg>
+      <figcaption>Layer ${layer + 1}</figcaption>`;
+    container.append(figure);
+  }
+}
+
+/** Show one structure's layout, trials and the overview of all structures. */
+function showStructure(name) {
+  const structure = structures.find((item) => item.name === name);
+  if (!structure) return;
+  selectedStructure = name;
+  renderStructureList();
+  for (const id of ["content", "loading", "empty", "error"])
+    byId(id).hidden = true;
+  byId("structure-view").hidden = false;
+  byId("structure-breadcrumb").textContent = name.toUpperCase();
+  byId("structure-name").textContent = name;
+  const sim = latestTrial(structure, "simulation", null);
+  byId("structure-status").textContent = `LATEST SIM ${trialLabel(sim)}`;
+  byId("structure-subheading").textContent =
+    `${structure.brick_count} bricks · ${structure.layers} layers · ${structure.recipe}`;
+  byId("structure-error").hidden = !structure.error;
+  byId("structure-error").textContent = structure.error
+    ? `Recipe does not validate: ${structure.error}`
+    : "";
+  drawLayers(structure);
+  const rows = structure.trials
+    .slice()
+    .reverse()
+    .map(
+      (trial) => `<tr>
+        <td>${escapeText(formatDate(trial.date_utc))}</td>
+        <td>${escapeText(trial.kind)}</td>
+        <td>${escapeText(trial.platform)}</td>
+        <td>${trial.breakage === null || trial.breakage === undefined ? "—" : trial.breakage ? "on" : "off"}</td>
+        <td>${escapeText(trialLabel(trial))}</td>
+        <td>${escapeText(trial.outcome)}</td>
+        <td>${escapeText(trial.failure || "")}</td>
+        <td>${escapeText(trial.notes || "")}</td>
+        <td>${trial.run_id ? `<button class="case-link" type="button" data-run="${escapeText(trial.run_id)}">Open run</button>` : ""}</td>
+      </tr>`,
+    );
+  byId("structure-trials").innerHTML =
+    "<thead><tr><th>Date</th><th>Kind</th><th>Platform</th><th>Breakage</th><th>Connected</th><th>Outcome</th><th>First failure</th><th>Notes</th><th></th></tr></thead>" +
+    `<tbody>${rows.join("") || '<tr><td colspan="9">No trials recorded yet.</td></tr>'}</tbody>`;
+  for (const button of byId("structure-trials").querySelectorAll("[data-run]"))
+    button.addEventListener("click", () => openRun(button.dataset.run));
+  byId("structure-overview").innerHTML =
+    "<thead><tr><th>Structure</th><th>Bricks</th><th>Layers</th><th>Sim, breakage off</th><th>Sim, breakage on</th><th>Real</th></tr></thead><tbody>" +
+    structures
+      .map(
+        (item) => `<tr class="${item.name === name ? "active" : ""}">
+          <td><button class="case-link" type="button" data-structure="${escapeText(item.name)}">${escapeText(item.name)}</button></td>
+          <td>${item.brick_count}</td><td>${item.layers}</td>
+          <td>${escapeText(trialLabel(latestTrial(item, "simulation", false)))}</td>
+          <td>${escapeText(trialLabel(latestTrial(item, "simulation", true)))}</td>
+          <td>${escapeText(trialLabel(latestTrial(item, "real", null)))}</td>
+        </tr>`,
+      )
+      .join("") +
+    "</tbody>";
+  for (const button of byId("structure-overview").querySelectorAll(
+    "[data-structure]",
+  ))
+    button.addEventListener("click", () =>
+      showStructure(button.dataset.structure),
+    );
+}
+
+/** Load structures and their trials, keeping the selected structure. */
+async function loadStructures() {
+  byId("refresh").disabled = true;
+  try {
+    const response = await fetch("/api/structures", { cache: "no-store" });
+    if (!response.ok)
+      throw new Error(`Unable to read the structures (${response.status}).`);
+    structures = await response.json();
+    renderStructureList();
+    const next =
+      structures.find((item) => item.name === selectedStructure) ||
+      structures[0];
+    if (next) showStructure(next.name);
+  } catch (error) {
+    byId("structure-view").hidden = true;
+    byId("error").hidden = false;
+    byId("error-message").textContent = error.message;
+  } finally {
+    byId("refresh").disabled = false;
+  }
+}
+
+/** Mark one filter button active and render the list it selects. */
+function setFilter(filter) {
+  activeFilter = filter;
+  for (const item of document.querySelectorAll(".filter")) {
+    item.classList.toggle("active", item.dataset.filter === filter);
+    item.setAttribute(
+      "aria-pressed",
+      item.dataset.filter === filter ? "true" : "false",
+    );
+  }
+  if (filter === "structures") {
+    loadStructures();
+    return;
+  }
+  byId("structure-view").hidden = true;
+  if (currentRun) byId("content").hidden = false;
+  renderRuns();
+}
+
+/** Leave the structure view and open one recording in the run library. */
+function openRun(id) {
+  setFilter("all");
+  selectRun(id);
+}
+
 /** Refresh the discovered recordings while preserving the selected run. */
 async function loadRuns() {
   byId("refresh").disabled = true;
@@ -734,19 +928,15 @@ async function loadRuns() {
   }
 }
 
-byId("search").addEventListener("input", renderRuns);
-for (const button of document.querySelectorAll(".filter")) {
-  button.addEventListener("click", () => {
-    activeFilter = button.dataset.filter;
-    for (const item of document.querySelectorAll(".filter")) {
-      item.classList.toggle("active", item === button);
-      item.setAttribute("aria-pressed", item === button ? "true" : "false");
-    }
-    renderRuns();
-  });
-}
+byId("search").addEventListener("input", () =>
+  activeFilter === "structures" ? renderStructureList() : renderRuns(),
+);
+for (const button of document.querySelectorAll(".filter"))
+  button.addEventListener("click", () => setFilter(button.dataset.filter));
 byId("signal").addEventListener("change", drawChart);
-byId("refresh").addEventListener("click", loadRuns);
-byId("retry").addEventListener("click", loadRuns);
+const refreshView = () =>
+  activeFilter === "structures" ? loadStructures() : loadRuns();
+byId("refresh").addEventListener("click", refreshView);
+byId("retry").addEventListener("click", refreshView);
 new ResizeObserver(drawChart).observe(byId("chart").parentElement);
 loadRuns();
