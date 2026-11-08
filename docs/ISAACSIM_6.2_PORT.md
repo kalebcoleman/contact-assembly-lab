@@ -81,6 +81,11 @@ version Kit's `all-deps.packman.xml` pins; the installed copy is stripped.
   update:
   - `NpScene::getFilterCallback()` loads `[this+0x9c8]`.
   - `NpScene::simulateOrCollide()` stores `elapsedTime` to `[this+0x3c8]`.
+- Weld torque on CPU TGS scenes: PhysX's CPU TGS writeback reports a weld's
+  torque about the weld point short by 2 rA x F (PGS and GPU are correct; PhysX
+  5.6.1 and 5.9.x alike). `populate_rigid_info_map` adds it back so breakage sees
+  the real joint load; `TestWeldConstraintForce` pins the PhysX behaviour. See
+  `experiments/ur5e_dog/RESULTS.md`.
 - The omni.physx 107 `PrimIteratorMapRange` vtable patch is removed. 110.x
   traverses instance proxies in both `reset()` and `next()`.
 

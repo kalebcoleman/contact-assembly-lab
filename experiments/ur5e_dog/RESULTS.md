@@ -137,3 +137,48 @@ joint near the base, often a 4-stud joint, breaks while a later brick is placed,
 including bricks beside it rather than above it (table, human, dog). Neither cause
 is established yet; the release ramp and freeze-on-connection fixes were tuned on
 aligned stacks.
+
+## Why joints broke with breakage on (2026-11-07)
+
+The breakage model (BrickSim paper, Eq. 10) loads each brick with
+b = (momentum change - external impulse) / dt. In the code the external impulse
+is the momentum change minus the PhysX weld-constraint impulses, so each brick's
+load is the weld (connection) force and torque PhysX reports. A joint breaks when
+utilization max (|F_t| + F_a) / (mu (F_r + F_0)) exceeds 1 for longer than the
+0.05 s cooldown.
+
+**1. A PhysX reporting error (fixed in native code).** PhysX's CPU TGS solver,
+which Isaac Sim uses here, reports a weld's torque about the weld point short by
+2 rA x F, rA being the distance from body A's centre of mass to the weld
+(`writeBack1DStep`, DyTGSContactPrep.cpp; identical in PhysX 5.6.1 and 5.9.x, so
+5.1 had it too). For a brick welded to the baseplate, rA is the brick's distance
+from the plate centre. Under a robot press (about 2.4 N) a 2x2 at stud (6, 6) got
+a spurious 0.12 N*m and utilization 2.1 on its first solve, so it broke while
+still being pressed; the same brick at (9, 9) read 0.00. `TestWeldConstraintForce`
+reproduces the PhysX behaviour on raw PhysX (PGS reports 0, CPU TGS -2 rA x F),
+and `PhysicsLegoGraph` now adds 2 rA x F back on CPU TGS scenes. Afterwards the
+(6, 6) brick peaks at 0.26 and builds.
+
+**2. The opening gripper finger hits the neighbouring brick (controller).** With
+the fix, `human` still breaks its first brick (an 8-stud 2x4 on the plate) while
+the second brick, 2 studs away along x, is released: the first brick is welded
+to the kinematic plate and does not move, yet its joint load rises from 0 to 0.83
+within 0.05 s as the RG2 fingers start opening (about 0.12 rad), then it breaks
+and the brick jumps 2.4 mm away from the gripper. A welded brick on a fixed plate
+only gains load from contact, so the opening finger is pushing it. The 2-stud
+same-layer gap clears the closed fingers but not the opening ones. table, dog and
+human fail this way; this would also happen on the real robot.
+
+**3. Marginal 4-stud joints during release.** l_corner and cantilever now fail
+at 1.000x utilization on a 4-stud joint during the 1 s gripper-release ramp (they
+passed before the fix, by the spurious torque partly cancelling the real one).
+
+Breakage on, bricks connected during the run (console), before -> after the fix:
+single 1/1 -> 1/1, column 4/4 -> 4/4, tower 5/6 -> **6/6**, spiral_tower 2/10 ->
+6/10, stairs 4/8 -> 6/8, cross_tower 2/10 -> 4/10, column_10 4/10 -> 6/10, lean_6
+2/6 -> 3/6, table 1/10 -> 2/10, zigzag_6 3/6, human 2/8, mixed_tower 5/8, dog 2/10
+unchanged, l_corner 4/4 -> 3/4, cantilever 4/4 -> 3/4. Trials after the fix are
+marked in `experiments/ur5e_structures/trials.json`.
+
+Next: open the gripper only as far as the gap allows (or place so the fingers open
+away from neighbours), then look at the release load on 4-stud joints.

@@ -32,6 +32,22 @@
     "notes": ""
   },
   {
+    "structure": "cantilever",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_cantilever",
+    "date_utc": "2026-11-07T23:46:53.765108+00:00",
+    "breakage": true,
+    "bricks_total": 4,
+    "bricks_connected": 2,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 77.40000403672457,
+    "recording": "20261107T234653.765108Z-structure_cantilever.jsonl",
+    "failure": "Brick 3 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "column",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -46,6 +62,22 @@
     "recording": "20261107T185842.736700Z-structure_column.jsonl",
     "failure": null,
     "notes": ""
+  },
+  {
+    "structure": "column",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_column",
+    "date_utc": "2026-11-07T23:44:32.812046+00:00",
+    "breakage": true,
+    "bricks_total": 4,
+    "bricks_connected": 4,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 102.41667200811207,
+    "recording": "20261107T234432.812046Z-structure_column.jsonl",
+    "failure": null,
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   },
   {
     "structure": "column_10",
@@ -80,6 +112,22 @@
     "notes": ""
   },
   {
+    "structure": "column_10",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_column_10",
+    "date_utc": "2026-11-07T23:39:55.888247+00:00",
+    "breakage": true,
+    "bricks_total": 10,
+    "bricks_connected": 5,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 141.16667402908206,
+    "recording": "20261107T233955.888247Z-structure_column_10.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "cross_tower",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -110,6 +158,22 @@
     "recording": "20261107T210155.510235Z-structure_cross_tower.jsonl",
     "failure": "Brick 2 detached from its support",
     "notes": ""
+  },
+  {
+    "structure": "cross_tower",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_cross_tower",
+    "date_utc": "2026-11-07T23:34:21.620117+00:00",
+    "breakage": true,
+    "bricks_total": 10,
+    "bricks_connected": 3,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 98.71667181514204,
+    "recording": "20261107T233421.620117Z-structure_cross_tower.jsonl",
+    "failure": "Brick 3 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   },
   {
     "structure": "dog",
@@ -224,6 +288,22 @@
     "notes": ""
   },
   {
+    "structure": "dog",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "dog_ten",
+    "date_utc": "2026-11-07T23:43:06.225230+00:00",
+    "breakage": true,
+    "bricks_total": 10,
+    "bricks_connected": 1,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 55.48333622701466,
+    "recording": "20261107T234306.225230Z-dog_ten.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "human",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -272,6 +352,22 @@
     "notes": ""
   },
   {
+    "structure": "human",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_human",
+    "date_utc": "2026-11-07T23:27:12.967350+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 1,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 55.88333624787629,
+    "recording": "20261107T232712.967350Z-structure_human.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "l_corner",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -302,6 +398,22 @@
     "recording": "20261107T210959.875319Z-structure_l_corner.jsonl",
     "failure": null,
     "notes": ""
+  },
+  {
+    "structure": "l_corner",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_l_corner",
+    "date_utc": "2026-11-07T23:17:16.534552+00:00",
+    "breakage": true,
+    "bricks_total": 4,
+    "bricks_connected": 2,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 76.91667067818344,
+    "recording": "20261107T231716.534552Z-structure_l_corner.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   },
   {
     "structure": "lean_6",
@@ -336,6 +448,22 @@
     "notes": ""
   },
   {
+    "structure": "lean_6",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_lean_6",
+    "date_utc": "2026-11-07T23:23:39.341794+00:00",
+    "breakage": true,
+    "bricks_total": 6,
+    "bricks_connected": 2,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 77.11667068861425,
+    "recording": "20261107T232339.341794Z-structure_lean_6.jsonl",
+    "failure": "Brick 2 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "mixed_tower",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -368,6 +496,22 @@
     "notes": ""
   },
   {
+    "structure": "mixed_tower",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_mixed_tower",
+    "date_utc": "2026-11-07T23:31:41.887013+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 4,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 119.9000062532723,
+    "recording": "20261107T233141.887013Z-structure_mixed_tower.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "single",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -382,6 +526,38 @@
     "recording": "20261107T185233.600604Z-structure_single.jsonl",
     "failure": null,
     "notes": ""
+  },
+  {
+    "structure": "single",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_single",
+    "date_utc": "2026-11-07T21:37:04.737748+00:00",
+    "breakage": true,
+    "bricks_total": 1,
+    "bricks_connected": 1,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 38.43333533778787,
+    "recording": "20261107T213704.737748Z-structure_single.jsonl",
+    "failure": null,
+    "notes": ""
+  },
+  {
+    "structure": "single",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_single",
+    "date_utc": "2026-11-07T23:15:11.826657+00:00",
+    "breakage": true,
+    "bricks_total": 1,
+    "bricks_connected": 1,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 38.43333533778787,
+    "recording": "20261107T231511.826657Z-structure_single.jsonl",
+    "failure": null,
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   },
   {
     "structure": "spiral_tower",
@@ -414,6 +590,22 @@
     "recording": "20261107T211439.126317Z-structure_spiral_tower.jsonl",
     "failure": "Brick 2 detached from its support",
     "notes": ""
+  },
+  {
+    "structure": "spiral_tower",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_spiral_tower",
+    "date_utc": "2026-11-07T23:36:40.278533+00:00",
+    "breakage": true,
+    "bricks_total": 10,
+    "bricks_connected": 5,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 144.68334087915719,
+    "recording": "20261107T233640.278533Z-structure_spiral_tower.jsonl",
+    "failure": "Brick 2 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   },
   {
     "structure": "stairs",
@@ -464,6 +656,22 @@
     "notes": ""
   },
   {
+    "structure": "stairs",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_stairs",
+    "date_utc": "2026-11-07T23:28:37.112178+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 5,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 141.28334070183337,
+    "recording": "20261107T232837.112178Z-structure_stairs.jsonl",
+    "failure": "Brick 3 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "table",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -494,6 +702,22 @@
     "recording": "20261107T205542.939352Z-structure_table.jsonl",
     "failure": "Brick 1 detached from its support",
     "notes": ""
+  },
+  {
+    "structure": "table",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_table",
+    "date_utc": "2026-11-07T23:19:00.196119+00:00",
+    "breakage": true,
+    "bricks_total": 10,
+    "bricks_connected": 1,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 55.75000290758908,
+    "recording": "20261107T231900.196119Z-structure_table.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   },
   {
     "structure": "tower",
@@ -528,6 +752,22 @@
     "notes": ""
   },
   {
+    "structure": "tower",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_tower",
+    "date_utc": "2026-11-07T23:20:26.845994+00:00",
+    "breakage": true,
+    "bricks_total": 6,
+    "bricks_connected": 6,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 145.0000075623393,
+    "recording": "20261107T232026.845994Z-structure_tower.jsonl",
+    "failure": null,
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
+  },
+  {
     "structure": "zigzag_6",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -558,5 +798,21 @@
     "recording": "20261107T203711.794302Z-structure_zigzag_6.jsonl",
     "failure": "Brick 3 detached from its support",
     "notes": ""
+  },
+  {
+    "structure": "zigzag_6",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_zigzag_6",
+    "date_utc": "2026-11-07T23:25:25.753790+00:00",
+    "breakage": true,
+    "bricks_total": 6,
+    "bricks_connected": 2,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 77.20000402629375,
+    "recording": "20261107T232525.753790Z-structure_zigzag_6.jsonl",
+    "failure": "Brick 2 detached from its support",
+    "notes": "With the CPU TGS weld-torque fix (f61f441)."
   }
 ]

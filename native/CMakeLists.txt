@@ -115,5 +115,6 @@ bricksim_add_test(TestConstraintScheduler tests/TestConstraintScheduler.cpp)
 bricksim_add_test(TestRandomRegularGraphSchedulingPolicy tests/TestRandomRegularGraphSchedulingPolicy.cpp)
 bricksim_add_test(TestPack2dMaxrect tests/TestPack2dMaxrect.cpp)
 bricksim_add_test(TestPhysicsGraphAssemblyClosure tests/TestPhysicsGraphAssemblyClosure.cpp)
+bricksim_add_test(TestWeldConstraintForce tests/TestWeldConstraintForce.cpp)
 
 bricksim_add_checks(DIRS modules py tools tests)
