@@ -9,14 +9,19 @@ file records exactly which output belongs to which settings.
 
 With `--capture`, the viewport is rendered to frames during the run
 (`DOG_CAPTURE_DIR`) and encoded to `.cache/videos/<sweep>/<label>.mp4` (1080p,
-30 fps of simulated time); the frames are then deleted.
+30 fps of simulated time); the frames are then deleted. The close-up stills
+taken at the end of the run are kept beside the video as
+`<label>_closeup_*.png`.
 
 Summarize afterwards with `summarize_sweep.py`. This drives the simulator only;
 it never connects to a robot.
 
-    OMNI_KIT_ACCEPT_EULA=YES DISPLAY=:1 \
-        python3 -m experiments.ur5e_structures.run_sweep \
+    OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep \
         experiments/ur5e_structures/sweeps/<name>.json [--capture] [--dry-run]
+
+To reproduce a committed sweep, `--rerun <copy.json>` clears the run ids into
+a copy and runs that; summarize the copy and compare it with the committed
+summary. A display is needed (Kit runs windowed).
 """
 
 import json
@@ -138,8 +143,20 @@ def main() -> None:
     parser.add_argument("sweep", type=Path, help="Sweep definition (JSON).")
     parser.add_argument("--capture", action="store_true", help="Record videos.")
     parser.add_argument("--dry-run", action="store_true", help="Only list runs.")
+    parser.add_argument(
+        "--rerun",
+        type=Path,
+        help="Copy the definition here with run ids, videos and media cleared, "
+        "and run the copy (to reproduce a committed sweep).",
+    )
     args = parser.parse_args()
     sweep = json.loads(args.sweep.read_text())
+    if args.rerun:
+        sweep["name"] = args.rerun.stem
+        for run in sweep["runs"]:
+            run.update(run=None, video=None, media=None)
+        args.rerun.write_text(json.dumps(sweep, indent=2) + "\n")
+        args.sweep = args.rerun
     for run in sweep["runs"]:
         if run.get("run"):
             continue
@@ -155,6 +172,7 @@ def main() -> None:
         frames = ROOT / ".cache/frames" / run["label"]
         if args.capture:
             shutil.rmtree(frames, ignore_errors=True)
+            shutil.rmtree(frames.with_name(f"{frames.name}_stills"), ignore_errors=True)
             environment["DOG_CAPTURE_DIR"] = str(frames)
         while free_gpu_mb() < MIN_FREE_GPU_MB:
             print("waiting for GPU memory", flush=True)
@@ -166,6 +184,11 @@ def main() -> None:
             video = ROOT / ".cache/videos" / sweep["name"] / f"{run['label']}.mp4"
             encode(frames, video)
             run["video"] = str(video.relative_to(ROOT))
+            stills = frames.with_name(f"{frames.name}_stills")
+            if stills.exists():
+                for still in sorted(stills.glob("*.png")):
+                    still.replace(video.with_name(f"{run['label']}_{still.name}"))
+                shutil.rmtree(stills)
         manifest = json.loads((RUNS / run["run"] / "manifest.json").read_text())
         print(f"{run['label']}: {manifest[0]['outcome']} {run['run']}", flush=True)
         # Record progress after every run, so an interrupted sweep can resume.

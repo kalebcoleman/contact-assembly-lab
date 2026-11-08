@@ -1,4 +1,4 @@
-UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T005857.232334Z-case_C05.jsonl
+UR5e recording: <workspace>/BrickSim/outputs/ur5e_lego/20261104T005857.232334Z-case_C05.jsonl
 UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
 UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
 UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
@@ -16,7 +16,7 @@ UR5e case finished
     raise RuntimeError(
 2026-11-04T00:59:42Z [57,091ms] [Error] [omni.kit.app._impl] [py stderr]: RuntimeError: Brick 1 did not complete the press: connected=False, held=0.00 s, brick=[-0.29605654 -0.33043578 -0.08075033], tool=[-0.29492825 -0.31614354  0.15000008], target=[-0.29475963 -0.31604413  0.14963766], debug=[(-1.4153320747077374e-05, -4.85822726780481, 0.002249993553084026, 0.014724891246679547, 0.019777009076176882, [3, 8]), (-1.4256534095847878e-05, -4.8573255985879955, 0.0022498902641657046, 0.01472573937473313, 0.019762872424846336, [3, 8])]
 UR5e baseplate: resetting scene
-UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T005944.649539Z-case_C05.jsonl
+UR5e recording: <workspace>/BrickSim/outputs/ur5e_lego/20261104T005944.649539Z-case_C05.jsonl
 UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
 UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
 UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000

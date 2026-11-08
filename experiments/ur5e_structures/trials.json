@@ -1,5 +1,22 @@
 [
   {
+    "structure": "bridge",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_bridge",
+    "date_utc": "2026-11-08T17:31:56.605533+00:00",
+    "breakage": true,
+    "bricks_total": 7,
+    "bricks_connected": 7,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 179.2000093460083,
+    "recording": "20261108T173156.605533Z-structure_bridge.jsonl",
+    "failure": null,
+    "gripper_contacts": 0,
+    "notes": "Showcase sweep 2026-11-08, run bridge (completed; joint breaks lasting/transient 0/1). Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md"
+  },
+  {
     "structure": "cantilever",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -468,6 +485,23 @@
     "notes": "Documented sweep: neighbour-limited release, arm held while opening, contact monitor in log mode (92af9bd)."
   },
   {
+    "structure": "column_turned",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_column_turned",
+    "date_utc": "2026-11-08T17:59:39.228685+00:00",
+    "breakage": true,
+    "bricks_total": 4,
+    "bricks_connected": 4,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 114.43333930149674,
+    "recording": "20261108T175939.228685Z-structure_column_turned.jsonl",
+    "failure": null,
+    "gripper_contacts": 0,
+    "notes": "Showcase sweep 2026-11-08, run column_turned (completed; joint breaks lasting/transient 0/3). Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md"
+  },
+  {
     "structure": "cross_tower",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -729,6 +763,23 @@
     "notes": "Capture sweep 2026-11-08, run dog (completed; joint breaks lasting/transient 0/2). Details: experiments/ur5e_structures/sweeps/2026-11-08-capture-sweep.summary.md"
   },
   {
+    "structure": "dog",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "dog_ten",
+    "date_utc": "2026-11-08T17:44:36.567216+00:00",
+    "breakage": true,
+    "bricks_total": 10,
+    "bricks_connected": 10,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 238.1833457555622,
+    "recording": "20261108T174436.567216Z-dog_ten.jsonl",
+    "failure": null,
+    "gripper_contacts": 2,
+    "notes": "Showcase sweep 2026-11-08, run dog (completed; joint breaks lasting/transient 0/2). Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md"
+  },
+  {
     "structure": "duck",
     "kind": "simulation",
     "platform": "Isaac Sim 6.2.0.0",
@@ -761,6 +812,63 @@
     "failure": "Brick 1 detached from its support",
     "gripper_contacts": 0,
     "notes": "Capture sweep 2026-11-08, run giraffe (joint lost; joint breaks lasting/transient 1/1). Details: experiments/ur5e_structures/sweeps/2026-11-08-capture-sweep.summary.md"
+  },
+  {
+    "structure": "house",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_house",
+    "date_utc": "2026-11-08T17:36:54.788894+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 2,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 100.70000525191426,
+    "recording": "20261108T173654.788894Z-structure_house.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "gripper_contacts": 0,
+    "notes": "Showcase sweep 2026-11-08, run house (joint lost; joint breaks lasting/transient 1/0). Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md"
+  },
+  {
+    "structure": "house",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_house",
+    "date_utc": "2026-11-08T17:51:20.592976+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 8,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 216.5333446264267,
+    "recording": "20261108T175120.592976Z-structure_house.jsonl",
+    "failure": null,
+    "gripper_contacts": 0,
+    "notes": "Showcase sweep 2026-11-08, run house_release_2s (completed; joint breaks lasting/transient 0/4). Settings: DOG_RELEASE_RAMP_S=2.0. Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md",
+    "controller_settings": {
+      "DOG_RELEASE_RAMP_S": "2.0"
+    }
+  },
+  {
+    "structure": "house",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_house",
+    "date_utc": "2026-11-08T17:57:05.119369+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 2,
+    "outcome": "failed",
+    "required_force_n": 1.0,
+    "simulation_s": 100.73333858698606,
+    "recording": "20261108T175705.119369Z-structure_house.jsonl",
+    "failure": "Brick 1 detached from its support",
+    "gripper_contacts": 0,
+    "notes": "Showcase sweep 2026-11-08, run house_press_shallow (joint lost; joint breaks lasting/transient 1/0). Settings: DOG_PRESS_DEPTH_M=0.0002. Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md",
+    "controller_settings": {
+      "DOG_PRESS_DEPTH_M": "0.0002"
+    }
   },
   {
     "structure": "human",
@@ -1193,6 +1301,23 @@
     "failure": "Brick 2 detached from its support",
     "gripper_contacts": 0,
     "notes": "Capture sweep 2026-11-08, run lean_ladder (joint lost; joint breaks lasting/transient 1/3). Details: experiments/ur5e_structures/sweeps/2026-11-08-capture-sweep.summary.md"
+  },
+  {
+    "structure": "log_cabin",
+    "kind": "simulation",
+    "platform": "Isaac Sim 6.2.0.0",
+    "experiment": "structure_log_cabin",
+    "date_utc": "2026-11-08T17:39:27.306763+00:00",
+    "breakage": true,
+    "bricks_total": 8,
+    "bricks_connected": 8,
+    "outcome": "completed",
+    "required_force_n": 1.0,
+    "simulation_s": 198.45001034997404,
+    "recording": "20261108T173927.306763Z-structure_log_cabin.jsonl",
+    "failure": null,
+    "gripper_contacts": 1,
+    "notes": "Showcase sweep 2026-11-08, run log_cabin (completed; joint breaks lasting/transient 0/0). Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md"
   },
   {
     "structure": "mixed_tower",

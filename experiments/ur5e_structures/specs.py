@@ -1,8 +1,9 @@
 """Store-bought-brick structure library, validated with the dog recipe checker.
 
-Bricks: 2x4, 2x6 and 2x2 (studs along x, y; height 3 plate units). `yaw` is the
-quarter-turn count relative to the support. Same-layer bricks keep a gap of at
-least 2 studs (16 mm) so the gripper never touches a neighbor while placing.
+Bricks: 2x2, 2x4, 2x6, 2x8 and 2x10 (studs along x, y; height 3 plate units).
+`yaw` is the quarter-turn count relative to the support. Same-layer bricks keep
+a gap of at least 2 studs (16 mm) so the gripper never touches a neighbor while
+placing.
 """
 
 import json
@@ -159,6 +160,155 @@ SPECS = {
     "tower_2x2": [(D, None, (9, 9), 0)] + [(D, i, (0, 0), 0) for i in range(9)],
 }
 
+# Showcase builds, written in absolute plate studs: (dimensions, support index or
+# None, footprint corner (x, y), turns). Turns 1 lays a brick along world x; the
+# RG2 always closes across a brick's own x side, so a turned 2-wide brick is
+# gripped by its long faces and gaps along a wall (doors, spans) leave the
+# fingers free. The camera looks along +y, so these read from the side.
+L6 = [2, 6, 3]  # 2x6 brick, gripped across its 2-stud width
+L8 = [2, 8, 3]  # 2x8 brick
+L10 = [2, 10, 3]  # 2x10 brick
+STONE = [150, 150, 158]
+# (dimensions, support index or None, footprint corner, turns, RGB color)
+AbsolutePart = tuple[list[int], int | None, tuple[int, int], int, list[int]]
+SHOWCASE: dict[str, list[AbsolutePart]] = {
+    # Corbel arch: each pier steps one stud inward, then a 2x10 deck closes the
+    # arch by landing on both piers; two parapets finish the deck.
+    "bridge": [
+        (L6, None, (1, 9), 1, STONE),
+        (L6, None, (13, 9), 1, STONE),
+        (A, 0, (4, 9), 1, STONE),
+        (A, 1, (12, 9), 1, STONE),
+        (L10, 2, (5, 9), 1, [120, 78, 45]),
+        (A, 4, (5, 9), 1, [175, 40, 35]),
+        (A, 4, (11, 9), 1, [175, 40, 35]),
+    ],
+    # Facade with a doorway: two walls two courses high, a 2x10 lintel across
+    # the door landing on both walls, a stepped gable roof and a chimney.
+    "house": [
+        (A, None, (2, 9), 1, [235, 225, 195]),
+        (A, None, (10, 9), 1, [235, 225, 195]),
+        (A, 0, (2, 9), 1, [235, 225, 195]),
+        (A, 1, (10, 9), 1, [235, 225, 195]),
+        (L10, 2, (3, 9), 1, [110, 70, 40]),
+        (L8, 4, (4, 9), 1, [160, 30, 30]),
+        (A, 5, (6, 9), 1, [160, 30, 30]),
+        (D, 6, (8, 9), 0, [110, 110, 115]),
+    ],
+    # The 4-brick column with every brick turned to lie along x: the same 8-stud
+    # joints, with the gripper rotated 90 degrees (a control for the house wall).
+    "column_turned": [
+        (A, None, (8, 9), 1, [200, 30, 30]),
+        (A, 0, (8, 9), 1, [188, 40, 30]),
+        (A, 1, (8, 9), 1, [176, 50, 30]),
+        (A, 2, (8, 9), 1, [164, 60, 30]),
+    ],
+    # Log cabin: courses alternate direction and every brick above the first
+    # course interlocks two corners below (planned on one, landing on both).
+    "log_cabin": [
+        (L8, None, (6, 6), 0, [125, 80, 45]),
+        (L8, None, (12, 6), 0, [125, 80, 45]),
+        (L8, 0, (6, 6), 1, [150, 100, 55]),
+        (L8, 0, (6, 12), 1, [150, 100, 55]),
+        (L8, 2, (6, 6), 0, [125, 80, 45]),
+        (L8, 2, (12, 6), 0, [125, 80, 45]),
+        (L8, 4, (6, 6), 1, [150, 100, 55]),
+        (L8, 4, (6, 12), 1, [150, 100, 55]),
+    ],
+}
+
+
+def rotate(quarter_turns: int, x: int, y: int) -> tuple[int, int]:
+    """Rotate a stud vector counter-clockwise by quarter turns, as `validate` does.
+
+    Args:
+        quarter_turns: Number of 90-degree counter-clockwise turns.
+        x: Stud x component.
+        y: Stud y component.
+
+    Returns:
+        The rotated (x, y) vector.
+    """
+    for _ in range(quarter_turns % 4):
+        x, y = -y, x
+    return x, y
+
+
+def from_absolute(
+    parts: list[AbsolutePart],
+) -> list[tuple[list[int], int | None, tuple[int, int], int]]:
+    """Convert absolute footprints to the support-relative offsets and yaws.
+
+    Args:
+        parts: (dimensions, support, footprint corner, turns, color) in plate
+            studs, turns 0 or 1.
+
+    Returns:
+        (dimensions, support, offset, yaw) entries as in `SPECS`.
+    """
+    origins: list[tuple[int, int, int]] = []
+    result = []
+    for size, support, (x0, y0), turns, _ in parts:
+        # Hole origin: the footprint corner, shifted by the turned brick's extent.
+        x, y = (x0 + size[1], y0) if turns == 1 else (x0, y0)
+        px, py, parent_turns = (0, 0, 0) if support is None else origins[support]
+        offset = rotate(4 - parent_turns, x - px, y - py)
+        result.append((size, support, offset, (turns - parent_turns) % 4))
+        origins.append((x, y, turns))
+    return result
+
+
+def packed_sources(sizes: list[list[int]], plate: list[float]) -> list[list[float]]:
+    """Lay out pickup positions for long bricks, tighter along y than the grid.
+
+    Bricks are gripped across x, so neighbours along x keep a 70 mm edge gap
+    for the open fingers (the dog's spacing); along y, where the fingers are
+    narrower than the gap, a 30 mm edge gap. Positions stay within 0.76 m of
+    the robot base (the dog's farthest pickup) and clear of the baseplate.
+
+    Args:
+        sizes: Brick dimensions in build order.
+        plate: Baseplate centre (x, y) in meters.
+
+    Returns:
+        One (x, y) pickup position per brick, in meters.
+    """
+    candidates = [
+        (round(-0.56 + 0.005 * i, 3), round(-0.66 + 0.005 * j, 3))
+        for i in range(53)
+        for j in range(97)
+    ]
+    candidates = [
+        c for c in candidates if 0.35 <= (c[0] ** 2 + c[1] ** 2) ** 0.5 <= 0.76
+    ]
+    candidates.sort(key=lambda c: abs(c[0] + 0.47) + abs(c[1] + 0.45))
+    placed: list[tuple[float, float, list[int]]] = []
+    for size in sizes:
+        for x, y in candidates:
+            half = (0.004 * size[0], 0.004 * size[1])
+            if all(
+                abs((x, y)[a] - plate[a]) < 0.08 + 0.004 * size[a] + 0.03
+                for a in (0, 1)
+            ):
+                continue
+            if any(
+                all(
+                    abs((x, y)[a] - (px, py)[a]) < 0.004 * (size[a] + other[a]) + 0.02
+                    for a in (0, 1)
+                )
+                or (
+                    abs(y - py) < half[1] + 0.004 * other[1] + 0.03
+                    and abs(x - px) < half[0] + 0.004 * other[0] + 0.07
+                )
+                for px, py, other in placed
+            ):
+                continue
+            placed.append((x, y, size))
+            break
+        else:
+            raise ValueError(f"No pickup position for a {size} brick")
+    return [[x, y] for x, y, _ in placed]
+
 
 def main() -> None:
     """Resolve offsets, validate every spec and write one JSON recipe per structure.
@@ -166,19 +316,28 @@ def main() -> None:
     Pickup positions are a placeholder grid (x -0.52/-0.43 m, y from -0.55 m in
     0.07 m steps) satisfying the validator's spacing and plate clearance.
     """
-    for name, parts in SPECS.items():
+    showcase = {name: from_absolute(parts) for name, parts in SHOWCASE.items()}
+    for name, parts in {**SPECS, **showcase}.items():
+        colors = (
+            [p[4] for p in SHOWCASE[name]]
+            if name in SHOWCASE
+            else [[200 - 12 * i, 30 + 10 * i, 30] for i in range(len(parts))]
+        )
+        sources = (
+            packed_sources([p[0] for p in parts], [-0.25, -0.33])
+            if name in SHOWCASE
+            else [
+                [round(-0.52 + 0.09 * (i // 5), 3), round(-0.55 + 0.07 * (i % 5), 3)]
+                for i in range(len(parts))
+            ]
+        )
         config = {
             "experiment_name": f"structure_{name}",
             "baseplate_xy_m": [-0.25, -0.33],
             "part_names": [f"{name}_{i}" for i in range(len(parts))],
             "brick_dimensions": [p[0] for p in parts],
-            "brick_colors": [
-                [200 - 12 * i, 30 + 10 * i, 30] for i in range(len(parts))
-            ],
-            "brick_positions_xy_m": [
-                [round(-0.52 + 0.09 * (i // 5), 3), round(-0.55 + 0.07 * (i % 5), 3)]
-                for i in range(len(parts))
-            ],
+            "brick_colors": colors,
+            "brick_positions_xy_m": sources,
             "support_bricks": [p[1] for p in parts],
             "placement_offsets": [],
             "placement_yaws": [p[3] for p in parts],

@@ -1,71 +1,151 @@
-# contact-assembly-lab
+# Contact Assembly Lab
+
+### Robotic brick assembly with joint-strength physics in Isaac Sim 6.2
+
+**Kaleb Coleman**
+
+[Structure catalog](docs/STRUCTURES.md) ·
+[Failure analysis](experiments/ur5e_structures/FAILURES.md) ·
+[Sweep summaries](experiments/ur5e_structures/sweeps/README.md) ·
+[Evaluation practices](docs/EVALUATION_PRACTICES.md) ·
+[Isaac Sim 6.2 port](docs/ISAACSIM_6.2_PORT.md) ·
+[Citation](#citation)
 
 [![Isaac Sim 6.2](https://img.shields.io/badge/Isaac%20Sim-6.2-76B900?logo=nvidia&logoColor=white)](https://docs.isaacsim.omniverse.nvidia.com/6.2.0/index.html)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](https://docs.python.org/3.12/)
 [![MIT License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+[![Built on BrickSim](https://img.shields.io/badge/built%20on-BrickSim-c0392b)](https://github.com/intelligent-control-lab/BrickSim)
 
-Research on assembling complex brick structures with a UR5e (RG2 gripper,
-Vention bench) in Isaac Sim 6.2. The simulator is a port of BrickSim from Isaac
-Sim 5.1 / Python 3.11 to Isaac Sim 6.2.0.0 / Python 3.12.
+![The UR5e building the arch bridge in simulation](docs/media/bridge.gif)
 
-**Credit.** The brick physics (connection and breakage model), the C++ native
-extension, the simulator UI and the Isaac Sim 6.0 groundwork of this port come
-from
-[BrickSim](https://github.com/intelligent-control-lab/BrickSim) by Haowei Wen,
-Ruixuan Liu, Weiyi Piao, Siyu Li and Changliu Liu (Intelligent Control Lab,
-Carnegie Mellon University), released under the MIT License. Please cite it
-([below](#citation)) if you use this work.
+*The UR5e builds a corbel-arch bridge in simulation. Each pier steps one stud
+inward, then a 2x10 deck closes the arch by landing on both piers at once.
+Joint strength follows BrickSim's breakage model throughout.*
 
-All results are simulation, judged by simulator ground truth, unless a document
-says otherwise.
+## Overview
 
-## Demos
+A UR5e arm with an OnRobot RG2 gripper builds structures from interlocking
+bricks in NVIDIA Isaac Sim 6.2. BrickSim's joint-strength model decides, at
+every physics step, whether each stud connection holds under the loads the
+robot puts on it. The project asks three questions:
+- what a robot can build reliably;
+- where builds fail, and why;
+- whether the simulator's answers hold on the real robot (planned).
 
-UR5e with an RG2 gripper building brick structures in Isaac Sim 6.2, with
-BrickSim's full joint-strength (breakage) model on. These are simulation
-recordings rendered in the simulator at 1080p, 30 frames per second of
-simulated time. The GIFs play 16× faster and the MP4s 8×. Poses come from
-simulator ground truth, and the final pose is held at the end of each video.
+It is also the contact-physics and evaluation testbed for the author's main
+research, Jenga with model-predictive control and reinforcement learning.
 
-| Dog, 10 bricks: completed | Human figure, 8 bricks: completed |
+The simulator is a port of [BrickSim](https://github.com/intelligent-control-lab/BrickSim)
+(Wen et al., 2026) from Isaac Sim 5.1 to Isaac Sim 6.2.0.0 and Python 3.12. The
+brick physics, the C++ native extension and the simulator UI are BrickSim's.
+This repository adds:
+- the 6.2 port;
+- a weld-torque correction for PhysX's CPU TGS solver;
+- the UR5e assembly controller with clearance-aware release;
+- the structure library and catalog;
+- reproducible sweeps and the failure analysis.
+
+All results are simulation, judged by simulator ground truth. Nothing here ran
+on hardware.
+
+## Key findings (simulation)
+
+These come from 38 runs of 28 structures.
+
+- **Spanning builds work.**
+  - The bridge deck lands on both piers.
+  - All six interlocking logs of the cabin each rest on two corners.
+  - The ten-brick dog completed its last four runs with breakage on.
+- **Releasing a brick can break the joint below.** The house loses an 8-stud
+  wall joint while the gripper opens over 1 s. It survives a 2 s opening, while
+  a shallower press does not help.
+- **The press force has a threshold.** A plain column holds at 1 and 2 N and
+  loses its base joint at 3 and 5 N, on the release after the press.
+- **Load position decides cantilevers.** Two bricks at the tip pry the
+  structure apart, while the same bricks over the support complete.
+- **Most breaks are invisible.** 69 of 87 joint breaks were re-formed at once,
+  and the controller never saw them.
+- **Many breaks follow solver trouble.** 12 of 18 lasting breaks came right
+  after breakage-solver warnings, which marks where the simulator is least
+  certain.
+
+Details: [FAILURES.md](experiments/ur5e_structures/FAILURES.md).
+
+## What the robot builds
+
+Each picture links to its video. The videos are rendered in the simulator at
+1080p and play 8× faster than simulated time.
+
+| Dog, 10 bricks | Arch bridge, 7 bricks |
 |---|---|
-| ![Dog build](docs/media/dog_breakage_on.gif) | ![Human build](docs/media/human_breakage_on.gif) |
-| [MP4](docs/media/dog_breakage_on.mp4) · [final pose](docs/media/dog_breakage_on_final.png) | [MP4](docs/media/human_breakage_on.mp4) · [final pose](docs/media/human_breakage_on_final.png) |
+| [![Dog](docs/media/dog_breakage_on_closeup.jpg)](docs/media/dog_breakage_on.mp4) | [![Arch bridge](docs/media/bridge_closeup_front.jpg)](docs/media/bridge.mp4) |
+| Four legs, a wide body bridging them, neck, head and tail. | Stepped piers and a deck that spans the arch. |
 
-**Figures.** Each still links to its video.
+| House, 8 bricks | Log cabin, 8 bricks |
+|---|---|
+| [![House](docs/media/house_closeup.jpg)](docs/media/house.mp4) | [![Log cabin](docs/media/log_cabin_closeup.jpg)](docs/media/log_cabin.mp4) |
+| A doorway, a lintel across it, a stepped roof and a chimney. It completes with a 2 s gripper release; at the default 1 s, a wall joint breaks. | Courses alternate direction; every log interlocks two corners. |
 
-| Robot: completed | Cat: completed | Tree: base joint lost | Giraffe: base joint lost |
-|---|---|---|---|
-| [![Robot](docs/media/robot_final.png)](docs/media/robot.mp4) | [![Cat](docs/media/cat_final.png)](docs/media/cat.mp4) | [![Tree](docs/media/tree_final.png)](docs/media/tree.mp4) | [![Giraffe](docs/media/giraffe_final.png)](docs/media/giraffe.mp4) |
+**[Structure catalog →](docs/STRUCTURES.md)** has all 28 structures. Each one
+has its design, its picture in simulation, its bricks and joints, the latest
+result and a video.
 
-The tree still looks whole, but the joint of its bottom 2×2 to the baseplate
-broke at the last release.
+## Breaking it on purpose
 
-**Breaking it on purpose.** Each break test pushes one failure mechanism. In
-the cantilever, a 2×6 rests by one end on a column of 2×2 bricks. Pressing the
-last 2×2 onto its free tip overloads the joint below, and the cantilever tips
-over.
+Break tests push one failure mechanism at a time, most with a control that
+completes. In the cantilever, a 2x6 rests by one end on a column of 2x2 bricks.
+Pressing a brick onto its free tip overloads the joint below, and the
+cantilever tips over.
 
 ![Cantilever failure](docs/media/cantilever_failure.gif)
 
-| Load at the tip: fails | Same load over the support: completes | Column pressed at 3 N: base joint lost | Leaning ladder: collapses | Ten 2×2 bricks: base joint lost |
-|---|---|---|---|---|
-| [![Tip load](docs/media/cantilever_tip2_final.png)](docs/media/cantilever_tip2.mp4) | [![Root load](docs/media/cantilever_root2_final.png)](docs/media/cantilever_root2.mp4) | [![3 N press](docs/media/column_press_3N_final.png)](docs/media/column_press_3N.mp4) | [![Lean ladder](docs/media/lean_ladder_final.png)](docs/media/lean_ladder.mp4) | [![2x2 tower](docs/media/tower_2x2_final.png)](docs/media/tower_2x2.mp4) |
+| Two bricks at the tip: fails | The same bricks over the support: completes |
+|---|---|
+| [![Tip load](docs/media/cantilever_tip2_final.png)](docs/media/cantilever_tip2.mp4) | [![Root load](docs/media/cantilever_root2_final.png)](docs/media/cantilever_root2.mp4) |
 
-The failures are documented as test cases in
-[FAILURES.md](experiments/ur5e_structures/FAILURES.md). Each is broken down
-into:
+| Column pressed at 3 N: base joint lost | Leaning ladder: collapses |
+|---|---|
+| [![3 N press](docs/media/column_press_3N_final.png)](docs/media/column_press_3N.mp4) | [![Lean ladder](docs/media/lean_ladder_final.png)](docs/media/lean_ladder.mp4) |
+| It holds at 1 and 2 N and fails at 3 and 5 N, on the release after the press. | Each brick shifts one stud; the lean grows until a low joint fails. |
+
+## When complex builds fail
+
+Some failures were not planned. They came from trying harder structures, and
+each is now a test case.
+
+| Table: no room for the fingers | Cross-bonded tower: solver trouble |
+|---|---|
+| [![Table design](docs/structures/table.png)](docs/STRUCTURES.md#table) | [![Cross tower design](docs/structures/cross_tower.png)](docs/STRUCTURES.md#cross_tower) |
+| Legs 2 studs apart leave the RG2 no room to let go, so the controller stops rather than hit a leg. | The second joint breaks after four breakage-solver non-convergences. It is a simulator issue, not a clear overload. |
+
+| Giraffe: the neck levers the base | Mixed tower: a brick does not seat |
+|---|---|
+| [![Giraffe](docs/media/giraffe_final.png)](docs/media/giraffe.mp4) | [![Mixed tower design](docs/structures/mixed_tower.png)](docs/STRUCTURES.md#mixed_tower) |
+| Pressing the neck onto the end of the body pries the 4-stud base joint loose. | The brick stops on the studs 1 mm above its seat. |
+
+Designs drawn from the config are marked by their white background. The other
+pictures are the simulation.
+
+## How a run is judged
+
+Each run records the robot, every brick's pose and joint, the load on each
+joint and a video. Its summary keeps apart:
 - what stopped the controller;
-- what the breakage model did (lasting or transient joint breaks);
-- whether the breakage solver was struggling numerically.
+- what the breakage model did: joints that broke for good, and joints that
+  broke and re-formed at once;
+- whether the breakage solver was struggling;
+- whether the gripper touched another brick.
 
-Every run links to its configuration, settings and video in the
-[sweep summaries](experiments/ur5e_structures/sweeps/README.md). They are
-simulation results only.
+The details are in:
+- [FAILURES.md](experiments/ur5e_structures/FAILURES.md): mechanisms and proposed
+  real-robot tests;
+- the [sweep summaries](experiments/ur5e_structures/sweeps/README.md): every
+  run with its settings;
+- [docs/EVALUATION_PRACTICES.md](docs/EVALUATION_PRACTICES.md): what carries
+  over to Jenga.
 
 The [dashboard](experiments/ur5e_dashboard/README.md)'s **Structures** view shows
-each structure layer by layer, every trial in simulation and on the robot, and
-the latest result per setting:
+each structure layer by layer, with every trial:
 
 ![Dashboard structures view](docs/media/dashboard_structures.png)
 
@@ -73,15 +153,14 @@ the latest result per setting:
 
 The main research direction is Jenga with MPC and RL, developed in separate
 projects. This repository remains the demo and a supporting contact-physics and
-evaluation testbed. [docs/EVALUATION_PRACTICES.md](docs/EVALUATION_PRACTICES.md)
-lists the telemetry and evaluation practices from these sweeps that carry over.
+evaluation testbed.
 
-1. Build more complex structures in simulation and document each run in the
-   dashboard.
+1. Build larger structures in simulation and document each one in the catalog
+   and dashboard.
 2. Build the same structures on the real UR5e and compare what fails against
    simulation.
-3. Close the telemetry gaps the sweeps found: log the breaking solve and record
-   joint events in the recording.
+3. Close the telemetry gaps the sweeps found: log the breaking solve, record
+   joint events in the recording, and check the grasp during transfer.
 
 ## Requirements
 
@@ -137,6 +216,70 @@ Controller settings (environment variables, read in
 | `DOG_RELEASE_RAMP_S` | `1.0` | Gripper opening time (s) |
 | `DOG_HOLD_S` | `10` | Time (s) the finished structure stays on screen |
 
+## Reproducing the results
+
+The results were produced on this stack:
+
+| Component | Version |
+|---|---|
+| OS | Ubuntu 22.04.5 LTS (glibc 2.35, built with the glibc 2.39 sysroot) |
+| GPU, driver | NVIDIA RTX PRO 6000 Blackwell Max-Q, 595.99.02 |
+| Isaac Sim | 6.2.0.0 (Kit 110.4.0, omni.physx 110.4.4, PhysX SDK 5.9.2, OpenUSD 25.11) |
+| Python | 3.12 with torch 2.11.0+cu130, locked in `uv.lock` |
+| Media | ffmpeg (for `scripts/make_media.sh`) |
+
+**Lab assets.** The UR5e model with its `tool0` frame, the RG2 gripper and the
+Vention bench are not in this repository. They come from a separate asset store
+that is loaded through the public
+[isaac-mcp](https://github.com/kalebcoleman/isaac-mcp) resolver; see
+[experiments/ur5e_lego/README.md](experiments/ur5e_lego/README.md). Their
+hashes are pinned in
+[`assets/lab_assets_sha256.json`](experiments/ur5e_lego/assets/lab_assets_sha256.json).
+`scripts/check_parity.py` checks the checkout, the locked packages, the native
+build and these assets.
+
+1. Build (see [Build](#build)), then check the setup:
+
+   ```bash
+   .venv/bin/python scripts/check_parity.py
+   ```
+
+2. Re-run a committed sweep into a fresh copy. Run ids, videos and close-up
+   stills are written as the runs finish. Kit needs a display.
+
+   ```bash
+   OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep \
+     experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.json \
+     --rerun experiments/ur5e_structures/sweeps/my-rerun.json --capture
+   ```
+
+3. Summarize the copy and compare it with the committed
+   [summary](experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md):
+
+   ```bash
+   python3 -m experiments.ur5e_structures.summarize_sweep \
+     experiments/ur5e_structures/sweeps/my-rerun.json
+   ```
+
+4. Make the media and regenerate the catalog:
+
+   ```bash
+   scripts/make_media.sh .cache/videos/my-rerun/bridge.mp4 docs/media/bridge
+   scripts/make_media.sh --closeup \
+     .cache/videos/my-rerun/bridge_closeup_three_quarter.png docs/media/bridge_closeup.jpg
+   .venv/bin/python -m experiments.ur5e_structures.catalog
+   ```
+
+**Determinism.** On the machine above, repeated runs of the same structure
+matched exactly:
+- outcome;
+- joint breaks;
+- solver warnings;
+- the simulator step of every logged joint event.
+
+Expect the same outcomes on other GPUs and drivers, but not necessarily
+bit-identical steps. Each sweep records the controller commit it ran.
+
 ## Case suite
 
 Thirteen single-case experiments (C01–C13), each with a prediction written
@@ -163,10 +306,10 @@ case suite; Isaac Sim need not be running. See
 ```bash
 pixi run build-native          # rebuild after C++ changes
 pixi run test-native-release   # and test-native-debug
-uv run ruff check
-python3 -m unittest experiments.ur5e_dog.test_geometry
-python3 -m unittest discover -s experiments/ur5e_dashboard -p 'test_*.py'
-python3 -m unittest experiments.ur5e_structures.test_summarize_sweep
+.venv/bin/ruff check            # not `uv run`: it would rebuild the native module
+.venv/bin/python -m pytest experiments
+.venv/bin/python -m experiments.ur5e_structures.specs     # regenerate structure configs
+.venv/bin/python -m experiments.ur5e_structures.catalog   # regenerate docs/STRUCTURES.md
 ```
 
 Coding rules are in [AGENTS.md](AGENTS.md).
@@ -182,12 +325,24 @@ Coding rules are in [AGENTS.md](AGENTS.md).
 | `experiments/ur5e_lego/` | UR5e scene, recording format, case suite C01–C13 |
 | `experiments/ur5e_dashboard/` | Results dashboard |
 | `docs/ISAACSIM_6.2_PORT.md` | Isaac Sim 5.1 → 6.2 changes and rebuild notes |
+| `docs/STRUCTURES.md` | Structure catalog: design, picture, result and video of every structure |
 | `docs/EVALUATION_PRACTICES.md` | Telemetry and evaluation practices for the Jenga work |
 | `scripts/` | Native build, Isaac Sim pin resolver, environment parity check |
 
 ## Citation
 
+If you use this work, please cite it and BrickSim, which it builds on.
+
+```bibtex
+@software{coleman2026contactassemblylab,
+    title = {Contact Assembly Lab: Robotic Brick Assembly with Joint-Strength Physics in Isaac Sim 6.2},
+    author = {Coleman, Kaleb},
+    year = {2026},
+    url = {https://github.com/kalebcoleman/contact-assembly-lab}
+}
 ```
+
+```bibtex
 @article{wen2026bricksim,
     title = {BrickSim: A Physics-Based Simulator for Manipulating Interlocking Brick Assemblies},
     author = {Wen, Haowei and Liu, Ruixuan and Piao, Weiyi and Li, Siyu and Liu, Changliu},
@@ -199,6 +354,15 @@ Coding rules are in [AGENTS.md](AGENTS.md).
     url = {https://arxiv.org/abs/2603.16853}
 }
 ```
+
+## Acknowledgments
+
+The brick connection and breakage physics, the C++ native extension, the
+simulator UI and the Isaac Sim 6.0 groundwork of this port come from
+[BrickSim](https://github.com/intelligent-control-lab/BrickSim) by Haowei Wen,
+Ruixuan Liu, Weiyi Piao, Siyu Li and Changliu Liu (Intelligent Control Lab,
+Carnegie Mellon University), released under the MIT License. The simulation
+runs on [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac/sim).
 
 ## License
 

@@ -4,6 +4,7 @@ Frames follow simulation time (one every `every` app updates), so a video made
 from them plays smoothly regardless of how fast the machine renders.
 """
 
+from asyncio import sleep
 from pathlib import Path
 
 import numpy as np
@@ -78,3 +79,25 @@ class FrameCapture:
             str(self.directory / f"frame_{self.frames:06d}.png"),
         )
         self.frames += 1
+
+    async def stills(
+        self, shots: list[tuple[str, np.ndarray, np.ndarray]], settle_s: float = 1.0
+    ) -> None:
+        """Stop the periodic frames and save one still per camera view.
+
+        Args:
+            shots: (file stem, eye, target) per still, world meters; each is saved
+                as `<stem>.png` in `<capture directory>_stills`, which is kept
+                when the frames are deleted after encoding.
+            settle_s: Seconds to wait after moving the camera, so the renderer
+                converges, and again after each capture so the file is written.
+        """
+        self.subscription = None
+        folder = self.directory.with_name(f"{self.directory.name}_stills")
+        folder.mkdir(parents=True, exist_ok=True)
+        for stem, eye, target in shots:
+            set_camera_view(eye=eye, target=target)
+            get_context().get_selection().clear_selected_prim_paths()
+            await sleep(settle_s)
+            capture_viewport_to_file(get_active_viewport(), str(folder / f"{stem}.png"))
+            await sleep(settle_s)

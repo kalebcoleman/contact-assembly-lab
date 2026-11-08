@@ -1,0 +1,84 @@
+{
+  "name": "2026-11-08-showcase-sweep",
+  "description": "Showcase builds recorded at 1080p with close-up stills: the arch bridge, the house and the log cabin, which need distinctive steps (a span landing on two supports, a lintel over a doorway, interlocking corners), and the ten-brick dog for its close-ups. Breakage on; gripper contacts logged, not fatal. Follow-ups after the house failed on a release: the house with a slower (2 s) gripper release and with a shallower press, and a turned 4-brick column as a control.",
+  "controller_commit": "00f9ab4",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES DISPLAY=:1 python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.json --capture",
+  "environment": {
+    "DOG_GRIPPER_CONTACT": "log",
+    "DOG_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "bridge",
+      "config": "experiments/ur5e_structures/bridge.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T173138184108Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/bridge.mp4",
+      "media": null
+    },
+    {
+      "label": "house",
+      "config": "experiments/ur5e_structures/house.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T173637057510Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/house.mp4",
+      "media": null
+    },
+    {
+      "label": "log_cabin",
+      "config": "experiments/ur5e_structures/log_cabin.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T173910080438Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/log_cabin.mp4",
+      "media": null
+    },
+    {
+      "label": "dog",
+      "config": "experiments/ur5e_dog/dog.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T174419340647Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/dog.mp4",
+      "media": null
+    },
+    {
+      "label": "house_release_2s",
+      "config": "experiments/ur5e_structures/house.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": "20261108T175103453535Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/house_release_2s.mp4",
+      "media": null
+    },
+    {
+      "label": "house_press_shallow",
+      "config": "experiments/ur5e_structures/house.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_PRESS_DEPTH_M": "0.0002"
+      },
+      "run": "20261108T175646896585Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/house_press_shallow.mp4",
+      "media": null
+    },
+    {
+      "label": "column_turned",
+      "config": "experiments/ur5e_structures/column_turned.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T175922040430Z",
+      "video": ".cache/videos/2026-11-08-showcase-sweep/column_turned.mp4",
+      "media": null
+    }
+  ]
+}

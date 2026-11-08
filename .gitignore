@@ -10,3 +10,12 @@ build/
 logs/
 outputs/
 ty.toml
+
+# Local-only workspace material: lab notebook, the separate dual-arm (RISE)
+# experiment and launchers tied to this workstation's display and sibling
+# checkouts.
+/research/
+/experiments/rise_dual_ur5e.py
+/experiments/tests/
+/scripts/run_rise_lab.sh
+/scripts/rise_isaac_mcp.sh

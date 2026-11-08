@@ -68,8 +68,8 @@ mode only where the policy needs it, and report both counts.
 ## 4. Log simulator health next to physical outcomes
 
 **Seen here.**
-- 23 of 31 runs logged breakage-solver non-convergence or high slack.
-- 12 of the 16 lasting joint breaks came right after such warnings.
+- 26 of 38 runs logged breakage-solver non-convergence or high slack.
+- 12 of the 18 lasting joint breaks came right after such warnings.
 - A utilization of 1e6 is a sentinel for exhausted capacity, not a load.
 
 Treating every break as physics would overstate what the model predicts.
@@ -100,8 +100,8 @@ deciding value with the event.
 
 ## 6. Keep events in structured records, not text logs
 
-**Seen here.** Kit's console log lost some or all of its BrickSim events in 8 of
-31 runs, and every one of them in both human runs: it is flushed
+**Seen here.** Kit's console log lost some or all of its BrickSim events in 13 of
+38 runs, and every one of them in both human runs: it is flushed
 asynchronously and the run exits at once. The step-by-step
 recording, which samples every brick's planned joint, is what showed that the
 dog's last joint broke and re-formed 16 ms later.
@@ -117,8 +117,8 @@ diagnosis only.
 
 ## 7. Count near-failures, not only outcomes
 
-**Seen here.** 59 of 75 joint breaks were re-formed within 1 s, and every
-completed run except the one-brick build had some. A joint that breaks transiently on every release
+**Seen here.** 69 of 87 joint breaks were re-formed within 1 s, and every
+completed run except two had some. A joint that breaks transiently on every release
 (tree, tower_2x2, column_10) is the clearest early sign of a lasting break.
 The controller never sees these breaks.
 
