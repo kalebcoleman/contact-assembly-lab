@@ -23,23 +23,45 @@ says otherwise.
 
 UR5e with an RG2 gripper building brick structures in Isaac Sim 6.2, with
 BrickSim's full joint-strength (breakage) model on. These are simulation
-recordings, sped up 10–12×, cropped to the work area. Poses come from simulator
-ground truth.
+recordings rendered in the simulator at 1080p, 30 frames per second of
+simulated time. The GIFs play 16× faster and the MP4s 8×. Poses come from
+simulator ground truth, and the final pose is held at the end of each video.
 
 | Dog, 10 bricks: completed | Human figure, 8 bricks: completed |
 |---|---|
 | ![Dog build](docs/media/dog_breakage_on.gif) | ![Human build](docs/media/human_breakage_on.gif) |
 | [MP4](docs/media/dog_breakage_on.mp4) · [final pose](docs/media/dog_breakage_on_final.png) | [MP4](docs/media/human_breakage_on.mp4) · [final pose](docs/media/human_breakage_on_final.png) |
 
-**A documented failure: the cantilever.** A 2×6 rests by one end on a column of
-2×2 bricks. Pressing the last 2×2 onto its free tip overloads the joint below,
-and the cantilever tips over. Failures like this one are real-robot test cases;
-all of them are listed in
-[experiments/ur5e_structures/FAILURES.md](experiments/ur5e_structures/FAILURES.md).
+**Figures.** Each still links to its video.
+
+| Robot: completed | Cat: completed | Tree: base joint lost | Giraffe: base joint lost |
+|---|---|---|---|
+| [![Robot](docs/media/robot_final.png)](docs/media/robot.mp4) | [![Cat](docs/media/cat_final.png)](docs/media/cat.mp4) | [![Tree](docs/media/tree_final.png)](docs/media/tree.mp4) | [![Giraffe](docs/media/giraffe_final.png)](docs/media/giraffe.mp4) |
+
+The tree still looks whole, but the joint of its bottom 2×2 to the baseplate
+broke at the last release.
+
+**Breaking it on purpose.** Each break test pushes one failure mechanism. In
+the cantilever, a 2×6 rests by one end on a column of 2×2 bricks. Pressing the
+last 2×2 onto its free tip overloads the joint below, and the cantilever tips
+over.
 
 ![Cantilever failure](docs/media/cantilever_failure.gif)
 
-[MP4](docs/media/cantilever_failure.mp4) · [after the break](docs/media/cantilever_failure_final.png)
+| Load at the tip: fails | Same load over the support: completes | Column pressed at 3 N: base joint lost | Leaning ladder: collapses | Ten 2×2 bricks: base joint lost |
+|---|---|---|---|---|
+| [![Tip load](docs/media/cantilever_tip2_final.png)](docs/media/cantilever_tip2.mp4) | [![Root load](docs/media/cantilever_root2_final.png)](docs/media/cantilever_root2.mp4) | [![3 N press](docs/media/column_press_3N_final.png)](docs/media/column_press_3N.mp4) | [![Lean ladder](docs/media/lean_ladder_final.png)](docs/media/lean_ladder.mp4) | [![2x2 tower](docs/media/tower_2x2_final.png)](docs/media/tower_2x2.mp4) |
+
+The failures are documented as test cases in
+[FAILURES.md](experiments/ur5e_structures/FAILURES.md). Each is broken down
+into:
+- what stopped the controller;
+- what the breakage model did (lasting or transient joint breaks);
+- whether the breakage solver was struggling numerically.
+
+Every run links to its configuration, settings and video in the
+[sweep summaries](experiments/ur5e_structures/sweeps/README.md). They are
+simulation results only.
 
 The [dashboard](experiments/ur5e_dashboard/README.md)'s **Structures** view shows
 each structure layer by layer, every trial in simulation and on the robot, and
@@ -49,11 +71,17 @@ the latest result per setting:
 
 ## Roadmap (planned)
 
+The main research direction is Jenga with MPC and RL, developed in separate
+projects. This repository remains the demo and a supporting contact-physics and
+evaluation testbed. [docs/EVALUATION_PRACTICES.md](docs/EVALUATION_PRACTICES.md)
+lists the telemetry and evaluation practices from these sweeps that carry over.
+
 1. Build more complex structures in simulation and document each run in the
    dashboard.
 2. Build the same structures on the real UR5e and compare what fails against
    simulation.
-3. Add more advanced contact physics and demos such as Jenga.
+3. Close the telemetry gaps the sweeps found: log the breaking solve and record
+   joint events in the recording.
 
 ## Requirements
 
@@ -138,6 +166,7 @@ pixi run test-native-release   # and test-native-debug
 uv run ruff check
 python3 -m unittest experiments.ur5e_dog.test_geometry
 python3 -m unittest discover -s experiments/ur5e_dashboard -p 'test_*.py'
+python3 -m unittest experiments.ur5e_structures.test_summarize_sweep
 ```
 
 Coding rules are in [AGENTS.md](AGENTS.md).
@@ -149,10 +178,11 @@ Coding rules are in [AGENTS.md](AGENTS.md).
 | `native/` | C++26 native extension: brick connection and breakage physics, PhysX 5.9.2 patches, tests |
 | `python/bricksim/` | Isaac Sim extension, launcher and Python API |
 | `experiments/ur5e_dog/` | UR5e assembly controller and fresh-scene attempt loop |
-| `experiments/ur5e_structures/` | Structure specs (JSON) built from 2×4 bricks |
+| `experiments/ur5e_structures/` | Structure specs (JSON), sweeps and their summaries, failure catalogue |
 | `experiments/ur5e_lego/` | UR5e scene, recording format, case suite C01–C13 |
 | `experiments/ur5e_dashboard/` | Results dashboard |
 | `docs/ISAACSIM_6.2_PORT.md` | Isaac Sim 5.1 → 6.2 changes and rebuild notes |
+| `docs/EVALUATION_PRACTICES.md` | Telemetry and evaluation practices for the Jenga work |
 | `scripts/` | Native build, Isaac Sim pin resolver, environment parity check |
 
 ## Citation

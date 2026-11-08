@@ -1,6 +1,6 @@
 # Store-brick structures
 
-Structures built only from 2x4 bricks (some rotated to 4x2), run with the dog
+Structures built from store bricks (mostly 2x4, some rotated to 4x2), run with the dog
 controller: `bash experiments/ur5e_dog/run_loop.sh --attempts 1 --config experiments/ur5e_structures/<name>.json`.
 `python3 -m experiments.ur5e_structures.specs` regenerates and validates the JSON.
 
@@ -9,10 +9,28 @@ dog showed the gripper can place beside. Each brick rests on one brick below wit
 least 4 studs of contact and may overhang toward a neighbor. Touching same-layer
 bricks were dropped from the first draft.
 
+Besides the 2x4 builds, the library includes:
+- figures (giraffe, duck, robot, cat, tree) that also use 2x2 and 2x6 bricks;
+- break tests that each push one failure mechanism (lean_ladder,
+  cantilever_tip2, cantilever_root2, tower_2x2).
+
+The comments in `specs.py` describe each one.
+
 ## Failure catalogue
 
 [FAILURES.md](FAILURES.md) lists every structure's result with breakage on, the
 mechanism behind each failure, and what to test on the real robot.
+
+## Sweeps
+
+[sweeps/](sweeps/README.md) holds each sweep's definition (configs, settings,
+run ids, videos) and its generated summary. The summary keeps apart:
+- what stopped the controller;
+- contact logging versus fail-on-contact;
+- breakage settings;
+- breakage-solver warnings versus modeled overloads.
+
+`run_sweep.py` runs a definition and `summarize_sweep.py` summarizes it.
 
 ## Trials
 

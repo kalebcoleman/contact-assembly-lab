@@ -93,6 +93,70 @@ SPECS = {
     # Mixed 2x2, 2x4 and 2x6 bricks; offsets auto-found (smallest valid, not centered).
     "mixed_tower": [(D, None, (9, 9), 0)]
     + [(size, i, None, 0) for i, size in enumerate([A, W, B, D, A, W, D])],
+    # Figures, one brick per layer (side profiles), so no finger meets a neighbour.
+    # Giraffe: two-high leg, body reaching forward, two-high neck, head with snout.
+    "giraffe": [
+        (D, None, (8, 9), 0),
+        (D, 0, (0, 0), 0),
+        (B, 1, (0, 0), 0),
+        (D, 2, (2, 0), 0),
+        (D, 3, (0, 0), 0),
+        (B, 4, (0, 0), 0),
+    ],
+    # Duck: foot, long body, neck at the front, head with a beak.
+    "duck": [
+        (D, None, (9, 9), 0),
+        (W, 0, (-2, 0), 0),
+        (D, 1, (4, 0), 0),
+        (B, 2, (0, 0), 0),
+    ],
+    # Robot: wide feet, body across them, shoulders, head, hat.
+    "robot": [
+        (W, None, (7, 9), 0),
+        (A, 0, (2, -1), 0),
+        (W, 1, (-2, 1), 0),
+        (D, 2, (2, 0), 0),
+        (B, 3, (-1, 0), 0),
+    ],
+    # Sitting cat: two-high body, chest, head, one ear.
+    "cat": [
+        (B, None, (8, 9), 0),
+        (B, 0, (0, 0), 0),
+        (B, 1, (1, 0), 0),
+        (D, 2, (2, 0), 0),
+        (D, 3, (0, 0), 0),
+    ],
+    # Tree: three-high 2x2 trunk, crown of 2x6, 4x2 and 2x2.
+    "tree": [
+        (D, None, (9, 9), 0),
+        (D, 0, (0, 0), 0),
+        (D, 1, (0, 0), 0),
+        (W, 2, (-2, 0), 0),
+        (B, 3, (1, 0), 0),
+        (D, 4, (1, 0), 0),
+    ],
+    # Break tests: each pushes one mechanism on purpose.
+    # 4x2 bricks each shifted 1 stud along x (6-stud joints): the overturning
+    # moment on the lowest joints grows with every layer.
+    "lean_ladder": [(B, None, (6, 9), 0)] + [(B, i, (1, 0), 0) for i in range(7)],
+    # Two-brick load at the free tip of a 2x6 resting by one end on a 2x2 column...
+    "cantilever_tip2": [
+        (D, None, (8, 9), 0),
+        (D, 0, (0, 0), 0),
+        (W, 1, (0, 0), 0),
+        (D, 2, (4, 0), 0),
+        (D, 3, (0, 0), 0),
+    ],
+    # ...and the same load over the support, as the control.
+    "cantilever_root2": [
+        (D, None, (8, 9), 0),
+        (D, 0, (0, 0), 0),
+        (W, 1, (0, 0), 0),
+        (D, 2, (0, 0), 0),
+        (D, 3, (0, 0), 0),
+    ],
+    # Ten 2x2 bricks: every joint has only 4 studs.
+    "tower_2x2": [(D, None, (9, 9), 0)] + [(D, i, (0, 0), 0) for i in range(9)],
 }
 
 

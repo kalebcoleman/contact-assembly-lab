@@ -1,0 +1,2007 @@
+{
+  "sweep": "2026-11-08-failure-sweep",
+  "runs": [
+    {
+      "label": "single_on",
+      "config": "experiments/ur5e_structures/single.json",
+      "run": "20261108T013729047340Z",
+      "recording": "20261108T013748.030277Z-structure_single.jsonl",
+      "utilization_csv": "utilization-structure_single-20261108T013748.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "completed",
+      "bricks_total": 1,
+      "bricks_connected_end": 1,
+      "simulation_s": 49.43,
+      "failure": null,
+      "failure_class": "none",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 0,
+        "high_slack": 0
+      },
+      "event_log_complete": false,
+      "breaks": [],
+      "lasting_breaks": 0,
+      "transient_breaks": 0,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "column_on",
+      "config": "experiments/ur5e_structures/column.json",
+      "run": "20261108T013849895141Z",
+      "recording": "20261108T013908.066502Z-structure_column.jsonl",
+      "utilization_csv": "utilization-structure_column-20261108T013908.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "completed",
+      "bricks_total": 4,
+      "bricks_connected_end": 4,
+      "simulation_s": 113.45,
+      "failure": null,
+      "failure_class": "none",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 1,
+        "high_slack": 0
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 81.2667,
+          "phase": "release",
+          "peak_utilization": 0.9227,
+          "peak_utilization_before_break": 0.8118,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 81.275
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 102.4833,
+          "phase": "release",
+          "peak_utilization": 1.0119,
+          "peak_utilization_before_break": 0.789,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 102.4917
+        }
+      ],
+      "lasting_breaks": 0,
+      "transient_breaks": 2,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "cantilever_on",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "run": "20261108T014121731842Z",
+      "recording": "20261108T014139.879209Z-structure_cantilever.jsonl",
+      "utilization_csv": "utilization-structure_cantilever-20261108T014139.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 4,
+      "bricks_connected_end": 3,
+      "simulation_s": 113.87,
+      "failure": "Brick 2 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 1,
+        "high_slack": 14
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 60.1167,
+          "phase": "release",
+          "peak_utilization": 0.9707,
+          "peak_utilization_before_break": 0.7728,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 60.125
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 102.8667,
+          "phase": "release",
+          "peak_utilization": 4.4796,
+          "peak_utilization_before_break": 4.4796,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "overload seen, after solver warnings",
+          "broken_at_s": 102.875
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 1,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "l_corner_on",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "run": "20261108T014343916915Z",
+      "recording": "20261108T014402.093977Z-structure_l_corner.jsonl",
+      "utilization_csv": "utilization-structure_l_corner-20261108T014402.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 4,
+      "bricks_connected_end": 2,
+      "simulation_s": 87.93,
+      "failure": "Brick 3 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 12,
+        "high_slack": 0
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_3",
+          "last_seen_s": 81.0833,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 12,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "overload seen, after solver warnings",
+          "broken_at_s": 81.0917
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 0,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "table_on",
+      "config": "experiments/ur5e_structures/table.json",
+      "run": "20261108T014538157564Z",
+      "recording": "20261108T014556.110450Z-structure_table.jsonl",
+      "utilization_csv": "utilization-structure_table-20261108T014556.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 10,
+      "bricks_connected_end": 4,
+      "simulation_s": 102.23,
+      "failure": "No gripper clearance to release brick 4: nearest bricks left 16.2 mm, left 156.3 mm",
+      "failure_class": "no_release_clearance",
+      "gripper_contacts": 1,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 0,
+        "high_slack": 0
+      },
+      "event_log_complete": true,
+      "breaks": [],
+      "lasting_breaks": 0,
+      "transient_breaks": 0,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "tower_on",
+      "config": "experiments/ur5e_structures/tower.json",
+      "run": "20261108T014800234866Z",
+      "recording": "20261108T014818.469801Z-structure_tower.jsonl",
+      "utilization_csv": "utilization-structure_tower-20261108T014818.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 6,
+      "bricks_connected_end": 5,
+      "simulation_s": 156.03,
+      "failure": "Brick 2 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 5,
+        "high_slack": 45
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 59.9167,
+          "phase": "release",
+          "peak_utilization": 0.6852,
+          "peak_utilization_before_break": 0.6852,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 59.925
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 81.1333,
+          "phase": "release",
+          "peak_utilization": 1.0003,
+          "peak_utilization_before_break": 0.0543,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 81.1417
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 102.4,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 0.2607,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 102.4083
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 123.75,
+          "phase": "release",
+          "peak_utilization": 13.5116,
+          "peak_utilization_before_break": 0.8688,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 1,
+            "max_slack_pct": 12.7
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden, after solver warnings",
+          "broken_at_s": 123.7583
+        },
+        {
+          "parent": "Part_3",
+          "child": "Part_4",
+          "last_seen_s": 145.05,
+          "phase": "release",
+          "peak_utilization": 1.5106,
+          "peak_utilization_before_break": 1.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 145.0583
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 145.1833,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "overload seen, after solver warnings",
+          "broken_at_s": 145.1917
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 5,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "lean_6_on",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "run": "20261108T015114740357Z",
+      "recording": "20261108T015132.941724Z-structure_lean_6.jsonl",
+      "utilization_csv": "utilization-structure_lean_6-20261108T015132.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 6,
+      "bricks_connected_end": 3,
+      "simulation_s": 109.43,
+      "failure": "Brick 3 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 2,
+        "high_slack": 8
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 59.8167,
+          "phase": "release",
+          "peak_utilization": 0.2465,
+          "peak_utilization_before_break": 0.2465,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 59.825
+        },
+        {
+          "parent": "Part_2",
+          "child": "Part_3",
+          "last_seen_s": 81.1667,
+          "phase": "release",
+          "peak_utilization": 0.1143,
+          "peak_utilization_before_break": 0.1143,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 81.175
+        },
+        {
+          "parent": "Part_3",
+          "child": "Part_4",
+          "last_seen_s": 102.45,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 102.4583
+        },
+        {
+          "parent": "Part_2",
+          "child": "Part_3",
+          "last_seen_s": 102.5833,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "overload seen",
+          "broken_at_s": 102.5917
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 3,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "zigzag_6_on",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "run": "20261108T015336517997Z",
+      "recording": "20261108T015355.244818Z-structure_zigzag_6.jsonl",
+      "utilization_csv": "utilization-structure_zigzag_6-20261108T015355.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 6,
+      "bricks_connected_end": 3,
+      "simulation_s": 109.37,
+      "failure": "Brick 2 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 8,
+        "high_slack": 85
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 59.8833,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 59.8917
+        },
+        {
+          "parent": "Part_3",
+          "child": "Part_4",
+          "last_seen_s": 102.3833,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 102.3917
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 102.5167,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "overload seen, after solver warnings",
+          "broken_at_s": 102.525
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 2,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "human_on",
+      "config": "experiments/ur5e_structures/human.json",
+      "run": "20261108T015559848745Z",
+      "recording": "20261108T015618.189142Z-structure_human.jsonl",
+      "utilization_csv": "utilization-structure_human-20261108T015618.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "completed",
+      "bricks_total": 8,
+      "bricks_connected_end": 8,
+      "simulation_s": 198.4,
+      "failure": null,
+      "failure_class": "none",
+      "gripper_contacts": 3,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 0,
+        "high_slack": 0
+      },
+      "event_log_complete": false,
+      "breaks": [
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": null,
+          "phase": "retreat",
+          "peak_utilization": null,
+          "peak_utilization_before_break": null,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "cause": "not in console log",
+          "rejoined": true,
+          "rejoined_source": "recording",
+          "broken_at_s": 104.5083
+        }
+      ],
+      "lasting_breaks": 0,
+      "transient_breaks": 1,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "stairs_on",
+      "config": "experiments/ur5e_structures/stairs.json",
+      "run": "20261108T020023557522Z",
+      "recording": "20261108T020042.058166Z-structure_stairs.jsonl",
+      "utilization_csv": "utilization-structure_stairs-20261108T020042.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "completed",
+      "bricks_total": 8,
+      "bricks_connected_end": 8,
+      "simulation_s": 198.3,
+      "failure": null,
+      "failure_class": "none",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 4,
+        "high_slack": 4
+      },
+      "event_log_complete": false,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_4",
+          "last_seen_s": 102.25,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 3,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen, after solver warnings",
+          "broken_at_s": 102.2583
+        },
+        {
+          "parent": "Part_3",
+          "child": "Part_6",
+          "last_seen_s": 145.0667,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 145.075
+        },
+        {
+          "parent": "Part_1",
+          "child": "Part_4",
+          "last_seen_s": 166.4167,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 0.6905,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 166.425
+        },
+        {
+          "parent": "Part_5",
+          "child": "Part_8",
+          "last_seen_s": null,
+          "phase": "release",
+          "peak_utilization": null,
+          "peak_utilization_before_break": null,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "cause": "not in console log",
+          "rejoined": true,
+          "rejoined_source": "recording",
+          "broken_at_s": 187.3917
+        }
+      ],
+      "lasting_breaks": 0,
+      "transient_breaks": 4,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "mixed_tower_on",
+      "config": "experiments/ur5e_structures/mixed_tower.json",
+      "run": "20261108T020446313605Z",
+      "recording": "20261108T020504.904204Z-structure_mixed_tower.jsonl",
+      "utilization_csv": "utilization-structure_mixed_tower-20261108T020504.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 8,
+      "bricks_connected_end": 5,
+      "simulation_s": 161.43,
+      "failure": "Brick 6 did not complete the press: connected=False, held=0.00 s, brick=[-0.25071818 -0.3225776  -0.03422935], tool=[-0.2577851  -0.30801213  0.19793805], target=[-0.25770587 -0.30794671  0.19772243], debug=[(0.000361363178101813, -3.0025759601101645, 0.0003948724809028309, 0.013642168439863408, 0.06748804238233937, [0, 0]), (0.0003573897736529124, -3.0663361233346995, 0.0003978445792888774, 0.01356627185700311, 0.06653064963935, [0, 0])]",
+      "failure_class": "not_seated",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 2,
+        "high_slack": 3
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 59.9667,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1000000.0,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 59.975
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 102.6167,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 41.2091,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen, after solver warnings",
+          "broken_at_s": 102.625
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 124.0667,
+          "phase": "release",
+          "peak_utilization": 1000000.0,
+          "peak_utilization_before_break": 1.3622,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 124.075
+        }
+      ],
+      "lasting_breaks": 0,
+      "transient_breaks": 3,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "cross_tower_on",
+      "config": "experiments/ur5e_structures/cross_tower.json",
+      "run": "20261108T020816492637Z",
+      "recording": "20261108T020835.112301Z-structure_cross_tower.jsonl",
+      "utilization_csv": "utilization-structure_cross_tower-20261108T020835.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 10,
+      "bricks_connected_end": 1,
+      "simulation_s": 67.03,
+      "failure": "Brick 2 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 4,
+        "high_slack": 0
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 60.1333,
+          "phase": "release",
+          "peak_utilization": 0.8012,
+          "peak_utilization_before_break": 0.8012,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "sudden, after solver warnings",
+          "broken_at_s": 60.1417
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 0,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "spiral_tower_on",
+      "config": "experiments/ur5e_structures/spiral_tower.json",
+      "run": "20261108T020955264867Z",
+      "recording": "20261108T021013.449127Z-structure_spiral_tower.jsonl",
+      "utilization_csv": "utilization-structure_spiral_tower-20261108T021013.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 10,
+      "bricks_connected_end": 1,
+      "simulation_s": 67.03,
+      "failure": "Brick 2 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 0,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 4,
+        "high_slack": 0
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_1",
+          "child": "Part_2",
+          "last_seen_s": 60.1333,
+          "phase": "release",
+          "peak_utilization": 0.8012,
+          "peak_utilization_before_break": 0.8012,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "sudden, after solver warnings",
+          "broken_at_s": 60.1417
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 0,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "column_10_on",
+      "config": "experiments/ur5e_structures/column_10.json",
+      "run": "20261108T021134129623Z",
+      "recording": "20261108T021152.245270Z-structure_column_10.jsonl",
+      "utilization_csv": "utilization-structure_column_10-20261108T021152.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "failed",
+      "bricks_total": 10,
+      "bricks_connected_end": 9,
+      "simulation_s": 240.37,
+      "failure": "Brick 1 detached from its support",
+      "failure_class": "joint_lost",
+      "gripper_contacts": 1,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 12,
+        "high_slack": 12
+      },
+      "event_log_complete": true,
+      "breaks": [
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 81.25,
+          "phase": "release",
+          "peak_utilization": 0.9435,
+          "peak_utilization_before_break": 0.9435,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 81.2583
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 102.4333,
+          "phase": "release",
+          "peak_utilization": 2.0694,
+          "peak_utilization_before_break": 0.3091,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 102.4417
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 145.0,
+          "phase": "release",
+          "peak_utilization": 2.8789,
+          "peak_utilization_before_break": 0.6606,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 145.0083
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 166.1667,
+          "phase": "release",
+          "peak_utilization": 2.2976,
+          "peak_utilization_before_break": 0.5904,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 1,
+            "max_slack_pct": 16.1
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden, after solver warnings",
+          "broken_at_s": 166.175
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 187.15,
+          "phase": "release",
+          "peak_utilization": 4.973,
+          "peak_utilization_before_break": 1.0006,
+          "overload_seen": true,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "overload seen",
+          "broken_at_s": 187.1583
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 208.1,
+          "phase": "release",
+          "peak_utilization": 1.2778,
+          "peak_utilization_before_break": 0.9999,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 208.1083
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": 229.3833,
+          "phase": "release",
+          "peak_utilization": 1.3941,
+          "peak_utilization_before_break": 0.5424,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": true,
+          "cause": "sudden",
+          "broken_at_s": 229.3917
+        },
+        {
+          "parent": "Part_0",
+          "child": "Part_1",
+          "last_seen_s": null,
+          "phase": null,
+          "peak_utilization": null,
+          "peak_utilization_before_break": null,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 6,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "rejoined_source": "recording",
+          "rejoined": false,
+          "cause": "no utilization data",
+          "broken_at_s": 229.525
+        }
+      ],
+      "lasting_breaks": 1,
+      "transient_breaks": 7,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    },
+    {
+      "label": "dog_on",
+      "config": "experiments/ur5e_dog/dog.json",
+      "run": "20261108T021649667640Z",
+      "recording": "20261108T021707.815728Z-dog_ten.jsonl",
+      "utilization_csv": "utilization-dog_ten-20261108T021707.csv",
+      "video": null,
+      "media": null,
+      "settings": {
+        "DOG_BREAKAGE": {
+          "value": "1",
+          "source": "recording"
+        },
+        "DOG_GRIPPER_CONTACT": {
+          "value": "log",
+          "source": "sweep definition"
+        },
+        "DOG_REQUIRED_FORCE_N": {
+          "value": "1.0",
+          "source": "recording"
+        },
+        "DOG_PRESS_DEPTH_M": {
+          "value": "0.0005",
+          "source": "default"
+        },
+        "DOG_PRESS_HOLD_S": {
+          "value": "0.05",
+          "source": "default"
+        },
+        "DOG_FREEZE_ON_CONNECTION": {
+          "value": "1",
+          "source": "default"
+        },
+        "DOG_RELEASE_RAMP_S": {
+          "value": "1.0",
+          "source": "default"
+        },
+        "DOG_TIP_CLEARANCE_M": {
+          "value": "0.003",
+          "source": "default"
+        },
+        "DOG_HOLD_S": {
+          "value": "10",
+          "source": "default"
+        }
+      },
+      "breakage_enabled": true,
+      "contact_mode": "log",
+      "outcome": "completed",
+      "bricks_total": 10,
+      "bricks_connected_end": 10,
+      "simulation_s": 238.18,
+      "failure": null,
+      "failure_class": "none",
+      "gripper_contacts": 2,
+      "contact_stopped_run": false,
+      "solver_warnings": {
+        "not_converged": 0,
+        "high_slack": 0
+      },
+      "event_log_complete": false,
+      "breaks": [
+        {
+          "parent": "Part_7",
+          "child": "Part_8",
+          "last_seen_s": null,
+          "phase": "release",
+          "peak_utilization": null,
+          "peak_utilization_before_break": null,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "cause": "not in console log",
+          "rejoined": true,
+          "rejoined_source": "recording",
+          "broken_at_s": 206.0917
+        },
+        {
+          "parent": "Part_7",
+          "child": "Part_10",
+          "last_seen_s": null,
+          "phase": "release",
+          "peak_utilization": null,
+          "peak_utilization_before_break": null,
+          "overload_seen": false,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0,
+            "max_slack_pct": 0.0
+          },
+          "cause": "not in console log",
+          "rejoined": true,
+          "rejoined_source": "recording",
+          "broken_at_s": 227.2917
+        }
+      ],
+      "lasting_breaks": 0,
+      "transient_breaks": 2,
+      "breakage_settings": {
+        "enabled": true,
+        "contact_regularization": 0.1,
+        "clutch_axial_compliance": 1.0,
+        "clutch_radial_compliance": 1.0,
+        "clutch_tangential_compliance": 1.0,
+        "friction_coefficient": 0.2,
+        "preloaded_force_n": 3.5,
+        "slack_fraction_warn": 0.1,
+        "slack_fraction_b_floor": 1e-09,
+        "debug_dump": false,
+        "breakage_cooldown_time_s": 0.05
+      },
+      "assembly_settings": {
+        "enabled": true,
+        "distance_tolerance_m": 0.001,
+        "max_penetration_m": 0.005,
+        "z_angle_tolerance_rad": 0.03490658503988659,
+        "required_force_n": 1.0,
+        "yaw_tolerance_rad": 0.03490658503988659,
+        "position_tolerance_m": 0.001
+      }
+    }
+  ]
+}
