@@ -10,7 +10,8 @@ For each structure this draws the design (`render.py`) to
 - how many sweep runs at the default settings completed, the latest result,
   and the runs at other settings, all from the sweep summaries.
 
-It also rewrites the results table between the `<!-- results:start -->` and
+It also writes `docs/structures/index.json` for the dashboard, and rewrites
+the results table between the `<!-- results:start -->` and
 `<!-- results:end -->` markers in `FAILURES.md`.
 
 All results are simulation.
@@ -20,7 +21,9 @@ All results are simulation.
 
 import json
 from collections import Counter
+from collections.abc import Callable
 from pathlib import Path
+from typing import TypedDict
 
 from experiments.ur5e_structures.render import draw, footprints
 
@@ -70,7 +73,7 @@ ENTRIES = {
         "A facade with a doorway. Two walls stand two courses high, a 2x10 lintel "
         "spans the door and lands on both walls, and a stepped gable roof and a "
         "chimney finish it.",
-        "B: release load on an 8-stud wall joint at the default 1 s release",
+        "B: release load on an 8-stud wall joint",
     ),
     "log_cabin": (
         "showcase",
@@ -360,7 +363,12 @@ def sweep_runs() -> dict[str, list[dict]]:
                 if key not in COSMETIC
                 and float(value["value"]) != float(CONTROLLER_DEFAULTS[key])
             }
-            runs.setdefault(Path(run["config"]).stem, []).append(
+            structure = Path(run["config"]).stem
+            if Path(run["config"]).parent.name == "attempts":
+                variant = json.loads((ROOT / run["config"]).read_text())
+                structure = variant["variant_of"]
+                changed = {"variant": variant["variant"], **changed}
+            runs.setdefault(structure, []).append(
                 {
                     "sweep": summary["sweep"],
                     "label": run["label"],
@@ -377,7 +385,16 @@ def sweep_runs() -> dict[str, list[dict]]:
     return runs
 
 
-def results(runs: list[dict]) -> dict[str, object]:
+class Results(TypedDict):
+    """A structure's runs at the default settings and at other settings."""
+
+    runs: int
+    completed: int
+    latest: dict | None
+    other: list[dict]
+
+
+def results(runs: list[dict]) -> Results:
     """Summarize a structure's runs at default settings.
 
     Args:
@@ -405,7 +422,7 @@ def describe_settings(changed: dict[str, str]) -> str:
     Returns:
         A comma-separated description.
     """
-    words = {
+    words: dict[str, Callable[[str], str]] = {
         "DOG_RELEASE_RAMP_S": lambda v: f"{float(v):g} s gripper release",
         "DOG_PRESS_DEPTH_M": lambda v: f"press {float(v) * 1000:g} mm below seated",
         "DOG_REQUIRED_FORCE_N": lambda v: f"{float(v):g} N press",
@@ -413,7 +430,12 @@ def describe_settings(changed: dict[str, str]) -> str:
         "DOG_PRESS_HOLD_S": lambda v: f"{float(v):g} s press hold",
         "DOG_TIP_CLEARANCE_M": lambda v: f"{float(v) * 1000:g} mm tip clearance",
         "DOG_FREEZE_ON_CONNECTION": lambda v: f"freeze on connection {v}",
+        "DOG_RELEASE_MARGIN_M": lambda v: f"{float(v) * 1000:g} mm release margin",
+        "DOG_RELEASE_MIN_CLEARANCE_M": lambda v: (
+            f"{float(v) * 1000:g} mm minimum release clearance"
+        ),
     }
+    words["variant"] = str
     return ", ".join(
         words[k](v) if k in words else f"{k}={v}" for k, v in changed.items()
     )
@@ -436,7 +458,7 @@ def describe_result(run: dict) -> str:
     )
 
 
-def entry(name: str, runs: list[dict]) -> tuple[str, dict[str, object]]:
+def entry(name: str, runs: list[dict]) -> tuple[str, Results]:
     """Render one structure's catalog entry and draw its design.
 
     Args:
@@ -502,6 +524,88 @@ def entry(name: str, runs: list[dict]) -> tuple[str, dict[str, object]]:
         )
     lines += [f"- **Media:** {' · '.join(links)}", ""]
     return "\n".join(lines), found
+
+
+def media_for(name: str) -> tuple[str | None, str | None]:
+    """Find a structure's committed still and video, relative to docs/.
+
+    Args:
+        name: Structure name.
+
+    Returns:
+        (still, video) paths such as "media/bridge_closeup.jpg", or None.
+    """
+    stem = MEDIA_STEM.get(name, name)
+    still = next(
+        (
+            f"media/{stem}{suffix}"
+            for suffix in ("_closeup.jpg", "_final.png")
+            if (MEDIA / f"{stem}{suffix}").exists()
+        ),
+        None,
+    )
+    video = f"media/{stem}.mp4" if (MEDIA / f"{stem}.mp4").exists() else None
+    return still, video
+
+
+def run_summary(run: dict) -> dict[str, object]:
+    """Reduce a run to what the dashboard shows.
+
+    Args:
+        run: A run from `sweep_runs`.
+
+    Returns:
+        Outcome, connected and total bricks, and the stop reason in words.
+    """
+    return {
+        "outcome": run["outcome"],
+        "connected": run["connected"],
+        "total": run["total"],
+        "stop": STOP[run["failure_class"]],
+        "run": run["run"],
+    }
+
+
+def index(all_runs: dict[str, list[dict]]) -> dict[str, object]:
+    """Build docs/structures/index.json, which the dashboard reads.
+
+    Args:
+        all_runs: Runs by structure from `sweep_runs`.
+
+    Returns:
+        Sections in order, and per structure its catalog text, media and
+        results at the default settings and at other settings.
+    """
+    items = {}
+    for name, (section, title, description, mechanism) in ENTRIES.items():
+        found = results(all_runs.get(name, []))
+        still, video = media_for(name)
+        latest = found["latest"]
+        items[name] = {
+            "title": title,
+            "section": section,
+            "section_title": SECTIONS[section][0],
+            "description": description,
+            "tests": TESTS[name],
+            "mechanism": mechanism,
+            "note": NOTES.get(name, ""),
+            "still": still,
+            "video": video,
+            "default_runs": found["runs"],
+            "default_completed": found["completed"],
+            "latest": run_summary(latest) if latest else None,
+            "attempts": [
+                {"settings": describe_settings(r["changed"]), **run_summary(r)}
+                for r in found["other"]
+            ],
+        }
+    return {
+        "sections": [
+            {"key": key, "title": title, "blurb": blurb}
+            for key, (title, blurb) in SECTIONS.items()
+        ],
+        "structures": items,
+    }
 
 
 def results_table(all_runs: dict[str, list[dict]]) -> list[str]:
@@ -594,6 +698,9 @@ def main() -> None:
         "",
     ]
     (DOCS / "STRUCTURES.md").write_text("\n".join(header + body))
+    (DOCS / "structures" / "index.json").write_text(
+        json.dumps(index(all_runs), indent=2) + "\n"
+    )
     failures = STRUCTURES / "FAILURES.md"
     text = failures.read_text()
     start, end = "<!-- results:start -->", "<!-- results:end -->"

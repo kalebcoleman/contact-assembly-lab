@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>Experiment results</title>
+    <title>Contact Assembly Lab</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/style.css" />
     <script src="/app.js" defer></script>
@@ -14,7 +14,7 @@
       <aside class="sidebar" aria-label="Recorded runs">
         <div class="brand">
           <img src="/icon.svg" width="37" height="37" alt="" />
-          <div><strong>BrickSim</strong><span>EXPERIMENT REVIEW</span></div>
+          <div><strong>Contact Assembly Lab</strong><span>EXPERIMENT REVIEW</span></div>
         </div>
         <div class="side-heading">
           <span>RUN LIBRARY</span><span id="run-count" class="count">—</span>
@@ -85,7 +85,7 @@
       <main class="main">
         <header class="topbar">
           <div>
-            <span class="eyebrow">RISE LAB</span
+            <span class="eyebrow">UR5E · ISAAC SIM 6.2</span
             ><span class="topbar-separator">/</span
             ><span>Experiment results</span>
           </div>
@@ -148,12 +148,38 @@
           <div class="notice">
             <span class="notice-icon">i</span
             ><span
-              >Simulation trials use simulator ground truth for poses and
-              connections. Real-robot trials are entered by hand in
-              <code>experiments/ur5e_structures/trials.json</code>.</span
+              >Simulation, judged by simulator ground truth. Default settings:
+              breakage on, 1 N press, 1 s gripper release.</span
             >
           </div>
           <p id="structure-error" class="case-failure" hidden></p>
+          <section
+            id="structure-media-panel"
+            class="panel"
+            aria-labelledby="media-title"
+            hidden
+          >
+            <div class="panel-header">
+              <div>
+                <span class="section-label">IN SIMULATION</span>
+                <h2 id="media-title">Latest captured build</h2>
+              </div>
+            </div>
+            <div id="structure-media" class="structure-media"></div>
+          </section>
+          <section class="panel" aria-labelledby="results-title">
+            <div class="panel-header">
+              <div>
+                <span class="section-label">RESULTS</span>
+                <h2 id="results-title">Default settings and attempts</h2>
+              </div>
+            </div>
+            <p id="structure-result" class="panel-copy"></p>
+            <p id="structure-explanation" class="panel-copy" hidden></p>
+            <div id="structure-attempts-wrap" class="case-table-wrap" hidden>
+              <table id="structure-attempts" class="case-table"></table>
+            </div>
+          </section>
           <section class="panel" aria-labelledby="layers-title">
             <div class="panel-header">
               <div>
@@ -168,21 +194,27 @@
             <div id="structure-layers" class="structure-layers"></div>
           </section>
           <section class="panel" aria-labelledby="trials-title">
-            <div class="panel-header">
-              <div>
-                <span class="section-label">RESULTS</span>
-                <h2 id="trials-title">Trials</h2>
+            <details class="trials-details">
+              <summary>
+                <span class="section-label">HISTORY</span>
+                <span id="trials-title">All recorded trials</span>
+                <span id="structure-trial-count" class="count"></span>
+              </summary>
+              <p class="panel-copy">
+                Every recorded attempt, including development runs and runs at
+                other settings. Real-robot trials are entered by hand in
+                <code>experiments/ur5e_structures/trials.json</code>.
+              </p>
+              <div class="case-table-wrap">
+                <table id="structure-trials" class="case-table"></table>
               </div>
-            </div>
-            <div class="case-table-wrap">
-              <table id="structure-trials" class="case-table"></table>
-            </div>
+            </details>
           </section>
           <section class="panel" aria-labelledby="structure-overview-title">
             <div class="panel-header">
               <div>
                 <span class="section-label">ALL STRUCTURES</span>
-                <h2 id="structure-overview-title">Latest result per setting</h2>
+                <h2 id="structure-overview-title">Results at the default settings</h2>
               </div>
             </div>
             <div class="case-table-wrap">

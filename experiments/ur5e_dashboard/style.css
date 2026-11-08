@@ -1099,3 +1099,52 @@ footer span {
 #structure-view .panel {
   margin-top: 14px;
 }
+
+/* Structure catalog: sidebar sections, media, collapsible history. */
+.side-section {
+  margin: 14px 7px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+.side-section:first-child {
+  margin-top: 4px;
+}
+.structure-media {
+  display: flex;
+  justify-content: center;
+}
+.structure-media video,
+.structure-media img {
+  width: 100%;
+  max-width: 960px;
+  border-radius: 6px;
+  background: #111;
+}
+.trials-details summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  list-style-position: outside;
+}
+.trials-details[open] summary {
+  margin-bottom: 12px;
+}
+.case-table .section-row td {
+  padding-top: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+.run.structure-item {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}

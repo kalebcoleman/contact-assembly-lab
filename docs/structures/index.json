@@ -1,0 +1,631 @@
+{
+  "sections": [
+    {
+      "key": "showcase",
+      "title": "Showcase builds",
+      "blurb": "Recognisable structures that need distinctive steps."
+    },
+    {
+      "key": "figures",
+      "title": "Figures",
+      "blurb": "Smaller recognisable builds."
+    },
+    {
+      "key": "complex",
+      "title": "Complex builds",
+      "blurb": "Harder structures, some failing, with the variants tried to build them."
+    },
+    {
+      "key": "break",
+      "title": "Break tests (failures on purpose)",
+      "blurb": "Each pushes one failure mechanism, some with a matched control."
+    },
+    {
+      "key": "basics",
+      "title": "Basics",
+      "blurb": "Simple builds used to check the controller and the breakage model."
+    }
+  ],
+  "structures": {
+    "dog": {
+      "title": "Dog",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "Ten bricks: four legs, a wide body bridging them, a neck, head and tail.",
+      "tests": "wide bricks bridging legs; ten-brick figure",
+      "mechanism": "",
+      "note": "",
+      "still": "media/dog_breakage_on_closeup.jpg",
+      "video": "media/dog_breakage_on.mp4",
+      "default_runs": 3,
+      "default_completed": 3,
+      "latest": {
+        "outcome": "completed",
+        "connected": 10,
+        "total": 10,
+        "stop": "",
+        "run": "20261108T174419340647Z"
+      },
+      "attempts": []
+    },
+    "bridge": {
+      "title": "Arch bridge",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "A corbel arch: each pier steps one stud inward, then a 2x10 deck closes the arch by landing on both piers. Two parapets finish the deck.",
+      "tests": "a deck landing on two piers (corbel arch)",
+      "mechanism": "",
+      "note": "",
+      "still": "media/bridge_closeup.jpg",
+      "video": "media/bridge.mp4",
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 7,
+        "total": 7,
+        "stop": "",
+        "run": "20261108T173138184108Z"
+      },
+      "attempts": []
+    },
+    "house": {
+      "title": "House",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "A facade with a doorway. Two walls stand two courses high, a 2x10 lintel spans the door and lands on both walls, and a stepped gable roof and a chimney finish it.",
+      "tests": "a lintel over a doorway; stepped roof",
+      "mechanism": "B: release load on an 8-stud wall joint",
+      "note": "At the default 1 s gripper release, the first wall joint (8 studs) breaks during a release with no visible motion. With a 2 s release the house completes; the picture and video are that run.",
+      "still": "media/house_closeup.jpg",
+      "video": "media/house.mp4",
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 2,
+        "total": 8,
+        "stop": "a joint broke",
+        "run": "20261108T173637057510Z"
+      },
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "completed",
+          "connected": 8,
+          "total": 8,
+          "stop": "",
+          "run": "20261108T175103453535Z"
+        },
+        {
+          "settings": "press 0.2 mm below seated",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T175646896585Z"
+        }
+      ]
+    },
+    "log_cabin": {
+      "title": "Log cabin",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "Courses alternate direction, and every brick above the first interlocks two corners below. It is planned on one corner and lands on both.",
+      "tests": "courses alternating direction; interlocking corners",
+      "mechanism": "",
+      "note": "",
+      "still": "media/log_cabin_closeup.jpg",
+      "video": "media/log_cabin.mp4",
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 8,
+        "total": 8,
+        "stop": "",
+        "run": "20261108T173910080438Z"
+      },
+      "attempts": []
+    },
+    "locomotive": {
+      "title": "Steam locomotive",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "Three wheels, a 2x10 chassis that rests on all three, a cab with an overhanging roof, a boiler and a chimney.",
+      "tests": "a chassis resting on three wheels",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 0,
+      "default_completed": 0,
+      "latest": null,
+      "attempts": []
+    },
+    "lighthouse": {
+      "title": "Lighthouse",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "A 4x6 rock, a tower striped red and white, a yellow lamp and a red cap: seven layers, the tallest showcase build.",
+      "tests": "a seven-layer tower on a wide base",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 0,
+      "default_completed": 0,
+      "latest": null,
+      "attempts": []
+    },
+    "castle_gate": {
+      "title": "Castle gate",
+      "section": "showcase",
+      "section_title": "Showcase builds",
+      "description": "Two towers flank the gate, a 2x10 lintel spans it and lands on both towers, and three battlements line the top.",
+      "tests": "a lintel over a gate; battlements",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 0,
+      "default_completed": 0,
+      "latest": null,
+      "attempts": []
+    },
+    "tree": {
+      "title": "Tree",
+      "section": "figures",
+      "section_title": "Figures",
+      "description": "A three-high 2x2 trunk under a crown of 2x6, 4x2 and 2x2 bricks.",
+      "tests": "a crown on a 2x2 trunk (4-stud joints)",
+      "mechanism": "B: the trunk's 4-stud base joint breaks on the releases, transiently, then for good",
+      "note": "",
+      "still": "media/tree_final.png",
+      "video": "media/tree.mp4",
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 5,
+        "total": 6,
+        "stop": "a joint broke",
+        "run": "20261108T041311129876Z"
+      },
+      "attempts": []
+    },
+    "table": {
+      "title": "Table",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Four 2x2 legs two bricks high under two 2x6 tops.",
+      "tests": "four legs, then tops spanning them",
+      "mechanism": "C: legs 2 studs apart leave no room for the RG2 fingers to let go",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 4,
+        "total": 10,
+        "stop": "no room to release",
+        "run": "20261108T014538157564Z"
+      },
+      "attempts": []
+    },
+    "table_grip": {
+      "title": "Table, grip-aware",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "The table's ten bricks, with each grip chosen for room. The legs are gripped across the axis where they are 4 studs apart, and the 2x8 tops are gripped end to end, so no finger enters a 2-stud gap.",
+      "tests": "the table with grips chosen for room",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 0,
+      "default_completed": 0,
+      "latest": null,
+      "attempts": []
+    },
+    "trestle_table": {
+      "title": "Trestle table",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Two slab legs of 2x4 bricks gripped end to end under a 4x6 top.",
+      "tests": "slab legs gripped end to end",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 0,
+      "default_completed": 0,
+      "latest": null,
+      "attempts": []
+    },
+    "mixed_tower": {
+      "title": "Mixed tower",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Eight bricks of three sizes stacked with offsets.",
+      "tests": "three brick sizes with offsets",
+      "mechanism": "D: a brick stops on the studs and does not seat",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 5,
+        "total": 8,
+        "stop": "a brick did not seat",
+        "run": "20261108T020446313605Z"
+      },
+      "attempts": []
+    },
+    "cross_tower": {
+      "title": "Cross-bonded tower",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Ten 2x4 bricks alternating +90 and -90 degrees.",
+      "tests": "alternating quarter turns (4-stud overlaps)",
+      "mechanism": "E: the second joint breaks after four breakage-solver non-convergences",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 1,
+        "total": 10,
+        "stop": "a joint broke",
+        "run": "20261108T020816492637Z"
+      },
+      "attempts": []
+    },
+    "spiral_tower": {
+      "title": "Spiral tower",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Ten 2x4 bricks, each a quarter turn from the one below.",
+      "tests": "repeated quarter turns (4-stud overlaps)",
+      "mechanism": "E: the second joint breaks after four breakage-solver non-convergences",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 1,
+        "total": 10,
+        "stop": "a joint broke",
+        "run": "20261108T020955264867Z"
+      },
+      "attempts": []
+    },
+    "l_corner": {
+      "title": "L corner",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Two posts joined by a corner brick.",
+      "tests": "a corner brick joining two posts",
+      "mechanism": "A: press load through a 4-stud joint",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 2,
+        "total": 4,
+        "stop": "a joint broke",
+        "run": "20261108T014343916915Z"
+      },
+      "attempts": []
+    },
+    "tower": {
+      "title": "Offset tower",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Six 2x4 bricks alternating direction, each shifted by a stud.",
+      "tests": "alternating directions with 1-stud shifts",
+      "mechanism": "B: release load on a 4-stud joint",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 5,
+        "total": 6,
+        "stop": "a joint broke",
+        "run": "20261108T014800234866Z"
+      },
+      "attempts": []
+    },
+    "cantilever": {
+      "title": "Cantilever",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "A 2x6 rests by one end on a 2x2 column, with a 2x2 pressed onto its free tip.",
+      "tests": "a press on a cantilever tip",
+      "mechanism": "A: press on the overhang",
+      "note": "",
+      "still": "media/cantilever_failure_final.png",
+      "video": "media/cantilever_failure.mp4",
+      "default_runs": 2,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 3,
+        "total": 4,
+        "stop": "a joint broke",
+        "run": "20261108T035554030267Z"
+      },
+      "attempts": []
+    },
+    "cantilever_tip2": {
+      "title": "Cantilever, two bricks at the tip",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "Two 2x2 bricks pressed onto the free tip of the cantilever.",
+      "tests": "two bricks at a cantilever tip",
+      "mechanism": "A: the press pries the column's base joint off before the brick seats",
+      "note": "",
+      "still": "media/cantilever_tip2_final.png",
+      "video": "media/cantilever_tip2.mp4",
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 2,
+        "total": 5,
+        "stop": "a brick did not seat",
+        "run": "20261108T042248279292Z"
+      },
+      "attempts": []
+    },
+    "cantilever_root2": {
+      "title": "Cantilever, two bricks over the support (control)",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "The same two bricks pressed over the support instead of the tip.",
+      "tests": "the same bricks over the support (control)",
+      "mechanism": "",
+      "note": "",
+      "still": "media/cantilever_root2_final.png",
+      "video": "media/cantilever_root2.mp4",
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 5,
+        "total": 5,
+        "stop": "",
+        "run": "20261108T042635983255Z"
+      },
+      "attempts": []
+    },
+    "lean_ladder": {
+      "title": "Leaning ladder",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "Eight 4x2 bricks, each shifted one stud: the lean grows with every layer.",
+      "tests": "a lean that grows every layer",
+      "mechanism": "B: growing overturning moment on the low joints",
+      "note": "",
+      "still": "media/lean_ladder_final.png",
+      "video": "media/lean_ladder.mp4",
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 6,
+        "total": 8,
+        "stop": "a joint broke",
+        "run": "20261108T041742925499Z"
+      },
+      "attempts": []
+    },
+    "tower_2x2": {
+      "title": "2x2 tower",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "Ten 2x2 bricks: every joint has only 4 studs.",
+      "tests": "ten 4-stud joints",
+      "mechanism": "B: the base joint breaks transiently on each release, then for good",
+      "note": "",
+      "still": "media/tower_2x2_final.png",
+      "video": "media/tower_2x2.mp4",
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 3,
+        "total": 10,
+        "stop": "a joint broke",
+        "run": "20261108T043058804924Z"
+      },
+      "attempts": []
+    },
+    "lean_6": {
+      "title": "Lean 6",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "Six 2x4 bricks, each shifted 2 studs (4-stud joints).",
+      "tests": "2-stud shifts (4-stud joints)",
+      "mechanism": "B: release load on a 4-stud joint",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 3,
+        "total": 6,
+        "stop": "a joint broke",
+        "run": "20261108T015114740357Z"
+      },
+      "attempts": []
+    },
+    "zigzag_6": {
+      "title": "Zigzag 6",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "Six 2x4 bricks shifted +2 and -2 studs in turn.",
+      "tests": "shear at every joint",
+      "mechanism": "A: press load through a 4-stud joint",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 3,
+        "total": 6,
+        "stop": "a joint broke",
+        "run": "20261108T015336517997Z"
+      },
+      "attempts": []
+    },
+    "column_10": {
+      "title": "Column of ten",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "Ten aligned 2x4 bricks: the load on the base grows with height.",
+      "tests": "load on the base growing with height",
+      "mechanism": "B: release load accumulated over ten layers",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 9,
+        "total": 10,
+        "stop": "a joint broke",
+        "run": "20261108T021134129623Z"
+      },
+      "attempts": []
+    },
+    "column_turned": {
+      "title": "Column, turned 90 degrees",
+      "section": "break",
+      "section_title": "Break tests (failures on purpose)",
+      "description": "The 4-brick column with every brick laid along x: the same 8-stud joints, gripped with the wrist turned 90 degrees. It is a control for the house wall.",
+      "tests": "the column with bricks turned 90 degrees",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 4,
+        "total": 4,
+        "stop": "",
+        "run": "20261108T175922040430Z"
+      },
+      "attempts": []
+    },
+    "single": {
+      "title": "Single brick",
+      "section": "basics",
+      "section_title": "Basics",
+      "description": "One 2x4 on the baseplate.",
+      "tests": "one brick (sanity check)",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 1,
+        "total": 1,
+        "stop": "",
+        "run": "20261108T013729047340Z"
+      },
+      "attempts": []
+    },
+    "column": {
+      "title": "Column",
+      "section": "basics",
+      "section_title": "Basics",
+      "description": "Four aligned 2x4 bricks (8-stud joints). It is also the press-force sweep: it holds at 1 and 2 N and loses its base joint at 3 and 5 N.",
+      "tests": "aligned 8-stud joints",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 2,
+      "default_completed": 2,
+      "latest": {
+        "outcome": "completed",
+        "connected": 4,
+        "total": 4,
+        "stop": "",
+        "run": "20261108T043449477385Z"
+      },
+      "attempts": [
+        {
+          "settings": "2 N press",
+          "outcome": "completed",
+          "connected": 4,
+          "total": 4,
+          "stop": "",
+          "run": "20261108T043836377949Z"
+        },
+        {
+          "settings": "3 N press",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T044224574750Z"
+        },
+        {
+          "settings": "5 N press",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T044451774358Z"
+        }
+      ]
+    },
+    "stairs": {
+      "title": "Stairs",
+      "section": "basics",
+      "section_title": "Basics",
+      "description": "A staircase of 2x4, 2x2 and 2x6 bricks.",
+      "tests": "mixed sizes stepping up",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 8,
+        "total": 8,
+        "stop": "",
+        "run": "20261108T020023557522Z"
+      },
+      "attempts": []
+    }
+  }
+}
