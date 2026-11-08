@@ -543,7 +543,7 @@ def markdown(sweep: dict, runs: list[dict]) -> str:
         overrides = definitions[run["label"]].get("environment", {})
         breaks = "<br>".join(describe_break(b) for b in run["breaks"])
         evidence = []
-        if run["media"]:
+        if run["media"] and (ROOT / f"{run['media']}.mp4").exists():
             evidence.append(f"[media](../../../{run['media']}.mp4)")
         if run["video"]:
             evidence.append(f"`{run['video']}`")

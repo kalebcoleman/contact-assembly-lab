@@ -104,7 +104,7 @@ simulator UI are theirs. This version adds:
 - **a UR5e assembly controller** that builds any structure config, releases
   bricks without touching their neighbours and logs every gripper contact
   ([controller](experiments/ur5e_assembly/README.md));
-- **the structure library** of about 30 structures, its design renderer and
+- **the structure library** of 29 structures, its design renderer and
   the [catalog](docs/STRUCTURES.md);
 - **reproducible sweeps**, run summaries that separate physics failures from
   numerical and controller ones, and the failure analysis;

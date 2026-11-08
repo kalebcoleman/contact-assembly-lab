@@ -52,7 +52,7 @@ OMNI_KIT_ACCEPT_EULA=YES bash experiments/ur5e_assembly/run_loop.sh \
 - The default config is `experiments/ur5e_structures/dog.json`.
 - `--attempts` takes 1–5; each attempt is a fresh scene and the loop stops at
   the first failure.
-- Console logs and outcomes go to `outputs/ur5e_dog/<time>/`, per-step
+- Console logs and outcomes go to `outputs/ur5e_assembly/<time>/`, per-step
   recordings to `outputs/ur5e_lego/`.
 
 The structures are listed in
@@ -83,8 +83,7 @@ set per structure; see [Per-structure settings](#per-structure-settings).
 | `ASSEMBLY_CAPTURE_EVERY` | | `2` | App updates between captured frames |
 | `ASSEMBLY_CONFIG` | | `dog.json` | Structure config; `run_loop.sh --config` sets it |
 
-The older `DOG_*` names are still accepted as aliases; sweeps committed before
-the rename record their settings under them.
+The older `DOG_*` names are still accepted as aliases.
 
 ### Per-structure settings
 

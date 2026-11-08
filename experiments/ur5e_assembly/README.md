@@ -18,7 +18,7 @@ takes 1–5 and the loop stops at the first failure or timeout (default 600 s,
 at most 900 s). Each attempt is a fresh scene: nothing is reset or repaired
 mid-run. Ctrl-C ends only the current attempt's process group.
 
-Console logs and an outcome manifest go to `outputs/ur5e_dog/<time>/`,
+Console logs and an outcome manifest go to `outputs/ur5e_assembly/<time>/`,
 per-step recordings to `outputs/ur5e_lego/`. An attempt counts as completed
 only if the process exits normally and the controller prints
 `assembly succeeded; all N bricks connected`.

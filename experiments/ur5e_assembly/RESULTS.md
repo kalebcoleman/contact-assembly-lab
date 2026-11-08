@@ -45,7 +45,7 @@ before seating on a 4-stud patch).
 ### Why breakage on failed, and what fixed it
 
 The breakage solver sees every joint's load; `get_connection_utilization` over 1 means
-overloaded. A per-step utilization log (`outputs/ur5e_dog/utilization-*.csv`) showed:
+overloaded. A per-step utilization log (`outputs/ur5e_assembly/utilization-*.csv`) showed:
 
 1. **One-step gripper release** discharged the press load as an impulse; the lower
    joint hit 0.98 at release and the new joint broke. Fixed by easing the arm back to
