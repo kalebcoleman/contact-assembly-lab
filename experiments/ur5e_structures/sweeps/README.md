@@ -9,6 +9,7 @@ ground truth; nothing in this folder drives a robot.
 |---|---|---|
 | [2026-11-08-failure-sweep](2026-11-08-failure-sweep.summary.md) | 15 | Every structure once, breakage on; the basis of [FAILURES.md](../FAILURES.md) |
 | [2026-11-08-capture-sweep](2026-11-08-capture-sweep.summary.md) | 16 | Demo and break-test runs recorded at 1080p; figures, break tests, press-force sweep |
+| [2026-11-08-showcase-sweep](2026-11-08-showcase-sweep.summary.md) | 7 | Bridge, house and log cabin with close-up stills, the dog again, house variants, turned column |
 
 ## Files
 

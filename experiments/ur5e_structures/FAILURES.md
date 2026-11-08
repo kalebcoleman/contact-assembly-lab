@@ -1,6 +1,6 @@
 # Failure catalogue (simulation, breakage on)
 
-Two sweeps built every structure once in Isaac Sim 6.2 with the full breakage
+Three sweeps built every structure in Isaac Sim 6.2 with the full breakage
 model on 2026-11-08:
 
 - The **failure sweep**: 15 structures, controller `92af9bd`.
@@ -11,8 +11,17 @@ model on 2026-11-08:
   - a press-force sweep.
 
   Commit `45717a8` has the same controller logic plus video capture.
+- The **showcase sweep**: 7 runs, recorded at 1080p with close-up stills. It
+  covers:
+  - the arch bridge, house and log cabin;
+  - the dog again;
+  - two house variants;
+  - a turned column.
 
-Settings shared by both sweeps:
+  Commits `00f9ab4` and `a9b1349` add these structures and the close-ups; the
+  controller logic is unchanged.
+
+Settings shared by all three sweeps:
 - release opens as wide as neighbouring bricks allow;
 - the arm is held still while the fingers open;
 - gripper contacts are logged, not fatal (`DOG_GRIPPER_CONTACT=log`).
@@ -25,6 +34,10 @@ Per-run details are generated from the raw outputs, with the settings, the
 joint breaks and the solver warnings of each run:
 - [sweeps/2026-11-08-failure-sweep.summary.md](sweeps/2026-11-08-failure-sweep.summary.md)
 - [sweeps/2026-11-08-capture-sweep.summary.md](sweeps/2026-11-08-capture-sweep.summary.md)
+- [sweeps/2026-11-08-showcase-sweep.summary.md](sweeps/2026-11-08-showcase-sweep.summary.md)
+
+The [structure catalog](../../docs/STRUCTURES.md) shows every structure's design,
+picture, latest result and video.
 
 [sweeps/README.md](sweeps/README.md) defines each term. The trials are also in
 [trials.json](trials.json) and the dashboard's **Structures** view.
@@ -115,6 +128,30 @@ loses its base joint at 3.9 N, on the gripper release that follows the press.
 That makes it a clean dose-response test for mechanism B. See the
 [3 N video](../../docs/media/column_press_3N.mp4).
 
+### Showcase sweep: bridge, house and log cabin (commits `00f9ab4`, `a9b1349`)
+
+These builds need steps the earlier structures do not have:
+- a deck or lintel that lands on two supports at once;
+- courses that alternate direction and interlock two corners each.
+
+| Run | Settings | Connected at end | Result | Breaks | Video |
+|---|---|---|---|---|---|
+| bridge | default | 7/7 | completed: the 2x10 deck lands on both piers | 0 / 1 | [mp4](../../docs/media/bridge.mp4) |
+| log_cabin | default | 8/8 | completed: 6 bricks each interlock two corners | 0 / 0 | [mp4](../../docs/media/log_cabin.mp4) |
+| dog | default | 10/10 | completed; same breaks as the capture-sweep dog | 0 / 2 | [mp4](../../docs/media/dog_breakage_on.mp4) |
+| house | default (1 s release) | 2/8 | failed: brick 1 joint lost during brick 3's release (B) | 1 / 0 | (local only) |
+| house_press_shallow | press 0.2 mm below seated (default 0.5) | 2/8 | failed the same way | 1 / 0 | (local only) |
+| house_release_2s | 2 s gripper release | 8/8 | completed | 0 / 4 | [mp4](../../docs/media/house.mp4) |
+| column_turned | default | 4/4 | completed: the same 8-stud joints, bricks laid along x | 0 / 3 | (local only) |
+
+The house's first wall course is an 8-stud joint on the baseplate. During the
+release of the brick above it, the joint's utilization rose from 0.02 to 0.94
+in 0.05 s, then the joint broke. Nothing moved visibly: the wall stayed seated.
+A slower release completes the house, while a shallower press does not help.
+The turned column completes, so turning the bricks alone is not the cause.
+The four transient breaks of the completed house show that it remains close to
+the limit.
+
 ## Mechanisms
 
 **A. Press load overloads a weak joint below.**
@@ -141,7 +178,10 @@ That makes it a clean dose-response test for mechanism B. See the
     transiently on one release after another, then for good;
   - lean_ladder: the joint fails as the lean grows;
   - press-force sweep: a harder press makes even an 8-stud joint fail on
-    release.
+    release;
+  - house: an 8-stud wall joint fails on a 1 s release and survives a 2 s
+    release, with a shallower press making no difference. In this model the
+    opening speed matters more than the press depth.
 - *Real test:* place a 2×4 on a 2×4 shifted 2 studs, then a 2×2 column. Watch
   whether the lower joint lifts when the gripper opens, at two press forces
   and two opening speeds.
