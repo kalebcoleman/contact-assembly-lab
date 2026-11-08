@@ -1,0 +1,197 @@
+{
+  "name": "2026-11-08-fix-attempts-1",
+  "description": "Round 1 of fix attempts for every structure that fails at the default settings. Release failures get a 2 s gripper release. The table gets a tighter release margin, plus two variants whose grips avoid 2-stud gaps. The mixed tower gets a grip over its supported part and a deeper press. Breakage on; gripper contacts logged, not fatal.",
+  "controller_commit": "8414c2f",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-fix-attempts-1.json --capture",
+  "environment": {
+    "DOG_GRIPPER_CONTACT": "log",
+    "DOG_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "tower_release_2s",
+      "config": "experiments/ur5e_structures/tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_6_release_2s",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "zigzag_6_release_2s",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_ladder_release_2s",
+      "config": "experiments/ur5e_structures/lean_ladder.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_2x2_release_2s",
+      "config": "experiments/ur5e_structures/tower_2x2.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "column_10_release_2s",
+      "config": "experiments/ur5e_structures/column_10.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tree_release_2s",
+      "config": "experiments/ur5e_structures/tree.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cross_tower_release_2s",
+      "config": "experiments/ur5e_structures/cross_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "spiral_tower_release_2s",
+      "config": "experiments/ur5e_structures/spiral_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "l_corner_release_2s",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_release_2s",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_tip2_release_2s",
+      "config": "experiments/ur5e_structures/cantilever_tip2.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "table_margin_1mm",
+      "config": "experiments/ur5e_structures/table.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_MARGIN_M": "0.001",
+        "DOG_RELEASE_MIN_CLEARANCE_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "table_grip",
+      "config": "experiments/ur5e_structures/table_grip.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "trestle_table",
+      "config": "experiments/ur5e_structures/trestle_table.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "mixed_tower_grip_support",
+      "config": "experiments/ur5e_structures/attempts/mixed_tower_grip_support.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "mixed_tower_press_1mm",
+      "config": "experiments/ur5e_structures/mixed_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_PRESS_DEPTH_M": "0.001"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    }
+  ]
+}

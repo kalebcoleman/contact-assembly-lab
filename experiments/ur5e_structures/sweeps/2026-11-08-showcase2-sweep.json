@@ -1,0 +1,53 @@
+{
+  "name": "2026-11-08-showcase2-sweep",
+  "description": "Second set of showcase builds, recorded at 1080p with close-up stills: the steam locomotive (a chassis resting on three wheels), the lighthouse (seven layers on a 4x6 base) and the castle gate (a lintel over a gate, battlements). The castle gate is also run with a 2 s gripper release, as the house needed. Breakage on; gripper contacts logged, not fatal.",
+  "controller_commit": "8414c2f",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-showcase2-sweep.json --capture",
+  "environment": {
+    "DOG_GRIPPER_CONTACT": "log",
+    "DOG_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "locomotive",
+      "config": "experiments/ur5e_structures/locomotive.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lighthouse",
+      "config": "experiments/ur5e_structures/lighthouse.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate_release_2s",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "2.0"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    }
+  ]
+}
