@@ -1,0 +1,225 @@
+{
+  "name": "2026-11-08-fix-attempts-3",
+  "description": "Round 3 of fix attempts. Round 2 found two release fixes: easing off the press before letting go (tree, offset tower, house) and a faster 0.5 s release (column of ten, cross-bonded tower, house). This round tries both on the failing structures not yet tried, the fast release on the spiral tower, and both together on the structures neither fixed. Breakage on; gripper contacts logged, not fatal.",
+  "controller_commit": "1fec04f",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-fix-attempts-3.json --capture",
+  "environment": {
+    "ASSEMBLY_GRIPPER_CONTACT": "log",
+    "ASSEMBLY_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "spiral_tower_release_fast",
+      "config": "experiments/ur5e_structures/spiral_tower.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "zigzag_6_ease_off",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "zigzag_6_release_fast",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_ladder_ease_off",
+      "config": "experiments/ur5e_structures/lean_ladder.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_ladder_release_fast",
+      "config": "experiments/ur5e_structures/lean_ladder.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "l_corner_ease_off",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "l_corner_release_fast",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_tip2_ease_off",
+      "config": "experiments/ur5e_structures/cantilever_tip2.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_tip2_release_fast",
+      "config": "experiments/ur5e_structures/cantilever_tip2.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "table_wide_ease_off",
+      "config": "experiments/ur5e_structures/table_wide.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "table_wide_release_fast",
+      "config": "experiments/ur5e_structures/table_wide.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_short_stack_ease_off",
+      "config": "experiments/ur5e_structures/attempts/locomotive_short_stack.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_short_stack_release_fast",
+      "config": "experiments/ur5e_structures/attempts/locomotive_short_stack.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_ease_off",
+      "config": "experiments/ur5e_structures/locomotive.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_release_fast",
+      "config": "experiments/ur5e_structures/locomotive.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_2x2_ease_off_fast",
+      "config": "experiments/ur5e_structures/tower_2x2.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_6_ease_off_fast",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_ease_off_fast",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate_ease_off_fast",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    }
+  ]
+}
