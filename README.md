@@ -19,6 +19,34 @@ Carnegie Mellon University), released under the MIT License. Please cite it
 All results are simulation, judged by simulator ground truth, unless a document
 says otherwise.
 
+## Demos
+
+UR5e with an RG2 gripper building brick structures in Isaac Sim 6.2, with
+BrickSim's full joint-strength (breakage) model on. These are simulation
+recordings, sped up 10–12×, cropped to the work area. Poses come from simulator
+ground truth.
+
+| Dog, 10 bricks: completed | Human figure, 8 bricks: completed |
+|---|---|
+| ![Dog build](docs/media/dog_breakage_on.gif) | ![Human build](docs/media/human_breakage_on.gif) |
+| [MP4](docs/media/dog_breakage_on.mp4) · [final pose](docs/media/dog_breakage_on_final.png) | [MP4](docs/media/human_breakage_on.mp4) · [final pose](docs/media/human_breakage_on_final.png) |
+
+**A documented failure: the cantilever.** A 2×6 rests by one end on a column of
+2×2 bricks. Pressing the last 2×2 onto its free tip overloads the joint below,
+and the cantilever tips over. Failures like this one are real-robot test cases;
+all of them are listed in
+[experiments/ur5e_structures/FAILURES.md](experiments/ur5e_structures/FAILURES.md).
+
+![Cantilever failure](docs/media/cantilever_failure.gif)
+
+[MP4](docs/media/cantilever_failure.mp4) · [after the break](docs/media/cantilever_failure_final.png)
+
+The [dashboard](experiments/ur5e_dashboard/README.md)'s **Structures** view shows
+each structure layer by layer, every trial in simulation and on the robot, and
+the latest result per setting:
+
+![Dashboard structures view](docs/media/dashboard_structures.png)
+
 ## Roadmap (planned)
 
 1. Build more complex structures in simulation and document each run in the
