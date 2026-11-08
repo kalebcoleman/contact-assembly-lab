@@ -16,9 +16,12 @@ taken at the end of the run are kept beside the video as
 Summarize afterwards with `summarize_sweep.py`. This drives the simulator only;
 it never connects to a robot.
 
-    OMNI_KIT_ACCEPT_EULA=YES DISPLAY=:1 \
-        python3 -m experiments.ur5e_structures.run_sweep \
+    OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep \
         experiments/ur5e_structures/sweeps/<name>.json [--capture] [--dry-run]
+
+To reproduce a committed sweep, `--rerun <copy.json>` clears the run ids into
+a copy and runs that; summarize the copy and compare it with the committed
+summary. A display is needed (Kit runs windowed).
 """
 
 import json
@@ -140,8 +143,20 @@ def main() -> None:
     parser.add_argument("sweep", type=Path, help="Sweep definition (JSON).")
     parser.add_argument("--capture", action="store_true", help="Record videos.")
     parser.add_argument("--dry-run", action="store_true", help="Only list runs.")
+    parser.add_argument(
+        "--rerun",
+        type=Path,
+        help="Copy the definition here with run ids, videos and media cleared, "
+        "and run the copy (to reproduce a committed sweep).",
+    )
     args = parser.parse_args()
     sweep = json.loads(args.sweep.read_text())
+    if args.rerun:
+        sweep["name"] = args.rerun.stem
+        for run in sweep["runs"]:
+            run.update(run=None, video=None, media=None)
+        args.rerun.write_text(json.dumps(sweep, indent=2) + "\n")
+        args.sweep = args.rerun
     for run in sweep["runs"]:
         if run.get("run"):
             continue
