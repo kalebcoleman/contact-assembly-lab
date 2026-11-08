@@ -6,7 +6,7 @@ offset `(3, 8)`. The middle and upper bricks connect to the brick immediately
 below at offset `(0, 0)`; all three connections use yaw index 0. Each link is
 checked directly after release and again after the final settling interval.
 
-Use the Isaac Sim 5.1 environment and lab assets described in
+Use the Isaac Sim 6.2 environment and lab assets described in
 [`ur5e-lego.md`](ur5e-lego.md). From the repository root, run:
 
     ./experiments/ur5e_lego/scripts/run_ur5e_stack.sh

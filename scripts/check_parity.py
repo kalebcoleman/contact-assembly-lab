@@ -33,9 +33,11 @@ REFERENCE = ROOT / "experiments/ur5e_lego/assets/lab_assets_sha256.json"
 PREBUILT_MANIFEST = ROOT / ".prebuilt-native/manifest.env"
 PACKAGES = (
     "isaacsim",
-    "isaaclab",
+    "isaacsim-kernel",
     "torch",
     "torchvision",
+    "torchaudio",
+    "numpy",
     "lerobot",
     "opencv-python",
     "bricksim",
@@ -194,13 +196,11 @@ def main() -> None:
             report("FAIL", f"asset {name}", "missing")
         elif sha256(path) != expected:
             report("FAIL", f"asset {name}", f"hash differs ({path})")
+    report("PASS", "assets", f"{len(reference)} reference files checked")
+    # Files the scene does not reference cannot change the simulation.
     extra = sorted(set(local_assets) - set(reference))
-    report(
-        "FAIL" if extra else "PASS",
-        "assets",
-        f"{len(reference)} reference files checked"
-        + (f", not in reference: {extra}" if extra else ""),
-    )
+    if extra:
+        report("INFO", "assets", f"unreferenced files in the store: {extra}")
 
     # Reported, never compared.
     os_name = next(

@@ -7,26 +7,16 @@ import bricksim.vendor;
 namespace bricksim {
 
 // ========== PhysX Internals ===========
-// PhysX 107.3-physx-5.6.1, Linux x86_64, gcc-11, with GPU, PUBLIC_RELEASE=0
+// Isaac Sim 6.2.0: omni.physx 110.4.4 / PhysX SDK 5.9.2.94859732, Linux x86_64.
+// Read from the disassembly of the SDK's libPhysX_static_64.a (checked) and of
+// libomni.physx.plugin.so (release); both builds share this layout.
 //
-// physx/source/physx/src/NpScene.h:747
-// field mScene
-// Type: Sc::Scene
-// Offset: 1440 bytes
-// Size: 5440 bytes, alignment 16 byte
-//
-// physx/source/simulationcontroller/include/ScScene.h:783
-// field mFilterShader
-// Type: PxSimulationFilterShader (aka PxFlags<physx::PxFilterFlag::Enum, unsigned short> (*)(unsigned int, physx::PxFilterData, unsigned int, physx::PxFilterData, PxFlags<physx::PxPairFlag::Enum, unsigned short> &, const void *, unsigned int))
-// Offset: 1008 bytes
-// Size: 8 bytes, alignment 8 bytes
-//
-// physx/source/physx/src/NpScene.h:653
-// field mElapsedTime
-// Type: PxReal (aka float)
-// Offset: 968 bytes
-// Size: 4 bytes, alignment 4 bytes
-constexpr std::size_t offset_NpScene_mScene = 1440;
+// NpScene::mScene (Sc::Scene): 0x5d0, the `this` of Sc::Scene member calls.
+// Sc::Scene::mFilterCallback: NpScene + 0x9c8, loaded by
+//   NpScene::getFilterCallback() const.
+// NpScene::mElapsedTime (PxReal): 0x3c8, stored by
+//   NpScene::simulateOrCollide(PxReal elapsedTime, ...).
+constexpr std::size_t offset_NpScene_mScene = 1488;
 constexpr std::size_t offset_NpScene_mScene_mFilterCallback =
     offset_NpScene_mScene + 1016;
 constexpr std::size_t offset_NpScene_mElapsedTime = 968;
@@ -50,6 +40,11 @@ export class PxSimulationFilterPatch
   public:
 	explicit PxSimulationFilterPatch(physx::PxScene *scene) : scene_{scene} {
 		auto **cb_ptr = locate_mFilterCallback(scene_);
+		if (*cb_ptr != scene_->getFilterCallback()) {
+			throw std::runtime_error(
+			    "PxSimulationFilterPatch: NpScene layout does not match this "
+			    "PhysX build; update the offsets in bricksim.physx.patcher");
+		}
 		wrapped_ = *cb_ptr;
 		*cb_ptr = this;
 		log_info("PxSimulationFilterPatch: patched PxSimulationFilterCallback");

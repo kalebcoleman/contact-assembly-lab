@@ -26,9 +26,9 @@ the hash file.
 
 The lab robot (with its `tool0` frame) and the Vention bench are not in Git.
 The experiments load the asset resolver from the `isaac-mcp` code checkout at
-`~/Desktop/isaac-mcp` (`ISAAC_MCP_ROOT` overrides it). The resolver reads the
-separate asset store `~/Desktop/isaac-mcp-assets`, which is not a Git checkout;
-`ISAAC_MCP_ASSET_PATH` overrides it. The robot is `ur5e-dt/robot/ur5e.usd` and
+`~/isaac-workspace/isaac-mcp` (`ISAAC_MCP_ROOT` overrides it). The resolver reads
+the separate asset store (here `~/isaac-workspace/isaac-mcp-assets`), which is not
+a Git checkout; `ISAAC_MCP_ASSET_PATH` selects it. The robot is `ur5e-dt/robot/ur5e.usd` and
 the bench is `ur5e-dt/workstation/vention.usd` inside the store. Set
 `ISAAC_MCP_ASSET_STRICT=1` to refuse remote fallback.
 
@@ -48,7 +48,7 @@ From the repository root, choose an experiment:
 See also the [meeting brief](docs/ur5e-meeting-brief.md) and the
 [isaac-mcp 5.1 tool report](docs/isaac-mcp-5.1-tool-report.md).
 
-The guides describe the Isaac Sim 5.1 and lab asset requirements, controls,
+The guides describe the Isaac Sim 6.2 and lab asset requirements, controls,
 results, and limitations. `configs/` contains the scene and placement settings,
 `assets/` contains the workstation layout, and `docs/evidence/` contains the
 versioned results. Earlier local recordings remain under the ignored

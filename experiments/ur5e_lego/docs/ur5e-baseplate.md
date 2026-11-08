@@ -5,7 +5,7 @@ pick up three 2×4 bricks and connect them to a 20×20 light-gray baseplate on t
 table. The baseplate is kinematic, so it stays fixed while the robot presses.
 The original one-brick experiment remains available separately.
 
-Use the Isaac Sim 5.1 environment and lab assets described in
+Use the Isaac Sim 6.2 environment and lab assets described in
 [`ur5e-lego.md`](ur5e-lego.md). From the repository root, run:
 
     ./experiments/ur5e_lego/scripts/run_ur5e_baseplate.sh

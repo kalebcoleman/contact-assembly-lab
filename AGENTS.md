@@ -1,8 +1,8 @@
 # AGENTS.md
 
-Isaac Sim 5.1 extension for simulating LEGO bricks and their assembly. This repository supports a research project.
+Isaac Sim 6.2 extension for simulating LEGO bricks and their assembly. This repository supports a research project.
 
-This project is written in C++26 (with modules) and Python 3.11. The project is mostly C++.
+This project is written in C++26 (with modules) and Python 3.12. The project is mostly C++.
 
 ## ExecPlans
 - When writing complex features or significant refactors, use an ExecPlan (as described in .agents/PLANS.md) from design to implementation.
@@ -108,13 +108,13 @@ Non modular 3rd-party dependencies are wrapped in a single `bricksim.vendor` (`v
 - `.cpp` is allowed only for tests and the final entrypoint translation unit.
 
 ## Inspecting Isaac Sim dependencies
-- Isaac Sim 5.1 is partially open‑sourced.
+- Isaac Sim 6.2 is partially open‑sourced.
    - Some C++ is open; other parts are closed or header‑only.
-   - Source code lives at `../IsaacSim-5.1` (relative to this project directory). **This is only a source checkout. Isaac Sim runtime live in uv virtual environment!**
+   - Source code lives at `../IsaacSim` (relative to this project directory). **This is only a source checkout. Isaac Sim runtime live in uv virtual environment!**
 - Isaac Lab code is in the virtual environment. This is the ground truth. Isaac Lab changes a lot between versions.
-- PhysX source checkout lives at `../PhysX-107.3-omni-and-physx-5.6.1` (relative to this project directory).
+- PhysX source checkout lives at `../PhysX` (relative to this project directory).
    - The source code of Omni PhysX, the extension that bridges Omniverse and PhysX, is located in `omni/` inside PhysX source.
-- OpenUSD source checkout lives at `../OpenUSD-v24.05` (relative to this project directory).
+- OpenUSD source checkout lives at `../OpenUSD` (relative to this project directory).
 - Treat online docs as potentially stale; verify against local Isaac Sim code.
 - Decompile/disassemble/reverse‑engineer binaries when source is unavailable.
    - Many dirs are symlinks created by repoman; they may point outside the tree. Follow them, and enable following links in searches.

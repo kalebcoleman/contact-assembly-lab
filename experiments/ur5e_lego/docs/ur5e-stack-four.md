@@ -5,7 +5,7 @@ This experiment picks up four loose 2×4 bricks and stacks them on an anchored
 the blue, green, and yellow bricks each connect to the one below at `(0, 0)`.
 Every connection uses yaw index 0.
 
-Use the Isaac Sim 5.1 environment and lab assets described in
+Use the Isaac Sim 6.2 environment and lab assets described in
 [`ur5e-lego.md`](ur5e-lego.md). From the repository root, run:
 
     ./experiments/ur5e_lego/scripts/run_ur5e_stack_four.sh

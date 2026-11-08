@@ -9,13 +9,14 @@ connections after release. The original UR5e experiment files are unchanged.
 
 ## Start one attempt
 
-From this isolated worktree, run:
+From the repository root, after `uv sync` and `pixi run build-native`, run:
 
     bash experiments/ur5e_dog/run_loop.sh --attempts 1
 
-The existing parent Python 3.11 / Isaac Sim 5.1 environment and native binary are
-reused, without installation. Local robot, gripper and bench assets resolve in
-`/home/kaleb/isaac-workspace/isaac-mcp-assets`. The Simple Room still uses the
+It uses the repository's Python 3.12 / Isaac Sim 6.2 `.venv`. Local robot, gripper
+and bench assets resolve in `ISAAC_MCP_ASSET_PATH` (default
+`~/isaac-workspace/isaac-mcp-assets`); `ISAAC_MCP_ROOT` defaults to
+`~/isaac-workspace/isaac-mcp`. The Simple Room still uses the
 baseline asset-root resolver; its runtime availability has not been tested.
 
 Run geometry checks without simulation:

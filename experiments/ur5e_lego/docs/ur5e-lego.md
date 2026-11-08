@@ -5,7 +5,7 @@ The lab UR5e stays fixed on the workstation rail and uses the RG2 gripper to
 attempt one pick, transfer, and release. The robot, gripper, rail, and
 workstation come from the `isaac-mcp` assets; their files are not modified.
 
-The experiment requires Isaac Sim 5.1 and an `isaac-mcp` checkout of `main` at
+The experiment requires Isaac Sim 6.2 and an `isaac-mcp` checkout of `main` at
 PR #16 or later, which provides `exts/ur5e-dt/ur5e_dt/asset_cache.py`. The tested workstation layout is versioned here in
 `experiments/ur5e_lego/assets/ur5e_workstation.usda`. It preserves the tested world and
 physics settings but omits the unused ROS graphs. An ignored checkpoint or its
