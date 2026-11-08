@@ -124,6 +124,13 @@ ENTRIES = {
         "are gripped end to end, so no finger enters a 2-stud gap.",
         "",
     ),
+    "table_wide": (
+        "complex",
+        "Table, wide gaps",
+        "Four 2x2 legs two bricks high, 4 studs apart both ways, under two 2x8 tops "
+        "gripped across their width.",
+        "",
+    ),
     "trestle_table": (
         "complex",
         "Trestle table",
@@ -305,6 +312,7 @@ TESTS = {
     "locomotive": "a chassis resting on three wheels",
     "table_grip": "the table with grips chosen for room",
     "trestle_table": "slab legs gripped end to end",
+    "table_wide": "4-stud gaps on both axes",
     "lighthouse": "a seven-layer tower on a wide base",
     "castle_gate": "a lintel over a gate; battlements",
     "tree": "a crown on a 2x2 trunk (4-stud joints)",
@@ -431,6 +439,9 @@ def describe_settings(changed: dict[str, str]) -> str:
         "DOG_TIP_CLEARANCE_M": lambda v: f"{float(v) * 1000:g} mm tip clearance",
         "DOG_FREEZE_ON_CONNECTION": lambda v: f"freeze on connection {v}",
         "DOG_RELEASE_MARGIN_M": lambda v: f"{float(v) * 1000:g} mm release margin",
+        "DOG_RELEASE_LIFT_M": lambda v: (
+            f"ease off {float(v) * 1000:g} mm before letting go"
+        ),
         "DOG_RELEASE_MIN_CLEARANCE_M": lambda v: (
             f"{float(v) * 1000:g} mm minimum release clearance"
         ),

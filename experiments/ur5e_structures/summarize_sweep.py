@@ -60,6 +60,7 @@ CONTROLLER_DEFAULTS = {
     "DOG_HOLD_S": "10",
     "DOG_RELEASE_MARGIN_M": "0.002",
     "DOG_RELEASE_MIN_CLEARANCE_M": "0.001",
+    "DOG_RELEASE_LIFT_M": "0.0",
 }
 # Keys of the "controller settings" line the controller prints (and of a
 # structure config's "controller" block), by environment variable.
@@ -71,6 +72,7 @@ SETTING_KEYS = {
     "DOG_TIP_CLEARANCE_M": "tip_clearance_m",
     "DOG_RELEASE_MARGIN_M": "release_margin_m",
     "DOG_RELEASE_MIN_CLEARANCE_M": "release_min_clearance_m",
+    "DOG_RELEASE_LIFT_M": "release_lift_m",
 }
 
 # (class, pattern on the first failure message), first match wins.

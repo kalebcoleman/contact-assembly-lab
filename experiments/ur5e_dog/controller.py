@@ -65,6 +65,7 @@ SETTINGS = {
     "DOG_TIP_CLEARANCE_M": ("tip_clearance_m", 0.003),
     "DOG_RELEASE_MARGIN_M": ("release_margin_m", 0.002),
     "DOG_RELEASE_MIN_CLEARANCE_M": ("release_min_clearance_m", 0.001),
+    "DOG_RELEASE_LIFT_M": ("release_lift_m", 0.0),
 }
 
 
@@ -836,7 +837,12 @@ async def main(
             f"nearest bricks {nearest or 'none'})",
             flush=True,
         )
+        # Ease off the press before letting go: hold the tool `release_lift_m`
+        # above where the press left it while the fingers open.
         unload_position, _ = end_effector.get_world_pose()
+        unload_position = unload_position + np.array(
+            [0.0, 0.0, settings["release_lift_m"]]
+        )
         elapsed = 0.0
         while elapsed < release_ramp_s:
             dt = await wait_for_physics_step(world)

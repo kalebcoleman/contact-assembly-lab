@@ -206,6 +206,20 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (L8X, 4, (5, 6), 0, [120, 75, 40]),
         (L8X, 6, (5, 10), 0, [120, 75, 40]),
     ],
+    # Four-legged table with 4-stud gaps on both axes, every brick gripped across
+    # its width: no finger has to fit a 2-stud gap, and no grip spans a 2x8.
+    "table_wide": [
+        (D, None, (5, 6), 0, [150, 95, 50]),
+        (D, None, (11, 6), 0, [150, 95, 50]),
+        (D, None, (5, 12), 0, [150, 95, 50]),
+        (D, None, (11, 12), 0, [150, 95, 50]),
+        (D, 0, (5, 6), 0, [150, 95, 50]),
+        (D, 1, (11, 6), 0, [150, 95, 50]),
+        (D, 2, (5, 12), 0, [150, 95, 50]),
+        (D, 3, (11, 12), 0, [150, 95, 50]),
+        (L8, 4, (5, 6), 1, [120, 75, 40]),
+        (L8, 6, (5, 12), 1, [120, 75, 40]),
+    ],
     # Trestle table: two slab legs of 2x4 bricks gripped end to end, so no finger
     # enters the gap between the legs, under a 4x6 top.
     "trestle_table": [
@@ -372,12 +386,62 @@ def grip_over_support(
     return offsets
 
 
+def absolute_config(name: str, parts: list[AbsolutePart]) -> dict:
+    """Build a validated config from absolute parts, as `main` does for showcases.
+
+    Args:
+        name: Structure name (sets the experiment name).
+        parts: Absolute parts as in `SHOWCASE`.
+
+    Returns:
+        The assembly config.
+    """
+    relative = from_absolute(parts)
+    config = {
+        "experiment_name": f"structure_{name}",
+        "baseplate_xy_m": [-0.25, -0.33],
+        "part_names": [f"{name}_{i}" for i in range(len(parts))],
+        "brick_dimensions": [p[0] for p in parts],
+        "brick_colors": [p[4] for p in parts],
+        "brick_positions_xy_m": packed_sources([p[0] for p in parts], [-0.25, -0.33]),
+        "support_bricks": [p[1] for p in parts],
+        "placement_offsets": [list(p[2]) for p in relative],
+        "placement_yaws": [p[3] for p in relative],
+        "min_same_layer_gap_studs": 2,
+    }
+    validate(config)
+    return config
+
+
 # Variant configs for fix attempts: name -> (structure, description, change).
 ATTEMPTS = {
     "mixed_tower_grip_support": (
         "mixed_tower",
         "grip over the supported part",
         lambda config: {**config, "grasp_offsets_m": grip_over_support(config)},
+    ),
+    "mixed_tower_grip_support_full": (
+        "mixed_tower",
+        "grip 8 mm toward the support (fingertip over the brick end)",
+        lambda config: {
+            **config,
+            "grasp_offsets_m": grip_over_support(
+                config, finger_half_width_m=0.004, margin_m=0.0
+            ),
+        },
+    ),
+    "locomotive_short_stack": (
+        "locomotive",
+        "one-brick smokestack",
+        lambda _: absolute_config("locomotive", SHOWCASE["locomotive"][:-1]),
+    ),
+    "castle_gate_two_battlements": (
+        "castle_gate",
+        "battlements over the towers only",
+        lambda _: absolute_config(
+            "castle_gate",
+            SHOWCASE["castle_gate"][:6] + SHOWCASE["castle_gate"][7:],
+        ),
     ),
 }
 
