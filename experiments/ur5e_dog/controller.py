@@ -10,6 +10,13 @@ from runpy import run_path
 
 import numpy as np
 from carb.events import IEvent
+from experiments.ur5e_dog.clearance import (
+    FingerFaces,
+    neighbours,
+    outer_faces,
+    release_opening,
+)
+from experiments.ur5e_dog.gripper_contacts import GripperContactMonitor
 from experiments.ur5e_lego.recording import RunRecorder
 from experiments.ur5e_lego.rise_ur5e_lego import move_to, set_gripper
 from isaacsim.core.api import World
@@ -233,6 +240,12 @@ async def main(
     )
     world.scene.add(robot)
     world.scene.add(gripper)
+    # Any gripper contact with a brick other than the one being handled is logged;
+    # it fails the run unless DOG_GRIPPER_CONTACT=log.
+    contact_monitor = GripperContactMonitor(
+        stage, "/World/RG2_Gripper", plate_path.rsplit("/", 1)[0], brick_paths
+    )
+    fail_on_gripper_contact = environ.get("DOG_GRIPPER_CONTACT", "fail") != "log"
     await world.reset_async()
     supports = assembly.get("support_bricks", [None] * len(brick_paths))
     for index, support_index in enumerate(supports, start=1):
@@ -267,6 +280,7 @@ async def main(
             "isaac_assets_root": assets_root,
         },
     )
+    contact_monitor.recorder = recorder
     task = asyncio.current_task()
     if task is None:
         raise RuntimeError("Experiment task is unavailable")
@@ -374,6 +388,66 @@ async def main(
             lateral_max = max(lateral_max, float(np.max(lateral)))
         finger_centers.append((lateral_min + lateral_max) / 2.0)
     lateral_offset = float(np.mean(finger_centers))
+
+    # Finger faces along the closing axis against the RG2 angle, in free air and in
+    # the grasp frame (columns: approach, closing, width): the release opening is
+    # chosen from these so the fingers free the brick without reaching neighbours.
+    finger_profile = []
+    finger_half_width = 0.0
+    for angle in (-0.45, -0.4, -0.35, -0.3, -0.25, -0.2, -0.1, 0.0, 0.2, 0.5, 1.0):
+        UsdPhysics.DriveAPI(joint, "angular").GetTargetPositionAttr().Set(
+            math.degrees(angle)
+        )
+        gripper.apply_action(
+            ArticulationAction(
+                joint_positions=np.array([angle]), joint_indices=np.array([index])
+            )
+        )
+        elapsed = 0.0
+        while elapsed < 0.5:
+            elapsed += await wait_for_physics_step(world)
+        cache = UsdGeom.XformCache(Usd.TimeCode.Default())
+        grasp_now = np.array(cache.GetLocalToWorldTransform(tool)).T @ tool_to_grasp
+        finger_points_local = {}
+        for link in ("rg2_l_finger_link", "rg2_r_finger_link"):
+            collisions = stage.GetPrimAtPath(f"/World/RG2_Gripper/{link}/collisions")
+            local = []
+            for mesh in Usd.PrimRange(collisions):
+                if not mesh.IsA(UsdGeom.Mesh):
+                    continue
+                points = np.asarray(UsdGeom.Mesh(mesh).GetPointsAttr().Get())
+                transform = np.array(cache.GetLocalToWorldTransform(mesh)).T
+                world_points = (
+                    transform @ np.column_stack((points, np.ones(len(points)))).T
+                ).T[:, :3]
+                local.append((world_points - grasp_now[:3, 3]) @ grasp_now[:3, :3])
+            finger_points_local[link] = np.vstack(local)
+            finger_half_width = max(
+                finger_half_width, float(np.abs(finger_points_local[link][:, 2]).max())
+            )
+        left = finger_points_local["rg2_l_finger_link"]
+        right = finger_points_local["rg2_r_finger_link"]
+        finger_profile.append(
+            FingerFaces(
+                float(gripper.get_joint_positions()[index]),
+                float(left[:, 1].max()),
+                float(right[:, 1].min()),
+                outer_faces(left, -1),
+                outer_faces(right, 1),
+            )
+        )
+    finger_profile.sort(key=lambda faces: faces.angle)
+    # Outer faces over the lowest 10 mm of the fingers, where neighbours are met.
+    summary = []
+    for faces in finger_profile:
+        left_tip = faces.left_outer[~np.isnan(faces.left_outer)][-5:].min()
+        right_tip = faces.right_outer[~np.isnan(faces.right_outer)][-5:].max()
+        summary.append(
+            f"{faces.angle:.2f}: inner {faces.left_inner * 1000:.1f}/"
+            f"{faces.right_inner * 1000:.1f}, tip outer {left_tip * 1000:.1f}/"
+            f"{right_tip * 1000:.1f}"
+        )
+    print(f"UR5e baseplate: finger profile (rad, mm) {'; '.join(summary)}", flush=True)
     await set_gripper(world, gripper, joint, 1.0)
 
     # Grasp-frame columns: approach downward, close across each brick's x side.
@@ -659,15 +733,53 @@ async def main(
         )
         recorder.phase = "release"
         # Unload the press, then open the fingers gradually with the arm held still:
-        # a one-step open releases the stored press load as an impulse.
+        # a one-step open releases the stored press load as an impulse. Open only
+        # until the brick is free, short of any neighbouring brick.
         gripper_index = gripper.get_dof_index("rg2_gripper_joint")
         opening_start = float(gripper.get_joint_positions()[gripper_index])
+        cache = UsdGeom.XformCache(Usd.TimeCode.Default())
+        grasp_now = np.array(cache.GetLocalToWorldTransform(tool)).T @ tool_to_grasp
+        boxes_cache = UsdGeom.BBoxCache(
+            Usd.TimeCode.Default(), [UsdGeom.Tokens.default_]
+        )
+        boxes = []
+        for other_path in brick_paths:
+            if other_path == brick_path:
+                continue
+            box = boxes_cache.ComputeWorldBound(
+                stage.GetPrimAtPath(other_path)
+            ).ComputeAlignedBox()
+            boxes.append(np.array([box.GetMin(), box.GetMax()]))
+        nearby = neighbours(
+            boxes,
+            grasp_now[:3, 3],
+            grasp_now[:3, 1],
+            grasp_now[:3, 2],
+            finger_half_width,
+        )
+        nearest = ", ".join(
+            f"{'left' if n.side < 0 else 'right'} {n.distance * 1000:.1f} mm"
+            for n in sorted(nearby, key=lambda n: n.distance)[:2]
+        )
+        release = release_opening(finger_profile, opening_start, nearby)
+        if release is None:
+            raise RuntimeError(
+                f"No gripper clearance to release brick {index}: nearest bricks "
+                f"{nearest or 'none'}"
+            )
+        release_angle, release_clearance = release
+        print(
+            f"UR5e baseplate: brick {index}/{total} release opening="
+            f"{release_angle:.3f} rad (clearance {release_clearance * 1000:.1f} mm; "
+            f"nearest bricks {nearest or 'none'})",
+            flush=True,
+        )
         unload_position = target_tool[:3, 3]
         elapsed = 0.0
         while elapsed < release_ramp_s:
             dt = await wait_for_physics_step(world)
             elapsed += dt
-            opening = opening_start + (1.0 - opening_start) * min(
+            opening = opening_start + (release_angle - opening_start) * min(
                 elapsed / release_ramp_s, 1.0
             )
             UsdPhysics.DriveAPI(joint, "angular").GetTargetPositionAttr().Set(
@@ -684,7 +796,7 @@ async def main(
             rmpflow.set_end_effector_target(unload_position, target_orientation)
             rmpflow.update_world()
             robot.apply_action(policy.get_next_articulation_action(dt))
-        await set_gripper(world, gripper, joint, 1.0)
+        # Lift with the fingers barely open, then open fully above the structure.
         recorder.phase = "retreat"
         await move_to(
             world,
@@ -696,6 +808,12 @@ async def main(
             target_tool[:3, 3] + np.array([0.0, 0.0, 0.10]),
             target_orientation,
         )
+        await set_gripper(world, gripper, joint, 1.0)
+        if contact_monitor.contacts and fail_on_gripper_contact:
+            other, step, phase = contact_monitor.contacts[0]
+            raise RuntimeError(
+                f"Gripper touched {other} during {phase} of brick {step}"
+            )
         if index == len(brick_paths):
             elapsed = 0.0
             while elapsed < 2.0:
@@ -720,6 +838,11 @@ async def main(
                 )
         print(f"UR5e baseplate: {index}/{total} bricks secured", flush=True)
 
+    print(
+        f"UR5e baseplate: gripper contacts with other bricks: "
+        f"{len(contact_monitor.contacts)}",
+        flush=True,
+    )
     print(
         f"UR5e baseplate: assembly succeeded; all {total} bricks connected", flush=True
     )
