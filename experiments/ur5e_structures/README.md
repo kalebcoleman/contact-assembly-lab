@@ -9,6 +9,11 @@ dog showed the gripper can place beside. Each brick rests on one brick below wit
 least 4 studs of contact and may overhang toward a neighbor. Touching same-layer
 bricks were dropped from the first draft.
 
+## Failure catalogue
+
+[FAILURES.md](FAILURES.md) lists every structure's result with breakage on, the
+mechanism behind each failure, and what to test on the real robot.
+
 ## Trials
 
 Every attempt at a structure, in simulation or on the real UR5e, is one entry in

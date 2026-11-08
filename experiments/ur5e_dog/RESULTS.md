@@ -182,3 +182,12 @@ marked in `experiments/ur5e_structures/trials.json`.
 
 Next: open the gripper only as far as the gap allows (or place so the fingers open
 away from neighbours), then look at the release load on 4-stud joints.
+
+## Gripper contact fix and documented failures (2026-11-08)
+
+The release now opens only as wide as neighbouring bricks allow and holds the
+arm still while the fingers open, and every gripper contact with another brick
+is logged (or fails the run). The whole set was then built once with breakage on.
+Completed: single, column, stairs 8/8, human 8/8, dog 10/10. The ten failures,
+grouped by mechanism with a real-robot test for each, are in
+[../ur5e_structures/FAILURES.md](../ur5e_structures/FAILURES.md).
