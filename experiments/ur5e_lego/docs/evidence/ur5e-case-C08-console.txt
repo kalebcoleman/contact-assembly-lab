@@ -1,4 +1,4 @@
-UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010248.424723Z-case_C08.jsonl
+UR5e recording: <workspace>/BrickSim/outputs/ur5e_lego/20261104T010248.424723Z-case_C08.jsonl
 UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
 UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
 UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000
@@ -18,7 +18,7 @@ UR5e case finished
     raise RuntimeError(
 2026-11-04T01:03:27Z [51,710ms] [Error] [omni.kit.app._impl] [py stderr]: RuntimeError: Brick 1 connected at [4, 8], yaw 0; expected (3, 8), yaw 0
 UR5e baseplate: resetting scene
-UR5e recording: /home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/20261104T010329.657199Z-case_C08.jsonl
+UR5e recording: <workspace>/BrickSim/outputs/ur5e_lego/20261104T010329.657199Z-case_C08.jsonl
 UR5e baseplate: tabletop z=-0.085475 m; press Play to begin
 UR5e LEGO: gripper command_rad=1.0000 physics_target_rad=1.0000 usd_target_deg=57.2958 joint_rad=0.9992 velocity_rad_s=0.0000
 UR5e LEGO: gripper command_rad=-0.4500 physics_target_rad=-0.4500 usd_target_deg=-25.7831 joint_rad=-0.4491 velocity_rad_s=0.0000

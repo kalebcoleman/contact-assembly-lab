@@ -9,7 +9,7 @@ dashboard.
 
 ## Same setup on every machine
 
-`main` on the `fork` remote is the shared version. On each machine, from the
+`main` on GitHub is the shared version. On each machine, from the
 repository root:
 
     git pull --ff-only

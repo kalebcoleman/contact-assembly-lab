@@ -7,28 +7,28 @@
     "isaacsim": "5.1.0.0",
     "isaaclab": "2.3.2.post1",
     "native_sha256": "4e62dc33ee02270993c20e3cfd658e6d6ef0ea9780e53ad15cedde12f41b2455",
-    "isaac_mcp_root": "/home/kaleb/Desktop/projects/RISE/BrickSim/outputs/ur5e_lego/isaac-mcp-af85e6b",
+    "isaac_mcp_root": "<workspace>/BrickSim/outputs/ur5e_lego/isaac-mcp-af85e6b",
     "isaac_mcp_commit": "af85e6b6",
     "launcher_args": [],
     "asset_strict": "1",
     "lab_assets": {
       "robot/ur5e.usd": {
-        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/robot/ur5e.usd",
+        "path": "<assets>/ur5e-dt/robot/ur5e.usd",
         "sha256": "4de699a43bfa583446e8d330e841d6a513f97909fe3d4f60b386d98ed32b06d0",
         "matches_reference": true
       },
       "gripper/husarion_rg2/rg2_gripper_fixed.usd": {
-        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/gripper/husarion_rg2/rg2_gripper_fixed.usd",
+        "path": "<assets>/ur5e-dt/gripper/husarion_rg2/rg2_gripper_fixed.usd",
         "sha256": "c6f3d59a851965ae07d25ca5fac7f067bf8d1676639b68eba738f1be1c719e70",
         "matches_reference": true
       },
       "gripper/QuickChanger.usd": {
-        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/gripper/QuickChanger.usd",
+        "path": "<assets>/ur5e-dt/gripper/QuickChanger.usd",
         "sha256": "8c94c82fb295c596c0cf7e8d7d8d7ee6334dac054bae81ed49bcbe36c0b3a52f",
         "matches_reference": true
       },
       "workstation/vention.usd": {
-        "path": "/home/kaleb/Desktop/isaac-mcp-assets/ur5e-dt/workstation/vention.usd",
+        "path": "<assets>/ur5e-dt/workstation/vention.usd",
         "sha256": "5e6ceeaf04643733a8eae35bdea93099d39564fc7fa612edb2669d61cf31d6d7",
         "matches_reference": true
       }
