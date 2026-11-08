@@ -31,14 +31,26 @@ class ControllerDefaults(unittest.TestCase):
     """The summarizer agrees with the controller."""
 
     def test_defaults_match_the_controller(self) -> None:
-        """The summarizer's defaults are the ones the controller reads."""
-        source = "".join(
-            (ROOT / f"experiments/ur5e_dog/{name}").read_text()
-            for name in ("controller.py", "run.py")
+        """The summarizer's defaults are the ones the controller uses."""
+        controller = (ROOT / "experiments/ur5e_dog/controller.py").read_text()
+        run = (ROOT / "experiments/ur5e_dog/run.py").read_text()
+        found = {
+            name: float(value)
+            for name, _, value in re.findall(
+                r'"(DOG_[A-Z_]+)": \("([a-z_]+)", ([0-9.e-]+)\)', controller
+            )
+        }
+        found.update(
+            (name, float(value))
+            for name, value in re.findall(
+                r'environ\.get\("(DOG_[A-Z_]+)", "([0-9.e-]+)"\)', controller + run
+            )
         )
-        found = dict(re.findall(r'environ\.get\("(DOG_[A-Z_]+)", "([^"]*)"\)', source))
         for name, default in CONTROLLER_DEFAULTS.items():
-            self.assertEqual(found.get(name), default, name)
+            if name == "DOG_GRIPPER_CONTACT":
+                self.assertIn(f'environ.get("{name}", "{default}")', controller)
+                continue
+            self.assertEqual(found.get(name), float(default), name)
 
 
 class Classify(unittest.TestCase):

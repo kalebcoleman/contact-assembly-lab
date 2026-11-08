@@ -46,8 +46,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Controller settings read from the environment, with the defaults in
-# experiments/ur5e_dog/controller.py and run.py (checked by test_summarize_sweep).
+# Controller settings and their defaults, as in experiments/ur5e_dog/controller.py
+# (its SETTINGS table) and run.py (checked by test_summarize_sweep).
 CONTROLLER_DEFAULTS = {
     "DOG_BREAKAGE": "1",
     "DOG_GRIPPER_CONTACT": "fail",
@@ -58,6 +58,19 @@ CONTROLLER_DEFAULTS = {
     "DOG_RELEASE_RAMP_S": "1.0",
     "DOG_TIP_CLEARANCE_M": "0.003",
     "DOG_HOLD_S": "10",
+    "DOG_RELEASE_MARGIN_M": "0.002",
+    "DOG_RELEASE_MIN_CLEARANCE_M": "0.001",
+}
+# Keys of the "controller settings" line the controller prints (and of a
+# structure config's "controller" block), by environment variable.
+SETTING_KEYS = {
+    "DOG_REQUIRED_FORCE_N": "required_force_n",
+    "DOG_PRESS_DEPTH_M": "press_depth_m",
+    "DOG_PRESS_HOLD_S": "press_hold_s",
+    "DOG_RELEASE_RAMP_S": "release_ramp_s",
+    "DOG_TIP_CLEARANCE_M": "tip_clearance_m",
+    "DOG_RELEASE_MARGIN_M": "release_margin_m",
+    "DOG_RELEASE_MIN_CLEARANCE_M": "release_min_clearance_m",
 }
 
 # (class, pattern on the first failure message), first match wins.
@@ -157,6 +170,7 @@ def read_console(path: Path) -> dict:
                 }
             )
             pending = {"not_converged": 0, "high_slack": 0, "max_slack_pct": 0.0}
+    applied = re.search(r"UR5e baseplate: controller settings (\{.*\})", text)
     monitored = "finger profile" in text
     # Kit flushes its log asynchronously and the process exits with os._exit,
     # so the last BrickSim lines can be missing. Every brick the controller saw
@@ -173,6 +187,7 @@ def read_console(path: Path) -> dict:
         "events": events,
         "solver_warnings": totals,
         "event_log_complete": complete,
+        "applied_settings": json.loads(applied[1]) if applied else None,
     }
 
 
@@ -427,6 +442,14 @@ def summarize_run(sweep: dict, run: dict) -> dict:
             "value": "1" if breakage["enabled"] else "0",
             "source": "recording",
         }
+    # The controller prints the settings it used (newer runs): ground truth.
+    if console["applied_settings"]:
+        for name, key in SETTING_KEYS.items():
+            if key in console["applied_settings"]:
+                settings[name] = {
+                    "value": str(console["applied_settings"][key]),
+                    "source": "console",
+                }
     if assembly:
         settings["DOG_REQUIRED_FORCE_N"] = {
             "value": str(assembly["required_force_n"]),

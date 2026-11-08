@@ -53,6 +53,42 @@ from bricksim.core import (
 )
 from bricksim.utils.physics_step import wait_for_physics_step
 
+# Tunable controller settings: environment variable -> (key in the structure
+# config's "controller" block, default). An environment variable wins, then the
+# structure's own setting, then the default, so a structure can carry what it
+# needs to build and a sweep can still override it.
+SETTINGS = {
+    "DOG_REQUIRED_FORCE_N": ("required_force_n", 1.0),
+    "DOG_PRESS_DEPTH_M": ("press_depth_m", 0.0005),
+    "DOG_PRESS_HOLD_S": ("press_hold_s", 0.05),
+    "DOG_RELEASE_RAMP_S": ("release_ramp_s", 1.0),
+    "DOG_TIP_CLEARANCE_M": ("tip_clearance_m", 0.003),
+    "DOG_RELEASE_MARGIN_M": ("release_margin_m", 0.002),
+    "DOG_RELEASE_MIN_CLEARANCE_M": ("release_min_clearance_m", 0.001),
+}
+
+
+def controller_settings(assembly: dict) -> dict[str, float]:
+    """Resolve the tunable settings for one structure.
+
+    Args:
+        assembly: The structure config; its optional "controller" block holds
+            per-structure values keyed as in `SETTINGS`.
+
+    Returns:
+        Config key to value, with environment variables taking precedence.
+    """
+    tuning = assembly.get("controller", {})
+    unknown = set(tuning) - {key for key, _ in SETTINGS.values()}
+    if unknown:
+        raise ValueError(f"Unknown controller settings: {sorted(unknown)}")
+    return {
+        key: float(environ[name])
+        if name in environ
+        else float(tuning.get(key, default))
+        for name, (key, default) in SETTINGS.items()
+    }
+
 
 class UtilizationRecorder(RunRecorder):
     """Run recorder that also logs each live connection's load utilization.
@@ -455,7 +491,9 @@ async def main(
     target_grasp[:3, :3] = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
     # DOG_TIP_CLEARANCE_M: fingertip height above the held brick's bottom, which
     # keeps the tips clear of the support's top and studs while seating.
-    grasp_z = table_z + tip_offset + float(environ.get("DOG_TIP_CLEARANCE_M", "0.003"))
+    settings = controller_settings(assembly)
+    print(f"UR5e baseplate: controller settings {json.dumps(settings)}", flush=True)
+    grasp_z = table_z + tip_offset + settings["tip_clearance_m"]
     # Assembly check: seat within 1 mm and 2 degrees (tighter than the 2 mm and 5
     # degrees of the baseline). A required force above 1 N makes the press harder
     # and, with breakage on, overloads the joints below (see RESULTS.md).
@@ -463,7 +501,7 @@ async def main(
     strict.distance_tolerance = 0.001
     strict.max_penetration = 0.005
     strict.z_angle_tolerance = math.radians(2.0)
-    strict.required_force = float(environ.get("DOG_REQUIRED_FORCE_N", "1.0"))
+    strict.required_force = settings["required_force_n"]
     strict.yaw_tolerance = math.radians(2.0)
     strict.position_tolerance = 0.001
     set_assembly_thresholds(strict)
@@ -483,11 +521,12 @@ async def main(
     grasp_error_xy = np.array(assembly.get("grasp_error_xy_m", [0.0, 0.0]))
     placement_error_xy = np.array(assembly.get("placement_error_xy_m", [0.0, 0.0]))
     placement_error_yaw = assembly.get("placement_error_yaw_rad", 0.0)
-    press_depth_m = float(environ.get("DOG_PRESS_DEPTH_M", "0.0005"))
+    press_depth_m = settings["press_depth_m"]
     freeze_on_connection = environ.get("DOG_FREEZE_ON_CONNECTION", "1") == "1"
-    release_ramp_s = float(environ.get("DOG_RELEASE_RAMP_S", "1.0"))
-    press_hold_s = float(environ.get("DOG_PRESS_HOLD_S", "0.05"))
+    release_ramp_s = settings["release_ramp_s"]
+    press_hold_s = settings["press_hold_s"]
     placement_yaws = assembly.get("placement_yaws", [0] * len(brick_paths))
+    grasp_offsets = assembly.get("grasp_offsets_m", [[0.0, 0.0]] * len(brick_paths))
     for index, (brick_path, offset, support_index) in enumerate(
         zip(brick_paths, assembly["placement_offsets"], supports, strict=True), start=1
     ):
@@ -506,11 +545,21 @@ async def main(
         )
         recorder.brick_index = index
         recorder.phase = "approach"
-        source_position, _ = brick.get_world_pose()
+        source_position, source_orientation = brick.get_world_pose()
+        grasp_offset = (
+            quats_to_rot_matrices(np.asarray(source_orientation))
+            @ np.array([*grasp_offsets[index - 1], 0.0])
+        )[:2]
+        if np.any(grasp_offset):
+            print(
+                f"UR5e baseplate: brick {index}/{total} grasp offset "
+                f"m={grasp_offset.tolist()}",
+                flush=True,
+            )
         print(f"UR5e baseplate: brick {index}/{total} approach", flush=True)
         for height in (grasp_z + 0.10, grasp_z):
             target_grasp[:3, 3] = (
-                *(source_position[:2] + grasp_error_xy),
+                *(source_position[:2] + grasp_error_xy + grasp_offset),
                 height,
             )
             target_grasp[:3, 3] -= target_grasp[:3, 2] * lateral_offset
@@ -543,7 +592,9 @@ async def main(
             )
         brick_position, _ = brick.get_world_pose()
         center_error = float(
-            np.linalg.norm(np.mean(finger_centers, axis=0)[:2] - brick_position[:2])
+            np.linalg.norm(
+                np.mean(finger_centers, axis=0)[:2] - brick_position[:2] - grasp_offset
+            )
         )
         print(
             f"UR5e baseplate: brick {index}/{total} "
@@ -766,7 +817,12 @@ async def main(
         # As wide as the neighbours allow (fully open in free space): a narrow
         # opening keeps the pads on the brick longer and lets the lift drag it.
         release = release_opening(
-            finger_profile, opening_start, nearby, target_clearance=float("inf")
+            finger_profile,
+            opening_start,
+            nearby,
+            target_clearance=float("inf"),
+            min_clearance=settings["release_min_clearance_m"],
+            margin=settings["release_margin_m"],
         )
         if release is None:
             raise RuntimeError(
