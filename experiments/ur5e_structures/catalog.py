@@ -36,8 +36,8 @@ SECTIONS = {
     ),
     "figures": ("Figures", "Smaller recognisable builds."),
     "complex": (
-        "Complex builds that failed",
-        "Attempts at harder structures. Each failure is a documented test case.",
+        "Complex builds",
+        "Harder structures, some failing, with the variants tried to build them.",
     ),
     "break": (
         "Break tests (failures on purpose)",
@@ -112,6 +112,20 @@ ENTRIES = {
         "Table",
         "Four 2x2 legs two bricks high under two 2x6 tops.",
         "C: legs 2 studs apart leave no room for the RG2 fingers to let go",
+    ),
+    "table_grip": (
+        "complex",
+        "Table, grip-aware",
+        "The table's ten bricks, with each grip chosen for room. The legs are "
+        "gripped across the axis where they are 4 studs apart, and the 2x8 tops "
+        "are gripped end to end, so no finger enters a 2-stud gap.",
+        "",
+    ),
+    "trestle_table": (
+        "complex",
+        "Trestle table",
+        "Two slab legs of 2x4 bricks gripped end to end under a 4x6 top.",
+        "",
     ),
     "mixed_tower": (
         "complex",
@@ -286,6 +300,8 @@ TESTS = {
     "house": "a lintel over a doorway; stepped roof",
     "log_cabin": "courses alternating direction; interlocking corners",
     "locomotive": "a chassis resting on three wheels",
+    "table_grip": "the table with grips chosen for room",
+    "trestle_table": "slab legs gripped end to end",
     "lighthouse": "a seven-layer tower on a wide base",
     "castle_gate": "a lintel over a gate; battlements",
     "tree": "a crown on a 2x2 trunk (4-stud joints)",

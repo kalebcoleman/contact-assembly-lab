@@ -126,6 +126,7 @@ L6 = [2, 6, 3]  # 2x6 brick, gripped across its 2-stud width
 L8 = [2, 8, 3]  # 2x8 brick
 L10 = [2, 10, 3]  # 2x10 brick
 Q = [6, 4, 3]  # 4x6 brick, as in the dog
+L8X = [8, 2, 3]  # 2x8 brick gripped end to end (fingers on its short ends)
 STONE = [150, 150, 158]
 # (dimensions, support index or None, footprint corner, turns, RGB color)
 AbsolutePart = tuple[list[int], int | None, tuple[int, int], int, list[int]]
@@ -188,6 +189,31 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (D, 4, (4, 9), 1, STONE),
         (D, 4, (8, 9), 1, STONE),
         (D, 4, (12, 9), 1, STONE),
+    ],
+    # Four-legged table built with grip directions chosen for room: each 2x2 leg
+    # is gripped across x, where the legs are 4 studs apart, and each 2x8 top is
+    # gripped end to end, on its free ends. (The original table has 2-stud gaps
+    # on both axes, so its last leg has no free grip axis.)
+    "table_grip": [
+        (D, None, (5, 6), 0, [150, 95, 50]),
+        (D, None, (11, 6), 0, [150, 95, 50]),
+        (D, None, (5, 10), 0, [150, 95, 50]),
+        (D, None, (11, 10), 0, [150, 95, 50]),
+        (D, 0, (5, 6), 0, [150, 95, 50]),
+        (D, 1, (11, 6), 0, [150, 95, 50]),
+        (D, 2, (5, 10), 0, [150, 95, 50]),
+        (D, 3, (11, 10), 0, [150, 95, 50]),
+        (L8X, 4, (5, 6), 0, [120, 75, 40]),
+        (L8X, 6, (5, 10), 0, [120, 75, 40]),
+    ],
+    # Trestle table: two slab legs of 2x4 bricks gripped end to end, so no finger
+    # enters the gap between the legs, under a 4x6 top.
+    "trestle_table": [
+        (B, None, (6, 6), 1, [150, 95, 50]),
+        (B, None, (10, 6), 1, [150, 95, 50]),
+        (B, 0, (6, 6), 1, [150, 95, 50]),
+        (B, 1, (10, 6), 1, [150, 95, 50]),
+        (Q, 2, (6, 6), 0, [120, 75, 40]),
     ],
     # The 4-brick column with every brick turned to lie along x: the same 8-stud
     # joints, with the gripper rotated 90 degrees (a control for the house wall).
