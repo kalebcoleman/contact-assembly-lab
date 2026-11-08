@@ -15,8 +15,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T201752758338Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/tower_release_2s.mp4",
       "media": null
     },
     {
@@ -26,8 +26,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T202028624545Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/lean_6_release_2s.mp4",
       "media": null
     },
     {
@@ -37,8 +37,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T202314842401Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/zigzag_6_release_2s.mp4",
       "media": null
     },
     {
@@ -48,8 +48,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T202748845868Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/lean_ladder_release_2s.mp4",
       "media": null
     },
     {
@@ -59,8 +59,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T203207115954Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/tower_2x2_release_2s.mp4",
       "media": null
     },
     {
@@ -70,8 +70,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T203524069238Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/column_10_release_2s.mp4",
       "media": null
     },
     {
@@ -81,8 +81,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T203808941817Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/tree_release_2s.mp4",
       "media": null
     },
     {
@@ -92,8 +92,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T204146615012Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/cross_tower_release_2s.mp4",
       "media": null
     },
     {
@@ -103,8 +103,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T204357958860Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/spiral_tower_release_2s.mp4",
       "media": null
     },
     {
@@ -114,8 +114,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T204613725870Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/l_corner_release_2s.mp4",
       "media": null
     },
     {
@@ -125,8 +125,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T204856963798Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/cantilever_release_2s.mp4",
       "media": null
     },
     {
@@ -136,8 +136,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T205214718396Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/cantilever_tip2_release_2s.mp4",
       "media": null
     },
     {
@@ -148,8 +148,8 @@
         "DOG_RELEASE_MARGIN_M": "0.001",
         "DOG_RELEASE_MIN_CLEARANCE_M": "0.0005"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T205519575411Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/table_margin_1mm.mp4",
       "media": null
     },
     {
@@ -158,8 +158,8 @@
       "environment": {
         "DOG_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T205959462286Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/table_grip.mp4",
       "media": null
     },
     {
@@ -168,8 +168,8 @@
       "environment": {
         "DOG_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T210518733717Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/trestle_table.mp4",
       "media": null
     },
     {
@@ -178,8 +178,8 @@
       "environment": {
         "DOG_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T210846707501Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/mixed_tower_grip_support.mp4",
       "media": null
     },
     {
@@ -189,8 +189,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_PRESS_DEPTH_M": "0.001"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T211303404743Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-1/mixed_tower_press_1mm.mp4",
       "media": null
     }
   ]

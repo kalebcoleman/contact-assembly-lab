@@ -14,8 +14,8 @@
       "environment": {
         "DOG_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T195810299956Z",
+      "video": ".cache/videos/2026-11-08-showcase2-sweep/locomotive.mp4",
       "media": null
     },
     {
@@ -24,8 +24,8 @@
       "environment": {
         "DOG_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T200444481750Z",
+      "video": ".cache/videos/2026-11-08-showcase2-sweep/lighthouse.mp4",
       "media": null
     },
     {
@@ -34,8 +34,8 @@
       "environment": {
         "DOG_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T200918091893Z",
+      "video": ".cache/videos/2026-11-08-showcase2-sweep/castle_gate.mp4",
       "media": null
     },
     {
@@ -45,8 +45,8 @@
         "DOG_BREAKAGE": "1",
         "DOG_RELEASE_RAMP_S": "2.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261108T201434592508Z",
+      "video": ".cache/videos/2026-11-08-showcase2-sweep/castle_gate_release_2s.mp4",
       "media": null
     }
   ]
