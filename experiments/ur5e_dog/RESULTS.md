@@ -1,15 +1,24 @@
-# Dog assembly results
+# Dog structure history
+
+The dog was the first structure the controller built, and this log follows it
+from the first runs to the full breakage model; most sections also cover the
+other structures run alongside it. Current results for every structure are in
+[docs/STRUCTURES.md](../../docs/STRUCTURES.md) and
+[FAILURES.md](../ur5e_structures/FAILURES.md).
 
 Simulation only. Each run is a fresh virtual scene; nothing is reset or edited mid-run.
 
+## First runs (Isaac Sim 5.1, breakage off)
+
 | Run | Pickup layout | Connections | Outcome |
 |---|---|---|---|
-| 1 | `dog.json`, head at (-0.34,-0.38) | 8/10 | head not retained (finger closed on baseplate edge) |
+| 1 | [`dog.json`](../ur5e_structures/dog.json), head at (-0.34,-0.38) | 8/10 | head not retained (finger closed on baseplate edge) |
 | 2 | same | 8/10 | identical failure |
 | 3 | `dog.json`, head at (-0.43,-0.295) | 10/10 | success; continuous video recorded |
-| 4–8 | `variants/seed_1..5.json` | 10/10 each | 5/5 success |
+| 4–8 | `ur5e_structures/attempts/dog_seed_1..5.json` | 10/10 each | 5/5 success |
 
-Variants jitter every pickup XY by up to ±15 mm (seeded, validator-checked; yaw 0).
+The seed variants (`ur5e_structures/make_dog_seeds.py`) jitter every pickup XY by up
+to ±15 mm (seeded, validator-checked; yaw 0).
 Across the five: max grasp-center error 0.8 mm, max pre-press XY correction 1.6 mm
 (mean 1.3 mm), 0 timeouts. No recovery logic exists, so "0 recovery attempts" means
 none were implemented, not that none were needed.
@@ -24,7 +33,7 @@ unknown positions, yaw or contact uncertainty.
 
 ## Structures, yaw and the full model (2026-11-07)
 
-Structure specs are in `experiments/ur5e_structures/`. Every run below is simulation,
+Structure specs are in [experiments/ur5e_structures/](../ur5e_structures/README.md). Every run below is simulation,
 one attempt each, simulator ground truth for poses (not sensing). "Breakage off" runs
 used the baseline's lenient assembly check (2 mm, 5 degrees, 1 N) and are **not**
 the full BrickSim model.
@@ -40,11 +49,11 @@ overloaded. A per-step utilization log (`outputs/ur5e_dog/utilization-*.csv`) sh
 
 1. **One-step gripper release** discharged the press load as an impulse; the lower
    joint hit 0.98 at release and the new joint broke. Fixed by easing the arm back to
-   the seat height and opening the gripper over 1 s (`DOG_RELEASE_RAMP_S`).
+   the seat height and opening the gripper over 1 s (`ASSEMBLY_RELEASE_RAMP_S`).
 2. **Press force grew with stack height** (about 1.2 N on bricks 1-2, about 7 N on
    bricks 3-4) because the arm kept descending after seating; lower joints reached
    1.1-3.1 times capacity. Fixed by freezing the arm target once the connection
-   forms (`DOG_FREEZE_ON_CONNECTION`).
+   forms (`ASSEMBLY_FREEZE_ON_CONNECTION`).
 3. **Pressing harder is not free**: a 5 N required force with a 3 mm press broke the
    first joint with breakage on. Tighter angle (2 degrees) and position (1 mm)
    tolerances are set; required force stays at 1 N for breakage on.

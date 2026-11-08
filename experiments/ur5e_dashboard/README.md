@@ -1,6 +1,7 @@
-# Experiment results viewer
+# Results dashboard
 
 Open recorded UR5e brick experiments in a local, read-only browser dashboard.
+All data is from simulation.
 From the repository root, run:
 
     python3 experiments/ur5e_dashboard/server.py
@@ -47,8 +48,8 @@ time, so a later local re-run is labeled as not in the published suite. A video
 is labeled either as this run's recording or as a representative recording of
 another case.
 
-The **Structures** filter lists every recipe in `experiments/ur5e_structures/`
-(and the dog). A structure page draws each layer on the 20 × 20 stud baseplate
+The **Structures** filter lists every structure config in
+`experiments/ur5e_structures/`. A structure page draws each layer on the 20 × 20 stud baseplate
 from above, lists the structure's trials from
 `experiments/ur5e_structures/trials.json` (simulation and real robot), opens a
 trial's run when its recording is in the library, and shows the latest result

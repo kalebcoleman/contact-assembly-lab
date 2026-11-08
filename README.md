@@ -6,6 +6,7 @@
 
 [Structure catalog](docs/STRUCTURES.md) ·
 [Failure analysis](experiments/ur5e_structures/FAILURES.md) ·
+[Assembly controller](experiments/ur5e_assembly/README.md) ·
 [Usage and reproduction](docs/USAGE.md) ·
 [Isaac Sim 6.2 port](docs/ISAACSIM_6.2_PORT.md) ·
 [Citation](#citation)
@@ -100,9 +101,11 @@ simulator UI are theirs. This version adds:
   ([notes](docs/ISAACSIM_6.2_PORT.md));
 - **a weld-torque correction** for PhysX 5.9's CPU TGS solver, which
   misreported the loads the breakage model reads;
-- **a UR5e assembly controller** that releases bricks without touching their
-  neighbours and logs every gripper contact;
-- **the structure library**, its design renderer and the catalog;
+- **a UR5e assembly controller** that builds any structure config, releases
+  bricks without touching their neighbours and logs every gripper contact
+  ([controller](experiments/ur5e_assembly/README.md));
+- **the structure library** of about 30 structures, its design renderer and
+  the [catalog](docs/STRUCTURES.md);
 - **reproducible sweeps**, run summaries that separate physics failures from
   numerical and controller ones, and the failure analysis;
 - **the dashboard**.
