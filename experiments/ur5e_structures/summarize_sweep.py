@@ -190,6 +190,7 @@ def read_console(path: Path) -> dict:
         "solver_warnings": totals,
         "event_log_complete": complete,
         "applied_settings": json.loads(applied[1]) if applied else None,
+        "grasp_offsets_used": "grasp offset m=" in text,
     }
 
 
@@ -483,6 +484,7 @@ def summarize_run(sweep: dict, run: dict) -> dict:
         "contact_stopped_run": failure_class == "gripper_contact_abort",
         "solver_warnings": console["solver_warnings"],
         "event_log_complete": console["event_log_complete"] and recording_agrees,
+        "grasp_offsets_used": console["grasp_offsets_used"],
         "breaks": breaks,
         "lasting_breaks": sum(not b["rejoined"] for b in breaks),
         "transient_breaks": sum(b["rejoined"] for b in breaks),

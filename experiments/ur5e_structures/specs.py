@@ -386,6 +386,39 @@ def grip_over_support(
     return offsets
 
 
+# What a structure needs to build, found by the fix-attempt sweeps (see
+# FAILURES.md): controller settings written into its config's "controller"
+# block, and whether its half-supported bricks are gripped over their support.
+NEEDS: dict[str, dict] = {
+    "tree": {"controller": {"release_lift_m": 0.0005}},
+    "tower": {"controller": {"release_lift_m": 0.0005}},
+    "house": {"controller": {"release_lift_m": 0.0005}},
+    "column_10": {"controller": {"release_ramp_s": 0.5}},
+    "cross_tower": {"controller": {"release_ramp_s": 0.5}},
+    "mixed_tower": {"grip_over_support": True},
+}
+
+
+def apply_needs(name: str, config: dict) -> dict:
+    """Add a structure's needed controller settings and grasp offsets.
+
+    Args:
+        name: Structure name.
+        config: Its validated config.
+
+    Returns:
+        The config with its "controller" block and grasp offsets, if any.
+    """
+    needs = NEEDS.get(name, {})
+    if "controller" in needs:
+        config["controller"] = needs["controller"]
+    if needs.get("grip_over_support"):
+        config["grasp_offsets_m"] = grip_over_support(
+            config, finger_half_width_m=0.004, margin_m=0.0
+        )
+    return config
+
+
 def absolute_config(name: str, parts: list[AbsolutePart]) -> dict:
     """Build a validated config from absolute parts, as `main` does for showcases.
 
@@ -520,6 +553,7 @@ def main() -> None:
                 offset = best[1]
             config["placement_offsets"].append(list(offset))
         origins = validate(config)
+        config = apply_needs(name, config)
         Path(__file__).with_name(f"{name}.json").write_text(
             json.dumps(config, indent=2) + "\n"
         )

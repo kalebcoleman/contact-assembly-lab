@@ -74,6 +74,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_7",
@@ -210,6 +211,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -328,6 +330,7 @@
         "high_slack": 14
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -464,6 +467,7 @@
         "high_slack": 1
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -600,6 +604,7 @@
         "high_slack": 0
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [],
       "lasting_breaks": 0,
       "transient_breaks": 0,
@@ -699,6 +704,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_1",
@@ -853,6 +859,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_1",
@@ -971,6 +978,7 @@
         "high_slack": 6
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1179,6 +1187,7 @@
         "high_slack": 15
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_1",
@@ -1351,6 +1360,7 @@
         "high_slack": 7
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1487,6 +1497,7 @@
         "high_slack": 1
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1641,6 +1652,7 @@
         "high_slack": 2
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1813,6 +1825,7 @@
         "high_slack": 0
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1949,6 +1962,7 @@
         "high_slack": 0
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -2103,6 +2117,7 @@
         "high_slack": 1
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -2221,6 +2236,7 @@
         "high_slack": 2
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",

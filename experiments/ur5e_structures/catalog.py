@@ -235,11 +235,7 @@ ENTRIES = {
 }
 
 # Facts a reader needs that the trials do not show.
-NOTES = {
-    "house": "At the default 1 s gripper release, the first wall joint (8 studs) "
-    "breaks during a release with no visible motion. With a 2 s release the "
-    "house completes; the picture and video are that run.",
-}
+NOTES: dict[str, str] = {}
 
 # Committed media are named after the run that made them.
 MEDIA_STEM = {
@@ -347,31 +343,106 @@ STOP = {
 COSMETIC = {"ASSEMBLY_GRIPPER_CONTACT", "ASSEMBLY_HOLD_S"}
 
 
+def structure_config(structure: str) -> dict:
+    """Read a structure's config ({} if it no longer exists).
+
+    Args:
+        structure: Structure name.
+
+    Returns:
+        The config.
+    """
+    path = config_path(structure)
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def standard_settings(structure: str) -> dict[str, str]:
+    """The settings a structure builds with: defaults plus its controller block.
+
+    Args:
+        structure: Structure name.
+
+    Returns:
+        Environment variable name to value.
+    """
+    from experiments.ur5e_structures.summarize_sweep import (
+        CONTROLLER_DEFAULTS,
+        SETTING_KEYS,
+    )
+
+    block = structure_config(structure).get("controller", {})
+    return {
+        name: str(block.get(SETTING_KEYS.get(name, ""), default))
+        for name, default in CONTROLLER_DEFAULTS.items()
+    }
+
+
+def needs_grip(structure: str) -> bool:
+    """Tell whether a structure grips some bricks off-centre by default.
+
+    Args:
+        structure: Structure name.
+
+    Returns:
+        True if its config has non-zero grasp offsets.
+    """
+    offsets = structure_config(structure).get("grasp_offsets_m", [])
+    return any(any(value for value in offset) for offset in offsets)
+
+
+def needs_text(structure: str) -> str:
+    """Describe what a structure's config adds to the controller defaults.
+
+    Args:
+        structure: Structure name.
+
+    Returns:
+        A comma-separated description, or "" if nothing.
+    """
+    from experiments.ur5e_structures.summarize_sweep import SETTING_KEYS
+
+    block = structure_config(structure).get("controller", {})
+    names = {key: name for name, key in SETTING_KEYS.items()}
+    parts = [
+        describe_settings({names[key]: str(value)}) for key, value in block.items()
+    ]
+    if needs_grip(structure):
+        parts.append("grip half-supported bricks over their support")
+    return ", ".join(parts)
+
+
 def sweep_runs() -> dict[str, list[dict]]:
     """Collect every summarized sweep run by structure.
 
     Returns:
         Structure name to its runs (oldest first). Each run has the sweep, label,
-        run id, outcome, connected/total, failure class, and `changed`: the
-        settings that differ from the controller defaults (empty at defaults).
+        run id, outcome, connected/total, failure class, and `changed`: how the
+        run differs from the structure's standard settings (the controller
+        defaults with its config's "controller" block and grip), empty if not.
     """
-    from experiments.ur5e_structures.summarize_sweep import CONTROLLER_DEFAULTS
-
     runs: dict[str, list[dict]] = {}
     for path in sorted((STRUCTURES / "sweeps").glob("*.summary.json")):
         summary = json.loads(path.read_text())
         for run in summary["runs"]:
-            changed = {
-                key: value["value"]
-                for key, value in run["settings"].items()
-                if key not in COSMETIC
-                and float(value["value"]) != float(CONTROLLER_DEFAULTS[key])
-            }
             structure = Path(run["config"]).stem
+            variant = None
             if Path(run["config"]).parent.name == "attempts":
                 variant = json.loads((ROOT / run["config"]).read_text())
                 structure = variant["variant_of"]
+            standard = standard_settings(structure)
+            changed = {
+                key: value["value"]
+                for key, value in run["settings"].items()
+                if key not in COSMETIC and float(value["value"]) != float(standard[key])
+            }
+            if variant is not None:
                 changed = {"variant": variant["variant"], **changed}
+            elif run.get("grasp_offsets_used", False) != needs_grip(structure):
+                changed["grip"] = (
+                    "gripped at the middle"
+                    if needs_grip(structure)
+                    else "gripped off-centre"
+                )
             runs.setdefault(structure, []).append(
                 {
                     "sweep": summary["sweep"],
@@ -439,15 +510,26 @@ def describe_settings(changed: dict[str, str]) -> str:
         "ASSEMBLY_RELEASE_MARGIN_M": lambda v: f"{float(v) * 1000:g} mm release margin",
         "ASSEMBLY_RELEASE_LIFT_M": lambda v: (
             f"ease off {float(v) * 1000:g} mm before letting go"
+            if float(v)
+            else "no easing off"
         ),
         "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": lambda v: (
             f"{float(v) * 1000:g} mm minimum release clearance"
         ),
     }
+    from experiments.ur5e_structures.summarize_sweep import CONTROLLER_DEFAULTS
+
     words["variant"] = str
-    return ", ".join(
-        words[k](v) if k in words else f"{k}={v}" for k, v in changed.items()
-    )
+    words["grip"] = str
+    texts = []
+    for key, value in changed.items():
+        text = words[key](value) if key in words else f"{key}={value}"
+        if key in CONTROLLER_DEFAULTS and float(value) == float(
+            CONTROLLER_DEFAULTS[key]
+        ):
+            text += " (controller default)"
+        texts.append(text)
+    return ", ".join(texts)
 
 
 def describe_result(run: dict) -> str:
@@ -492,7 +574,7 @@ def entry(name: str, runs: list[dict]) -> tuple[str, Results]:
     )
     found = results(runs)
     latest = found["latest"]
-    result = describe_result(latest) if latest else "not run at default settings"
+    result = describe_result(latest) if latest else "not run at its standard settings"
     links = []
     if (MEDIA / f"{stem}.mp4").exists():
         links.append(f"[video (MP4)](media/{stem}.mp4)")
@@ -518,12 +600,17 @@ def entry(name: str, runs: list[dict]) -> tuple[str, Results]:
         f"- **Layers:** {info['layers']}.",
         f"- **Bricks resting on two or more bricks:** {info['multi']}.",
         f"- **Weakest planned joint:** {info['weakest']} studs.",
-        f"- **Runs at default settings:** {found['runs']}, "
+        f"- **Builds with:** {needs_text(name) or 'the controller defaults'}.",
+        f"- **Runs at these settings:** {found['runs']}, "
         f"{found['completed']} completed. Latest: {result}.",
     ]
+    tried: dict[tuple[str, str], int] = {}
     for other in found["other"]:
-        settings = describe_settings(other["changed"])
-        lines.append(f"- **Also tried ({settings}):** {describe_result(other)}.")
+        key = (describe_settings(other["changed"]), describe_result(other))
+        tried[key] = tried.get(key, 0) + 1
+    for (settings, outcome), count in tried.items():
+        times = f" ×{count}" if count > 1 else ""
+        lines.append(f"- **Also tried ({settings}){times}:** {outcome}.")
     if name in NOTES:
         lines.append(f"- **Note:** {NOTES[name]}")
     if mechanism:
@@ -600,6 +687,7 @@ def index(all_runs: dict[str, list[dict]]) -> dict[str, object]:
             "note": NOTES.get(name, ""),
             "still": still,
             "video": video,
+            "needs": needs_text(name),
             "default_runs": found["runs"],
             "default_completed": found["completed"],
             "latest": run_summary(latest) if latest else None,
@@ -692,10 +780,12 @@ def main() -> None:
         "- its bricks and joints;",
         "- its results.",
         "",
-        "**Runs** counts the sweep runs at the default settings: breakage on, 1 N",
-        "press, 1 s release, gripper contacts logged. Runs at other settings are",
-        "listed in each entry. Repeated runs of a structure give the same result,",
-        "because the simulation is deterministic. These are simulation results",
+        "**Runs** counts the sweep runs at each structure's standard settings: the",
+        "controller defaults (breakage on, 1 N press, 1 s release, gripper",
+        "contacts logged) plus anything its config adds, shown as *Builds with*.",
+        "Runs at other settings are listed in each entry as attempts. Repeated",
+        "runs of a structure give the same result, because the simulation is",
+        "deterministic. These are simulation results",
         "judged by simulator ground truth; nothing here ran on hardware.",
         "",
         "The failures are explained in",

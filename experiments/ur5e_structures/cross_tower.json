@@ -228,5 +228,8 @@
     3,
     1
   ],
-  "min_same_layer_gap_studs": 2
+  "min_same_layer_gap_studs": 2,
+  "controller": {
+    "release_ramp_s": 0.5
+  }
 }

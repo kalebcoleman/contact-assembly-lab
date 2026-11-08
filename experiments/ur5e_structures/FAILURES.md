@@ -24,21 +24,20 @@ Generated from the sweep summaries by `catalog.py`.
 |---|---|---|---|---|---|
 | [Dog](../../docs/STRUCTURES.md#dog) | wide bricks bridging legs; ten-brick figure | 3 | 3 | — | — |
 | [Arch bridge](../../docs/STRUCTURES.md#bridge) | a deck landing on two piers (corbel arch) | 1 | 1 | — | — |
-| [House](../../docs/STRUCTURES.md#house) | a lintel over a doorway; stepped roof | 1 | 0 | a joint broke | B |
+| [House](../../docs/STRUCTURES.md#house) | a lintel over a doorway; stepped roof | 1 | 1 | — | B |
 | [Log cabin](../../docs/STRUCTURES.md#log_cabin) | courses alternating direction; interlocking corners | 1 | 1 | — | — |
 | [Steam locomotive](../../docs/STRUCTURES.md#locomotive) | a chassis resting on three wheels | 1 | 0 | a brick slipped from the grasp | — |
 | [Lighthouse](../../docs/STRUCTURES.md#lighthouse) | a seven-layer tower on a wide base | 1 | 1 | — | — |
 | [Castle gate](../../docs/STRUCTURES.md#castle_gate) | a lintel over a gate; battlements | 1 | 0 | a joint broke | — |
-| [Tree](../../docs/STRUCTURES.md#tree) | a crown on a 2x2 trunk (4-stud joints) | 2 | 0 | a joint broke | B |
+| [Tree](../../docs/STRUCTURES.md#tree) | a crown on a 2x2 trunk (4-stud joints) | 1 | 1 | — | B |
 | [Table](../../docs/STRUCTURES.md#table) | four legs, then tops spanning them | 2 | 0 | no room to release | C |
 | [Table, grip-aware](../../docs/STRUCTURES.md#table_grip) | the table with grips chosen for room | 1 | 0 | grasp failed | — |
 | [Table, wide gaps](../../docs/STRUCTURES.md#table_wide) | 4-stud gaps on both axes | 1 | 0 | a joint broke | — |
 | [Trestle table](../../docs/STRUCTURES.md#trestle_table) | slab legs gripped end to end | 1 | 1 | — | — |
-| [Mixed tower](../../docs/STRUCTURES.md#mixed_tower) | three brick sizes with offsets | 2 | 0 | a brick did not seat | D |
-| [Cross-bonded tower](../../docs/STRUCTURES.md#cross_tower) | alternating quarter turns (4-stud overlaps) | 2 | 0 | a joint broke | E |
+| [Cross-bonded tower](../../docs/STRUCTURES.md#cross_tower) | alternating quarter turns (4-stud overlaps) | 1 | 1 | — | E |
 | [Spiral tower](../../docs/STRUCTURES.md#spiral_tower) | repeated quarter turns (4-stud overlaps) | 2 | 0 | a joint broke | E |
 | [L corner](../../docs/STRUCTURES.md#l_corner) | a corner brick joining two posts | 2 | 0 | a joint broke | A |
-| [Offset tower](../../docs/STRUCTURES.md#tower) | alternating directions with 1-stud shifts | 2 | 0 | a joint broke | B |
+| [Offset tower](../../docs/STRUCTURES.md#tower) | alternating directions with 1-stud shifts | 1 | 1 | — | B |
 | [Cantilever](../../docs/STRUCTURES.md#cantilever) | a press on a cantilever tip | 3 | 0 | a joint broke | A |
 | [Cantilever, two bricks at the tip](../../docs/STRUCTURES.md#cantilever_tip2) | two bricks at a cantilever tip | 2 | 0 | a brick did not seat | A |
 | [Cantilever, two bricks over the support (control)](../../docs/STRUCTURES.md#cantilever_root2) | the same bricks over the support (control) | 2 | 2 | — | — |
@@ -46,7 +45,7 @@ Generated from the sweep summaries by `catalog.py`.
 | [2x2 tower](../../docs/STRUCTURES.md#tower_2x2) | ten 4-stud joints | 2 | 0 | a joint broke | B |
 | [Lean 6](../../docs/STRUCTURES.md#lean_6) | 2-stud shifts (4-stud joints) | 2 | 0 | a joint broke | B |
 | [Zigzag 6](../../docs/STRUCTURES.md#zigzag_6) | shear at every joint | 2 | 0 | a joint broke | A |
-| [Column of ten](../../docs/STRUCTURES.md#column_10) | load on the base growing with height | 2 | 0 | a joint broke | B |
+| [Column of ten](../../docs/STRUCTURES.md#column_10) | load on the base growing with height | 1 | 1 | — | B |
 | [Column, turned 90 degrees](../../docs/STRUCTURES.md#column_turned) | the column with bricks turned 90 degrees | 2 | 2 | — | — |
 | [Single brick](../../docs/STRUCTURES.md#single) | one brick (sanity check) | 2 | 2 | — | — |
 | [Column](../../docs/STRUCTURES.md#column) | aligned 8-stud joints | 3 | 3 | — | — |

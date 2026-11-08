@@ -144,5 +144,8 @@
     0,
     0
   ],
-  "min_same_layer_gap_studs": 2
+  "min_same_layer_gap_studs": 2,
+  "controller": {
+    "release_lift_m": 0.0005
+  }
 }
