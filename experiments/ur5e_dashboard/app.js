@@ -817,14 +817,15 @@ function showStructure(name) {
         <td>${trial.breakage === null || trial.breakage === undefined ? "—" : trial.breakage ? "on" : "off"}</td>
         <td>${escapeText(trialLabel(trial))}</td>
         <td>${escapeText(trial.outcome)}</td>
+        <td>${trial.gripper_contacts ?? "—"}</td>
         <td title="${escapeText(trial.failure || "")}">${escapeText((trial.failure || "").replace(/: connected=[\s\S]*$/, ""))}</td>
         <td>${escapeText(trial.notes || "")}</td>
         <td>${trial.run_id ? `<button class="case-link" type="button" data-run="${escapeText(trial.run_id)}">Open run</button>` : ""}</td>
       </tr>`,
     );
   byId("structure-trials").innerHTML =
-    "<thead><tr><th>Date</th><th>Kind</th><th>Platform</th><th>Breakage</th><th>Connected</th><th>Outcome</th><th>First failure</th><th>Notes</th><th></th></tr></thead>" +
-    `<tbody>${rows.join("") || '<tr><td colspan="9">No trials recorded yet.</td></tr>'}</tbody>`;
+    "<thead><tr><th>Date</th><th>Kind</th><th>Platform</th><th>Breakage</th><th>Connected</th><th>Outcome</th><th>Gripper contacts</th><th>First failure</th><th>Notes</th><th></th></tr></thead>" +
+    `<tbody>${rows.join("") || '<tr><td colspan="10">No trials recorded yet.</td></tr>'}</tbody>`;
   for (const button of byId("structure-trials").querySelectorAll("[data-run]"))
     button.addEventListener("click", () => openRun(button.dataset.run));
   byId("structure-overview").innerHTML =

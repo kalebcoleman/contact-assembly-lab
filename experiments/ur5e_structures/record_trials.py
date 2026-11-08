@@ -74,22 +74,25 @@ def read_recording(path: Path) -> dict[str, object]:
     }
 
 
-def console_failures() -> dict[str, str | None]:
-    """Find the first failure message of every console log by recording name.
+def console_summaries() -> dict[str, tuple[str | None, int | None]]:
+    """Read every console log's first failure and gripper contacts.
 
     Returns:
-        Recording file name to its run's first failure message (None if none).
+        Recording file name to (first failure message or None, number of gripper
+        contacts with other bricks, or None for runs before contact monitoring).
     """
-    failures: dict[str, str | None] = {}
+    summaries: dict[str, tuple[str | None, int | None]] = {}
     for console in sorted((ROOT / "outputs/ur5e_dog").glob("*/attempt-*.txt")):
         text = console.read_text(errors="replace")
         recording = search(r"UR5e recording: (\S+)", text)
         if recording:
             failure = search(FAILURE, text)
-            failures[Path(recording.group(1)).name] = (
-                failure.group(1).strip() if failure else None
+            monitored = "finger profile" in text
+            summaries[Path(recording.group(1)).name] = (
+                failure.group(1).strip() if failure else None,
+                text.count("gripper touched") if monitored else None,
             )
-    return failures
+    return summaries
 
 
 def main() -> None:
@@ -104,7 +107,7 @@ def main() -> None:
     args = parser.parse_args()
     trials = json.loads(TRIALS.read_text()) if TRIALS.exists() else []
     known = {trial.get("recording") for trial in trials}
-    failures = console_failures()
+    summaries = console_summaries()
     platform = f"Isaac Sim {version('isaacsim')}"
     paths = args.recordings or sorted((ROOT / "outputs/ur5e_lego").glob("*.jsonl"))
     for path in paths:
@@ -120,7 +123,8 @@ def main() -> None:
             "kind": "simulation",
             "platform": platform,
             **read_recording(path),
-            "failure": failures.get(path.name),
+            "failure": summaries.get(path.name, (None, None))[0],
+            "gripper_contacts": summaries.get(path.name, (None, None))[1],
             "notes": "",
         }
         # A run that raised never writes its end record.
