@@ -13,7 +13,7 @@ dashboard.
 repository root:
 
     git pull --ff-only
-    ./scripts/download_prebuilt_native.sh
+    pixi run build-native
     uv sync --locked
     .venv/bin/python scripts/check_parity.py
 
