@@ -1,81 +1,126 @@
-# Ten-piece dog assembly prototype
+# UR5e assembly controller
 
-Experiment at baseline c158937. Results: see [RESULTS.md](RESULTS.md).
+Builds any structure config from
+[experiments/ur5e_structures/](../ur5e_structures/README.md) with the UR5e and
+RG2 gripper on the anchored 20x20 baseplate. Simulation only: nothing here
+connects to a robot. Settings, sweeps and reproduction are in
+[docs/USAGE.md](../../docs/USAGE.md).
 
-The robot is asked to assemble four feet, two wide body supports, a bridging torso,
-a neck, head and tail on the anchored 20x20 plate. It grasps loose parts through
-contact, presses them onto the previous supports and verifies expected simulator
-connections after release. The original UR5e experiment files are unchanged.
+## Run one structure
 
-## Start one attempt
+```bash
+OMNI_KIT_ACCEPT_EULA=YES bash experiments/ur5e_assembly/run_loop.sh \
+  --attempts 1 --config experiments/ur5e_structures/<name>.json
+```
 
-From the repository root, after `uv sync` and `pixi run build-native`, run:
+The default config is [dog.json](../ur5e_structures/dog.json). `--attempts`
+takes 1–5 and the loop stops at the first failure or timeout (default 600 s,
+at most 900 s). Each attempt is a fresh scene: nothing is reset or repaired
+mid-run. Ctrl-C ends only the current attempt's process group.
 
-    bash experiments/ur5e_dog/run_loop.sh --attempts 1
+Console logs and an outcome manifest go to `outputs/ur5e_dog/<time>/`,
+per-step recordings to `outputs/ur5e_lego/`. An attempt counts as completed
+only if the process exits normally and the controller prints
+`assembly succeeded; all N bricks connected`.
 
-It uses the repository's Python 3.12 / Isaac Sim 6.2 `.venv`. Local robot, gripper
-and bench assets resolve in `ISAAC_MCP_ASSET_PATH` (default
-`~/isaac-workspace/isaac-mcp-assets`); `ISAAC_MCP_ROOT` defaults to
-`~/isaac-workspace/isaac-mcp`. The Simple Room still uses the
-baseline asset-root resolver; its runtime availability has not been tested.
+Geometry checks without Isaac Sim:
 
-Run geometry checks without simulation:
+```bash
+.venv/bin/python -m pytest experiments/ur5e_assembly
+.venv/bin/python experiments/ur5e_assembly/validate.py
+```
 
-    python3 -m unittest experiments.ur5e_dog.test_geometry -v
-    python3 experiments/ur5e_dog/validate.py
+## Files
 
-After reviewing a successful single attempt, use `--attempts 3` for repetition.
-The limit is five attempts; default timeout is 600 seconds per attempt, maximum
-900 seconds. Each attempt starts a **fresh virtual scene**. This is not physical
-robot disassembly, online learning or self-improving training. First failure or
-timeout stops the loop. Ctrl-C terminates only this attempt's process group.
+| File | Role |
+|---|---|
+| `controller.py` | The per-brick build loop and settings |
+| `run.py` | One attempt inside Kit; video capture and close-up stills |
+| `loop.py`, `run_loop.sh` | Fresh-scene attempt loop |
+| `clearance.py` | Release opening from finger geometry and neighbouring bricks |
+| `gripper_contacts.py` | Gripper contact monitor |
+| `frame_capture.py` | Viewport frames in simulated time |
+| `validate.py`, `test_*.py` | Config and geometry checks |
+| [RESULTS.md](RESULTS.md) | History of the dog structure, the first one built |
 
-Console logs and an explicit outcome manifest go to `outputs/ur5e_dog/<time>/`.
-Detailed baseline-style per-step recordings go to `outputs/ur5e_lego/`.
-A completed attempt requires the controller's ten-connection success marker and
-normal process exit, not merely a movie or the target geometry.
+## Per brick
 
-## Verified so far
+Units are meters and radians, quaternions wxyz. Poses come from simulator
+ground truth, not perception.
 
-- Positive geometric recipe: ten parts with ordered supports and at least four
-  overlapping studs on the selected support per part.
-- No solid target-brick overlap, no part outside the plate footprint, and source
-  parts spaced with at least 20 mm additional planar box clearance.
-- Five deliberate invalid recipes rejected; Python syntax and focused Ruff pass.
-- Type checker cannot resolve 14 Isaac/Omniverse imports without generated runtime
-  search paths; this is not a full type-check pass.
-- All four local lab asset paths resolve. Parent native sources match this baseline.
+1. **Pick.** Approach the brick from above and close the fingers across its x
+   side, at `tip_clearance_m` above its bottom. A per-brick grasp offset
+   (`grasp_offsets_m`) moves the grip off-centre. The run fails if the grasp
+   centre is more than 3 mm off target or the brick is not retained during
+   the lift.
+2. **Transfer.** Move 10 cm above the target, then to 25 mm above it, and
+   correct the held brick's XY error from ground truth.
+3. **Press.** Descend 0.5 mm (`press_depth_m`) below the seated pose over 2 s.
+   BrickSim forms the connection when the seat is within 1 mm and 2° and the
+   contact force reaches `required_force_n`. With
+   `ASSEMBLY_FREEZE_ON_CONNECTION=1` the arm stops descending once it forms, so
+   the press force does not grow; the connection must hold for `press_hold_s`.
+4. **Release.** Open the fingers over `release_ramp_s` with the arm held still,
+   optionally `release_lift_m` higher ("ease off before letting go"). A
+   one-step open releases the stored press load as an impulse, and moving the
+   arm while the fingers still grip loads the new joint.
+5. **Retreat.** Lift 10 cm, open fully, then check that every placed brick is
+   still connected to its support at its planned offset and yaw.
 
-## Limitations and next acceptance checks
+## Release clearance
 
-The geometric validator does **not** establish gripper clearance, dynamic stability,
-robot reachability, table bounds or collision-free motion. Wider 6x4 parts and a
-2x8 torso are new to this controller and need single-grasp tests. The primary
-support connection is checked; extra possible bridge connections are not assumed.
-No success claim is justified until the real simulation recording is inspected.
+The fingers open as wide as neighbouring bricks allow. At startup the
+controller measures the RG2 finger faces in free air across the joint range.
+At each release it finds bricks beside the fingers and picks the widest
+opening that stays `release_margin_m` away from every neighbour at that
+neighbour's height. If that opening frees the held brick by less than
+`release_min_clearance_m`, the run stops with "No gripper clearance".
 
-Source, held-part and support poses are simulator ground truth, including XY
-placement correction. Physics contacts hold the grasp, but assembly uses the
-existing threshold-triggered snap/weld model and disabled breakage, not detailed
-stud insertion. No final assembly poses are scripted or manually welded here.
-All units match baseline: meters, radians, wxyz quaternions. Recipe offsets are
-integer 8 mm studs, height dimensions are 3.2 mm plate units, and all target yaws
-are zero. Simulation-only; no physical robot, ROS bridge or hardware is connected
-by this launcher.
+## Gripper contact monitor
 
-## Screenshots
+Every contact between the gripper and a brick other than the one being
+handled (the baseplate included; during the retreat, the just-released brick
+too) is recorded with its brick step and phase. By default the first one fails
+the run after the retreat; `ASSEMBLY_GRIPPER_CONTACT=log` records contacts and
+lets the run continue. The run prints the total at the end.
 
-Failure (runs 1–2): the head's pickup spot touched the baseplate edge, so the
+## Settings
+
+A structure config may carry a `controller` block, for example
+`{"release_ramp_s": 2.0}`. Each value comes from the `ASSEMBLY_*` environment
+variable if set, else the config block, else the default. Every run prints
+`controller settings {...}` with the values it used. The full table is in
+[docs/USAGE.md](../../docs/USAGE.md#controller-settings).
+
+## Video and stills
+
+With `ASSEMBLY_CAPTURE_DIR` set, `run.py` writes a 1920x1080 frame every
+`ASSEMBLY_CAPTURE_EVERY` app updates (default 2) from a fixed camera, so the
+video follows simulated time. The scene is held for `ASSEMBLY_HOLD_S` after a
+failure too, so a collapse is captured. Afterwards two close-up stills (front
+three-quarter and front) go to `<ASSEMBLY_CAPTURE_DIR>_stills`.
+`scripts/make_media.sh` turns them into the published media.
+
+## Limits
+
+- Poses, the XY correction and connections are simulator ground truth; pickup
+  positions are known exactly.
+- Assembly uses BrickSim's threshold-triggered snap and weld, not detailed stud
+  insertion.
+- `validate.py` checks config geometry only: not gripper clearance, stability,
+  reachability or collision-free motion.
+- No recovery or retry logic exists.
+
+## Screenshots of the first dog runs
+
+Runs 1–2 failed: the head's pickup spot touched the baseplate edge, so the
 gripper closed on nothing and lifted without it.
 
 ![Gripper lifts without the head](media/failure_head_not_retained.png)
 ![Failure close-up](media/failure_head_closeup.png)
 
-Success (run 3, all ten connections reported by the simulator):
+Run 3 succeeded with all ten connections:
 
 ![Mid-run](media/success_midrun.png)
 ![Final, full window](media/success_final_full.png)
 ![Final close-up](media/success_final_closeup.png)
-
-Full recordings and logs stay local under `outputs/` (gitignored).
-Screenshots are of the simulator window only.

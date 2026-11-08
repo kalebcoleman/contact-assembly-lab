@@ -7,6 +7,11 @@ This checkout targets Isaac Sim 6.2.0.0 and Python 3.12. It started from the
 to the 6.2 builds. The code before the move is BrickSim at
 `kalebcoleman/BrickSim@4d7d629` (`feat/ur5e-dog-assembly`), on Isaac Sim 5.1.
 
+> The commands below are as run during the port. The controller has since moved
+> from `experiments/ur5e_dog/` to
+> [experiments/ur5e_assembly/](../experiments/ur5e_assembly/README.md), and its
+> settings are now `ASSEMBLY_*` (`DOG_*` is still accepted).
+
 ## Versions
 
 | Component | Before (5.1) | Now (6.2) |
@@ -85,7 +90,7 @@ version Kit's `all-deps.packman.xml` pins; the installed copy is stripped.
   torque about the weld point short by 2 rA x F (PGS and GPU are correct; PhysX
   5.6.1 and 5.9.x alike). `populate_rigid_info_map` adds it back so breakage sees
   the real joint load; `TestWeldConstraintForce` pins the PhysX behaviour. See
-  `experiments/ur5e_dog/RESULTS.md`.
+  [RESULTS.md](../experiments/ur5e_assembly/RESULTS.md).
 - The omni.physx 107 `PrimIteratorMapRange` vtable patch is removed. 110.x
   traverses instance proxies in both `reset()` and `next()`.
 
@@ -122,7 +127,7 @@ with `DOG_BREAKAGE=0` for (a) and (b). Every run executed once.
   launches took about 18 s.
 - Breakage-off results do not exercise the full model.
 - The 5.1 tuning (press force, tolerances) was used unchanged; run (c) matches
-  the 5.1 column result in `experiments/ur5e_dog/RESULTS.md`.
+  the 5.1 column result in [RESULTS.md](../experiments/ur5e_assembly/RESULTS.md).
 - The `mElapsedTime` value the breakage solver reads was verified statically,
   not by a runtime readout.
 
