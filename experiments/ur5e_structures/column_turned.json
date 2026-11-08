@@ -1,0 +1,106 @@
+{
+  "experiment_name": "structure_column_turned",
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "part_names": [
+    "column_turned_0",
+    "column_turned_1",
+    "column_turned_2",
+    "column_turned_3"
+  ],
+  "brick_dimensions": [
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      2,
+      4,
+      3
+    ]
+  ],
+  "brick_colors": [
+    [
+      200,
+      30,
+      30
+    ],
+    [
+      188,
+      40,
+      30
+    ],
+    [
+      176,
+      50,
+      30
+    ],
+    [
+      164,
+      60,
+      30
+    ]
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.47,
+      -0.45
+    ],
+    [
+      -0.47,
+      -0.515
+    ],
+    [
+      -0.47,
+      -0.385
+    ],
+    [
+      -0.38,
+      -0.45
+    ]
+  ],
+  "support_bricks": [
+    null,
+    0,
+    1,
+    2
+  ],
+  "placement_offsets": [
+    [
+      12,
+      9
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "placement_yaws": [
+    1,
+    0,
+    0,
+    0
+  ],
+  "min_same_layer_gap_studs": 2
+}

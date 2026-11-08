@@ -195,6 +195,14 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (A, 5, (6, 9), 1, [160, 30, 30]),
         (D, 6, (8, 9), 0, [110, 110, 115]),
     ],
+    # The 4-brick column with every brick turned to lie along x: the same 8-stud
+    # joints, with the gripper rotated 90 degrees (a control for the house wall).
+    "column_turned": [
+        (A, None, (8, 9), 1, [200, 30, 30]),
+        (A, 0, (8, 9), 1, [188, 40, 30]),
+        (A, 1, (8, 9), 1, [176, 50, 30]),
+        (A, 2, (8, 9), 1, [164, 60, 30]),
+    ],
     # Log cabin: courses alternate direction and every brick above the first
     # course interlocks two corners below (planned on one, landing on both).
     "log_cabin": [
