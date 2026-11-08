@@ -10,7 +10,7 @@ least 4 studs of contact and may overhang toward a neighbor. Touching same-layer
 bricks were dropped from the first draft.
 
 Besides the 2x4 builds, the library includes:
-- figures (giraffe, duck, robot, cat, tree) that also use 2x2 and 2x6 bricks;
+- figures (duck, robot, tree) that also use 2x2 and 2x6 bricks;
 - break tests that each push one failure mechanism (lean_ladder,
   cantilever_tip2, cantilever_root2, tower_2x2).
 

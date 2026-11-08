@@ -7,8 +7,11 @@ For each structure this draws the design (`render.py`) to
 - how many bricks land on two or more supports;
 - the weakest planned joint;
 - the simulation picture and video when there are any;
-- the latest simulation result at the default settings (breakage on, 1 N
-  press) from `trials.json`.
+- how many sweep runs at the default settings completed, the latest result,
+  and the runs at other settings, all from the sweep summaries.
+
+It also rewrites the results table between the `<!-- results:start -->` and
+`<!-- results:end -->` markers in `FAILURES.md`.
 
 All results are simulation.
 
@@ -31,7 +34,7 @@ SECTIONS = {
         "Showcase builds",
         "Recognisable structures that need distinctive steps.",
     ),
-    "figures": ("Figures", "Small animals and characters, one or two bricks a layer."),
+    "figures": ("Figures", "Smaller recognisable builds."),
     "complex": (
         "Complex builds that failed",
         "Attempts at harder structures. Each failure is a documented test case.",
@@ -76,26 +79,26 @@ ENTRIES = {
         "two corners below. It is planned on one corner and lands on both.",
         "",
     ),
-    "human": (
-        "figures",
-        "Human",
-        "Two legs two bricks high, hips, torso, shoulders and a head.",
+    "locomotive": (
+        "showcase",
+        "Steam locomotive",
+        "Three wheels, a 2x10 chassis that rests on all three, a cab with an "
+        "overhanging roof, a boiler and a chimney.",
         "",
     ),
-    "robot": (
-        "figures",
-        "Robot",
-        "Wide feet, a body across them, shoulders, a head and a hat.",
+    "lighthouse": (
+        "showcase",
+        "Lighthouse",
+        "A 4x6 rock, a tower striped red and white, a yellow lamp and a red cap: "
+        "seven layers, the tallest showcase build.",
         "",
     ),
-    "cat": ("figures", "Sitting cat", "A two-high body, chest, head and an ear.", ""),
-    "giraffe": (
-        "figures",
-        "Giraffe",
-        "A two-high leg, a body reaching forward, a two-high neck and a head with "
-        "a snout.",
-        "A: the neck is pressed onto the far end of the body and pries the 4-stud "
-        "base joint",
+    "castle_gate": (
+        "showcase",
+        "Castle gate",
+        "Two towers flank the gate, a 2x10 lintel spans it and lands on both "
+        "towers, and three battlements line the top.",
+        "",
     ),
     "tree": (
         "figures",
@@ -103,12 +106,6 @@ ENTRIES = {
         "A three-high 2x2 trunk under a crown of 2x6, 4x2 and 2x2 bricks.",
         "B: the trunk's 4-stud base joint breaks on the releases, transiently, "
         "then for good",
-    ),
-    "duck": (
-        "figures",
-        "Duck",
-        "A foot, a long body, a neck at the front and a head with a beak.",
-        "F: the 2x2 neck slipped out of the grasp during transfer",
     ),
     "table": (
         "complex",
@@ -223,7 +220,6 @@ NOTES = {
 # Committed media are named after the run that made them.
 MEDIA_STEM = {
     "dog": "dog_breakage_on",
-    "human": "human_breakage_on",
     "cantilever": "cantilever_failure",
 }
 
@@ -283,42 +279,156 @@ def details(config: dict) -> dict[str, object]:
     }
 
 
-def latest_trial(trials: list[dict], name: str) -> tuple[dict | None, int, int]:
-    """Find a structure's latest simulation trial at the default settings.
+# What each structure tests, for the results table.
+TESTS = {
+    "dog": "wide bricks bridging legs; ten-brick figure",
+    "bridge": "a deck landing on two piers (corbel arch)",
+    "house": "a lintel over a doorway; stepped roof",
+    "log_cabin": "courses alternating direction; interlocking corners",
+    "locomotive": "a chassis resting on three wheels",
+    "lighthouse": "a seven-layer tower on a wide base",
+    "castle_gate": "a lintel over a gate; battlements",
+    "tree": "a crown on a 2x2 trunk (4-stud joints)",
+    "table": "four legs, then tops spanning them",
+    "mixed_tower": "three brick sizes with offsets",
+    "cross_tower": "alternating quarter turns (4-stud overlaps)",
+    "spiral_tower": "repeated quarter turns (4-stud overlaps)",
+    "l_corner": "a corner brick joining two posts",
+    "tower": "alternating directions with 1-stud shifts",
+    "cantilever": "a press on a cantilever tip",
+    "cantilever_tip2": "two bricks at a cantilever tip",
+    "cantilever_root2": "the same bricks over the support (control)",
+    "lean_ladder": "a lean that grows every layer",
+    "tower_2x2": "ten 4-stud joints",
+    "lean_6": "2-stud shifts (4-stud joints)",
+    "zigzag_6": "shear at every joint",
+    "column_10": "load on the base growing with height",
+    "column_turned": "the column with bricks turned 90 degrees",
+    "single": "one brick (sanity check)",
+    "column": "aligned 8-stud joints",
+    "stairs": "mixed sizes stepping up",
+}
+STOP = {
+    "none": "",
+    "joint_lost": "a joint broke",
+    "joint_lost_in_press": "a joint broke during a press",
+    "not_seated": "a brick did not seat",
+    "lost_from_grasp": "a brick slipped from the grasp",
+    "no_release_clearance": "no room to release",
+    "gripper_contact_abort": "gripper touched a brick (abort)",
+    "grasp": "grasp failed",
+    "misplaced": "a brick seated in the wrong place",
+    "other": "other",
+}
+# Settings that only change logging or presentation, not the build.
+COSMETIC = {"DOG_GRIPPER_CONTACT", "DOG_HOLD_S"}
 
-    Args:
-        trials: Entries of `trials.json`.
-        name: Structure name.
+
+def sweep_runs() -> dict[str, list[dict]]:
+    """Collect every summarized sweep run by structure.
 
     Returns:
-        The latest breakage-on, 1 N trial with no other changed controller
-        settings (or None), and the number of all simulation trials and of
-        completed ones.
+        Structure name to its runs (oldest first). Each run has the sweep, label,
+        run id, outcome, connected/total, failure class, and `changed`: the
+        settings that differ from the controller defaults (empty at defaults).
     """
-    simulated = [
-        t for t in trials if t["structure"] == name and t["kind"] == "simulation"
-    ]
-    default = [
-        t
-        for t in simulated
-        if t["breakage"]
-        and t.get("required_force_n") in (None, 1.0)
-        and not t.get("controller_settings")
-    ]
-    latest = max(default, key=lambda t: t["date_utc"]) if default else None
-    completed = sum(t["outcome"] == "completed" for t in simulated)
-    return latest, len(simulated), completed
+    from experiments.ur5e_structures.summarize_sweep import CONTROLLER_DEFAULTS
+
+    runs: dict[str, list[dict]] = {}
+    for path in sorted((STRUCTURES / "sweeps").glob("*.summary.json")):
+        summary = json.loads(path.read_text())
+        for run in summary["runs"]:
+            changed = {
+                key: value["value"]
+                for key, value in run["settings"].items()
+                if key not in COSMETIC
+                and float(value["value"]) != float(CONTROLLER_DEFAULTS[key])
+            }
+            runs.setdefault(Path(run["config"]).stem, []).append(
+                {
+                    "sweep": summary["sweep"],
+                    "label": run["label"],
+                    "run": run["run"],
+                    "outcome": run["outcome"],
+                    "connected": run["bricks_connected_end"],
+                    "total": run["bricks_total"],
+                    "failure_class": run["failure_class"],
+                    "changed": changed,
+                }
+            )
+    for entries in runs.values():
+        entries.sort(key=lambda r: r["run"])
+    return runs
 
 
-def entry(name: str, trials: list[dict]) -> tuple[str, str]:
+def results(runs: list[dict]) -> dict[str, object]:
+    """Summarize a structure's runs at default settings.
+
+    Args:
+        runs: The structure's runs from `sweep_runs`.
+
+    Returns:
+        Number of default runs, completed ones, the latest default run (or
+        None), and the runs at other settings.
+    """
+    default = [r for r in runs if not r["changed"]]
+    return {
+        "runs": len(default),
+        "completed": sum(r["outcome"] == "completed" for r in default),
+        "latest": default[-1] if default else None,
+        "other": [r for r in runs if r["changed"]],
+    }
+
+
+def describe_settings(changed: dict[str, str]) -> str:
+    """Name changed controller settings in words, e.g. "2 s gripper release".
+
+    Args:
+        changed: Setting name to value, as in a run's `changed`.
+
+    Returns:
+        A comma-separated description.
+    """
+    words = {
+        "DOG_RELEASE_RAMP_S": lambda v: f"{float(v):g} s gripper release",
+        "DOG_PRESS_DEPTH_M": lambda v: f"press {float(v) * 1000:g} mm below seated",
+        "DOG_REQUIRED_FORCE_N": lambda v: f"{float(v):g} N press",
+        "DOG_BREAKAGE": lambda v: "breakage off" if v == "0" else "breakage on",
+        "DOG_PRESS_HOLD_S": lambda v: f"{float(v):g} s press hold",
+        "DOG_TIP_CLEARANCE_M": lambda v: f"{float(v) * 1000:g} mm tip clearance",
+        "DOG_FREEZE_ON_CONNECTION": lambda v: f"freeze on connection {v}",
+    }
+    return ", ".join(
+        words[k](v) if k in words else f"{k}={v}" for k, v in changed.items()
+    )
+
+
+def describe_result(run: dict) -> str:
+    """Render one run's outcome, e.g. "completed, 7/7 connected".
+
+    Args:
+        run: A run from `sweep_runs`.
+
+    Returns:
+        A short outcome text.
+    """
+    if run["outcome"] == "completed":
+        return f"completed, {run['connected']}/{run['total']} connected"
+    return (
+        f"failed ({STOP[run['failure_class']]}), "
+        f"{run['connected']}/{run['total']} connected at the end"
+    )
+
+
+def entry(name: str, runs: list[dict]) -> tuple[str, dict[str, object]]:
     """Render one structure's catalog entry and draw its design.
 
     Args:
         name: Structure name.
-        trials: Entries of `trials.json`.
+        runs: The structure's runs from `sweep_runs`.
 
     Returns:
-        The Markdown entry and a one-line result for the summary table.
+        The Markdown entry and its results (from `results`).
     """
     _, title, description, mechanism = ENTRIES[name]
     config = json.loads(config_path(name).read_text())
@@ -333,19 +443,9 @@ def entry(name: str, trials: list[dict]) -> tuple[str, str]:
         ),
         None,
     )
-    latest, runs, completed = latest_trial(trials, name)
-    if latest is None:
-        result = "not run yet"
-    elif latest["outcome"] == "completed":
-        result = (
-            f"completed, {latest['bricks_connected']}/{latest['bricks_total']} "
-            "connected"
-        )
-    else:
-        result = (
-            f"failed, {latest['bricks_connected']}/{latest['bricks_total']} "
-            "connected at the end"
-        )
+    found = results(runs)
+    latest = found["latest"]
+    result = describe_result(latest) if latest else "not run at default settings"
     links = []
     if (MEDIA / f"{stem}.mp4").exists():
         links.append(f"[video (MP4)](media/{stem}.mp4)")
@@ -371,9 +471,12 @@ def entry(name: str, trials: list[dict]) -> tuple[str, str]:
         f"- **Layers:** {info['layers']}.",
         f"- **Bricks resting on two or more bricks:** {info['multi']}.",
         f"- **Weakest planned joint:** {info['weakest']} studs.",
-        f"- **Latest simulation (breakage on, 1 N press):** {result}.",
-        f"- **Simulation runs:** {runs} ({completed} completed).",
+        f"- **Runs at default settings:** {found['runs']}, "
+        f"{found['completed']} completed. Latest: {result}.",
     ]
+    for other in found["other"]:
+        settings = describe_settings(other["changed"])
+        lines.append(f"- **Also tried ({settings}):** {describe_result(other)}.")
     if name in NOTES:
         lines.append(f"- **Note:** {NOTES[name]}")
     if mechanism:
@@ -382,13 +485,45 @@ def entry(name: str, trials: list[dict]) -> tuple[str, str]:
             "[FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms)."
         )
     lines += [f"- **Media:** {' · '.join(links)}", ""]
-    status = result.split(",")[0] + (" (see note)" if name in NOTES else "")
-    return "\n".join(lines), status
+    return "\n".join(lines), found
+
+
+def results_table(all_runs: dict[str, list[dict]]) -> list[str]:
+    """Build the results table: what each structure tests and how it went.
+
+    Args:
+        all_runs: Runs by structure from `sweep_runs`.
+
+    Returns:
+        Markdown table lines (default settings only).
+    """
+    lines = [
+        "| Structure | What it tests | Runs | Completed | What stopped it | "
+        "Mechanism |",
+        "|---|---|---|---|---|---|",
+    ]
+    for name, (section, title, _, mechanism) in ENTRIES.items():
+        found = results(all_runs.get(name, []))
+        if not found["runs"]:
+            continue
+        stops = sorted(
+            {
+                STOP[r["failure_class"]]
+                for r in all_runs[name]
+                if not r["changed"] and r["outcome"] != "completed"
+            }
+        )
+        letter = mechanism.split(":")[0] if mechanism else ""
+        lines.append(
+            f"| [{title}](../../docs/STRUCTURES.md#{name}) | {TESTS[name]} | "
+            f"{found['runs']} | {found['completed']} | {'; '.join(stops) or '—'} | "
+            f"{letter or '—'} |"
+        )
+    return lines
 
 
 def main() -> None:
-    """Draw every design and write docs/STRUCTURES.md."""
-    trials = json.loads((STRUCTURES / "trials.json").read_text())
+    """Draw every design, write docs/STRUCTURES.md and the FAILURES.md table."""
     missing = [
         path.stem
         for path in STRUCTURES.glob("*.json")
@@ -396,21 +531,26 @@ def main() -> None:
     ]
     if missing:
         raise ValueError(f"No catalog entry for {missing}")
+    all_runs = sweep_runs()
     body = []
     summary = [
-        "| Structure | Section | Bricks | Latest simulation |",
-        "|---|---|---|---|",
+        "| Structure | Bricks | Runs | Completed | Latest |",
+        "|---|---|---|---|---|",
     ]
     for section, (heading, blurb) in SECTIONS.items():
         body += [f"## {heading}", "", blurb, ""]
+        summary.append(f"| **{heading}** | | | | |")
         for name, values in ENTRIES.items():
             if values[0] != section:
                 continue
-            text, status = entry(name, trials)
+            text, found = entry(name, all_runs.get(name, []))
             body.append(text)
             bricks = len(json.loads(config_path(name).read_text())["part_names"])
+            latest = found["latest"]
+            status = latest["outcome"] if latest else "—"
             summary.append(
-                f"| [{values[1]}](#{name}) | {heading} | {bricks} | {status} |"
+                f"| [{values[1]}](#{name}) | {bricks} | {found['runs']} | "
+                f"{found['completed']} | {status} |"
             )
     header = [
         "# Structure catalog (simulation)",
@@ -419,20 +559,33 @@ def main() -> None:
         "",
         "Every structure the UR5e builds in Isaac Sim 6.2. Each entry shows:",
         "- the design, drawn from the config;",
-        "- the simulated build at the end of its latest captured run, if any;",
-        "- the bricks and joints;",
-        "- the latest simulation result at the default settings.",
+        "- the structure in simulation at the end of its latest captured run;",
+        "- its bricks and joints;",
+        "- its results.",
         "",
-        "These are simulation results judged by simulator ground truth. Nothing here",
-        "ran on hardware. Per-run details are in the",
-        "[sweep summaries](../experiments/ur5e_structures/sweeps/README.md), and",
-        "the failure mechanisms are explained in",
-        "[FAILURES.md](../experiments/ur5e_structures/FAILURES.md).",
+        "**Runs** counts the sweep runs at the default settings: breakage on, 1 N",
+        "press, 1 s release, gripper contacts logged. Runs at other settings are",
+        "listed in each entry. Repeated runs of a structure give the same result,",
+        "because the simulation is deterministic. These are simulation results",
+        "judged by simulator ground truth; nothing here ran on hardware.",
+        "",
+        "The failures are explained in",
+        "[FAILURES.md](../experiments/ur5e_structures/FAILURES.md), and every",
+        "run's settings are in the",
+        "[sweep summaries](../experiments/ur5e_structures/sweeps/README.md).",
         "",
         *summary,
         "",
     ]
     (DOCS / "STRUCTURES.md").write_text("\n".join(header + body))
+    failures = STRUCTURES / "FAILURES.md"
+    text = failures.read_text()
+    start, end = "<!-- results:start -->", "<!-- results:end -->"
+    if start in text and end in text:
+        head, rest = text.split(start, 1)
+        _, tail = rest.split(end, 1)
+        table = "\n".join(results_table(all_runs))
+        failures.write_text(f"{head}{start}\n{table}\n{end}{tail}")
     print(f"wrote docs/STRUCTURES.md with {len(ENTRIES)} structures")
 
 

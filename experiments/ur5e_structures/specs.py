@@ -65,17 +65,6 @@ SPECS = {
         (W, 4, (0, 0), 0),
         (W, 6, (0, 0), 0),
     ],
-    # Legs two bricks high, then full-width 2x6 hips, torso and shoulders, 2x2 head.
-    "human": [
-        (A, None, (8, 8), 0),
-        (A, None, (12, 8), 0),
-        (A, 0, (0, 0), 0),
-        (A, 1, (0, 0), 0),
-        (W, 2, (0, 1), 0),
-        (W, 4, (0, 0), 0),
-        (W, 5, (0, 0), 0),
-        (D, 6, (2, 0), 0),
-    ],
     # Ten 2x4 bricks stacked aligned: joint load grows with height.
     "column_10": [(A, None, (9, 8), 0)] + [(A, i, (0, 0), 0) for i in range(9)],
     # Each 2x4 shifted 2 studs along y (4-stud joints): the overturning moment on
@@ -95,38 +84,6 @@ SPECS = {
     "mixed_tower": [(D, None, (9, 9), 0)]
     + [(size, i, None, 0) for i, size in enumerate([A, W, B, D, A, W, D])],
     # Figures, one brick per layer (side profiles), so no finger meets a neighbour.
-    # Giraffe: two-high leg, body reaching forward, two-high neck, head with snout.
-    "giraffe": [
-        (D, None, (8, 9), 0),
-        (D, 0, (0, 0), 0),
-        (B, 1, (0, 0), 0),
-        (D, 2, (2, 0), 0),
-        (D, 3, (0, 0), 0),
-        (B, 4, (0, 0), 0),
-    ],
-    # Duck: foot, long body, neck at the front, head with a beak.
-    "duck": [
-        (D, None, (9, 9), 0),
-        (W, 0, (-2, 0), 0),
-        (D, 1, (4, 0), 0),
-        (B, 2, (0, 0), 0),
-    ],
-    # Robot: wide feet, body across them, shoulders, head, hat.
-    "robot": [
-        (W, None, (7, 9), 0),
-        (A, 0, (2, -1), 0),
-        (W, 1, (-2, 1), 0),
-        (D, 2, (2, 0), 0),
-        (B, 3, (-1, 0), 0),
-    ],
-    # Sitting cat: two-high body, chest, head, one ear.
-    "cat": [
-        (B, None, (8, 9), 0),
-        (B, 0, (0, 0), 0),
-        (B, 1, (1, 0), 0),
-        (D, 2, (2, 0), 0),
-        (D, 3, (0, 0), 0),
-    ],
     # Tree: three-high 2x2 trunk, crown of 2x6, 4x2 and 2x2.
     "tree": [
         (D, None, (9, 9), 0),
@@ -168,6 +125,7 @@ SPECS = {
 L6 = [2, 6, 3]  # 2x6 brick, gripped across its 2-stud width
 L8 = [2, 8, 3]  # 2x8 brick
 L10 = [2, 10, 3]  # 2x10 brick
+Q = [6, 4, 3]  # 4x6 brick, as in the dog
 STONE = [150, 150, 158]
 # (dimensions, support index or None, footprint corner, turns, RGB color)
 AbsolutePart = tuple[list[int], int | None, tuple[int, int], int, list[int]]
@@ -194,6 +152,42 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (L8, 4, (4, 9), 1, [160, 30, 30]),
         (A, 5, (6, 9), 1, [160, 30, 30]),
         (D, 6, (8, 9), 0, [110, 110, 115]),
+    ],
+    # Steam locomotive: three wheels, a 2x10 chassis resting on all three, a
+    # two-brick cab under an overhanging roof, a boiler and a tall smokestack.
+    "locomotive": [
+        (D, None, (3, 9), 1, [60, 60, 66]),
+        (D, None, (7, 9), 1, [60, 60, 66]),
+        (D, None, (11, 9), 1, [60, 60, 66]),
+        (L10, 0, (3, 9), 1, [170, 30, 30]),
+        (A, 3, (3, 9), 1, [30, 95, 55]),
+        (A, 3, (9, 9), 1, [30, 95, 55]),
+        (A, 4, (3, 9), 1, [30, 95, 55]),
+        (D, 5, (11, 9), 1, [45, 45, 50]),
+        (L6, 6, (2, 9), 1, [170, 30, 30]),
+        (D, 7, (11, 9), 1, [45, 45, 50]),
+    ],
+    # Lighthouse: a 4x6 rock, a tower striped red and white, a lamp and a cap.
+    "lighthouse": [
+        (Q, None, (7, 8), 0, [110, 105, 100]),
+        (A, 0, (8, 9), 1, [190, 30, 30]),
+        (A, 1, (8, 9), 1, [240, 240, 235]),
+        (A, 2, (8, 9), 1, [190, 30, 30]),
+        (A, 3, (8, 9), 1, [240, 240, 235]),
+        (D, 4, (9, 9), 1, [245, 200, 40]),
+        (A, 5, (8, 9), 1, [190, 30, 30]),
+    ],
+    # Castle gate: two towers two courses high, a 2x10 lintel over the gate and
+    # three battlements along the top.
+    "castle_gate": [
+        (A, None, (3, 9), 1, STONE),
+        (A, None, (11, 9), 1, STONE),
+        (A, 0, (3, 9), 1, STONE),
+        (A, 1, (11, 9), 1, STONE),
+        (L10, 2, (4, 9), 1, [95, 95, 102]),
+        (D, 4, (4, 9), 1, STONE),
+        (D, 4, (8, 9), 1, STONE),
+        (D, 4, (12, 9), 1, STONE),
     ],
     # The 4-brick column with every brick turned to lie along x: the same 8-stud
     # joints, with the gripper rotated 90 degrees (a control for the house wall).
