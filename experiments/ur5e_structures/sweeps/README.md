@@ -27,17 +27,33 @@ ground truth; nothing in this folder drives a robot.
 
 ```bash
 # Runs every entry without a run id and writes the id back into the definition.
-OMNI_KIT_ACCEPT_EULA=YES DISPLAY=:1 \
-  python3 -m experiments.ur5e_structures.run_sweep \
+OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep \
   experiments/ur5e_structures/sweeps/<name>.json [--capture]
 python3 -m experiments.ur5e_structures.summarize_sweep \
   experiments/ur5e_structures/sweeps/<name>.json
 ```
 
-To repeat a sweep, copy its definition, clear the `run`, `video` and `media`
-fields, and check out the controller commit it names. The two sweeps here were
-first run with an equivalent shell loop. Their definitions were written from
-that loop's run lists and result tables.
+To reproduce a committed sweep, check out the controller commit it names and
+run it into a fresh copy, then summarize the copy and compare it with the
+committed summary:
+
+```bash
+OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep \
+  experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.json \
+  --rerun experiments/ur5e_structures/sweeps/my-rerun.json --capture
+python3 -m experiments.ur5e_structures.summarize_sweep \
+  experiments/ur5e_structures/sweeps/my-rerun.json
+```
+
+On the machine that produced these sweeps, repeated runs matched exactly:
+- same outcomes;
+- same joint breaks;
+- same simulator step of every logged joint event.
+
+On other GPUs or drivers, expect the same outcomes but not necessarily
+bit-identical steps. The failure and capture sweeps were first run with an
+equivalent shell loop; their definitions were written from that loop's run
+lists and result tables.
 
 ## What a summary distinguishes
 
@@ -91,7 +107,7 @@ These are findings from these sweeps. Each one bounds what a summary can claim:
 - **The console log can lose BrickSim events.** Kit flushes its log
   asynchronously and the run ends with `os._exit`, so events after the last
   flush are lost. Both human runs lost every one.
-  - 8 of the 31 runs are affected, all completed runs
+  - 13 of the 38 runs are affected, all completed runs
     (`event_log_complete: false`). Their break and warning counts are lower
     bounds.
   - For each brick's joint to its planned support, the recording samples the

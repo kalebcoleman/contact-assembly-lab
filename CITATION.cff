@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it and BrickSim, which it builds on."
+title: "Contact Assembly Lab: Robotic Brick Assembly with Joint-Strength Physics in Isaac Sim 6.2"
+type: software
+authors:
+  - family-names: Coleman
+    given-names: Kaleb
+repository-code: "https://github.com/kalebcoleman/contact-assembly-lab"
+license: MIT
+date-released: "2026-11-08"
+keywords:
+  - robotics
+  - assembly
+  - Isaac Sim
+  - contact physics
+  - UR5e
+references:
+  - type: article
+    title: "BrickSim: A Physics-Based Simulator for Manipulating Interlocking Brick Assemblies"
+    authors:
+      - family-names: Wen
+        given-names: Haowei
+      - family-names: Liu
+        given-names: Ruixuan
+      - family-names: Piao
+        given-names: Weiyi
+      - family-names: Li
+        given-names: Siyu
+      - family-names: Liu
+        given-names: Changliu
+    year: 2026
+    url: "https://arxiv.org/abs/2603.16853"
+    identifiers:
+      - type: other
+        value: "arXiv:2603.16853"

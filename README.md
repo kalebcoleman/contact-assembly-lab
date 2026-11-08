@@ -1,39 +1,77 @@
-# contact-assembly-lab
+# Contact Assembly Lab
+
+### Robotic brick assembly with joint-strength physics in Isaac Sim 6.2
+
+**Kaleb Coleman**
+
+[Structure catalog](docs/STRUCTURES.md) ·
+[Failure analysis](experiments/ur5e_structures/FAILURES.md) ·
+[Sweep summaries](experiments/ur5e_structures/sweeps/README.md) ·
+[Evaluation practices](docs/EVALUATION_PRACTICES.md) ·
+[Isaac Sim 6.2 port](docs/ISAACSIM_6.2_PORT.md) ·
+[Citation](#citation)
 
 [![Isaac Sim 6.2](https://img.shields.io/badge/Isaac%20Sim-6.2-76B900?logo=nvidia&logoColor=white)](https://docs.isaacsim.omniverse.nvidia.com/6.2.0/index.html)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](https://docs.python.org/3.12/)
 [![MIT License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+[![Built on BrickSim](https://img.shields.io/badge/built%20on-BrickSim-c0392b)](https://github.com/intelligent-control-lab/BrickSim)
 
-A UR5e arm with an RG2 gripper builds brick structures in Isaac Sim 6.2. The
-joint-strength model from BrickSim decides whether every connection holds. The
-aims are:
-- find out what a robot can build reliably;
-- understand where and why builds fail;
-- later, repeat the builds on the real UR5e and see whether the simulator was
-  right.
+![The UR5e building the arch bridge in simulation](docs/media/bridge.gif)
 
-It is also the contact-physics and evaluation testbed for my main research,
-Jenga with MPC and RL. The simulator is a port of BrickSim from Isaac Sim 5.1 /
-Python 3.11 to Isaac Sim 6.2.0.0 / Python 3.12.
+*The UR5e builds a corbel-arch bridge in simulation. Each pier steps one stud
+inward, then a 2x10 deck closes the arch by landing on both piers at once.
+Joint strength follows BrickSim's breakage model throughout.*
 
-**Credit.** The brick physics (connection and breakage model), the C++ native
-extension, the simulator UI and the Isaac Sim 6.0 groundwork of this port come
-from
-[BrickSim](https://github.com/intelligent-control-lab/BrickSim) by Haowei Wen,
-Ruixuan Liu, Weiyi Piao, Siyu Li and Changliu Liu (Intelligent Control Lab,
-Carnegie Mellon University), released under the MIT License. Please cite it
-([below](#citation)) if you use this work.
+## Overview
+
+A UR5e arm with an OnRobot RG2 gripper builds structures from interlocking
+bricks in NVIDIA Isaac Sim 6.2. BrickSim's joint-strength model decides, at
+every physics step, whether each stud connection holds under the loads the
+robot puts on it. The project asks three questions:
+- what a robot can build reliably;
+- where builds fail, and why;
+- whether the simulator's answers hold on the real robot (planned).
+
+It is also the contact-physics and evaluation testbed for the author's main
+research, Jenga with model-predictive control and reinforcement learning.
+
+The simulator is a port of [BrickSim](https://github.com/intelligent-control-lab/BrickSim)
+(Wen et al., 2026) from Isaac Sim 5.1 to Isaac Sim 6.2.0.0 and Python 3.12. The
+brick physics, the C++ native extension and the simulator UI are BrickSim's.
+This repository adds:
+- the 6.2 port;
+- a weld-torque correction for PhysX's CPU TGS solver;
+- the UR5e assembly controller with clearance-aware release;
+- the structure library and catalog;
+- reproducible sweeps and the failure analysis.
 
 All results are simulation, judged by simulator ground truth. Nothing here ran
 on hardware.
 
+## Key findings (simulation)
+
+These come from 38 runs of 28 structures.
+
+- **Spanning builds work.**
+  - The bridge deck lands on both piers.
+  - All six interlocking logs of the cabin each rest on two corners.
+  - The ten-brick dog completed its last four runs with breakage on.
+- **Releasing a brick can break the joint below.** The house loses an 8-stud
+  wall joint while the gripper opens over 1 s. It survives a 2 s opening, while
+  a shallower press does not help.
+- **The press force has a threshold.** A plain column holds at 1 and 2 N and
+  loses its base joint at 3 and 5 N, on the release after the press.
+- **Load position decides cantilevers.** Two bricks at the tip pry the
+  structure apart, while the same bricks over the support complete.
+- **Most breaks are invisible.** 69 of 87 joint breaks were re-formed at once,
+  and the controller never saw them.
+- **Many breaks follow solver trouble.** 12 of 18 lasting breaks came right
+  after breakage-solver warnings, which marks where the simulator is least
+  certain.
+
+Details: [FAILURES.md](experiments/ur5e_structures/FAILURES.md).
+
 ## What the robot builds
-
-The arch bridge needs a step a simple tower never does. Each pier steps one
-stud inward, then a 2x10 deck closes the arch by landing on both piers at
-once.
-
-![Arch bridge build](docs/media/bridge.gif)
 
 Each picture links to its video. The videos are rendered in the simulator at
 1080p and play 8× faster than simulated time.
@@ -178,6 +216,70 @@ Controller settings (environment variables, read in
 | `DOG_RELEASE_RAMP_S` | `1.0` | Gripper opening time (s) |
 | `DOG_HOLD_S` | `10` | Time (s) the finished structure stays on screen |
 
+## Reproducing the results
+
+The results were produced on this stack:
+
+| Component | Version |
+|---|---|
+| OS | Ubuntu 22.04.5 LTS (glibc 2.35, built with the glibc 2.39 sysroot) |
+| GPU, driver | NVIDIA RTX PRO 6000 Blackwell Max-Q, 595.99.02 |
+| Isaac Sim | 6.2.0.0 (Kit 110.4.0, omni.physx 110.4.4, PhysX SDK 5.9.2, OpenUSD 25.11) |
+| Python | 3.12 with torch 2.11.0+cu130, locked in `uv.lock` |
+| Media | ffmpeg (for `scripts/make_media.sh`) |
+
+**Lab assets.** The UR5e model with its `tool0` frame, the RG2 gripper and the
+Vention bench are not in this repository. They come from a separate asset store
+that is loaded through the public
+[isaac-mcp](https://github.com/kalebcoleman/isaac-mcp) resolver; see
+[experiments/ur5e_lego/README.md](experiments/ur5e_lego/README.md). Their
+hashes are pinned in
+[`assets/lab_assets_sha256.json`](experiments/ur5e_lego/assets/lab_assets_sha256.json).
+`scripts/check_parity.py` checks the checkout, the locked packages, the native
+build and these assets.
+
+1. Build (see [Build](#build)), then check the setup:
+
+   ```bash
+   .venv/bin/python scripts/check_parity.py
+   ```
+
+2. Re-run a committed sweep into a fresh copy. Run ids, videos and close-up
+   stills are written as the runs finish. Kit needs a display.
+
+   ```bash
+   OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep \
+     experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.json \
+     --rerun experiments/ur5e_structures/sweeps/my-rerun.json --capture
+   ```
+
+3. Summarize the copy and compare it with the committed
+   [summary](experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md):
+
+   ```bash
+   python3 -m experiments.ur5e_structures.summarize_sweep \
+     experiments/ur5e_structures/sweeps/my-rerun.json
+   ```
+
+4. Make the media and regenerate the catalog:
+
+   ```bash
+   scripts/make_media.sh .cache/videos/my-rerun/bridge.mp4 docs/media/bridge
+   scripts/make_media.sh --closeup \
+     .cache/videos/my-rerun/bridge_closeup_three_quarter.png docs/media/bridge_closeup.jpg
+   .venv/bin/python -m experiments.ur5e_structures.catalog
+   ```
+
+**Determinism.** On the machine above, repeated runs of the same structure
+matched exactly:
+- outcome;
+- joint breaks;
+- solver warnings;
+- the simulator step of every logged joint event.
+
+Expect the same outcomes on other GPUs and drivers, but not necessarily
+bit-identical steps. Each sweep records the controller commit it ran.
+
 ## Case suite
 
 Thirteen single-case experiments (C01–C13), each with a prediction written
@@ -204,11 +306,9 @@ case suite; Isaac Sim need not be running. See
 ```bash
 pixi run build-native          # rebuild after C++ changes
 pixi run test-native-release   # and test-native-debug
-uv run ruff check
-python3 -m unittest experiments.ur5e_dog.test_geometry
-python3 -m unittest discover -s experiments/ur5e_dashboard -p 'test_*.py'
-python3 -m unittest experiments.ur5e_structures.test_summarize_sweep
-.venv/bin/python -m unittest experiments.ur5e_structures.test_catalog
+.venv/bin/ruff check            # not `uv run`: it would rebuild the native module
+.venv/bin/python -m pytest experiments
+.venv/bin/python -m experiments.ur5e_structures.specs     # regenerate structure configs
 .venv/bin/python -m experiments.ur5e_structures.catalog   # regenerate docs/STRUCTURES.md
 ```
 
@@ -231,7 +331,18 @@ Coding rules are in [AGENTS.md](AGENTS.md).
 
 ## Citation
 
+If you use this work, please cite it and BrickSim, which it builds on.
+
+```bibtex
+@software{coleman2026contactassemblylab,
+    title = {Contact Assembly Lab: Robotic Brick Assembly with Joint-Strength Physics in Isaac Sim 6.2},
+    author = {Coleman, Kaleb},
+    year = {2026},
+    url = {https://github.com/kalebcoleman/contact-assembly-lab}
+}
 ```
+
+```bibtex
 @article{wen2026bricksim,
     title = {BrickSim: A Physics-Based Simulator for Manipulating Interlocking Brick Assemblies},
     author = {Wen, Haowei and Liu, Ruixuan and Piao, Weiyi and Li, Siyu and Liu, Changliu},
@@ -243,6 +354,15 @@ Coding rules are in [AGENTS.md](AGENTS.md).
     url = {https://arxiv.org/abs/2603.16853}
 }
 ```
+
+## Acknowledgments
+
+The brick connection and breakage physics, the C++ native extension, the
+simulator UI and the Isaac Sim 6.0 groundwork of this port come from
+[BrickSim](https://github.com/intelligent-control-lab/BrickSim) by Haowei Wen,
+Ruixuan Liu, Weiyi Piao, Siyu Li and Changliu Liu (Intelligent Control Lab,
+Carnegie Mellon University), released under the MIT License. The simulation
+runs on [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac/sim).
 
 ## License
 

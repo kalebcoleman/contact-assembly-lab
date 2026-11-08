@@ -228,8 +228,8 @@ the limit.
   speed.
 
 **Transient breaks.**
-- 59 of the 75 joint breaks across the two sweeps were re-formed within 1 s.
-- They occur in every completed run except single.
+- 69 of the 87 joint breaks across the three sweeps were re-formed within 1 s.
+- They occur in every completed run except single and the log cabin.
 - The controller only sees lasting breaks.
 - A joint that breaks transiently on every release (tree, tower_2x2,
   column_10) is the clearest warning sign of a later lasting break.
@@ -250,14 +250,14 @@ the limit.
   Mechanisms A and B are where real joints may hold and simulated ones break,
   or the reverse.
 - The breakage solver often struggles:
-  - 23 of the 31 runs logged at least one non-convergence or high-slack warning;
-  - 12 of the 16 lasting breaks came after such warnings;
+  - 26 of the 38 runs logged at least one non-convergence or high-slack warning;
+  - 12 of the 18 lasting breaks came after such warnings;
   - BrickSim treats a non-converged step as "no information" and keeps the
     previous utilization.
 - The breaking solve is not sampled, so a `sudden` break cannot be explained
   from the telemetry. The utilization 1e6 is a sentinel for exhausted
   capacity, not a load.
-- The console log loses some or all of its BrickSim events in 8 of 31 runs,
+- The console log loses some or all of its BrickSim events in 13 of 38 runs,
   all of them completed runs (both human runs lost every one). Solver warnings
   and breaks of secondary joints counted from it are lower bounds there. For
   each brick's joint to its planned support, the recording fills the gap.
