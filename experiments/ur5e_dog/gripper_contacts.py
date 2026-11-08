@@ -11,10 +11,11 @@ class GripperContactMonitor:
 
     Contact reports are enabled on every RG2 rigid body. A contact counts when
     one actor is under the gripper and the other is a brick part other than the
-    brick of the current step (the baseplate counts too). The step and phase come
-    from `recorder`, set once the run recorder exists. Each (part, brick, phase) is
-    kept once. Create the monitor before the world reset: changing physics schemas
-    on a playing scene invalidates the articulation views.
+    brick of the current step (the baseplate counts too); during the retreat the
+    just-released brick counts as well, since the fingers must have let go of it.
+    The step and phase come from `recorder`, set once the run recorder exists. Each
+    (part, brick, phase) is kept once. Create the monitor before the world reset:
+    changing physics schemas on a playing scene invalidates the articulation views.
     """
 
     def __init__(
@@ -42,8 +43,9 @@ class GripperContactMonitor:
         self.recorder: RunRecorder | None = None
         self.brick_paths = brick_paths
         self.contacts: list[tuple[str, int, str]] = []
-        # Contact impulse (N*s) above which a reported contact counts as a touch.
-        self.min_impulse = 1e-7
+        # Contact impulse (N*s) above which a contact counts as a touch: about 1 mN
+        # over a 1/120 s step. Smaller numerical grazes are ignored.
+        self.min_impulse = 1e-5
         self.subscription = (
             get_physx_simulation_interface().subscribe_contact_report_events(
                 self.on_contacts
@@ -61,6 +63,8 @@ class GripperContactMonitor:
             return
         index = self.recorder.brick_index
         held = self.brick_paths[index - 1] if index else ""
+        if self.recorder.phase == "retreat":
+            held = ""
         for header in headers:
             if header.type == ContactEventType.CONTACT_LOST:
                 continue

@@ -453,8 +453,9 @@ async def main(
     # Grasp-frame columns: approach downward, close across each brick's x side.
     target_grasp = np.eye(4)
     target_grasp[:3, :3] = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
-    # Raise the pads clear of adjacent studs when a brick reaches the plate.
-    grasp_z = table_z + tip_offset + 0.003
+    # DOG_TIP_CLEARANCE_M: fingertip height above the held brick's bottom, which
+    # keeps the tips clear of the support's top and studs while seating.
+    grasp_z = table_z + tip_offset + float(environ.get("DOG_TIP_CLEARANCE_M", "0.003"))
     # Assembly check: seat within 1 mm and 2 degrees (tighter than the 2 mm and 5
     # degrees of the baseline). A required force above 1 N makes the press harder
     # and, with breakage on, overloads the joints below (see RESULTS.md).
@@ -732,9 +733,10 @@ async def main(
             flush=True,
         )
         recorder.phase = "release"
-        # Unload the press, then open the fingers gradually with the arm held still:
-        # a one-step open releases the stored press load as an impulse. Open only
-        # until the brick is free, short of any neighbouring brick.
+        # Open the fingers gradually with the arm held at its current pose: a
+        # one-step open releases the stored press load as an impulse, and any arm
+        # motion while the fingers still grip (lifting, or still converging on the
+        # press target) loads the new joint. Stop short of any neighbouring brick.
         gripper_index = gripper.get_dof_index("rg2_gripper_joint")
         opening_start = float(gripper.get_joint_positions()[gripper_index])
         cache = UsdGeom.XformCache(Usd.TimeCode.Default())
@@ -761,7 +763,11 @@ async def main(
             f"{'left' if n.side < 0 else 'right'} {n.distance * 1000:.1f} mm"
             for n in sorted(nearby, key=lambda n: n.distance)[:2]
         )
-        release = release_opening(finger_profile, opening_start, nearby)
+        # As wide as the neighbours allow (fully open in free space): a narrow
+        # opening keeps the pads on the brick longer and lets the lift drag it.
+        release = release_opening(
+            finger_profile, opening_start, nearby, target_clearance=float("inf")
+        )
         if release is None:
             raise RuntimeError(
                 f"No gripper clearance to release brick {index}: nearest bricks "
@@ -774,7 +780,7 @@ async def main(
             f"nearest bricks {nearest or 'none'})",
             flush=True,
         )
-        unload_position = target_tool[:3, 3]
+        unload_position, _ = end_effector.get_world_pose()
         elapsed = 0.0
         while elapsed < release_ramp_s:
             dt = await wait_for_physics_step(world)
@@ -796,7 +802,8 @@ async def main(
             rmpflow.set_end_effector_target(unload_position, target_orientation)
             rmpflow.update_world()
             robot.apply_action(policy.get_next_articulation_action(dt))
-        # Lift with the fingers barely open, then open fully above the structure.
+        # Lift, then open fully above the structure if a neighbour limited the
+        # opening.
         recorder.phase = "retreat"
         await move_to(
             world,
