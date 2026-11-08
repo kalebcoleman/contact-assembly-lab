@@ -1,15 +1,16 @@
-"""Run one simulated dog assembly; never connects to hardware."""
+"""Run one simulated structure assembly; never connects to hardware."""
 
 import json
 from asyncio import sleep
-from os import _exit, environ
+from os import _exit
 from pathlib import Path
 from sys import stderr, stdout
 from traceback import print_exc
 
 import numpy as np
-from experiments.ur5e_dog.controller import main as assemble
-from experiments.ur5e_dog.frame_capture import FrameCapture
+from experiments.ur5e_assembly.controller import main as assemble
+from experiments.ur5e_assembly.environment import setting
+from experiments.ur5e_assembly.frame_capture import FrameCapture
 
 
 def close_ups(config_path: str) -> list[tuple[str, np.ndarray, np.ndarray]]:
@@ -31,20 +32,20 @@ def close_ups(config_path: str) -> list[tuple[str, np.ndarray, np.ndarray]]:
 
 
 async def main() -> None:
-    """Run one dog attempt and exit the process: status 0 on success, 1 on failure.
+    """Run one assembly attempt and exit the process: status 0 on success, 1 on failure.
 
     Kit otherwise stays alive after the run (scene reset on timeline stop).
-    With DOG_CAPTURE_DIR set, rendered frames are written there for a video
-    (DOG_CAPTURE_EVERY app updates apart, default 2), and the scene is held for
-    DOG_HOLD_S after a failure as well, so the collapse is captured. After the
-    hold, two close-up stills are saved to `<DOG_CAPTURE_DIR>_stills`.
+    With ASSEMBLY_CAPTURE_DIR set, rendered frames are written there for a video
+    (ASSEMBLY_CAPTURE_EVERY app updates apart, default 2), and the scene is held for
+    ASSEMBLY_HOLD_S after a failure as well, so the collapse is captured. After the
+    hold, two close-up stills are saved to `<ASSEMBLY_CAPTURE_DIR>_stills`.
     """
-    config = environ.get("DOG_CONFIG", "experiments/ur5e_dog/dog.json")
+    config = setting("CONFIG", "experiments/ur5e_structures/dog.json")
     capture = None
-    if environ.get("DOG_CAPTURE_DIR"):
+    if setting("CAPTURE_DIR", ""):
         capture = FrameCapture(
-            Path(environ["DOG_CAPTURE_DIR"]),
-            int(environ.get("DOG_CAPTURE_EVERY", "2")),
+            Path(setting("CAPTURE_DIR", "")),
+            int(setting("CAPTURE_EVERY", "2")),
             np.array([-0.36, -0.90, 0.25]),
             np.array([-0.37, -0.40, -0.04]),
             (1920, 1080),
@@ -55,11 +56,11 @@ async def main() -> None:
         print_exc()
         stderr.flush()
         if capture is not None:
-            await sleep(float(environ.get("DOG_HOLD_S", "10")))
+            await sleep(float(setting("HOLD_S", "10")))
             await capture.stills(close_ups(config))
         _exit(1)
     # Keep the finished structure on screen for a screenshot or recording.
-    await sleep(float(environ.get("DOG_HOLD_S", "10")))
+    await sleep(float(setting("HOLD_S", "10")))
     if capture is not None:
         await capture.stills(close_ups(config))
     stdout.flush()

@@ -53,7 +53,7 @@ class FrameCapture:
         self.subscription = (
             get_app()
             .get_update_event_stream()
-            .create_subscription_to_pop(self.on_update, name="dog frame capture")
+            .create_subscription_to_pop(self.on_update, name="assembly frame capture")
         )
 
     def on_update(self, _event: object) -> None:

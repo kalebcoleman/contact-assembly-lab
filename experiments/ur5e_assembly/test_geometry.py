@@ -1,11 +1,11 @@
-"""Regression tests for the dog recipe, independent of simulator imports."""
+"""Regression tests for the dog structure recipe, independent of simulator imports."""
 
 import json
 import unittest
 from copy import deepcopy
 from pathlib import Path
 
-from experiments.ur5e_dog.validate import validate
+from experiments.ur5e_assembly.validate import validate
 
 
 class GeometryTests(unittest.TestCase):
@@ -13,14 +13,22 @@ class GeometryTests(unittest.TestCase):
 
     def test_recipe(self) -> None:
         """Accept ten parts at their expected stud/plate origins."""
-        data = json.loads(Path(__file__).with_name("dog.json").read_text())
+        data = json.loads(
+            (
+                Path(__file__).resolve().parents[1] / "ur5e_structures/dog.json"
+            ).read_text()
+        )
         origins = validate(data)
         self.assertEqual(len(origins), 10)
         self.assertEqual(origins[8], (6, 10, 12))
 
     def test_rejections(self) -> None:
         """Reject invalid order, collisions, detachment, bounds and height."""
-        data = json.loads(Path(__file__).with_name("dog.json").read_text())
+        data = json.loads(
+            (
+                Path(__file__).resolve().parents[1] / "ur5e_structures/dog.json"
+            ).read_text()
+        )
         cases = [
             ("support_bricks", 0, 2),
             ("placement_offsets", 1, [4, 4]),

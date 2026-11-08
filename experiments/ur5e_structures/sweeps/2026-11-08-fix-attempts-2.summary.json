@@ -10,51 +10,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/column_10_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -218,51 +218,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_2x2_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -372,51 +372,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tree_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -562,51 +562,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -734,51 +734,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/lean_6_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -906,51 +906,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cross_tower_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -1078,51 +1078,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/house_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -1250,51 +1250,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/castle_gate_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -1404,51 +1404,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cantilever_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -1576,51 +1576,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/column_10_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -1766,51 +1766,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_2x2_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -1902,51 +1902,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tree_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2020,51 +2020,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2138,51 +2138,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/lean_6_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2274,51 +2274,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cross_tower_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2536,51 +2536,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/house_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2690,51 +2690,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/castle_gate_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2808,51 +2808,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cantilever_release_fast.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "0.5",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -2962,51 +2962,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/mixed_tower_press_1mm_ease_off.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0005",
           "source": "console"
         }
@@ -3098,51 +3098,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/mixed_tower_grip_support_full.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -3306,51 +3306,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/table_wide.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -3478,51 +3478,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/locomotive_short_stack.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }
@@ -3632,51 +3632,51 @@
       "video": ".cache/videos/2026-11-08-fix-attempts-2/castle_gate_two_battlements.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "console"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "console"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "console"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "console"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
         },
-        "DOG_RELEASE_MARGIN_M": {
+        "ASSEMBLY_RELEASE_MARGIN_M": {
           "value": "0.002",
           "source": "console"
         },
-        "DOG_RELEASE_MIN_CLEARANCE_M": {
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
           "value": "0.001",
           "source": "console"
         },
-        "DOG_RELEASE_LIFT_M": {
+        "ASSEMBLY_RELEASE_LIFT_M": {
           "value": "0.0",
           "source": "console"
         }

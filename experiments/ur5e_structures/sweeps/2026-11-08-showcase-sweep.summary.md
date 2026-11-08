@@ -7,17 +7,17 @@ Showcase builds recorded at 1080p with close-up stills: the arch bridge, the hou
 
 - Controller commit: `00f9ab4`
 - Invocation: `OMNI_KIT_ACCEPT_EULA=YES DISPLAY=:1 python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.json --capture`
-- Sweep environment: `{"DOG_GRIPPER_CONTACT": "log", "DOG_HOLD_S": "8"}`
+- Sweep environment: `{"ASSEMBLY_GRIPPER_CONTACT": "log", "ASSEMBLY_HOLD_S": "8"}`
 
 | Run | Config | Overrides | Breakage | Contacts (mode) | Outcome | Connected at end | Stopped by | Breaks lasting / transient | Joint breaks | Solver warnings | Evidence |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| bridge | `bridge.json` | DOG_BREAKAGE=1 | on | 0 (log) | completed | 7/7 | none | 0 / 1 (log incomplete) | Part_2→Part_4 in release: not in console log (rejoined) | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/bridge.mp4` |
-| house | `house.json` | DOG_BREAKAGE=1 | on | 0 (log) | failed | 2/8 | joint_lost | 1 / 0 | Part_0→Part_1 in release: sudden, u 0.936 | 0 / 2 | `.cache/videos/2026-11-08-showcase-sweep/house.mp4` |
-| log_cabin | `log_cabin.json` | DOG_BREAKAGE=1 | on | 1 (log) | completed | 8/8 | none | 0 / 0 (log incomplete) | — | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/log_cabin.mp4` |
-| dog | `dog.json` | DOG_BREAKAGE=1 | on | 2 (log) | completed | 10/10 | none | 0 / 2 (log incomplete) | Part_7→Part_8 in release: sudden, u 0.821 (rejoined)<br>Part_7→Part_10 in release: overload seen, u exhausted (rejoined) | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/dog.mp4` |
-| house_release_2s | `house.json` | DOG_BREAKAGE=1 DOG_RELEASE_RAMP_S=2.0 | on | 0 (log) | completed | 8/8 | none | 0 / 4 (log incomplete) | Part_0→Part_1 in release: sudden, u 0.740 (rejoined)<br>Part_0→Part_2 in release: sudden, u 0.799 (rejoined)<br>Part_0→Part_2 in release: sudden, u 0.950 (rejoined)<br>Part_0→Part_1 in release: sudden, u 0.986 (rejoined) | 0 / 3 | `.cache/videos/2026-11-08-showcase-sweep/house_release_2s.mp4` |
-| house_press_shallow | `house.json` | DOG_BREAKAGE=1 DOG_PRESS_DEPTH_M=0.0002 | on | 0 (log) | failed | 2/8 | joint_lost | 1 / 0 | Part_0→Part_1 in release: sudden, u 0.961 | 0 / 2 | `.cache/videos/2026-11-08-showcase-sweep/house_press_shallow.mp4` |
-| column_turned | `column_turned.json` | DOG_BREAKAGE=1 | on | 0 (log) | completed | 4/4 | none | 0 / 3 (log incomplete) | Part_0→Part_1 in release: not in console log (rejoined)<br>Part_0→Part_1 in release: not in console log (rejoined)<br>Part_0→Part_1 in release: not in console log (rejoined) | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/column_turned.mp4` |
+| bridge | `bridge.json` | ASSEMBLY_BREAKAGE=1 | on | 0 (log) | completed | 7/7 | none | 0 / 1 (log incomplete) | Part_2→Part_4 in release: not in console log (rejoined) | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/bridge.mp4` |
+| house | `house.json` | ASSEMBLY_BREAKAGE=1 | on | 0 (log) | failed | 2/8 | joint_lost | 1 / 0 | Part_0→Part_1 in release: sudden, u 0.936 | 0 / 2 | `.cache/videos/2026-11-08-showcase-sweep/house.mp4` |
+| log_cabin | `log_cabin.json` | ASSEMBLY_BREAKAGE=1 | on | 1 (log) | completed | 8/8 | none | 0 / 0 (log incomplete) | — | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/log_cabin.mp4` |
+| dog | `dog.json` | ASSEMBLY_BREAKAGE=1 | on | 2 (log) | completed | 10/10 | none | 0 / 2 (log incomplete) | Part_7→Part_8 in release: sudden, u 0.821 (rejoined)<br>Part_7→Part_10 in release: overload seen, u exhausted (rejoined) | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/dog.mp4` |
+| house_release_2s | `house.json` | ASSEMBLY_BREAKAGE=1 ASSEMBLY_RELEASE_RAMP_S=2.0 | on | 0 (log) | completed | 8/8 | none | 0 / 4 (log incomplete) | Part_0→Part_1 in release: sudden, u 0.740 (rejoined)<br>Part_0→Part_2 in release: sudden, u 0.799 (rejoined)<br>Part_0→Part_2 in release: sudden, u 0.950 (rejoined)<br>Part_0→Part_1 in release: sudden, u 0.986 (rejoined) | 0 / 3 | `.cache/videos/2026-11-08-showcase-sweep/house_release_2s.mp4` |
+| house_press_shallow | `house.json` | ASSEMBLY_BREAKAGE=1 ASSEMBLY_PRESS_DEPTH_M=0.0002 | on | 0 (log) | failed | 2/8 | joint_lost | 1 / 0 | Part_0→Part_1 in release: sudden, u 0.961 | 0 / 2 | `.cache/videos/2026-11-08-showcase-sweep/house_press_shallow.mp4` |
+| column_turned | `column_turned.json` | ASSEMBLY_BREAKAGE=1 | on | 0 (log) | completed | 4/4 | none | 0 / 3 (log incomplete) | Part_0→Part_1 in release: not in console log (rejoined)<br>Part_0→Part_1 in release: not in console log (rejoined)<br>Part_0→Part_1 in release: not in console log (rejoined) | 0 / 0 | `.cache/videos/2026-11-08-showcase-sweep/column_turned.mp4` |
 
 Columns: *Contacts (mode)* counts gripper contacts with other bricks;
 `log` mode records them and lets the run continue, `fail` mode stops the

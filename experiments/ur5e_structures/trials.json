@@ -709,7 +709,7 @@
     "recording": "20261108T024004.322895Z-dog_ten.jsonl",
     "failure": "Gripper touched /World/managed/Parts/Part_2 during retreat of brick 2",
     "gripper_contacts": 1,
-    "notes": "README demo attempt with DOG_GRIPPER_CONTACT=fail: stopped by the gripper-contact guard (92af9bd)."
+    "notes": "README demo attempt with ASSEMBLY_GRIPPER_CONTACT=fail: stopped by the gripper-contact guard (92af9bd)."
   },
   {
     "structure": "dog",
@@ -794,9 +794,9 @@
     "recording": "20261108T175120.592976Z-structure_house.jsonl",
     "failure": null,
     "gripper_contacts": 0,
-    "notes": "Showcase sweep 2026-11-08, run house_release_2s (completed; joint breaks lasting/transient 0/4). Settings: DOG_RELEASE_RAMP_S=2.0. Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md",
+    "notes": "Showcase sweep 2026-11-08, run house_release_2s (completed; joint breaks lasting/transient 0/4). Settings: ASSEMBLY_RELEASE_RAMP_S=2.0. Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md",
     "controller_settings": {
-      "DOG_RELEASE_RAMP_S": "2.0"
+      "ASSEMBLY_RELEASE_RAMP_S": "2.0"
     }
   },
   {
@@ -814,9 +814,9 @@
     "recording": "20261108T175705.119369Z-structure_house.jsonl",
     "failure": "Brick 1 detached from its support",
     "gripper_contacts": 0,
-    "notes": "Showcase sweep 2026-11-08, run house_press_shallow (joint lost; joint breaks lasting/transient 1/0). Settings: DOG_PRESS_DEPTH_M=0.0002. Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md",
+    "notes": "Showcase sweep 2026-11-08, run house_press_shallow (joint lost; joint breaks lasting/transient 1/0). Settings: ASSEMBLY_PRESS_DEPTH_M=0.0002. Details: experiments/ur5e_structures/sweeps/2026-11-08-showcase-sweep.summary.md",
     "controller_settings": {
-      "DOG_PRESS_DEPTH_M": "0.0002"
+      "ASSEMBLY_PRESS_DEPTH_M": "0.0002"
     }
   },
   {

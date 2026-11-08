@@ -4,9 +4,9 @@ Each recording under `outputs/ur5e_lego/` whose experiment is `structure_<name>`
 (or `dog_ten*`, recorded as structure `dog`) becomes one trial. Connections are
 the bricks still connected in the recording's last sample, so a joint that broke
 after forming is not counted. The first failure message comes from the matching
-console log under `outputs/ur5e_dog/`; a run with one is `failed`. Trials already in
-the file (same recording) are kept unchanged. Real-robot trials are added to the
-same file by hand; see README.md.
+console log under `outputs/ur5e_assembly/`; a run with one is `failed`. Trials
+already in the file (same recording) are kept unchanged. Real-robot trials are
+added to the same file by hand; see README.md.
 
 Run from the repository root with the project environment, so the Isaac Sim
 version can be recorded:
@@ -82,7 +82,7 @@ def console_summaries() -> dict[str, tuple[str | None, int | None]]:
         contacts with other bricks, or None for runs before contact monitoring).
     """
     summaries: dict[str, tuple[str | None, int | None]] = {}
-    for console in sorted((ROOT / "outputs/ur5e_dog").glob("*/attempt-*.txt")):
+    for console in sorted((ROOT / "outputs/ur5e_assembly").glob("*/attempt-*.txt")):
         text = console.read_text(errors="replace")
         recording = search(r"UR5e recording: (\S+)", text)
         if recording:

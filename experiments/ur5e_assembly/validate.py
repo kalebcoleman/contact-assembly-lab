@@ -129,7 +129,9 @@ def validate(config: dict) -> list[tuple[int, int, int]]:
 
 
 if __name__ == "__main__":
-    data = json.loads(Path(__file__).with_name("dog.json").read_text())
+    data = json.loads(
+        (Path(__file__).resolve().parents[1] / "ur5e_structures/dog.json").read_text()
+    )
     print(
         json.dumps(
             {"geometry_valid": True, "origins_stud_plate_units": validate(data)},

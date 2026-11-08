@@ -1,4 +1,4 @@
-"""Run bounded fresh-scene dog attempts, stopping at the first failure."""
+"""Run bounded fresh-scene assembly attempts, stopping at the first failure."""
 
 import json
 import os
@@ -15,7 +15,7 @@ def main() -> None:
     """Run 1–5 attempts and save console output and explicit outcomes."""
     parser = ArgumentParser(description=__doc__)
     parser.add_argument("--attempts", type=int, choices=range(1, 6), default=1)
-    parser.add_argument("--config", default="experiments/ur5e_dog/dog.json")
+    parser.add_argument("--config", default="experiments/ur5e_structures/dog.json")
     parser.add_argument("--timeout", type=int, default=600)
     args = parser.parse_args()
     if not 1 <= args.timeout <= 900:
@@ -23,7 +23,7 @@ def main() -> None:
     root = Path(__file__).resolve().parents[2]
     output = (
         root
-        / "outputs/ur5e_dog"
+        / "outputs/ur5e_assembly"
         / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     )
     output.mkdir(parents=True)
@@ -31,18 +31,16 @@ def main() -> None:
     environment["PYTHONPATH"] = str(root / "python") + os.pathsep + str(root)
     workspace = Path.home() / "isaac-workspace"
     environment.setdefault("ISAAC_MCP_ROOT", str(workspace / "isaac-mcp"))
-    environment.setdefault(
-        "ISAAC_MCP_ASSET_PATH", str(workspace / "isaac-mcp-assets")
-    )
+    environment.setdefault("ISAAC_MCP_ASSET_PATH", str(workspace / "isaac-mcp-assets"))
     environment["ISAAC_MCP_ASSET_STRICT"] = "1"
-    environment["DOG_CONFIG"] = args.config
+    environment["ASSEMBLY_CONFIG"] = args.config
     results = []
     for attempt in range(1, args.attempts + 1):
         log = output / f"attempt-{attempt}.txt"
         print(f"Attempt {attempt}/{args.attempts}: {log}", flush=True)
         with log.open("w") as stream:
             process = subprocess.Popen(
-                [sys.executable, "-m", "bricksim", "experiments/ur5e_dog/run.py"],
+                [sys.executable, "-m", "bricksim", "experiments/ur5e_assembly/run.py"],
                 cwd=root,
                 env=environment,
                 stdout=stream,

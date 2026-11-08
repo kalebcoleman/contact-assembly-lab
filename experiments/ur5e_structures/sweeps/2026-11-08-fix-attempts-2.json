@@ -4,16 +4,16 @@
   "controller_commit": "fb15a73",
   "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-fix-attempts-2.json --capture",
   "environment": {
-    "DOG_GRIPPER_CONTACT": "log",
-    "DOG_HOLD_S": "8"
+    "ASSEMBLY_GRIPPER_CONTACT": "log",
+    "ASSEMBLY_HOLD_S": "8"
   },
   "runs": [
     {
       "label": "column_10_ease_off",
       "config": "experiments/ur5e_structures/column_10.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T211933906586Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/column_10_ease_off.mp4",
@@ -23,8 +23,8 @@
       "label": "tower_2x2_ease_off",
       "config": "experiments/ur5e_structures/tower_2x2.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T212413447811Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_2x2_ease_off.mp4",
@@ -34,8 +34,8 @@
       "label": "tree_ease_off",
       "config": "experiments/ur5e_structures/tree.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T212719005024Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tree_ease_off.mp4",
@@ -45,8 +45,8 @@
       "label": "tower_ease_off",
       "config": "experiments/ur5e_structures/tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T213116860948Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_ease_off.mp4",
@@ -56,8 +56,8 @@
       "label": "lean_6_ease_off",
       "config": "experiments/ur5e_structures/lean_6.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T213515302016Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/lean_6_ease_off.mp4",
@@ -67,8 +67,8 @@
       "label": "cross_tower_ease_off",
       "config": "experiments/ur5e_structures/cross_tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T213840939162Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cross_tower_ease_off.mp4",
@@ -78,8 +78,8 @@
       "label": "house_ease_off",
       "config": "experiments/ur5e_structures/house.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T214148987295Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/house_ease_off.mp4",
@@ -89,8 +89,8 @@
       "label": "castle_gate_ease_off",
       "config": "experiments/ur5e_structures/castle_gate.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T214659571270Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/castle_gate_ease_off.mp4",
@@ -100,8 +100,8 @@
       "label": "cantilever_ease_off",
       "config": "experiments/ur5e_structures/cantilever.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T215211606629Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cantilever_ease_off.mp4",
@@ -111,8 +111,8 @@
       "label": "column_10_release_fast",
       "config": "experiments/ur5e_structures/column_10.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T215519330739Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/column_10_release_fast.mp4",
@@ -122,8 +122,8 @@
       "label": "tower_2x2_release_fast",
       "config": "experiments/ur5e_structures/tower_2x2.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T220131259220Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_2x2_release_fast.mp4",
@@ -133,8 +133,8 @@
       "label": "tree_release_fast",
       "config": "experiments/ur5e_structures/tree.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T220401879111Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tree_release_fast.mp4",
@@ -144,8 +144,8 @@
       "label": "tower_release_fast",
       "config": "experiments/ur5e_structures/tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T220557763037Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/tower_release_fast.mp4",
@@ -155,8 +155,8 @@
       "label": "lean_6_release_fast",
       "config": "experiments/ur5e_structures/lean_6.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T220753756617Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/lean_6_release_fast.mp4",
@@ -166,8 +166,8 @@
       "label": "cross_tower_release_fast",
       "config": "experiments/ur5e_structures/cross_tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T221017439441Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cross_tower_release_fast.mp4",
@@ -177,8 +177,8 @@
       "label": "house_release_fast",
       "config": "experiments/ur5e_structures/house.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T221623741411Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/house_release_fast.mp4",
@@ -188,8 +188,8 @@
       "label": "castle_gate_release_fast",
       "config": "experiments/ur5e_structures/castle_gate.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T222130700965Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/castle_gate_release_fast.mp4",
@@ -199,8 +199,8 @@
       "label": "cantilever_release_fast",
       "config": "experiments/ur5e_structures/cantilever.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "0.5"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
       "run": "20261108T222409966625Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/cantilever_release_fast.mp4",
@@ -210,9 +210,9 @@
       "label": "mixed_tower_press_1mm_ease_off",
       "config": "experiments/ur5e_structures/mixed_tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_PRESS_DEPTH_M": "0.001",
-        "DOG_RELEASE_LIFT_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_PRESS_DEPTH_M": "0.001",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
       },
       "run": "20261108T222712740092Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/mixed_tower_press_1mm_ease_off.mp4",
@@ -222,7 +222,7 @@
       "label": "mixed_tower_grip_support_full",
       "config": "experiments/ur5e_structures/attempts/mixed_tower_grip_support_full.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T222950902011Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/mixed_tower_grip_support_full.mp4",
@@ -232,7 +232,7 @@
       "label": "table_wide",
       "config": "experiments/ur5e_structures/table_wide.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T223522461166Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/table_wide.mp4",
@@ -242,7 +242,7 @@
       "label": "locomotive_short_stack",
       "config": "experiments/ur5e_structures/attempts/locomotive_short_stack.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T224051076705Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/locomotive_short_stack.mp4",
@@ -252,7 +252,7 @@
       "label": "castle_gate_two_battlements",
       "config": "experiments/ur5e_structures/attempts/castle_gate_two_battlements.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T224650078431Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-2/castle_gate_two_battlements.mp4",

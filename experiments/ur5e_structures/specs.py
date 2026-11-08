@@ -9,7 +9,7 @@ placing.
 import json
 from pathlib import Path
 
-from experiments.ur5e_dog.validate import validate
+from experiments.ur5e_assembly.validate import validate
 
 A = [2, 4, 3]  # 2x4 brick, long side along y
 B = [4, 2, 3]  # 2x4 brick, long side along x (unrotated, a separate source part)

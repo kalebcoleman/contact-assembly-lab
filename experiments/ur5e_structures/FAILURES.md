@@ -32,6 +32,7 @@ Generated from the sweep summaries by `catalog.py`.
 | [Tree](../../docs/STRUCTURES.md#tree) | a crown on a 2x2 trunk (4-stud joints) | 2 | 0 | a joint broke | B |
 | [Table](../../docs/STRUCTURES.md#table) | four legs, then tops spanning them | 2 | 0 | no room to release | C |
 | [Table, grip-aware](../../docs/STRUCTURES.md#table_grip) | the table with grips chosen for room | 1 | 0 | grasp failed | — |
+| [Table, wide gaps](../../docs/STRUCTURES.md#table_wide) | 4-stud gaps on both axes | 1 | 0 | a joint broke | — |
 | [Trestle table](../../docs/STRUCTURES.md#trestle_table) | slab legs gripped end to end | 1 | 1 | — | — |
 | [Mixed tower](../../docs/STRUCTURES.md#mixed_tower) | three brick sizes with offsets | 2 | 0 | a brick did not seat | D |
 | [Cross-bonded tower](../../docs/STRUCTURES.md#cross_tower) | alternating quarter turns (4-stud overlaps) | 2 | 0 | a joint broke | E |

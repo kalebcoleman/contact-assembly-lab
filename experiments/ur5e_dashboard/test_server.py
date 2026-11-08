@@ -642,9 +642,9 @@ class ResultsViewerTests(TestCase):
 
     def test_structures_report_layout_and_link_trials_to_runs(self) -> None:
         """Recipes become stud-grid layouts; trials link to their recordings."""
-        dog = self.root / "experiments/ur5e_dog"
+        dog = self.root / "experiments/ur5e_assembly"
         dog.mkdir(parents=True)
-        source = Path(__file__).resolve().parents[1] / "ur5e_dog/validate.py"
+        source = Path(__file__).resolve().parents[1] / "ur5e_assembly/validate.py"
         (dog / "validate.py").write_text(source.read_text())
         structures = self.root / "experiments/ur5e_structures"
         structures.mkdir(parents=True)
@@ -693,9 +693,9 @@ class ResultsViewerTests(TestCase):
 
     def test_catalog_entries_order_structures_and_media_is_restricted(self) -> None:
         """Catalog text joins its structure; only committed media is served."""
-        dog = self.root / "experiments/ur5e_dog"
+        dog = self.root / "experiments/ur5e_assembly"
         dog.mkdir(parents=True)
-        source = Path(__file__).resolve().parents[1] / "ur5e_dog/validate.py"
+        source = Path(__file__).resolve().parents[1] / "ur5e_assembly/validate.py"
         (dog / "validate.py").write_text(source.read_text())
         structures = self.root / "experiments/ur5e_structures"
         structures.mkdir(parents=True)

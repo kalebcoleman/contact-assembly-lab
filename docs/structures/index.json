@@ -104,6 +104,22 @@
           "total": 8,
           "stop": "a joint broke",
           "run": "20261108T175646896585Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "completed",
+          "connected": 8,
+          "total": 8,
+          "stop": "",
+          "run": "20261108T214148987295Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "completed",
+          "connected": 8,
+          "total": 8,
+          "stop": "",
+          "run": "20261108T221623741411Z"
         }
       ]
     },
@@ -147,7 +163,16 @@
         "stop": "a brick slipped from the grasp",
         "run": "20261108T195810299956Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "one-brick smokestack",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 9,
+          "stop": "a joint broke",
+          "run": "20261108T224051076705Z"
+        }
+      ]
     },
     "lighthouse": {
       "title": "Lighthouse",
@@ -197,6 +222,30 @@
           "total": 8,
           "stop": "a joint broke",
           "run": "20261108T201434592508Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 7,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T214659571270Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T222130700965Z"
+        },
+        {
+          "settings": "battlements over the towers only",
+          "outcome": "completed",
+          "connected": 7,
+          "total": 7,
+          "stop": "",
+          "run": "20261108T224650078431Z"
         }
       ]
     },
@@ -227,6 +276,22 @@
           "total": 6,
           "stop": "a joint broke",
           "run": "20261108T203808941817Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "completed",
+          "connected": 6,
+          "total": 6,
+          "stop": "",
+          "run": "20261108T212719005024Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T220401879111Z"
         }
       ]
     },
@@ -291,9 +356,15 @@
       "note": "",
       "still": null,
       "video": null,
-      "default_runs": 0,
+      "default_runs": 1,
       "default_completed": 0,
-      "latest": null,
+      "latest": {
+        "outcome": "failed",
+        "connected": 7,
+        "total": 10,
+        "stop": "a joint broke",
+        "run": "20261108T223522461166Z"
+      },
       "attempts": []
     },
     "trestle_table": {
@@ -352,6 +423,22 @@
           "total": 8,
           "stop": "a joint broke",
           "run": "20261108T211303404743Z"
+        },
+        {
+          "settings": "press 1 mm below seated, ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T222712740092Z"
+        },
+        {
+          "settings": "grip 8 mm toward the support (fingertip over the brick end)",
+          "outcome": "completed",
+          "connected": 8,
+          "total": 8,
+          "stop": "",
+          "run": "20261108T222950902011Z"
         }
       ]
     },
@@ -382,6 +469,22 @@
           "total": 10,
           "stop": "a joint broke",
           "run": "20261108T204146615012Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T213840939162Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "completed",
+          "connected": 10,
+          "total": 10,
+          "stop": "",
+          "run": "20261108T221017439441Z"
         }
       ]
     },
@@ -472,6 +575,22 @@
           "total": 6,
           "stop": "a joint broke",
           "run": "20261108T201752758338Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "completed",
+          "connected": 6,
+          "total": 6,
+          "stop": "",
+          "run": "20261108T213116860948Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T220557763037Z"
         }
       ]
     },
@@ -502,6 +621,22 @@
           "total": 4,
           "stop": "a joint broke",
           "run": "20261108T204856963798Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T215211606629Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T222409966625Z"
         }
       ]
     },
@@ -613,6 +748,22 @@
           "total": 10,
           "stop": "a joint broke",
           "run": "20261108T203207115954Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T212413447811Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T220131259220Z"
         }
       ]
     },
@@ -643,6 +794,22 @@
           "total": 6,
           "stop": "a joint broke",
           "run": "20261108T202028624545Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 4,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T213515302016Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T220753756617Z"
         }
       ]
     },
@@ -703,6 +870,22 @@
           "total": 10,
           "stop": "a joint broke",
           "run": "20261108T203524069238Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 6,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T211933906586Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "completed",
+          "connected": 10,
+          "total": 10,
+          "stop": "",
+          "run": "20261108T215519330739Z"
         }
       ]
     },

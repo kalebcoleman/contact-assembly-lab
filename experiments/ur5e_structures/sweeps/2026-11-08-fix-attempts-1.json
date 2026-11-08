@@ -4,16 +4,16 @@
   "controller_commit": "8414c2f",
   "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-fix-attempts-1.json --capture",
   "environment": {
-    "DOG_GRIPPER_CONTACT": "log",
-    "DOG_HOLD_S": "8"
+    "ASSEMBLY_GRIPPER_CONTACT": "log",
+    "ASSEMBLY_HOLD_S": "8"
   },
   "runs": [
     {
       "label": "tower_release_2s",
       "config": "experiments/ur5e_structures/tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T201752758338Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/tower_release_2s.mp4",
@@ -23,8 +23,8 @@
       "label": "lean_6_release_2s",
       "config": "experiments/ur5e_structures/lean_6.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T202028624545Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/lean_6_release_2s.mp4",
@@ -34,8 +34,8 @@
       "label": "zigzag_6_release_2s",
       "config": "experiments/ur5e_structures/zigzag_6.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T202314842401Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/zigzag_6_release_2s.mp4",
@@ -45,8 +45,8 @@
       "label": "lean_ladder_release_2s",
       "config": "experiments/ur5e_structures/lean_ladder.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T202748845868Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/lean_ladder_release_2s.mp4",
@@ -56,8 +56,8 @@
       "label": "tower_2x2_release_2s",
       "config": "experiments/ur5e_structures/tower_2x2.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T203207115954Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/tower_2x2_release_2s.mp4",
@@ -67,8 +67,8 @@
       "label": "column_10_release_2s",
       "config": "experiments/ur5e_structures/column_10.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T203524069238Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/column_10_release_2s.mp4",
@@ -78,8 +78,8 @@
       "label": "tree_release_2s",
       "config": "experiments/ur5e_structures/tree.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T203808941817Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/tree_release_2s.mp4",
@@ -89,8 +89,8 @@
       "label": "cross_tower_release_2s",
       "config": "experiments/ur5e_structures/cross_tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T204146615012Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/cross_tower_release_2s.mp4",
@@ -100,8 +100,8 @@
       "label": "spiral_tower_release_2s",
       "config": "experiments/ur5e_structures/spiral_tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T204357958860Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/spiral_tower_release_2s.mp4",
@@ -111,8 +111,8 @@
       "label": "l_corner_release_2s",
       "config": "experiments/ur5e_structures/l_corner.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T204613725870Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/l_corner_release_2s.mp4",
@@ -122,8 +122,8 @@
       "label": "cantilever_release_2s",
       "config": "experiments/ur5e_structures/cantilever.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T204856963798Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/cantilever_release_2s.mp4",
@@ -133,8 +133,8 @@
       "label": "cantilever_tip2_release_2s",
       "config": "experiments/ur5e_structures/cantilever_tip2.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_RAMP_S": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "2.0"
       },
       "run": "20261108T205214718396Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/cantilever_tip2_release_2s.mp4",
@@ -144,9 +144,9 @@
       "label": "table_margin_1mm",
       "config": "experiments/ur5e_structures/table.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_RELEASE_MARGIN_M": "0.001",
-        "DOG_RELEASE_MIN_CLEARANCE_M": "0.0005"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_MARGIN_M": "0.001",
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": "0.0005"
       },
       "run": "20261108T205519575411Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/table_margin_1mm.mp4",
@@ -156,7 +156,7 @@
       "label": "table_grip",
       "config": "experiments/ur5e_structures/table_grip.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T205959462286Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/table_grip.mp4",
@@ -166,7 +166,7 @@
       "label": "trestle_table",
       "config": "experiments/ur5e_structures/trestle_table.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T210518733717Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/trestle_table.mp4",
@@ -176,7 +176,7 @@
       "label": "mixed_tower_grip_support",
       "config": "experiments/ur5e_structures/attempts/mixed_tower_grip_support.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T210846707501Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/mixed_tower_grip_support.mp4",
@@ -186,8 +186,8 @@
       "label": "mixed_tower_press_1mm",
       "config": "experiments/ur5e_structures/mixed_tower.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_PRESS_DEPTH_M": "0.001"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_PRESS_DEPTH_M": "0.001"
       },
       "run": "20261108T211303404743Z",
       "video": ".cache/videos/2026-11-08-fix-attempts-1/mixed_tower_press_1mm.mp4",

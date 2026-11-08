@@ -635,7 +635,7 @@ class RunCollection:
     def structures(self) -> list[dict]:
         """Describe every structure recipe with its layout and recorded trials.
 
-        Bricks are placed on the 20 x 20 stud baseplate grid by the dog validator:
+        Bricks are placed on the 20 x 20 stud baseplate grid by the recipe validator:
         `x`, `y`, `width` and `depth` are in studs (8 mm), `layer` counts brick
         heights above the plate. A simulation trial links to the run library
         when its recording is there. The run library need not be read first.
@@ -644,14 +644,11 @@ class RunCollection:
             Structures sorted by brick count, then name. A recipe that fails
             validation is reported with an `error` and no bricks.
         """
-        validate = run_path(str(self.root / "experiments/ur5e_dog/validate.py"))[
+        validate = run_path(str(self.root / "experiments/ur5e_assembly/validate.py"))[
             "validate"
         ]
         recipes = sorted((self.root / STRUCTURES).glob("*.json"))
         recipes = [path for path in recipes if path.name != TRIALS]
-        dog = self.root / "experiments/ur5e_dog/dog.json"
-        if dog.is_file():
-            recipes.append(dog)
         trials_path = self.root / STRUCTURES / TRIALS
         trials = loads(trials_path.read_text()) if trials_path.is_file() else []
         index_path = self.root / CATALOG_INDEX

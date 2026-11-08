@@ -32,23 +32,23 @@ class ControllerDefaults(unittest.TestCase):
 
     def test_defaults_match_the_controller(self) -> None:
         """The summarizer's defaults are the ones the controller uses."""
-        controller = (ROOT / "experiments/ur5e_dog/controller.py").read_text()
-        run = (ROOT / "experiments/ur5e_dog/run.py").read_text()
+        controller = (ROOT / "experiments/ur5e_assembly/controller.py").read_text()
+        run = (ROOT / "experiments/ur5e_assembly/run.py").read_text()
         found = {
             name: float(value)
             for name, _, value in re.findall(
-                r'"(DOG_[A-Z_]+)": \("([a-z_]+)", ([0-9.e-]+)\)', controller
+                r'"(ASSEMBLY_[A-Z_]+)": \("([a-z_]+)", ([0-9.e-]+)\)', controller
             )
         }
         found.update(
-            (name, float(value))
+            (f"ASSEMBLY_{name}", float(value))
             for name, value in re.findall(
-                r'environ\.get\("(DOG_[A-Z_]+)", "([0-9.e-]+)"\)', controller + run
+                r'setting\("([A-Z_]+)", "([0-9.e-]+)"\)', controller + run
             )
         )
         for name, default in CONTROLLER_DEFAULTS.items():
-            if name == "DOG_GRIPPER_CONTACT":
-                self.assertIn(f'environ.get("{name}", "{default}")', controller)
+            if name == "ASSEMBLY_GRIPPER_CONTACT":
+                self.assertIn(f'setting("GRIPPER_CONTACT", "{default}")', controller)
                 continue
             self.assertEqual(found.get(name), float(default), name)
 

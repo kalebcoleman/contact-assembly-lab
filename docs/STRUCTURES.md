@@ -34,7 +34,7 @@ run's settings are in the
 | **Complex builds** | | | | |
 | [Table](#table) | 10 | 2 | 0 | failed |
 | [Table, grip-aware](#table_grip) | 10 | 1 | 0 | failed |
-| [Table, wide gaps](#table_wide) | 10 | 0 | 0 | — |
+| [Table, wide gaps](#table_wide) | 10 | 1 | 0 | failed |
 | [Trestle table](#trestle_table) | 5 | 1 | 1 | completed |
 | [Mixed tower](#mixed_tower) | 8 | 2 | 0 | failed |
 | [Cross-bonded tower](#cross_tower) | 10 | 2 | 0 | failed |
@@ -73,7 +73,7 @@ Ten bricks: four legs, a wide body bridging them, a neck, head and tail.
 - **Bricks resting on two or more bricks:** 3.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 3, 3 completed. Latest: completed, 10/10 connected.
-- **Media:** [video (MP4)](media/dog_breakage_on.mp4) · [GIF](media/dog_breakage_on.gif) · [config](../experiments/ur5e_dog/dog.json)
+- **Media:** [video (MP4)](media/dog_breakage_on.mp4) · [GIF](media/dog_breakage_on.gif) · [config](../experiments/ur5e_structures/dog.json)
 
 ### <a id="bridge"></a>Arch bridge
 
@@ -105,6 +105,8 @@ A facade with a doorway. Two walls stand two courses high, a 2x10 lintel spans t
 - **Runs at default settings:** 1, 0 completed. Latest: failed (a joint broke), 2/8 connected at the end.
 - **Also tried (2 s gripper release):** completed, 8/8 connected.
 - **Also tried (press 0.2 mm below seated):** failed (a joint broke), 2/8 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** completed, 8/8 connected.
+- **Also tried (0.5 s gripper release):** completed, 8/8 connected.
 - **Note:** At the default 1 s gripper release, the first wall joint (8 studs) breaks during a release with no visible motion. With a 2 s release the house completes; the picture and video are that run.
 - **Failure mechanism:** B: release load on an 8-stud wall joint. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/house.mp4) · [config](../experiments/ur5e_structures/house.json)
@@ -137,6 +139,7 @@ Three wheels, a 2x10 chassis that rests on all three, a cab with an overhanging 
 - **Bricks resting on two or more bricks:** 1.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 1, 0 completed. Latest: failed (a brick slipped from the grasp), 8/10 connected at the end.
+- **Also tried (one-brick smokestack):** failed (a joint broke), 8/9 connected at the end.
 - **Media:** [config](../experiments/ur5e_structures/locomotive.json)
 
 ### <a id="lighthouse"></a>Lighthouse
@@ -168,6 +171,9 @@ Two towers flank the gate, a 2x10 lintel spans it and lands on both towers, and 
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 1, 0 completed. Latest: failed (a joint broke), 7/8 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 3/8 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 7/8 connected at the end.
+- **Also tried (0.5 s gripper release):** failed (a joint broke), 2/8 connected at the end.
+- **Also tried (battlements over the towers only):** completed, 7/7 connected.
 - **Media:** [config](../experiments/ur5e_structures/castle_gate.json)
 
 ## Figures
@@ -188,6 +194,8 @@ A three-high 2x2 trunk under a crown of 2x6, 4x2 and 2x2 bricks.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a joint broke), 5/6 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 4/6 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** completed, 6/6 connected.
+- **Also tried (0.5 s gripper release):** failed (a joint broke), 1/6 connected at the end.
 - **Failure mechanism:** B: the trunk's 4-stud base joint breaks on the releases, transiently, then for good. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/tree.mp4) · [config](../experiments/ur5e_structures/tree.json)
 
@@ -239,7 +247,7 @@ Four 2x2 legs two bricks high, 4 studs apart both ways, under two 2x8 tops gripp
 - **Layers:** 3.
 - **Bricks resting on two or more bricks:** 2.
 - **Weakest planned joint:** 4 studs.
-- **Runs at default settings:** 0, 0 completed. Latest: not run at default settings.
+- **Runs at default settings:** 1, 0 completed. Latest: failed (a joint broke), 7/10 connected at the end.
 - **Media:** [config](../experiments/ur5e_structures/table_wide.json)
 
 ### <a id="trestle_table"></a>Trestle table
@@ -272,6 +280,8 @@ Eight bricks of three sizes stacked with offsets.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a brick did not seat), 5/8 connected at the end.
 - **Also tried (grip over the supported part):** failed (a brick did not seat), 5/8 connected at the end.
 - **Also tried (press 1 mm below seated):** failed (a joint broke), 7/8 connected at the end.
+- **Also tried (press 1 mm below seated, ease off 0.5 mm before letting go):** failed (a joint broke), 2/8 connected at the end.
+- **Also tried (grip 8 mm toward the support (fingertip over the brick end)):** completed, 8/8 connected.
 - **Failure mechanism:** D: a brick stops on the studs and does not seat. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/mixed_tower.mp4) · [config](../experiments/ur5e_structures/mixed_tower.json)
 
@@ -289,6 +299,8 @@ Ten 2x4 bricks alternating +90 and -90 degrees.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a joint broke), 1/10 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 1/10 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 3/10 connected at the end.
+- **Also tried (0.5 s gripper release):** completed, 10/10 connected.
 - **Failure mechanism:** E: the second joint breaks after four breakage-solver non-convergences. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/cross_tower.mp4) · [config](../experiments/ur5e_structures/cross_tower.json)
 
@@ -340,6 +352,8 @@ Six 2x4 bricks alternating direction, each shifted by a stud.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a joint broke), 5/6 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 2/6 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** completed, 6/6 connected.
+- **Also tried (0.5 s gripper release):** failed (a joint broke), 1/6 connected at the end.
 - **Failure mechanism:** B: release load on a 4-stud joint. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/tower.mp4) · [config](../experiments/ur5e_structures/tower.json)
 
@@ -361,6 +375,8 @@ A 2x6 rests by one end on a 2x2 column, with a 2x2 pressed onto its free tip.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 3, 0 completed. Latest: failed (a joint broke), 3/4 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 3/4 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 3/4 connected at the end.
+- **Also tried (0.5 s gripper release):** failed (a joint broke), 3/4 connected at the end.
 - **Failure mechanism:** A: press on the overhang. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/cantilever_failure.mp4) · [GIF](media/cantilever_failure.gif) · [config](../experiments/ur5e_structures/cantilever.json)
 
@@ -427,6 +443,8 @@ Ten 2x2 bricks: every joint has only 4 studs.
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a joint broke), 3/10 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 3/10 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 3/10 connected at the end.
+- **Also tried (0.5 s gripper release):** failed (a joint broke), 2/10 connected at the end.
 - **Failure mechanism:** B: the base joint breaks transiently on each release, then for good. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/tower_2x2.mp4) · [config](../experiments/ur5e_structures/tower_2x2.json)
 
@@ -444,6 +462,8 @@ Six 2x4 bricks, each shifted 2 studs (4-stud joints).
 - **Weakest planned joint:** 4 studs.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a joint broke), 3/6 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 2/6 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 4/6 connected at the end.
+- **Also tried (0.5 s gripper release):** failed (a joint broke), 2/6 connected at the end.
 - **Failure mechanism:** B: release load on a 4-stud joint. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/lean_6.mp4) · [config](../experiments/ur5e_structures/lean_6.json)
 
@@ -478,6 +498,8 @@ Ten aligned 2x4 bricks: the load on the base grows with height.
 - **Weakest planned joint:** 8 studs.
 - **Runs at default settings:** 2, 0 completed. Latest: failed (a joint broke), 9/10 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 2/10 connected at the end.
+- **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 6/10 connected at the end.
+- **Also tried (0.5 s gripper release):** completed, 10/10 connected.
 - **Failure mechanism:** B: release load accumulated over ten layers. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
 - **Media:** [video (MP4)](media/column_10.mp4) · [config](../experiments/ur5e_structures/column_10.json)
 

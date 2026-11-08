@@ -216,5 +216,7 @@
       -2
     ]
   ],
-  "ground_truth_xy_correction": true
+  "ground_truth_xy_correction": true,
+  "variant_of": "dog",
+  "variant": "pickup positions jittered (seed 4)"
 }

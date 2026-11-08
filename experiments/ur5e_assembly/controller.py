@@ -10,13 +10,14 @@ from runpy import run_path
 
 import numpy as np
 from carb.events import IEvent
-from experiments.ur5e_dog.clearance import (
+from experiments.ur5e_assembly.clearance import (
     FingerFaces,
     neighbours,
     outer_faces,
     release_opening,
 )
-from experiments.ur5e_dog.gripper_contacts import GripperContactMonitor
+from experiments.ur5e_assembly.environment import is_set, setting
+from experiments.ur5e_assembly.gripper_contacts import GripperContactMonitor
 from experiments.ur5e_lego.recording import RunRecorder
 from experiments.ur5e_lego.rise_ur5e_lego import move_to, set_gripper
 from isaacsim.core.api import World
@@ -58,14 +59,14 @@ from bricksim.utils.physics_step import wait_for_physics_step
 # structure's own setting, then the default, so a structure can carry what it
 # needs to build and a sweep can still override it.
 SETTINGS = {
-    "DOG_REQUIRED_FORCE_N": ("required_force_n", 1.0),
-    "DOG_PRESS_DEPTH_M": ("press_depth_m", 0.0005),
-    "DOG_PRESS_HOLD_S": ("press_hold_s", 0.05),
-    "DOG_RELEASE_RAMP_S": ("release_ramp_s", 1.0),
-    "DOG_TIP_CLEARANCE_M": ("tip_clearance_m", 0.003),
-    "DOG_RELEASE_MARGIN_M": ("release_margin_m", 0.002),
-    "DOG_RELEASE_MIN_CLEARANCE_M": ("release_min_clearance_m", 0.001),
-    "DOG_RELEASE_LIFT_M": ("release_lift_m", 0.0),
+    "ASSEMBLY_REQUIRED_FORCE_N": ("required_force_n", 1.0),
+    "ASSEMBLY_PRESS_DEPTH_M": ("press_depth_m", 0.0005),
+    "ASSEMBLY_PRESS_HOLD_S": ("press_hold_s", 0.05),
+    "ASSEMBLY_RELEASE_RAMP_S": ("release_ramp_s", 1.0),
+    "ASSEMBLY_TIP_CLEARANCE_M": ("tip_clearance_m", 0.003),
+    "ASSEMBLY_RELEASE_MARGIN_M": ("release_margin_m", 0.002),
+    "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": ("release_min_clearance_m", 0.001),
+    "ASSEMBLY_RELEASE_LIFT_M": ("release_lift_m", 0.0),
 }
 
 
@@ -84,8 +85,8 @@ def controller_settings(assembly: dict) -> dict[str, float]:
     if unknown:
         raise ValueError(f"Unknown controller settings: {sorted(unknown)}")
     return {
-        key: float(environ[name])
-        if name in environ
+        key: float(setting(name.removeprefix("ASSEMBLY_"), ""))
+        if is_set(name.removeprefix("ASSEMBLY_"))
         else float(tuning.get(key, default))
         for name, (key, default) in SETTINGS.items()
     }
@@ -96,7 +97,7 @@ class UtilizationRecorder(RunRecorder):
 
     Utilization is the breakage solver's load over capacity per connection (above
     1 means the clutch is overloaded; -1 means not evaluated, e.g. breakage off).
-    Rows go to `outputs/ur5e_dog/utilization-<experiment>-<time>.csv` as
+    Rows go to `outputs/ur5e_assembly/utilization-<experiment>-<time>.csv` as
     `elapsed_s,phase,brick_index,connection_path,utilization`.
     """
 
@@ -111,7 +112,7 @@ class UtilizationRecorder(RunRecorder):
         super().__init__(root, experiment, *args)
         self.placement_pairs = [(s, b) for s, b, _ in args[4]]
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
-        out = root / "outputs/ur5e_dog"
+        out = root / "outputs/ur5e_assembly"
         out.mkdir(parents=True, exist_ok=True)
         self.utilization_file = (out / f"utilization-{experiment}-{stamp}.csv").open(
             "w"
@@ -139,7 +140,7 @@ class UtilizationRecorder(RunRecorder):
 
 
 async def main(
-    assembly_config: str = "experiments/ur5e_dog/dog.json",
+    assembly_config: str = "experiments/ur5e_structures/dog.json",
     autoplay: bool = False,
 ) -> None:
     """Create an isolated lab scene and assemble bricks on a baseplate.
@@ -168,7 +169,7 @@ async def main(
         (root / "experiments/ur5e_lego/configs/ur5e_lego.json").read_text()
     )
     assembly = json.loads((root / assembly_config).read_text())
-    from experiments.ur5e_dog.validate import validate
+    from experiments.ur5e_assembly.validate import validate
 
     validate(assembly)
     mcp_root = (
@@ -278,11 +279,11 @@ async def main(
     world.scene.add(robot)
     world.scene.add(gripper)
     # Any gripper contact with a brick other than the one being handled is logged;
-    # it fails the run unless DOG_GRIPPER_CONTACT=log.
+    # it fails the run unless ASSEMBLY_GRIPPER_CONTACT=log.
     contact_monitor = GripperContactMonitor(
         stage, "/World/RG2_Gripper", plate_path.rsplit("/", 1)[0], brick_paths
     )
-    fail_on_gripper_contact = environ.get("DOG_GRIPPER_CONTACT", "fail") != "log"
+    fail_on_gripper_contact = setting("GRIPPER_CONTACT", "fail") != "log"
     await world.reset_async()
     supports = assembly.get("support_bricks", [None] * len(brick_paths))
     for index, support_index in enumerate(supports, start=1):
@@ -490,7 +491,7 @@ async def main(
     # Grasp-frame columns: approach downward, close across each brick's x side.
     target_grasp = np.eye(4)
     target_grasp[:3, :3] = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
-    # DOG_TIP_CLEARANCE_M: fingertip height above the held brick's bottom, which
+    # ASSEMBLY_TIP_CLEARANCE_M: fingertip height above the held brick's bottom, which
     # keeps the tips clear of the support's top and studs while seating.
     settings = controller_settings(assembly)
     print(f"UR5e baseplate: controller settings {json.dumps(settings)}", flush=True)
@@ -506,9 +507,9 @@ async def main(
     strict.yaw_tolerance = math.radians(2.0)
     strict.position_tolerance = 0.001
     set_assembly_thresholds(strict)
-    # Full BrickSim model: connections can break under load unless DOG_BREAKAGE=0.
+    # Full BrickSim model: connections can break under load unless ASSEMBLY_BREAKAGE=0.
     breakage = get_breakage_thresholds()
-    breakage.enabled = environ.get("DOG_BREAKAGE", "1") == "1"
+    breakage.enabled = setting("BREAKAGE", "1") == "1"
     set_breakage_thresholds(breakage)
     print(f"UR5e baseplate: breakage enabled={breakage.enabled}", flush=True)
     print(
@@ -523,7 +524,7 @@ async def main(
     placement_error_xy = np.array(assembly.get("placement_error_xy_m", [0.0, 0.0]))
     placement_error_yaw = assembly.get("placement_error_yaw_rad", 0.0)
     press_depth_m = settings["press_depth_m"]
-    freeze_on_connection = environ.get("DOG_FREEZE_ON_CONNECTION", "1") == "1"
+    freeze_on_connection = setting("FREEZE_ON_CONNECTION", "1") == "1"
     release_ramp_s = settings["release_ramp_s"]
     press_hold_s = settings["press_hold_s"]
     placement_yaws = assembly.get("placement_yaws", [0] * len(brick_paths))

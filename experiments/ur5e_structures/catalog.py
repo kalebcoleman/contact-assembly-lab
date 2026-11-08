@@ -249,7 +249,7 @@ MEDIA_STEM = {
 
 
 def config_path(name: str) -> Path:
-    """Return the config of a structure (the dog lives with its controller).
+    """Return the config of a structure.
 
     Args:
         name: Structure name.
@@ -257,11 +257,7 @@ def config_path(name: str) -> Path:
     Returns:
         Path to its JSON config.
     """
-    return (
-        ROOT / "experiments/ur5e_dog/dog.json"
-        if name == "dog"
-        else (STRUCTURES / f"{name}.json")
-    )
+    return STRUCTURES / f"{name}.json"
 
 
 def details(config: dict) -> dict[str, object]:
@@ -348,7 +344,7 @@ STOP = {
     "other": "other",
 }
 # Settings that only change logging or presentation, not the build.
-COSMETIC = {"DOG_GRIPPER_CONTACT", "DOG_HOLD_S"}
+COSMETIC = {"ASSEMBLY_GRIPPER_CONTACT", "ASSEMBLY_HOLD_S"}
 
 
 def sweep_runs() -> dict[str, list[dict]]:
@@ -431,18 +427,20 @@ def describe_settings(changed: dict[str, str]) -> str:
         A comma-separated description.
     """
     words: dict[str, Callable[[str], str]] = {
-        "DOG_RELEASE_RAMP_S": lambda v: f"{float(v):g} s gripper release",
-        "DOG_PRESS_DEPTH_M": lambda v: f"press {float(v) * 1000:g} mm below seated",
-        "DOG_REQUIRED_FORCE_N": lambda v: f"{float(v):g} N press",
-        "DOG_BREAKAGE": lambda v: "breakage off" if v == "0" else "breakage on",
-        "DOG_PRESS_HOLD_S": lambda v: f"{float(v):g} s press hold",
-        "DOG_TIP_CLEARANCE_M": lambda v: f"{float(v) * 1000:g} mm tip clearance",
-        "DOG_FREEZE_ON_CONNECTION": lambda v: f"freeze on connection {v}",
-        "DOG_RELEASE_MARGIN_M": lambda v: f"{float(v) * 1000:g} mm release margin",
-        "DOG_RELEASE_LIFT_M": lambda v: (
+        "ASSEMBLY_RELEASE_RAMP_S": lambda v: f"{float(v):g} s gripper release",
+        "ASSEMBLY_PRESS_DEPTH_M": lambda v: (
+            f"press {float(v) * 1000:g} mm below seated"
+        ),
+        "ASSEMBLY_REQUIRED_FORCE_N": lambda v: f"{float(v):g} N press",
+        "ASSEMBLY_BREAKAGE": lambda v: "breakage off" if v == "0" else "breakage on",
+        "ASSEMBLY_PRESS_HOLD_S": lambda v: f"{float(v):g} s press hold",
+        "ASSEMBLY_TIP_CLEARANCE_M": lambda v: f"{float(v) * 1000:g} mm tip clearance",
+        "ASSEMBLY_FREEZE_ON_CONNECTION": lambda v: f"freeze on connection {v}",
+        "ASSEMBLY_RELEASE_MARGIN_M": lambda v: f"{float(v) * 1000:g} mm release margin",
+        "ASSEMBLY_RELEASE_LIFT_M": lambda v: (
             f"ease off {float(v) * 1000:g} mm before letting go"
         ),
-        "DOG_RELEASE_MIN_CLEARANCE_M": lambda v: (
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": lambda v: (
             f"{float(v) * 1000:g} mm minimum release clearance"
         ),
     }

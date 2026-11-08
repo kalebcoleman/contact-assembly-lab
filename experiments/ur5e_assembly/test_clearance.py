@@ -3,7 +3,7 @@
 from unittest import TestCase, main
 
 import numpy as np
-from experiments.ur5e_dog.clearance import (
+from experiments.ur5e_assembly.clearance import (
     DEPTH_BIN,
     DEPTH_START,
     FingerFaces,
