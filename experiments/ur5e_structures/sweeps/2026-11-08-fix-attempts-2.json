@@ -1,0 +1,262 @@
+{
+  "name": "2026-11-08-fix-attempts-2",
+  "description": "Round 2 of fix attempts. Round 1 showed that a slower release makes most release failures worse. This round tries easing off the press (holding the tool 0.5 mm higher while the fingers open) and a faster 0.5 s release on nine failing structures. It also tries the mixed tower with a deeper press plus easing off and with a full 8 mm grip over the support, a table with 4-stud gaps on both axes, and design variants of the locomotive and castle gate. Breakage on; gripper contacts logged, not fatal.",
+  "controller_commit": "fb15a73",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-fix-attempts-2.json --capture",
+  "environment": {
+    "DOG_GRIPPER_CONTACT": "log",
+    "DOG_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "column_10_ease_off",
+      "config": "experiments/ur5e_structures/column_10.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_2x2_ease_off",
+      "config": "experiments/ur5e_structures/tower_2x2.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tree_ease_off",
+      "config": "experiments/ur5e_structures/tree.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_ease_off",
+      "config": "experiments/ur5e_structures/tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_6_ease_off",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cross_tower_ease_off",
+      "config": "experiments/ur5e_structures/cross_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "house_ease_off",
+      "config": "experiments/ur5e_structures/house.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate_ease_off",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_ease_off",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "column_10_release_fast",
+      "config": "experiments/ur5e_structures/column_10.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_2x2_release_fast",
+      "config": "experiments/ur5e_structures/tower_2x2.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tree_release_fast",
+      "config": "experiments/ur5e_structures/tree.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_release_fast",
+      "config": "experiments/ur5e_structures/tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_6_release_fast",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cross_tower_release_fast",
+      "config": "experiments/ur5e_structures/cross_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "house_release_fast",
+      "config": "experiments/ur5e_structures/house.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate_release_fast",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_release_fast",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "mixed_tower_press_1mm_ease_off",
+      "config": "experiments/ur5e_structures/mixed_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1",
+        "DOG_PRESS_DEPTH_M": "0.001",
+        "DOG_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "mixed_tower_grip_support_full",
+      "config": "experiments/ur5e_structures/attempts/mixed_tower_grip_support_full.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "table_wide",
+      "config": "experiments/ur5e_structures/table_wide.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_short_stack",
+      "config": "experiments/ur5e_structures/attempts/locomotive_short_stack.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate_two_battlements",
+      "config": "experiments/ur5e_structures/attempts/castle_gate_two_battlements.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    }
+  ]
+}
