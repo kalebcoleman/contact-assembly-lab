@@ -138,9 +138,15 @@
       "note": "",
       "still": null,
       "video": null,
-      "default_runs": 0,
+      "default_runs": 1,
       "default_completed": 0,
-      "latest": null,
+      "latest": {
+        "outcome": "failed",
+        "connected": 8,
+        "total": 10,
+        "stop": "a brick slipped from the grasp",
+        "run": "20261108T195810299956Z"
+      },
       "attempts": []
     },
     "lighthouse": {
@@ -153,9 +159,15 @@
       "note": "",
       "still": null,
       "video": null,
-      "default_runs": 0,
-      "default_completed": 0,
-      "latest": null,
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 7,
+        "total": 7,
+        "stop": "",
+        "run": "20261108T200444481750Z"
+      },
       "attempts": []
     },
     "castle_gate": {
@@ -168,10 +180,25 @@
       "note": "",
       "still": null,
       "video": null,
-      "default_runs": 0,
+      "default_runs": 1,
       "default_completed": 0,
-      "latest": null,
-      "attempts": []
+      "latest": {
+        "outcome": "failed",
+        "connected": 7,
+        "total": 8,
+        "stop": "a joint broke",
+        "run": "20261108T200918091893Z"
+      },
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T201434592508Z"
+        }
+      ]
     },
     "tree": {
       "title": "Tree",
@@ -181,18 +208,27 @@
       "tests": "a crown on a 2x2 trunk (4-stud joints)",
       "mechanism": "B: the trunk's 4-stud base joint breaks on the releases, transiently, then for good",
       "note": "",
-      "still": "media/tree_final.png",
+      "still": "media/tree_closeup.jpg",
       "video": "media/tree.mp4",
-      "default_runs": 1,
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 5,
         "total": 6,
         "stop": "a joint broke",
-        "run": "20261108T041311129876Z"
+        "run": "20261108T184112276353Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 4,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T203808941817Z"
+        }
+      ]
     },
     "table": {
       "title": "Table",
@@ -202,18 +238,27 @@
       "tests": "four legs, then tops spanning them",
       "mechanism": "C: legs 2 studs apart leave no room for the RG2 fingers to let go",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/table_closeup.jpg",
+      "video": "media/table.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 4,
         "total": 10,
         "stop": "no room to release",
-        "run": "20261108T014538157564Z"
+        "run": "20261108T184747929394Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "1 mm release margin, 0.5 mm minimum release clearance",
+          "outcome": "failed",
+          "connected": 6,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T205519575411Z"
+        }
+      ]
     },
     "table_grip": {
       "title": "Table, grip-aware",
@@ -221,6 +266,27 @@
       "section_title": "Complex builds",
       "description": "The table's ten bricks, with each grip chosen for room. The legs are gripped across the axis where they are 4 studs apart, and the 2x8 tops are gripped end to end, so no finger enters a 2-stud gap.",
       "tests": "the table with grips chosen for room",
+      "mechanism": "",
+      "note": "",
+      "still": null,
+      "video": null,
+      "default_runs": 1,
+      "default_completed": 0,
+      "latest": {
+        "outcome": "failed",
+        "connected": 8,
+        "total": 10,
+        "stop": "grasp failed",
+        "run": "20261108T205959462286Z"
+      },
+      "attempts": []
+    },
+    "table_wide": {
+      "title": "Table, wide gaps",
+      "section": "complex",
+      "section_title": "Complex builds",
+      "description": "Four 2x2 legs two bricks high, 4 studs apart both ways, under two 2x8 tops gripped across their width.",
+      "tests": "4-stud gaps on both axes",
       "mechanism": "",
       "note": "",
       "still": null,
@@ -240,9 +306,15 @@
       "note": "",
       "still": null,
       "video": null,
-      "default_runs": 0,
-      "default_completed": 0,
-      "latest": null,
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 5,
+        "total": 5,
+        "stop": "",
+        "run": "20261108T210518733717Z"
+      },
       "attempts": []
     },
     "mixed_tower": {
@@ -253,18 +325,35 @@
       "tests": "three brick sizes with offsets",
       "mechanism": "D: a brick stops on the studs and does not seat",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/mixed_tower_closeup.jpg",
+      "video": "media/mixed_tower.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 5,
         "total": 8,
         "stop": "a brick did not seat",
-        "run": "20261108T020446313605Z"
+        "run": "20261108T185044436772Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "grip over the supported part",
+          "outcome": "failed",
+          "connected": 5,
+          "total": 8,
+          "stop": "a brick did not seat",
+          "run": "20261108T210846707501Z"
+        },
+        {
+          "settings": "press 1 mm below seated",
+          "outcome": "failed",
+          "connected": 7,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T211303404743Z"
+        }
+      ]
     },
     "cross_tower": {
       "title": "Cross-bonded tower",
@@ -274,18 +363,27 @@
       "tests": "alternating quarter turns (4-stud overlaps)",
       "mechanism": "E: the second joint breaks after four breakage-solver non-convergences",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/cross_tower_closeup.jpg",
+      "video": "media/cross_tower.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 1,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T020816492637Z"
+        "run": "20261108T185501653596Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T204146615012Z"
+        }
+      ]
     },
     "spiral_tower": {
       "title": "Spiral tower",
@@ -295,18 +393,27 @@
       "tests": "repeated quarter turns (4-stud overlaps)",
       "mechanism": "E: the second joint breaks after four breakage-solver non-convergences",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/spiral_tower_closeup.jpg",
+      "video": "media/spiral_tower.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 1,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T020955264867Z"
+        "run": "20261108T185708780338Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T204357958860Z"
+        }
+      ]
     },
     "l_corner": {
       "title": "L corner",
@@ -316,18 +423,27 @@
       "tests": "a corner brick joining two posts",
       "mechanism": "A: press load through a 4-stud joint",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/l_corner_closeup.jpg",
+      "video": "media/l_corner.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 2,
         "total": 4,
         "stop": "a joint broke",
-        "run": "20261108T014343916915Z"
+        "run": "20261108T185914824485Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T204613725870Z"
+        }
+      ]
     },
     "tower": {
       "title": "Offset tower",
@@ -337,18 +453,27 @@
       "tests": "alternating directions with 1-stud shifts",
       "mechanism": "B: release load on a 4-stud joint",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/tower_closeup.jpg",
+      "video": "media/tower.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 5,
         "total": 6,
         "stop": "a joint broke",
-        "run": "20261108T014800234866Z"
+        "run": "20261108T190139579488Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T201752758338Z"
+        }
+      ]
     },
     "cantilever": {
       "title": "Cantilever",
@@ -358,18 +483,27 @@
       "tests": "a press on a cantilever tip",
       "mechanism": "A: press on the overhang",
       "note": "",
-      "still": "media/cantilever_failure_final.png",
+      "still": "media/cantilever_failure_closeup.jpg",
       "video": "media/cantilever_failure.mp4",
-      "default_runs": 2,
+      "default_runs": 3,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 3,
         "total": 4,
         "stop": "a joint broke",
-        "run": "20261108T035554030267Z"
+        "run": "20261108T190539968195Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T204856963798Z"
+        }
+      ]
     },
     "cantilever_tip2": {
       "title": "Cantilever, two bricks at the tip",
@@ -379,18 +513,27 @@
       "tests": "two bricks at a cantilever tip",
       "mechanism": "A: the press pries the column's base joint off before the brick seats",
       "note": "",
-      "still": "media/cantilever_tip2_final.png",
+      "still": "media/cantilever_tip2_closeup.jpg",
       "video": "media/cantilever_tip2.mp4",
-      "default_runs": 1,
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 2,
         "total": 5,
         "stop": "a brick did not seat",
-        "run": "20261108T042248279292Z"
+        "run": "20261108T190847168351Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 5,
+          "stop": "a joint broke",
+          "run": "20261108T205214718396Z"
+        }
+      ]
     },
     "cantilever_root2": {
       "title": "Cantilever, two bricks over the support (control)",
@@ -400,16 +543,16 @@
       "tests": "the same bricks over the support (control)",
       "mechanism": "",
       "note": "",
-      "still": "media/cantilever_root2_final.png",
+      "still": "media/cantilever_root2_closeup.jpg",
       "video": "media/cantilever_root2.mp4",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 5,
         "total": 5,
         "stop": "",
-        "run": "20261108T042635983255Z"
+        "run": "20261108T191200809471Z"
       },
       "attempts": []
     },
@@ -421,18 +564,27 @@
       "tests": "a lean that grows every layer",
       "mechanism": "B: growing overturning moment on the low joints",
       "note": "",
-      "still": "media/lean_ladder_final.png",
+      "still": "media/lean_ladder_closeup.jpg",
       "video": "media/lean_ladder.mp4",
-      "default_runs": 1,
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 6,
         "total": 8,
         "stop": "a joint broke",
-        "run": "20261108T041742925499Z"
+        "run": "20261108T191534021908Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 5,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T202748845868Z"
+        }
+      ]
     },
     "tower_2x2": {
       "title": "2x2 tower",
@@ -442,18 +594,27 @@
       "tests": "ten 4-stud joints",
       "mechanism": "B: the base joint breaks transiently on each release, then for good",
       "note": "",
-      "still": "media/tower_2x2_final.png",
+      "still": "media/tower_2x2_closeup.jpg",
       "video": "media/tower_2x2.mp4",
-      "default_runs": 1,
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 3,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T043058804924Z"
+        "run": "20261108T192010810827Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T203207115954Z"
+        }
+      ]
     },
     "lean_6": {
       "title": "Lean 6",
@@ -463,18 +624,27 @@
       "tests": "2-stud shifts (4-stud joints)",
       "mechanism": "B: release load on a 4-stud joint",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/lean_6_closeup.jpg",
+      "video": "media/lean_6.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 3,
         "total": 6,
         "stop": "a joint broke",
-        "run": "20261108T015114740357Z"
+        "run": "20261108T192318113077Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T202028624545Z"
+        }
+      ]
     },
     "zigzag_6": {
       "title": "Zigzag 6",
@@ -484,18 +654,27 @@
       "tests": "shear at every joint",
       "mechanism": "A: press load through a 4-stud joint",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/zigzag_6_closeup.jpg",
+      "video": "media/zigzag_6.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 3,
         "total": 6,
         "stop": "a joint broke",
-        "run": "20261108T015336517997Z"
+        "run": "20261108T192615039503Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 5,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T202314842401Z"
+        }
+      ]
     },
     "column_10": {
       "title": "Column of ten",
@@ -505,18 +684,27 @@
       "tests": "load on the base growing with height",
       "mechanism": "B: release load accumulated over ten layers",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
+      "still": "media/column_10_closeup.jpg",
+      "video": "media/column_10.mp4",
+      "default_runs": 2,
       "default_completed": 0,
       "latest": {
         "outcome": "failed",
         "connected": 9,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T021134129623Z"
+        "run": "20261108T192913259579Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "2 s gripper release",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T203524069238Z"
+        }
+      ]
     },
     "column_turned": {
       "title": "Column, turned 90 degrees",
@@ -526,16 +714,16 @@
       "tests": "the column with bricks turned 90 degrees",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
-      "default_completed": 1,
+      "still": "media/column_turned_closeup.jpg",
+      "video": "media/column_turned.mp4",
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 4,
         "total": 4,
         "stop": "",
-        "run": "20261108T175922040430Z"
+        "run": "20261108T193537021742Z"
       },
       "attempts": []
     },
@@ -547,16 +735,16 @@
       "tests": "one brick (sanity check)",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
-      "default_completed": 1,
+      "still": "media/single_closeup.jpg",
+      "video": "media/single.mp4",
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 1,
         "total": 1,
         "stop": "",
-        "run": "20261108T013729047340Z"
+        "run": "20261108T193835858082Z"
       },
       "attempts": []
     },
@@ -568,16 +756,16 @@
       "tests": "aligned 8-stud joints",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 2,
-      "default_completed": 2,
+      "still": "media/column_closeup.jpg",
+      "video": "media/column.mp4",
+      "default_runs": 3,
+      "default_completed": 3,
       "latest": {
         "outcome": "completed",
         "connected": 4,
         "total": 4,
         "stop": "",
-        "run": "20261108T043449477385Z"
+        "run": "20261108T194006643378Z"
       },
       "attempts": [
         {
@@ -614,16 +802,16 @@
       "tests": "mixed sizes stepping up",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
-      "default_runs": 1,
-      "default_completed": 1,
+      "still": "media/stairs_closeup.jpg",
+      "video": "media/stairs.mp4",
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261108T020023557522Z"
+        "run": "20261108T194303296410Z"
       },
       "attempts": []
     }
