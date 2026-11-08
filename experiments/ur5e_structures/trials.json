@@ -556,7 +556,7 @@
     "recording": "20261108T024004.322895Z-dog_ten.jsonl",
     "failure": "Gripper touched /World/managed/Parts/Part_2 during retreat of brick 2",
     "gripper_contacts": 1,
-    "notes": "README demo recording; contacts logged (92af9bd)."
+    "notes": "README demo attempt with DOG_GRIPPER_CONTACT=fail: stopped by the gripper-contact guard (92af9bd)."
   },
   {
     "structure": "dog",
