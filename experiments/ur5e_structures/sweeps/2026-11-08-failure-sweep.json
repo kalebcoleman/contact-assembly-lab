@@ -1,0 +1,161 @@
+{
+  "name": "2026-11-08-failure-sweep",
+  "description": "Every structure built once with the full breakage model, after the CPU-TGS weld-torque fix and the neighbour-limited release. Gripper contacts were logged, not fatal. The basis of FAILURES.md.",
+  "controller_commit": "92af9bd",
+  "invocation": "DOG_GRIPPER_CONTACT=log python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-failure-sweep.json (originally run with an equivalent shell loop)",
+  "environment": {
+    "DOG_GRIPPER_CONTACT": "log"
+  },
+  "runs": [
+    {
+      "label": "single_on",
+      "config": "experiments/ur5e_structures/single.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T013729047340Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "column_on",
+      "config": "experiments/ur5e_structures/column.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T013849895141Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cantilever_on",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T014121731842Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "l_corner_on",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T014343916915Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "table_on",
+      "config": "experiments/ur5e_structures/table.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T014538157564Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower_on",
+      "config": "experiments/ur5e_structures/tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T014800234866Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_6_on",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T015114740357Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "zigzag_6_on",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T015336517997Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "human_on",
+      "config": "experiments/ur5e_structures/human.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T015559848745Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "stairs_on",
+      "config": "experiments/ur5e_structures/stairs.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T020023557522Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "mixed_tower_on",
+      "config": "experiments/ur5e_structures/mixed_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T020446313605Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cross_tower_on",
+      "config": "experiments/ur5e_structures/cross_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T020816492637Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "spiral_tower_on",
+      "config": "experiments/ur5e_structures/spiral_tower.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T020955264867Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "column_10_on",
+      "config": "experiments/ur5e_structures/column_10.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T021134129623Z",
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "dog_on",
+      "config": "experiments/ur5e_dog/dog.json",
+      "environment": {
+        "DOG_BREAKAGE": "1"
+      },
+      "run": "20261108T021649667640Z",
+      "video": null,
+      "media": null
+    }
+  ]
+}
