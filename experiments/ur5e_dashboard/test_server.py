@@ -640,6 +640,56 @@ class ResultsViewerTests(TestCase):
         (self.evidence / "ur5e-cases-suite.json").write_text("{not json")
         self.assertEqual(self.collection.refresh()[0]["status"], "completed")
 
+    def test_structures_report_layout_and_link_trials_to_runs(self) -> None:
+        """Recipes become stud-grid layouts; trials link to their recordings."""
+        dog = self.root / "experiments/ur5e_dog"
+        dog.mkdir(parents=True)
+        source = Path(__file__).resolve().parents[1] / "ur5e_dog/validate.py"
+        (dog / "validate.py").write_text(source.read_text())
+        structures = self.root / "experiments/ur5e_structures"
+        structures.mkdir(parents=True)
+        recipe = {
+            "baseplate_xy_m": [-0.25, -0.33],
+            "part_names": ["a", "b"],
+            "brick_dimensions": [[2, 4, 3], [2, 4, 3]],
+            "brick_colors": [[200, 30, 30], [30, 30, 200]],
+            "brick_positions_xy_m": [[-0.52, -0.55], [-0.52, -0.48]],
+            "support_bricks": [None, 0],
+            "placement_offsets": [[9, 8], [2, 1]],
+            "placement_yaws": [0, 1],
+        }
+        (structures / "turn.json").write_text(dumps(recipe))
+        broken = dict(recipe, support_bricks=[None, None], placement_yaws=[0, 0])
+        broken["placement_offsets"] = [[9, 8], [9, 8]]
+        (structures / "broken.json").write_text(dumps(broken))
+        trials = [
+            {
+                "structure": "turn",
+                "kind": "simulation",
+                "recording": self.raw.name,
+                "bricks_connected": 2,
+                "bricks_total": 2,
+            },
+            {"structure": "turn", "kind": "real", "recording": None},
+        ]
+        (structures / "trials.json").write_text(dumps(trials))
+        runs = self.collection.refresh()
+        by_name = {item["name"]: item for item in self.collection.structures()}
+        turn = by_name["turn"]
+        self.assertIsNone(turn["error"])
+        self.assertEqual(turn["layers"], 2)
+        # The quarter-turned 2x4 lies along x on the second layer.
+        layout = [
+            (b["x"], b["y"], b["layer"], b["width"], b["depth"]) for b in turn["bricks"]
+        ]
+        self.assertEqual(layout, [(9, 8, 0, 2, 4), (7, 9, 1, 4, 2)])
+        self.assertEqual(
+            [trial["run_id"] for trial in turn["trials"]], [runs[0]["id"], None]
+        )
+        self.assertIn("Solid collision", by_name["broken"]["error"])
+        self.assertEqual(by_name["broken"]["bricks"], [])
+        self.assertNotIn("trials", by_name)
+
 
 if __name__ == "__main__":
     main()

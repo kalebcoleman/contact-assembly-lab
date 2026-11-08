@@ -94,3 +94,46 @@ left at its default, disabled. The first row is the EULA stop.
 | 20261107T175751 | 4 | True | 4/4 | failed | Brick 4 detached from its support |
 | 20261107T180020 | 4 | True | 4/4 | success |  |
 | 20261107T180225 | 6 | True | 5/6 | failed | Brick 4 detached from its support |
+
+## Isaac Sim 6.2 regression (2026-11-07)
+
+Same controller and tuning (no setting changed), Isaac Sim 6.2.0.0 / PhysX 5.9.2,
+one run per row, simulation only. The 6.2 runs are deterministic: a repeated
+stairs run failed with bit-identical brick coordinates. All trials, with failure
+reasons, are in `experiments/ur5e_structures/trials.json` and the dashboard's
+**Structures** view. "Connected" counts bricks still connected at the end.
+
+Reproduced from 5.1: dog and seeds 1–5 (10/10 each, breakage off), single, tower,
+l_corner, spiral_tower, human (8/8, the current 8-brick recipe), column 4/4 with
+breakage on, and the tower with breakage on failing the same way (brick 4 detaches
+after brick 5). The case suite C01–C13 also reproduces (see
+`experiments/ur5e_lego/docs/ur5e-cases.md`), as do the baseplate (3/3), stack (3/3)
+and stack-four (4/4) experiments. The transfer experiment was not run: it waits for
+Play, and desktop input could not reach the window.
+
+Differs from 5.1: **stairs 6/8** (8/8 on 5.1). Brick 7 (2-stud shift onto brick 4)
+slid about 1.4 mm in -x inside the gripper at first stud contact, then rested
+1.28 mm above its seat at 0.5° tilt; the arm had already reached its press target
+(0.5 mm below seated), so the brick never seated and no connection formed.
+
+New structures (`experiments/ur5e_structures/specs.py`):
+
+| Structure | Breakage off | Breakage on (first failure) |
+|---|---|---|
+| cantilever (4) | 4/4 | 4/4 |
+| lean_6 (6) | 6/6 | 1/6 (brick 2 detached) |
+| zigzag_6 (6) | 6/6 | 2/6 (brick 3 detached) |
+| mixed_tower (8) | 5/8 (brick 6 did not seat) | 4/8 (brick 3 detached) |
+| table (10) | 10/10 | 0/10 (brick 1 detached) |
+| cross_tower (10) | 10/10 | 1/10 (brick 2 detached) |
+| column_10 (10) | 7/10 (brick 8 did not seat) | 3/10 (brick 4 detached) |
+
+With breakage on, the 5.1 structures stairs (3/8), spiral_tower (1/10), dog (1/10)
+and human (1/8) also fail; l_corner (4/4) completes.
+
+Two failure modes recur. Breakage off: a press high in a stack stops with the
+brick resting on the studs (stairs, mixed_tower, column_10). Breakage on: a
+joint near the base, often a 4-stud joint, breaks while a later brick is placed,
+including bricks beside it rather than above it (table, human, dog). Neither cause
+is established yet; the release ramp and freeze-on-connection fixes were tuned on
+aligned stacks.

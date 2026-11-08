@@ -153,7 +153,7 @@ def main() -> None:
         ),
         "environment": {
             "isaacsim": version("isaacsim"),
-            "isaaclab": version("isaaclab"),
+            "isaacsim_kernel": version("isaacsim-kernel"),
             "native_sha256": native_digest,
             "isaac_mcp_root": str(mcp_root),
             "isaac_mcp_commit": os.environ.get("ISAAC_MCP_COMMIT"),

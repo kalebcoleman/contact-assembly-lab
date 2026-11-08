@@ -10,11 +10,14 @@ from json import JSONDecodeError, dumps, loads
 from math import ceil, isfinite
 from os import fsencode
 from pathlib import Path
+from runpy import run_path
 from urllib.parse import parse_qs, quote, urlsplit
 
 ASSETS = Path(__file__).resolve().parent
 NONFINITE_VALUES = {"NaN": None, "Infinity": None, "-Infinity": None}
 CASE_SUITE = "ur5e-cases-suite.json"
+STRUCTURES = "experiments/ur5e_structures"
+TRIALS = "trials.json"
 VIDEO_EVIDENCE = (
     (
         "stack_four",
@@ -586,6 +589,77 @@ class RunCollection:
             reverse=True,
         )
 
+    def structures(self) -> list[dict]:
+        """Describe every structure recipe with its layout and recorded trials.
+
+        Bricks are placed on the 20 x 20 stud baseplate grid by the dog validator:
+        `x`, `y`, `width` and `depth` are in studs (8 mm), `layer` counts brick
+        heights above the plate. A simulation trial links to the run library
+        when its recording is there. Call `refresh` first.
+
+        Returns:
+            Structures sorted by brick count, then name. A recipe that fails
+            validation is reported with an `error` and no bricks.
+        """
+        validate = run_path(str(self.root / "experiments/ur5e_dog/validate.py"))[
+            "validate"
+        ]
+        recipes = sorted((self.root / STRUCTURES).glob("*.json"))
+        recipes = [path for path in recipes if path.name != TRIALS]
+        dog = self.root / "experiments/ur5e_dog/dog.json"
+        if dog.is_file():
+            recipes.append(dog)
+        trials_path = self.root / STRUCTURES / TRIALS
+        trials = loads(trials_path.read_text()) if trials_path.is_file() else []
+        run_ids = {run["filename"]: run_id for run_id, run in self.runs.items()}
+        structures = []
+        for path in recipes:
+            name = path.stem
+            config = loads(path.read_text())
+            bricks = []
+            error = None
+            try:
+                origins = validate(config)
+            except (ValueError, KeyError, TypeError) as exc:
+                origins = []
+                error = str(exc)
+            turns: list[int] = []
+            for index, origin in enumerate(origins):
+                support = config["support_bricks"][index]
+                yaw = config.get("placement_yaws", [0] * len(origins))[index]
+                turns.append((yaw + (0 if support is None else turns[support])) % 4)
+                size = config["brick_dimensions"][index][:2]
+                width, depth = size if turns[index] % 2 == 0 else size[::-1]
+                bricks.append(
+                    {
+                        "index": index,
+                        "x": origin[0],
+                        "y": origin[1],
+                        "layer": origin[2] // 3,
+                        "width": width,
+                        "depth": depth,
+                        "support": support,
+                        "color": config["brick_colors"][index],
+                    }
+                )
+            structure_trials = [
+                {**trial, "run_id": run_ids.get(trial.get("recording"))}
+                for trial in trials
+                if trial.get("structure") == name
+            ]
+            structures.append(
+                {
+                    "name": name,
+                    "recipe": str(path.relative_to(self.root)),
+                    "bricks": bricks,
+                    "brick_count": len(config["brick_dimensions"]),
+                    "layers": max((b["layer"] for b in bricks), default=-1) + 1,
+                    "error": error,
+                    "trials": structure_trials,
+                }
+            )
+        return sorted(structures, key=lambda s: (s["brick_count"], s["name"]))
+
 
 class DashboardServer(ThreadingHTTPServer):
     """HTTP server holding the configured recording collection."""
@@ -644,6 +718,16 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 ],
                 allow_nan=False,
             ).encode()
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if route.path == "/api/structures":
+            server.collection.refresh()
+            body = dumps(server.collection.structures(), allow_nan=False).encode()
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))

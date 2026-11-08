@@ -41,6 +41,11 @@ To run one case by hand, for recording or inspection:
     ./experiments/ur5e_lego/scripts/run_ur5e_case.sh \
       experiments/ur5e_lego/configs/cases/C05.json --manual
 
+On Isaac Sim 6.2.0.0 (2026-11-07, suite `20261107T191150Z`, not published to
+`docs/evidence/`) all 13 cases gave the same observed outcome as the published 5.1
+suite: 12 as predicted, and C10 connected although `rejected` was predicted, as on
+5.1. The command therefore exits 1 on both versions.
+
 ## Inputs
 
 All are optional and zero or unset by default. Positions are meters in the
