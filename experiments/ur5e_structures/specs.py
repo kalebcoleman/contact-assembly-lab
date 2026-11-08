@@ -330,6 +330,72 @@ def packed_sources(sizes: list[list[int]], plate: list[float]) -> list[list[floa
     return [[x, y] for x, y, _ in placed]
 
 
+def grip_over_support(
+    config: dict, finger_half_width_m: float = 0.010, margin_m: float = 0.002
+) -> list[list[float]]:
+    """Grasp offsets that put the grip (and so the press) over each support.
+
+    The grip moves along the brick's own y axis (the fingers close across x)
+    toward the centre of the area the brick shares with its support, as far as
+    the fingers stay on the brick.
+
+    Args:
+        config: Assembly config.
+        finger_half_width_m: Half the RG2 finger width along the brick (m).
+        margin_m: Distance kept between a finger edge and the brick end (m).
+
+    Returns:
+        Per brick, [x, y] in meters in the brick's own frame at the source.
+    """
+    from experiments.ur5e_structures.render import footprints
+
+    prints = footprints(config)
+    yaws = config.get("placement_yaws", [0] * len(prints))
+    turns: list[int] = []
+    offsets = []
+    for i, (x0, y0, x1, y1, _) in enumerate(prints):
+        support = config["support_bricks"][i]
+        turn = ((0 if support is None else turns[support]) + yaws[i]) % 4
+        turns.append(turn)
+        if support is None:
+            offsets.append([0.0, 0.0])
+            continue
+        a0, b0, a1, b1, _ = prints[support]
+        cx = (max(x0, a0) + min(x1, a1)) / 2 - (x0 + x1) / 2
+        cy = (max(y0, b0) + min(y1, b1)) / 2 - (y0 + y1) / 2
+        dx, dy = cx, cy
+        for _ in range((4 - turn) % 4):
+            dx, dy = -dy, dx
+        half = 0.004 * config["brick_dimensions"][i][1]
+        limit = max(0.0, half - finger_half_width_m - margin_m)
+        offsets.append([0.0, round(max(-limit, min(limit, 0.008 * dy)), 4)])
+    return offsets
+
+
+# Variant configs for fix attempts: name -> (structure, description, change).
+ATTEMPTS = {
+    "mixed_tower_grip_support": (
+        "mixed_tower",
+        "grip over the supported part",
+        lambda config: {**config, "grasp_offsets_m": grip_over_support(config)},
+    ),
+}
+
+
+def write_attempts() -> None:
+    """Write each attempt's variant config to `attempts/<name>.json`."""
+    folder = Path(__file__).with_name("attempts")
+    folder.mkdir(exist_ok=True)
+    for name, (structure, description, change) in ATTEMPTS.items():
+        base = json.loads(Path(__file__).with_name(f"{structure}.json").read_text())
+        variant = change(base)
+        variant["variant_of"] = structure
+        variant["variant"] = description
+        validate(variant)
+        (folder / f"{name}.json").write_text(json.dumps(variant, indent=2) + "\n")
+        print(f"attempt {name}: {description}")
+
+
 def main() -> None:
     """Resolve offsets, validate every spec and write one JSON recipe per structure.
 
@@ -399,3 +465,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    write_attempts()
