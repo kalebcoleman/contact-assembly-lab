@@ -8,6 +8,7 @@ from pathlib import Path
 
 from experiments.ur5e_structures.catalog import (
     ENTRIES,
+    Results,
     built_lines,
     config_path,
     details,
@@ -62,13 +63,13 @@ class BuiltLines(unittest.TestCase):
 
     def test_completed_run_says_builds_with(self) -> None:
         """A structure with a completed standard run builds with its settings."""
-        found = {"runs": 1, "completed": 1, "latest": None, "other": []}
+        found = Results(runs=1, completed=1, latest=None, other=[])
         lines = built_lines("column", found)
         self.assertEqual(lines, ["- **Builds with:** the controller defaults."])
 
     def test_no_completed_run_is_only_attempted(self) -> None:
         """Without a completed run the settings are attempted, not a build."""
-        found = {"runs": 2, "completed": 0, "latest": None, "other": []}
+        found = Results(runs=2, completed=0, latest=None, other=[])
         for name in ("table", "spiral_tower", "cantilever", "column"):
             text = "\n".join(built_lines(name, found))
             self.assertNotIn("Builds with", text, name)
