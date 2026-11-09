@@ -1,0 +1,133 @@
+{
+  "name": "2026-11-09-verification-sweep",
+  "description": "Each structure rescued by the fix attempts, built once more from its own config with no overrides: the settings it needs are in its config's controller block (or, for the mixed tower, its grasp offsets). Confirms the per-structure settings work end to end and records media at those settings. Also tries a low-cab locomotive. Breakage on; gripper contacts logged, not fatal.",
+  "controller_commit": "3d8aaab",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-09-verification-sweep.json --capture",
+  "environment": {
+    "ASSEMBLY_GRIPPER_CONTACT": "log",
+    "ASSEMBLY_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "tree",
+      "config": "experiments/ur5e_structures/tree.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "tower",
+      "config": "experiments/ur5e_structures/tower.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "house",
+      "config": "experiments/ur5e_structures/house.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "column_10",
+      "config": "experiments/ur5e_structures/column_10.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "cross_tower",
+      "config": "experiments/ur5e_structures/cross_tower.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "zigzag_6",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "lean_ladder",
+      "config": "experiments/ur5e_structures/lean_ladder.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "l_corner",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "castle_gate",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "mixed_tower",
+      "config": "experiments/ur5e_structures/mixed_tower.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_low_cab",
+      "config": "experiments/ur5e_structures/attempts/locomotive_low_cab.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    },
+    {
+      "label": "locomotive_low_cab_release_fast",
+      "config": "experiments/ur5e_structures/attempts/locomotive_low_cab.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": null,
+      "video": null,
+      "media": null
+    }
+  ]
+}
