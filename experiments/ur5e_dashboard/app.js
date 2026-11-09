@@ -62,11 +62,6 @@ function outcomeName(outcome) {
     : String(outcome || "Not recorded").replaceAll("_", " ");
 }
 
-/** Tell whether a run built a structure that is no longer in the library. */
-function isHistorical(run) {
-  return Boolean(run.structure) && !run.in_library;
-}
-
 /** Describe joint breaks as lasting / transient, flagging an incomplete log. */
 function breaksText(run) {
   const text = `${run.lasting_breaks} lasting / ${run.transient_breaks} transient`;
@@ -153,7 +148,7 @@ function renderRuns() {
       activeFilter === category ||
       (activeFilter === "cases" && Boolean(run.case_id));
     const text =
-      `${runTitle(run)} ${run.case_category || ""} ${run.filename} ${run.status} ${run.sweep || ""} ${isHistorical(run) ? "historical" : ""} ${isControlledRejection(run.experiment, run.created_utc) ? "intentional test" : ""}`.toLowerCase();
+      `${runTitle(run)} ${run.case_category || ""} ${run.filename} ${run.status} ${run.sweep || ""} ${isControlledRejection(run.experiment, run.created_utc) ? "intentional test" : ""}`.toLowerCase();
     return matchesFilter && text.includes(term);
   });
   byId("run-count").textContent = String(runs.length);
@@ -187,7 +182,6 @@ function renderRuns() {
       <span class="run-status"><i class="run-dot ${escapeText(category)}"></i>${escapeText(label)} <span>·</span> ${escapeText(formatTime(run.duration_s))}</span>
       ${intentional ? '<span class="run-purpose">Intentional test</span>' : ""}
       ${run.case_id ? `<span class="run-purpose">${escapeText(predictionLabel(run.case_as_predicted))}</span>` : ""}
-      ${isHistorical(run) ? '<span class="run-purpose">Historical · not in the current library</span>' : ""}
       ${run.sweep ? `<span class="run-purpose">Sweep ${escapeText(run.sweep)}</span>` : ""}`;
     button.addEventListener("click", () => selectRun(run.id));
     list.append(button);
@@ -452,10 +446,6 @@ async function selectRun(id) {
       byId("status").className = `status ${category}`;
       byId("scenario-badge").hidden = !intentional;
       byId("scenario-notice").hidden = !intentional;
-      byId("run-historical").hidden = !isHistorical(run);
-      byId("run-historical").textContent = isHistorical(run)
-        ? `Historical run: "${run.structure}" is not in the current structure library. This is not a current result.`
-        : "";
       const sweep = run.sweep;
       byId("sweep-panel").hidden = !sweep;
       if (sweep) {

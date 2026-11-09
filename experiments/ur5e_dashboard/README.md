@@ -67,8 +67,8 @@ A recording that a sweep summary lists is tagged with its sweep in the run
 list, and its run page shows that summary: breakage on or off, what stopped
 the controller, lasting and transient joint breaks, solver warnings, and each
 removed joint. When the console event log was incomplete, breaks and warnings
-are lower bounds. A recording of a structure that is no longer in the catalog
-is tagged historical and is not a current result.
+are lower bounds. Recordings of structures that are no longer in the catalog
+are left out of the dashboard.
 
 All current logs are simulation data. Tool and part poses are in the world
 frame, placement errors are in the support frame, joint angles are radians,
