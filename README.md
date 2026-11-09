@@ -104,8 +104,6 @@ Times are shown in the viewer's local time (MST).
 | Locomotive: 2/2 completed with its saved 0.5 s release; latest is the config-check run `20261109T020147942410Z` (0 lasting / 1 transient break, 0 solver warnings, event log incomplete). The 1 s default failed 7/8. | Table: not buildable yet (no room for the RG2 fingers between legs 2 studs apart); 0/2 completed. |
 | ![Run list and sweep evidence](docs/media/dashboard_overview.png) | ![Failed run detail](docs/media/dashboard_run_detail.png) |
 | Run library: each recording tagged with its sweep; the locomotive config-check run with its sweep evidence. | Locomotive at the 1 s default release (`20261109T011127574622Z`): failed 7/8, 1 lasting / 6 transient breaks, 4 non-converged / 1 high-slack warnings, each removed joint. The recording reads "Incomplete" because the run raised before writing its end record. |
-| ![Historical run](docs/media/dashboard_run_historical.png) | |
-| Runs of removed structures (giraffe, cat, duck, human, robot) are tagged historical, not current results. | |
 
 ## Reproducibility
 

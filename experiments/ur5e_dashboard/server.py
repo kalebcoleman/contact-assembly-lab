@@ -485,6 +485,15 @@ class RunCollection:
             else {}
         )
         for identity, (path, metadata) in selected.items():
+            experiment = str(metadata.get("experiment") or "")
+            structure = (
+                experiment.removeprefix("structure_")
+                if experiment.startswith("structure_")
+                else None
+            )
+            # Structures removed from the catalog are left out of the dashboard.
+            if structure is not None and library and structure not in library:
+                continue
             run_id = sha256(fsencode(path)).hexdigest()[:20]
             try:
                 stat = path.stat()
@@ -632,19 +641,12 @@ class RunCollection:
                         f"Representative video from case {source}; "
                         "it does not show this run."
                     )
-            experiment = str(metadata.get("experiment") or "")
-            structure = (
-                experiment.removeprefix("structure_")
-                if experiment.startswith("structure_")
-                else None
-            )
             recording = path.with_suffix("").name if path.suffix == ".gz" else path.name
             run = dict(summary)
             run.update(
                 {
                     "id": run_id,
                     "structure": structure,
-                    "in_library": structure is not None and structure in library,
                     "sweep": sweep_evidence.get(recording),
                     "filename": path.name,
                     "video": video is not None,
@@ -850,7 +852,6 @@ class DashboardHandler(BaseHTTPRequestHandler):
                             "as_predicted"
                         ),
                         "structure": run["structure"],
-                        "in_library": run["in_library"],
                         "sweep": (run["sweep"] or {}).get("sweep"),
                     }
                     for run in runs

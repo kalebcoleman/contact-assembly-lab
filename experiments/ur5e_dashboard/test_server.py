@@ -758,8 +758,8 @@ class ResultsViewerTests(TestCase):
             worker.join(timeout=5)
             server.server_close()
 
-    def test_runs_carry_sweep_evidence_and_historical_structures(self) -> None:
-        """Sweep summaries attach to their recording; removed structures are marked."""
+    def test_runs_carry_sweep_evidence_and_skip_removed_structures(self) -> None:
+        """Sweep summaries attach to recordings; removed structures are left out."""
         header = dumps(
             {"kind": "metadata", "experiment": "structure_beta", "created_utc": "b"}
         )
@@ -796,15 +796,12 @@ class ResultsViewerTests(TestCase):
         runs = {run["filename"]: run for run in self.collection.refresh()}
         beta = runs["beta.jsonl"]
         self.assertEqual(beta["structure"], "beta")
-        self.assertTrue(beta["in_library"])
         self.assertEqual(beta["sweep"]["sweep"], "check")
         self.assertEqual(beta["sweep"]["transient_breaks"], 1)
         self.assertFalse(beta["sweep"]["event_log_complete"])
         self.assertNotIn("settings", beta["sweep"])
-        self.assertFalse(runs["gone.jsonl"]["in_library"])
-        self.assertIsNone(runs["gone.jsonl"]["sweep"])
+        self.assertNotIn("gone.jsonl", runs)
         self.assertIsNone(runs["sample-stack-four.jsonl"]["structure"])
-        self.assertFalse(runs["sample-stack-four.jsonl"]["in_library"])
 
 
 if __name__ == "__main__":
