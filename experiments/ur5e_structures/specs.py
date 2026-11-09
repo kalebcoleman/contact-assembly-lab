@@ -395,6 +395,10 @@ NEEDS: dict[str, dict] = {
     "house": {"controller": {"release_lift_m": 0.0005}},
     "column_10": {"controller": {"release_ramp_s": 0.5}},
     "cross_tower": {"controller": {"release_ramp_s": 0.5}},
+    "zigzag_6": {"controller": {"release_ramp_s": 0.5}},
+    "lean_ladder": {"controller": {"release_ramp_s": 0.5}},
+    "l_corner": {"controller": {"release_ramp_s": 0.5}},
+    "castle_gate": {"controller": {"release_lift_m": 0.0005, "release_ramp_s": 0.5}},
     "mixed_tower": {"grip_over_support": True},
 }
 
@@ -467,6 +471,18 @@ ATTEMPTS = {
         "locomotive",
         "one-brick smokestack",
         lambda _: absolute_config("locomotive", SHOWCASE["locomotive"][:-1]),
+    ),
+    "locomotive_low_cab": (
+        "locomotive",
+        "one-brick cab under the roof, one-brick smokestack",
+        lambda _: absolute_config(
+            "locomotive",
+            [
+                *SHOWCASE["locomotive"][:6],
+                (L6, 4, (2, 9), 1, [170, 30, 30]),
+                (D, 5, (11, 9), 1, [45, 45, 50]),
+            ],
+        ),
     ),
     "castle_gate_two_battlements": (
         "castle_gate",
