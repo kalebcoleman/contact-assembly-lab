@@ -37,7 +37,17 @@ Each picture links to its video, rendered in the simulator.
 | House, 8 bricks | Log cabin, 8 bricks |
 |---|---|
 | [![House](docs/media/house_closeup.jpg)](docs/media/house.mp4) | [![Log cabin](docs/media/log_cabin_closeup.jpg)](docs/media/log_cabin.mp4) |
-| A doorway, a lintel across it, a stepped roof and a chimney. | Every log interlocks two corners. |
+| A doorway, a lintel across it, a stepped roof and a chimney. Builds when the arm eases off before letting go. | Every log interlocks two corners. |
+
+| Lighthouse, 7 bricks | Castle gate, 8 bricks |
+|---|---|
+| [![Lighthouse](docs/media/lighthouse_closeup.jpg)](docs/media/lighthouse.mp4) | [![Castle gate](docs/media/castle_gate_closeup.jpg)](docs/media/castle_gate.mp4) |
+| A striped tower on a rock, a lamp and a cap: seven layers. | Two towers, a lintel over the gate and battlements. Builds with an eased-off, faster release. |
+
+| Steam locomotive, 8 bricks | Trestle table, 5 bricks |
+|---|---|
+| [![Steam locomotive](docs/media/locomotive_closeup.jpg)](docs/media/locomotive.mp4) | [![Trestle table](docs/media/trestle_table_closeup.jpg)](docs/media/trestle_table.mp4) |
+| Three wheels under a long chassis, a cab, a boiler and a smokestack. Builds with a faster release. | Slab legs gripped end to end, so the fingers stay out of the gap under the top. |
 <!-- showcase:end -->
 
 **[All structures →](docs/STRUCTURES.md)** For each one the catalog gives the
@@ -46,13 +56,30 @@ and a video.
 
 ## Failures
 
-Some failures were planned, to test one effect at a time; others came from
-trying harder builds. Each row below is a controlled test. The full analysis is
-in [FAILURES.md](experiments/ur5e_structures/FAILURES.md).
+Every structure was first built with the same controller settings. When one
+failed, the run showed where and why, and it was tried again with a different
+release, grip or design. Some failures are planned break tests: the cantilever
+below tips over when a brick is pressed onto its free end.
 
 ![Cantilever failure](docs/media/cantilever_failure.gif)
 
 <!-- failures:start -->
+| What went wrong | What fixed it | Now builds |
+|---|---|---|
+| A joint breaks as the gripper opens: the arm is still pushing | Ease off 0.5 mm before letting go | tree, offset tower, house |
+| A joint breaks as the gripper opens: load builds while it opens | Let go faster (0.5 s instead of 1 s) | column of ten, cross-bonded tower, zigzag, leaning ladder, L corner, steam locomotive |
+| Both of the above | Both fixes together | castle gate |
+| A half-supported brick tips and never seats | Grip and press it over its support | mixed tower |
+| No room for the fingers beside a brick | Grip the brick end to end | trestle table |
+
+**Still not buildable:**
+- the original table: no room for the fingers;
+- the wide-gap table, spiral tower, 2x2 tower and lean 6: their 4-stud joints
+  break;
+- both cantilevers: they need building as a sub-assembly.
+
+Where each structure fails, every attempt and how many runs it took are in
+[FAILURES.md](experiments/ur5e_structures/FAILURES.md).
 <!-- failures:end -->
 
 ## Dashboard

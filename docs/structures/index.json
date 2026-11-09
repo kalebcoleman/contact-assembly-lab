@@ -82,14 +82,14 @@
       "still": "media/house_closeup.jpg",
       "video": "media/house.mp4",
       "needs": "ease off 0.5 mm before letting go",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261108T214148987295Z"
+        "run": "20261109T003045533041Z"
       },
       "attempts": [
         {
@@ -152,30 +152,78 @@
       "title": "Steam locomotive",
       "section": "showcase",
       "section_title": "Showcase builds",
-      "description": "Three wheels, a 2x10 chassis that rests on all three, a cab with an overhanging roof, a boiler and a chimney.",
+      "description": "Three wheels, a 2x10 chassis that rests on all three, a cab under an overhanging roof, a boiler and a smokestack.",
       "tests": "a chassis resting on three wheels",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
-      "needs": "",
+      "still": "media/locomotive_closeup.jpg",
+      "video": "media/locomotive.mp4",
+      "needs": "0.5 s gripper release",
       "default_runs": 1,
-      "default_completed": 0,
+      "default_completed": 1,
       "latest": {
-        "outcome": "failed",
+        "outcome": "completed",
         "connected": 8,
-        "total": 10,
-        "stop": "a brick slipped from the grasp",
-        "run": "20261108T195810299956Z"
+        "total": 8,
+        "stop": "",
+        "run": "20261109T011701638022Z"
       },
       "attempts": [
+        {
+          "settings": "two-brick cab and two-brick smokestack (the first design), 1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 10,
+          "stop": "a brick slipped from the grasp",
+          "run": "20261108T195810299956Z"
+        },
+        {
+          "settings": "one-brick smokestack, 1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 9,
+          "stop": "a joint broke",
+          "run": "20261108T224051076705Z"
+        },
+        {
+          "settings": "one-brick smokestack, 1 s gripper release (controller default), ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 9,
+          "stop": "a joint broke",
+          "run": "20261108T234120121381Z"
+        },
         {
           "settings": "one-brick smokestack",
           "outcome": "failed",
           "connected": 8,
           "total": 9,
           "stop": "a joint broke",
-          "run": "20261108T224051076705Z"
+          "run": "20261108T234733919652Z"
+        },
+        {
+          "settings": "two-brick cab and two-brick smokestack (the first design), 1 s gripper release (controller default), ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T235309993968Z"
+        },
+        {
+          "settings": "two-brick cab and two-brick smokestack (the first design)",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T235911588320Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 7,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261109T011127574622Z"
         }
       ]
     },
@@ -187,8 +235,8 @@
       "tests": "a seven-layer tower on a wide base",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
+      "still": "media/lighthouse_closeup.jpg",
+      "video": "media/lighthouse.mp4",
       "needs": "",
       "default_runs": 1,
       "default_completed": 1,
@@ -209,21 +257,29 @@
       "tests": "a lintel over a gate; battlements",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
-      "needs": "",
-      "default_runs": 1,
-      "default_completed": 0,
+      "still": "media/castle_gate_closeup.jpg",
+      "video": "media/castle_gate.mp4",
+      "needs": "ease off 0.5 mm before letting go, 0.5 s gripper release",
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
-        "outcome": "failed",
-        "connected": 7,
+        "outcome": "completed",
+        "connected": 8,
         "total": 8,
-        "stop": "a joint broke",
-        "run": "20261108T200918091893Z"
+        "stop": "",
+        "run": "20261109T010108729819Z"
       },
       "attempts": [
         {
-          "settings": "2 s gripper release",
+          "settings": "1 s gripper release (controller default), no easing off (controller default)",
+          "outcome": "failed",
+          "connected": 7,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T200918091893Z"
+        },
+        {
+          "settings": "2 s gripper release, no easing off (controller default)",
           "outcome": "failed",
           "connected": 3,
           "total": 8,
@@ -231,7 +287,7 @@
           "run": "20261108T201434592508Z"
         },
         {
-          "settings": "ease off 0.5 mm before letting go",
+          "settings": "1 s gripper release (controller default)",
           "outcome": "failed",
           "connected": 7,
           "total": 8,
@@ -239,7 +295,7 @@
           "run": "20261108T214659571270Z"
         },
         {
-          "settings": "0.5 s gripper release",
+          "settings": "no easing off (controller default)",
           "outcome": "failed",
           "connected": 2,
           "total": 8,
@@ -247,7 +303,7 @@
           "run": "20261108T222130700965Z"
         },
         {
-          "settings": "battlements over the towers only",
+          "settings": "battlements over the towers only, 1 s gripper release (controller default), no easing off (controller default)",
           "outcome": "completed",
           "connected": 7,
           "total": 7,
@@ -267,14 +323,14 @@
       "still": "media/tree_closeup.jpg",
       "video": "media/tree.mp4",
       "needs": "ease off 0.5 mm before letting go",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 6,
         "total": 6,
         "stop": "",
-        "run": "20261108T212719005024Z"
+        "run": "20261109T002225227866Z"
       },
       "attempts": [
         {
@@ -350,8 +406,8 @@
       "tests": "the table with grips chosen for room",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
+      "still": "media/table_grip_closeup.jpg",
+      "video": "media/table_grip.mp4",
       "needs": "",
       "default_runs": 1,
       "default_completed": 0,
@@ -372,8 +428,8 @@
       "tests": "4-stud gaps on both axes",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
+      "still": "media/table_wide_closeup.jpg",
+      "video": "media/table_wide.mp4",
       "needs": "",
       "default_runs": 1,
       "default_completed": 0,
@@ -384,7 +440,24 @@
         "stop": "a joint broke",
         "run": "20261108T223522461166Z"
       },
-      "attempts": []
+      "attempts": [
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 8,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T233026412389Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 6,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T233631674921Z"
+        }
+      ]
     },
     "trestle_table": {
       "title": "Trestle table",
@@ -394,8 +467,8 @@
       "tests": "slab legs gripped end to end",
       "mechanism": "",
       "note": "",
-      "still": null,
-      "video": null,
+      "still": "media/trestle_table_closeup.jpg",
+      "video": "media/trestle_table.mp4",
       "needs": "",
       "default_runs": 1,
       "default_completed": 1,
@@ -419,9 +492,15 @@
       "still": "media/mixed_tower_closeup.jpg",
       "video": "media/mixed_tower.mp4",
       "needs": "grip half-supported bricks over their support",
-      "default_runs": 0,
-      "default_completed": 0,
-      "latest": null,
+      "default_runs": 1,
+      "default_completed": 1,
+      "latest": {
+        "outcome": "completed",
+        "connected": 8,
+        "total": 8,
+        "stop": "",
+        "run": "20261109T010612115750Z"
+      },
       "attempts": [
         {
           "settings": "gripped at the middle",
@@ -484,14 +563,14 @@
       "still": "media/cross_tower_closeup.jpg",
       "video": "media/cross_tower.mp4",
       "needs": "0.5 s gripper release",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 10,
         "total": 10,
         "stop": "",
-        "run": "20261108T221017439441Z"
+        "run": "20261109T004255781633Z"
       },
       "attempts": [
         {
@@ -556,6 +635,14 @@
           "total": 10,
           "stop": "a joint broke",
           "run": "20261108T204357958860Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 10,
+          "stop": "a joint broke",
+          "run": "20261108T225956023946Z"
         }
       ]
     },
@@ -569,17 +656,33 @@
       "note": "",
       "still": "media/l_corner_closeup.jpg",
       "video": "media/l_corner.mp4",
-      "needs": "",
+      "needs": "0.5 s gripper release",
       "default_runs": 2,
-      "default_completed": 0,
+      "default_completed": 2,
       "latest": {
-        "outcome": "failed",
-        "connected": 2,
+        "outcome": "completed",
+        "connected": 4,
         "total": 4,
-        "stop": "a joint broke",
-        "run": "20261108T185914824485Z"
+        "stop": "",
+        "run": "20261109T005817139893Z"
       },
       "attempts": [
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T014343916915Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T185914824485Z"
+        },
         {
           "settings": "2 s gripper release",
           "outcome": "failed",
@@ -587,6 +690,14 @@
           "total": 4,
           "stop": "a joint broke",
           "run": "20261108T204613725870Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261108T232010504281Z"
         }
       ]
     },
@@ -601,14 +712,14 @@
       "still": "media/tower_closeup.jpg",
       "video": "media/tower.mp4",
       "needs": "ease off 0.5 mm before letting go",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 6,
         "total": 6,
         "stop": "",
-        "run": "20261108T213116860948Z"
+        "run": "20261109T002633591169Z"
       },
       "attempts": [
         {
@@ -689,6 +800,14 @@
           "total": 4,
           "stop": "a joint broke",
           "run": "20261108T222409966625Z"
+        },
+        {
+          "settings": "0.5 s gripper release, ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 4,
+          "stop": "a joint broke",
+          "run": "20261109T001246974986Z"
         }
       ]
     },
@@ -720,6 +839,22 @@
           "total": 5,
           "stop": "a joint broke",
           "run": "20261108T205214718396Z"
+        },
+        {
+          "settings": "ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 5,
+          "stop": "a joint broke",
+          "run": "20261108T232546767592Z"
+        },
+        {
+          "settings": "0.5 s gripper release",
+          "outcome": "failed",
+          "connected": 1,
+          "total": 5,
+          "stop": "a joint broke",
+          "run": "20261108T232823516305Z"
         }
       ]
     },
@@ -755,17 +890,33 @@
       "note": "",
       "still": "media/lean_ladder_closeup.jpg",
       "video": "media/lean_ladder.mp4",
-      "needs": "",
+      "needs": "0.5 s gripper release",
       "default_runs": 2,
-      "default_completed": 0,
+      "default_completed": 2,
       "latest": {
-        "outcome": "failed",
-        "connected": 6,
+        "outcome": "completed",
+        "connected": 8,
         "total": 8,
-        "stop": "a joint broke",
-        "run": "20261108T191534021908Z"
+        "stop": "",
+        "run": "20261109T005323253550Z"
       },
       "attempts": [
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 6,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T041742925499Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 6,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T191534021908Z"
+        },
         {
           "settings": "2 s gripper release",
           "outcome": "failed",
@@ -773,6 +924,14 @@
           "total": 8,
           "stop": "a joint broke",
           "run": "20261108T202748845868Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 6,
+          "total": 8,
+          "stop": "a joint broke",
+          "run": "20261108T231003548642Z"
         }
       ]
     },
@@ -820,6 +979,14 @@
           "total": 10,
           "stop": "a joint broke",
           "run": "20261108T220131259220Z"
+        },
+        {
+          "settings": "0.5 s gripper release, ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 10,
+          "stop": "a brick slipped from the grasp",
+          "run": "20261109T000537628236Z"
         }
       ]
     },
@@ -867,6 +1034,14 @@
           "total": 6,
           "stop": "a joint broke",
           "run": "20261108T220753756617Z"
+        },
+        {
+          "settings": "0.5 s gripper release, ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 4,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261109T000908390292Z"
         }
       ]
     },
@@ -880,17 +1055,33 @@
       "note": "",
       "still": "media/zigzag_6_closeup.jpg",
       "video": "media/zigzag_6.mp4",
-      "needs": "",
+      "needs": "0.5 s gripper release",
       "default_runs": 2,
-      "default_completed": 0,
+      "default_completed": 2,
       "latest": {
-        "outcome": "failed",
-        "connected": 3,
+        "outcome": "completed",
+        "connected": 6,
         "total": 6,
-        "stop": "a joint broke",
-        "run": "20261108T192615039503Z"
+        "stop": "",
+        "run": "20261109T004918193894Z"
       },
       "attempts": [
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T015336517997Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default)",
+          "outcome": "failed",
+          "connected": 3,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T192615039503Z"
+        },
         {
           "settings": "2 s gripper release",
           "outcome": "failed",
@@ -898,6 +1089,14 @@
           "total": 6,
           "stop": "a joint broke",
           "run": "20261108T202314842401Z"
+        },
+        {
+          "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
+          "outcome": "failed",
+          "connected": 2,
+          "total": 6,
+          "stop": "a joint broke",
+          "run": "20261108T230317017510Z"
         }
       ]
     },
@@ -912,14 +1111,14 @@
       "still": "media/column_10_closeup.jpg",
       "video": "media/column_10.mp4",
       "needs": "0.5 s gripper release",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 10,
         "total": 10,
         "stop": "",
-        "run": "20261108T215519330739Z"
+        "run": "20261109T003626663454Z"
       },
       "attempts": [
         {
