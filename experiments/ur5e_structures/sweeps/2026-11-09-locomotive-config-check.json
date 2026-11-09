@@ -1,0 +1,17 @@
+{
+  "name": "2026-11-09-locomotive-config-check",
+  "description": "One bounded run of the locomotive from its saved config, with no release-ramp override in the environment (ASSEMBLY_RELEASE_RAMP_S and the legacy DOG_RELEASE_RAMP_S both unset with env -u), to show the 0.5 s release comes from the config's controller block (the console's 'controller settings' line reports release_ramp_s 0.5). Breakage on. Every other setting is the controller default, which is stricter than the verification sweep: a gripper contact fails the run (ASSEMBLY_GRIPPER_CONTACT unset, i.e. 'fail') and the final hold is 10 s (ASSEMBLY_HOLD_S unset). A single completed run is not evidence of numerical robustness.",
+  "controller_commit": "50f3b08",
+  "invocation": "env -u ASSEMBLY_RELEASE_RAMP_S -u DOG_RELEASE_RAMP_S OMNI_KIT_ACCEPT_EULA=YES DISPLAY=:1 .venv/bin/python -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-09-locomotive-config-check.json",
+  "environment": {
+    "ASSEMBLY_BREAKAGE": "1"
+  },
+  "runs": [
+    {
+      "label": "locomotive_config",
+      "config": "experiments/ur5e_structures/locomotive.json",
+      "environment": {},
+      "run": "20261109T020147942410Z"
+    }
+  ]
+}

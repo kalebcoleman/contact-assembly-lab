@@ -159,14 +159,14 @@
       "still": "media/locomotive_closeup.jpg",
       "video": "media/locomotive.mp4",
       "needs": "0.5 s gripper release",
-      "default_runs": 1,
-      "default_completed": 1,
+      "default_runs": 2,
+      "default_completed": 2,
       "latest": {
         "outcome": "completed",
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261109T011701638022Z"
+        "run": "20261109T020147942410Z"
       },
       "attempts": [
         {

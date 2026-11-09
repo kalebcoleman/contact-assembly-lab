@@ -33,7 +33,7 @@ runs at any other setting, grip or design variant.
 | [Arch bridge](../../docs/STRUCTURES.md#bridge) | a deck landing on two piers (corbel arch) | 1 of 1 built | nothing | — | 0 |
 | [House](../../docs/STRUCTURES.md#house) | a lintel over a doorway; stepped roof | 0 of 1 built | ease off 0.5 mm before letting go | 2 of 2 built | 3 |
 | [Log cabin](../../docs/STRUCTURES.md#log_cabin) | courses alternating direction; interlocking corners | 1 of 1 built | nothing | — | 0 |
-| [Steam locomotive](../../docs/STRUCTURES.md#locomotive) | a chassis resting on three wheels | 0 of 1 built | 0.5 s gripper release | 1 of 1 built | 6 |
+| [Steam locomotive](../../docs/STRUCTURES.md#locomotive) | a chassis resting on three wheels | 0 of 1 built | 0.5 s gripper release | 2 of 2 built | 6 |
 | [Lighthouse](../../docs/STRUCTURES.md#lighthouse) | a seven-layer tower on a wide base | 1 of 1 built | nothing | — | 0 |
 | [Castle gate](../../docs/STRUCTURES.md#castle_gate) | a lintel over a gate; battlements | 0 of 1 built | ease off 0.5 mm before letting go, 0.5 s gripper release | 2 of 2 built | 4 |
 | [Tree](../../docs/STRUCTURES.md#tree) | a crown on a 2x2 trunk (4-stud joints) | 0 of 2 built | ease off 0.5 mm before letting go | 2 of 2 built | 2 |

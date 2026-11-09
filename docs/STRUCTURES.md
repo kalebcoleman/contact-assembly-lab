@@ -30,7 +30,7 @@ run's settings are in the
 | [Arch bridge](#bridge) | 7 | 1 | 1 | completed |
 | [House](#house) | 8 | 2 | 2 | completed |
 | [Log cabin](#log_cabin) | 8 | 1 | 1 | completed |
-| [Steam locomotive](#locomotive) | 8 | 1 | 1 | completed |
+| [Steam locomotive](#locomotive) | 8 | 2 | 2 | completed |
 | [Lighthouse](#lighthouse) | 7 | 1 | 1 | completed |
 | [Castle gate](#castle_gate) | 8 | 2 | 2 | completed |
 | **Figures** | | | | |
@@ -146,7 +146,7 @@ Three wheels, a 2x10 chassis that rests on all three, a cab under an overhanging
 - **Bricks resting on two or more bricks:** 1.
 - **Weakest planned joint:** 4 studs.
 - **Builds with:** 0.5 s gripper release.
-- **Runs at these settings:** 1, 1 completed. Latest: completed, 8/8 connected.
+- **Runs at these settings:** 2, 2 completed. Latest: completed, 8/8 connected.
 - **Also tried (two-brick cab and two-brick smokestack (the first design), 1 s gripper release (controller default)):** failed (a brick slipped from the grasp), 8/10 connected at the end.
 - **Also tried (one-brick smokestack, 1 s gripper release (controller default)):** failed (a joint broke), 8/9 connected at the end.
 - **Also tried (one-brick smokestack, 1 s gripper release (controller default), ease off 0.5 mm before letting go):** failed (a joint broke), 8/9 connected at the end.

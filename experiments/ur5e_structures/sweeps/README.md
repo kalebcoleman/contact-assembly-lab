@@ -16,6 +16,7 @@ ground truth; nothing in this folder drives a robot.
 | [2026-11-08-fix-attempts-2](2026-11-08-fix-attempts-2.summary.md) | 23 | Round 2: easing off the press before release, a 0.5 s release, mixed tower and table variants, locomotive and castle gate design variants |
 | [2026-11-08-fix-attempts-3](2026-11-08-fix-attempts-3.summary.md) | 19 | Round 3: both release fixes together, the grip over the support, and the one-brick-cab locomotive |
 | [2026-11-09-verification-sweep](2026-11-09-verification-sweep.summary.md) | 12 | Every rescued structure built from its own config with no overrides; the locomotive at both release speeds |
+| [2026-11-09-locomotive-config-check](2026-11-09-locomotive-config-check.summary.md) | 1 | The locomotive from its saved config with both release-ramp variables unset: the console reports release_ramp_s 0.5 from the config; completed 8/8, 0 lasting and 1 transient break, 0 solver warnings, event log incomplete. One run, not a robustness result |
 
 ## Files
 
