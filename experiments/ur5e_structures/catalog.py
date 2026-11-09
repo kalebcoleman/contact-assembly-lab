@@ -627,7 +627,7 @@ def entry(name: str, runs: list[dict]) -> tuple[str, Results]:
         f"- **Layers:** {info['layers']}.",
         f"- **Bricks resting on two or more bricks:** {info['multi']}.",
         f"- **Weakest planned joint:** {info['weakest']} studs.",
-        f"- **Builds with:** {needs_text(name) or 'the controller defaults'}.",
+        *built_lines(name, found),
         f"- **Runs at these settings:** {found['runs']}, "
         f"{found['completed']} completed. Latest: {result}.",
     ]
@@ -647,6 +647,32 @@ def entry(name: str, runs: list[dict]) -> tuple[str, Results]:
         )
     lines += [f"- **Media:** {' · '.join(links)}", ""]
     return "\n".join(lines), found
+
+
+def built_lines(name: str, found: Results) -> list[str]:
+    """Say what a structure is run with, and whether that has built it.
+
+    "Builds with" is written only when a run at the structure's standard
+    settings completed; otherwise the settings are only what was attempted.
+
+    Args:
+        name: Structure name.
+        found: Its results from `results`.
+
+    Returns:
+        Catalog bullet lines.
+    """
+    settings = needs_text(name) or "the controller defaults"
+    if found["completed"]:
+        return [f"- **Builds with:** {settings}."]
+    lines = [f"- **Standard settings (attempted):** {settings}."]
+    if name in BLOCKED:
+        lines.append(f"- **Not built yet:** {BLOCKED[name]}.")
+    elif found["runs"]:
+        lines.append("- **Not built yet:** no run at these settings completed.")
+    else:
+        lines.append("- **Not built yet:** not run at these settings.")
+    return lines
 
 
 def media_for(name: str) -> tuple[str | None, str | None]:
@@ -821,7 +847,9 @@ def main() -> None:
         "",
         "**Runs** counts the sweep runs at each structure's standard settings: the",
         "controller defaults (breakage on, 1 N press, 1 s release, gripper",
-        "contacts logged) plus anything its config adds, shown as *Builds with*.",
+        "contacts logged) plus anything its config adds. *Builds with* names them",
+        "only when a run at them completed; otherwise the entry says *Standard",
+        "settings (attempted)* and *Not built yet*, with the reason.",
         "Runs at other settings are listed in each entry as attempts. Repeated",
         "runs of a structure give the same result, because the simulation is",
         "deterministic. These are simulation results",

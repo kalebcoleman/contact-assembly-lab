@@ -115,6 +115,8 @@ are documented results, not dead ends.
   (attach the load to the 2x6, then place the pair); that needs controller
   support for moving a built part and is future work.
 
+<a id="mechanisms"></a>
+
 ## How builds fail
 
 The letters in the catalog refer to these mechanisms.

@@ -10,7 +10,9 @@ Every structure the UR5e builds in Isaac Sim 6.2. Each entry shows:
 
 **Runs** counts the sweep runs at each structure's standard settings: the
 controller defaults (breakage on, 1 N press, 1 s release, gripper
-contacts logged) plus anything its config adds, shown as *Builds with*.
+contacts logged) plus anything its config adds. *Builds with* names them
+only when a run at them completed; otherwise the entry says *Standard
+settings (attempted)* and *Not built yet*, with the reason.
 Runs at other settings are listed in each entry as attempts. Repeated
 runs of a structure give the same result, because the simulation is
 deterministic. These are simulation results
@@ -231,7 +233,8 @@ Four 2x2 legs two bricks high under two 2x6 tops.
 - **Layers:** 3.
 - **Bricks resting on two or more bricks:** 2.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** no room for the RG2 fingers between legs 2 studs apart (C); the trestle table builds.
 - **Runs at these settings:** 2, 0 completed. Latest: failed (no room to release), 4/10 connected at the end.
 - **Also tried (1 mm release margin, 0.5 mm minimum release clearance):** failed (a joint broke), 6/10 connected at the end.
 - **Failure mechanism:** C: legs 2 studs apart leave no room for the RG2 fingers to let go. See [FAILURES.md](../experiments/ur5e_structures/FAILURES.md#mechanisms).
@@ -249,7 +252,8 @@ The table's ten bricks, with each grip chosen for room. The legs are gripped acr
 - **Layers:** 3.
 - **Bricks resting on two or more bricks:** 2.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** a 2x8 gripped end to end slips out of the fingers.
 - **Runs at these settings:** 1, 0 completed. Latest: failed (grasp failed), 8/10 connected at the end.
 - **Media:** [video (MP4)](media/table_grip.mp4) · [config](../experiments/ur5e_structures/table_grip.json)
 
@@ -265,7 +269,8 @@ Four 2x2 legs two bricks high, 4 studs apart both ways, under two 2x8 tops gripp
 - **Layers:** 3.
 - **Bricks resting on two or more bricks:** 2.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** the 4-stud leg joints break while the tops go on (B).
 - **Runs at these settings:** 1, 0 completed. Latest: failed (a joint broke), 7/10 connected at the end.
 - **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 8/10 connected at the end.
 - **Also tried (0.5 s gripper release):** failed (a joint broke), 6/10 connected at the end.
@@ -341,7 +346,8 @@ Ten 2x4 bricks, each a quarter turn from the one below.
 - **Layers:** 10.
 - **Bricks resting on two or more bricks:** 0.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** its quarter-turned 4-stud joints break on release (E).
 - **Runs at these settings:** 2, 0 completed. Latest: failed (a joint broke), 1/10 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 1/10 connected at the end.
 - **Also tried (0.5 s gripper release):** failed (a joint broke), 3/10 connected at the end.
@@ -404,7 +410,8 @@ A 2x6 rests by one end on a 2x2 column, with a 2x2 pressed onto its free tip.
 - **Layers:** 4.
 - **Bricks resting on two or more bricks:** 0.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** the press on the overhang levers the column (A); needs building as a sub-assembly.
 - **Runs at these settings:** 3, 0 completed. Latest: failed (a joint broke), 3/4 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 3/4 connected at the end.
 - **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 3/4 connected at the end.
@@ -425,7 +432,8 @@ Two 2x2 bricks pressed onto the free tip of the cantilever.
 - **Layers:** 5.
 - **Bricks resting on two or more bricks:** 0.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** the press on the overhang levers the column (A); needs building as a sub-assembly.
 - **Runs at these settings:** 2, 0 completed. Latest: failed (a brick did not seat), 2/5 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 3/5 connected at the end.
 - **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 2/5 connected at the end.
@@ -481,7 +489,8 @@ Ten 2x2 bricks: every joint has only 4 studs.
 - **Layers:** 10.
 - **Bricks resting on two or more bricks:** 0.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** ten stacked 4-stud joints; the base breaks on a release (B).
 - **Runs at these settings:** 2, 0 completed. Latest: failed (a joint broke), 3/10 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 3/10 connected at the end.
 - **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 3/10 connected at the end.
@@ -502,7 +511,8 @@ Six 2x4 bricks, each shifted 2 studs (4-stud joints).
 - **Layers:** 6.
 - **Bricks resting on two or more bricks:** 0.
 - **Weakest planned joint:** 4 studs.
-- **Builds with:** the controller defaults.
+- **Standard settings (attempted):** the controller defaults.
+- **Not built yet:** 2-stud shifts leave 4-stud joints that break on release (B).
 - **Runs at these settings:** 2, 0 completed. Latest: failed (a joint broke), 3/6 connected at the end.
 - **Also tried (2 s gripper release):** failed (a joint broke), 2/6 connected at the end.
 - **Also tried (ease off 0.5 mm before letting go):** failed (a joint broke), 4/6 connected at the end.
