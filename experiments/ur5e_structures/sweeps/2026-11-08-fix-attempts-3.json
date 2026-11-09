@@ -153,7 +153,7 @@
     },
     {
       "label": "locomotive_ease_off",
-      "config": "experiments/ur5e_structures/locomotive.json",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
       "environment": {
         "ASSEMBLY_BREAKAGE": "1",
         "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
@@ -164,7 +164,7 @@
     },
     {
       "label": "locomotive_release_fast",
-      "config": "experiments/ur5e_structures/locomotive.json",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
       "environment": {
         "ASSEMBLY_BREAKAGE": "1",
         "ASSEMBLY_RELEASE_RAMP_S": "0.5"

@@ -85,8 +85,8 @@ ENTRIES = {
     "locomotive": (
         "showcase",
         "Steam locomotive",
-        "Three wheels, a 2x10 chassis that rests on all three, a cab with an "
-        "overhanging roof, a boiler and a chimney.",
+        "Three wheels, a 2x10 chassis that rests on all three, a cab under an "
+        "overhanging roof, a boiler and a smokestack.",
         "",
     ),
     "lighthouse": (
@@ -236,6 +236,21 @@ ENTRIES = {
 
 # Facts a reader needs that the trials do not show.
 NOTES: dict[str, str] = {}
+
+# Structures that do not build yet with any setting tried, and why.
+BLOCKED = {
+    "table": "no room for the RG2 fingers between legs 2 studs apart (C); "
+    "the trestle table builds",
+    "table_grip": "a 2x8 gripped end to end slips out of the fingers",
+    "table_wide": "the 4-stud leg joints break while the tops go on (B)",
+    "spiral_tower": "its quarter-turned 4-stud joints break on release (E)",
+    "tower_2x2": "ten stacked 4-stud joints; the base breaks on a release (B)",
+    "lean_6": "2-stud shifts leave 4-stud joints that break on release (B)",
+    "cantilever": "the press on the overhang levers the column (A); "
+    "needs building as a sub-assembly",
+    "cantilever_tip2": "the press on the overhang levers the column (A); "
+    "needs building as a sub-assembly",
+}
 
 # Committed media are named after the run that made them.
 MEDIA_STEM = {
@@ -420,6 +435,8 @@ def sweep_runs() -> dict[str, list[dict]]:
         run differs from the structure's standard settings (the controller
         defaults with its config's "controller" block and grip), empty if not.
     """
+    from experiments.ur5e_structures.summarize_sweep import CONTROLLER_DEFAULTS
+
     runs: dict[str, list[dict]] = {}
     for path in sorted((STRUCTURES / "sweeps").glob("*.summary.json")):
         summary = json.loads(path.read_text())
@@ -435,6 +452,15 @@ def sweep_runs() -> dict[str, list[dict]]:
                 for key, value in run["settings"].items()
                 if key not in COSMETIC and float(value["value"]) != float(standard[key])
             }
+            plain = (
+                variant is None
+                and not run.get("grasp_offsets_used", False)
+                and all(
+                    float(value["value"]) == float(CONTROLLER_DEFAULTS[key])
+                    for key, value in run["settings"].items()
+                    if key not in COSMETIC
+                )
+            )
             if variant is not None:
                 changed = {"variant": variant["variant"], **changed}
             elif run.get("grasp_offsets_used", False) != needs_grip(structure):
@@ -453,6 +479,7 @@ def sweep_runs() -> dict[str, list[dict]]:
                     "total": run["bricks_total"],
                     "failure_class": run["failure_class"],
                     "changed": changed,
+                    "plain_defaults": plain,
                 }
             )
     for entries in runs.values():
@@ -706,35 +733,47 @@ def index(all_runs: dict[str, list[dict]]) -> dict[str, object]:
 
 
 def results_table(all_runs: dict[str, list[dict]]) -> list[str]:
-    """Build the results table: what each structure tests and how it went.
+    """Build the results table: defaults, what a structure needs, and with it.
 
     Args:
         all_runs: Runs by structure from `sweep_runs`.
 
     Returns:
-        Markdown table lines (default settings only).
+        Markdown table lines.
     """
     lines = [
-        "| Structure | What it tests | Runs | Completed | What stopped it | "
-        "Mechanism |",
+        "| Structure | What it tests | At the controller defaults | What it needs | "
+        "With it | Other attempts |",
         "|---|---|---|---|---|---|",
     ]
-    for name, (section, title, _, mechanism) in ENTRIES.items():
-        found = results(all_runs.get(name, []))
-        if not found["runs"]:
+    for name, (_, title, _, _) in ENTRIES.items():
+        runs = all_runs.get(name, [])
+        if not runs:
             continue
-        stops = sorted(
-            {
-                STOP[r["failure_class"]]
-                for r in all_runs[name]
-                if not r["changed"] and r["outcome"] != "completed"
-            }
+        plain = [r for r in runs if r["plain_defaults"]]
+        standard = [r for r in runs if not r["changed"]]
+        needs = needs_text(name)
+        at_defaults = (
+            f"{sum(r['outcome'] == 'completed' for r in plain)} of {len(plain)} built"
+            if plain
+            else "—"
         )
-        letter = mechanism.split(":")[0] if mechanism else ""
+        if name in BLOCKED:
+            need, with_it = f"not buildable yet: {BLOCKED[name]}", "—"
+        elif needs:
+            need = needs
+            with_it = (
+                f"{sum(r['outcome'] == 'completed' for r in standard)} of "
+                f"{len(standard)} built"
+                if standard
+                else "not run yet"
+            )
+        else:
+            need, with_it = "nothing", "—"
+        others = len(runs) - len(plain) - (len(standard) if needs else 0)
         lines.append(
             f"| [{title}](../../docs/STRUCTURES.md#{name}) | {TESTS[name]} | "
-            f"{found['runs']} | {found['completed']} | {'; '.join(stops) or '—'} | "
-            f"{letter or '—'} |"
+            f"{at_defaults} | {need} | {with_it} | {others} |"
         )
     return lines
 

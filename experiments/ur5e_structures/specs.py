@@ -154,8 +154,8 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (A, 5, (6, 9), 1, [160, 30, 30]),
         (D, 6, (8, 9), 0, [110, 110, 115]),
     ],
-    # Steam locomotive: three wheels, a 2x10 chassis resting on all three, a
-    # two-brick cab under an overhanging roof, a boiler and a tall smokestack.
+    # Steam locomotive: three wheels, a 2x10 chassis resting on all three, a cab
+    # under an overhanging roof, a boiler and a smokestack.
     "locomotive": [
         (D, None, (3, 9), 1, [60, 60, 66]),
         (D, None, (7, 9), 1, [60, 60, 66]),
@@ -163,10 +163,8 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (L10, 0, (3, 9), 1, [170, 30, 30]),
         (A, 3, (3, 9), 1, [30, 95, 55]),
         (A, 3, (9, 9), 1, [30, 95, 55]),
-        (A, 4, (3, 9), 1, [30, 95, 55]),
+        (L6, 4, (2, 9), 1, [170, 30, 30]),
         (D, 5, (11, 9), 1, [45, 45, 50]),
-        (L6, 6, (2, 9), 1, [170, 30, 30]),
-        (D, 7, (11, 9), 1, [45, 45, 50]),
     ],
     # Lighthouse: a 4x6 rock, a tower striped red and white, a lamp and a cap.
     "lighthouse": [
@@ -250,6 +248,22 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (L8, 4, (6, 12), 1, [150, 100, 55]),
     ],
 }
+
+
+# The first locomotive design: a two-brick cab and a two-brick smokestack. It
+# places 9 of 10 bricks, then the cab or stack loses a 4-stud joint (FAILURES.md).
+LOCOMOTIVE_TALL: list[AbsolutePart] = [
+    (D, None, (3, 9), 1, [60, 60, 66]),
+    (D, None, (7, 9), 1, [60, 60, 66]),
+    (D, None, (11, 9), 1, [60, 60, 66]),
+    (L10, 0, (3, 9), 1, [170, 30, 30]),
+    (A, 3, (3, 9), 1, [30, 95, 55]),
+    (A, 3, (9, 9), 1, [30, 95, 55]),
+    (A, 4, (3, 9), 1, [30, 95, 55]),
+    (D, 5, (11, 9), 1, [45, 45, 50]),
+    (L6, 6, (2, 9), 1, [170, 30, 30]),
+    (D, 7, (11, 9), 1, [45, 45, 50]),
+]
 
 
 def rotate(quarter_turns: int, x: int, y: int) -> tuple[int, int]:
@@ -399,6 +413,7 @@ NEEDS: dict[str, dict] = {
     "lean_ladder": {"controller": {"release_ramp_s": 0.5}},
     "l_corner": {"controller": {"release_ramp_s": 0.5}},
     "castle_gate": {"controller": {"release_lift_m": 0.0005, "release_ramp_s": 0.5}},
+    "locomotive": {"controller": {"release_ramp_s": 0.5}},
     "mixed_tower": {"grip_over_support": True},
 }
 
@@ -470,19 +485,12 @@ ATTEMPTS = {
     "locomotive_short_stack": (
         "locomotive",
         "one-brick smokestack",
-        lambda _: absolute_config("locomotive", SHOWCASE["locomotive"][:-1]),
+        lambda _: absolute_config("locomotive", LOCOMOTIVE_TALL[:-1]),
     ),
-    "locomotive_low_cab": (
+    "locomotive_tall_cab": (
         "locomotive",
-        "one-brick cab under the roof, one-brick smokestack",
-        lambda _: absolute_config(
-            "locomotive",
-            [
-                *SHOWCASE["locomotive"][:6],
-                (L6, 4, (2, 9), 1, [170, 30, 30]),
-                (D, 5, (11, 9), 1, [45, 45, 50]),
-            ],
-        ),
+        "two-brick cab and two-brick smokestack (the first design)",
+        lambda _: absolute_config("locomotive", LOCOMOTIVE_TALL),
     ),
     "castle_gate_two_battlements": (
         "castle_gate",

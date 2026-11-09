@@ -10,7 +10,7 @@
   "runs": [
     {
       "label": "locomotive",
-      "config": "experiments/ur5e_structures/locomotive.json",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },

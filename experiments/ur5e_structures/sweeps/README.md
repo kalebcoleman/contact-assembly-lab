@@ -14,6 +14,8 @@ ground truth; nothing in this folder drives a robot.
 | [2026-11-08-catalog-sweep](2026-11-08-catalog-sweep.summary.md) | 24 | Every structure without a close-up, built again with capture for the catalog; also repeats structures for the run counts |
 | [2026-11-08-fix-attempts-1](2026-11-08-fix-attempts-1.summary.md) | 17 | Round 1 of fixes for every structure that fails at the default settings: 2 s release, tighter release margin, grip variants, deeper press |
 | [2026-11-08-fix-attempts-2](2026-11-08-fix-attempts-2.summary.md) | 23 | Round 2: easing off the press before release, a 0.5 s release, mixed tower and table variants, locomotive and castle gate design variants |
+| [2026-11-08-fix-attempts-3](2026-11-08-fix-attempts-3.summary.md) | 19 | Round 3: both release fixes together, the grip over the support, and the one-brick-cab locomotive |
+| [2026-11-09-verification-sweep](2026-11-09-verification-sweep.summary.md) | 12 | Every rescued structure built from its own config with no overrides; the locomotive at both release speeds |
 
 ## Files
 

@@ -1964,7 +1964,7 @@
     },
     {
       "label": "locomotive_ease_off",
-      "config": "experiments/ur5e_structures/locomotive.json",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
       "run": "20261108T235309993968Z",
       "recording": "20261108T235327.282804Z-structure_locomotive.jsonl",
       "utilization_csv": "utilization-structure_locomotive-20261108T235327.csv",
@@ -2119,7 +2119,7 @@
     },
     {
       "label": "locomotive_release_fast",
-      "config": "experiments/ur5e_structures/locomotive.json",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
       "run": "20261108T235911588320Z",
       "recording": "20261108T235928.924137Z-structure_locomotive.jsonl",
       "utilization_csv": "utilization-structure_locomotive-20261108T235928.csv",

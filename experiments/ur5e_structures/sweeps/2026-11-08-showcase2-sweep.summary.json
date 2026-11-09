@@ -3,7 +3,7 @@
   "runs": [
     {
       "label": "locomotive",
-      "config": "experiments/ur5e_structures/locomotive.json",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
       "run": "20261108T195810299956Z",
       "recording": "20261108T195828.239069Z-structure_locomotive.jsonl",
       "utilization_csv": "utilization-structure_locomotive-20261108T195828.csv",

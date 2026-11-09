@@ -12,7 +12,9 @@
     "locomotive_4",
     "locomotive_5",
     "locomotive_6",
-    "locomotive_7"
+    "locomotive_7",
+    "locomotive_8",
+    "locomotive_9"
   ],
   "brick_dimensions": [
     [
@@ -43,6 +45,16 @@
     [
       2,
       4,
+      3
+    ],
+    [
+      2,
+      4,
+      3
+    ],
+    [
+      2,
+      2,
       3
     ],
     [
@@ -88,6 +100,16 @@
       55
     ],
     [
+      30,
+      95,
+      55
+    ],
+    [
+      45,
+      45,
+      50
+    ],
+    [
       170,
       30,
       30
@@ -125,11 +147,19 @@
     ],
     [
       -0.47,
-      -0.335
+      -0.345
     ],
     [
       -0.56,
       -0.505
+    ],
+    [
+      -0.56,
+      -0.38
+    ],
+    [
+      -0.47,
+      -0.29
     ]
   ],
   "support_bricks": [
@@ -140,7 +170,9 @@
     3,
     3,
     4,
-    5
+    5,
+    6,
+    7
   ],
   "placement_offsets": [
     [
@@ -169,6 +201,14 @@
     ],
     [
       0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
       -1
     ],
     [
@@ -184,9 +224,11 @@
     0,
     0,
     0,
+    0,
+    0,
     0
   ],
   "min_same_layer_gap_studs": 2,
   "variant_of": "locomotive",
-  "variant": "one-brick cab under the roof, one-brick smokestack"
+  "variant": "two-brick cab and two-brick smokestack (the first design)"
 }

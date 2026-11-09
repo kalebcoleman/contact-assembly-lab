@@ -14,8 +14,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T002225227866Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/tree.mp4",
       "media": null
     },
     {
@@ -24,8 +24,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T002633591169Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/tower.mp4",
       "media": null
     },
     {
@@ -34,8 +34,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T003045533041Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/house.mp4",
       "media": null
     },
     {
@@ -44,8 +44,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T003626663454Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/column_10.mp4",
       "media": null
     },
     {
@@ -54,8 +54,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T004255781633Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/cross_tower.mp4",
       "media": null
     },
     {
@@ -64,8 +64,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T004918193894Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/zigzag_6.mp4",
       "media": null
     },
     {
@@ -74,8 +74,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T005323253550Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/lean_ladder.mp4",
       "media": null
     },
     {
@@ -84,8 +84,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T005817139893Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/l_corner.mp4",
       "media": null
     },
     {
@@ -94,8 +94,8 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T010108729819Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/castle_gate.mp4",
       "media": null
     },
     {
@@ -104,29 +104,30 @@
       "environment": {
         "ASSEMBLY_BREAKAGE": "1"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T010612115750Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/mixed_tower.mp4",
       "media": null
     },
     {
       "label": "locomotive_low_cab",
-      "config": "experiments/ur5e_structures/attempts/locomotive_low_cab.json",
+      "config": "experiments/ur5e_structures/locomotive.json",
       "environment": {
-        "ASSEMBLY_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "1.0"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T011127574622Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/locomotive_low_cab.mp4",
       "media": null
     },
     {
       "label": "locomotive_low_cab_release_fast",
-      "config": "experiments/ur5e_structures/attempts/locomotive_low_cab.json",
+      "config": "experiments/ur5e_structures/locomotive.json",
       "environment": {
         "ASSEMBLY_BREAKAGE": "1",
         "ASSEMBLY_RELEASE_RAMP_S": "0.5"
       },
-      "run": null,
-      "video": null,
+      "run": "20261109T011701638022Z",
+      "video": ".cache/videos/2026-11-09-verification-sweep/locomotive_low_cab_release_fast.mp4",
       "media": null
     }
   ]
