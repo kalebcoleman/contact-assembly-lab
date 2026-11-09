@@ -377,7 +377,7 @@ class ResultsViewerTests(TestCase):
         metadata["created_utc"] = "2026-11-01T00:00:00+00:00"
         (self.evidence / "ur5e-stack-four-run.jsonl.gz").unlink()
         with (
-            patch.object(Path, "glob", side_effect=[[removed, self.raw], [], []]),
+            patch.object(Path, "glob", side_effect=[[removed, self.raw], [], [], []]),
             patch.object(
                 self.collection,
                 "read_metadata",
@@ -757,6 +757,54 @@ class ResultsViewerTests(TestCase):
             server.shutdown()
             worker.join(timeout=5)
             server.server_close()
+
+    def test_runs_carry_sweep_evidence_and_historical_structures(self) -> None:
+        """Sweep summaries attach to their recording; removed structures are marked."""
+        header = dumps(
+            {"kind": "metadata", "experiment": "structure_beta", "created_utc": "b"}
+        )
+        (self.outputs / "beta.jsonl").write_text(header + "\n")
+        removed = header.replace("structure_beta", "structure_gone").replace(
+            '"b"', '"c"'
+        )
+        (self.outputs / "gone.jsonl").write_text(removed + "\n")
+        docs = self.root / "docs/structures"
+        docs.mkdir(parents=True)
+        (docs / "index.json").write_text(dumps({"structures": {"beta": {}}}))
+        sweeps = self.root / "experiments/ur5e_structures/sweeps"
+        sweeps.mkdir(parents=True)
+        evidence = {
+            "label": "beta_check",
+            "run": "20261109T000000000000Z",
+            "recording": "beta.jsonl",
+            "breakage_enabled": True,
+            "contact_mode": "fail",
+            "outcome": "completed",
+            "failure": None,
+            "bricks_connected_end": 2,
+            "bricks_total": 2,
+            "lasting_breaks": 0,
+            "transient_breaks": 1,
+            "solver_warnings": {"not_converged": 3, "high_slack": 0},
+            "event_log_complete": False,
+            "breaks": [],
+            "settings": {},
+        }
+        (sweeps / "check.summary.json").write_text(
+            dumps({"sweep": "check", "runs": [evidence]})
+        )
+        runs = {run["filename"]: run for run in self.collection.refresh()}
+        beta = runs["beta.jsonl"]
+        self.assertEqual(beta["structure"], "beta")
+        self.assertTrue(beta["in_library"])
+        self.assertEqual(beta["sweep"]["sweep"], "check")
+        self.assertEqual(beta["sweep"]["transient_breaks"], 1)
+        self.assertFalse(beta["sweep"]["event_log_complete"])
+        self.assertNotIn("settings", beta["sweep"])
+        self.assertFalse(runs["gone.jsonl"]["in_library"])
+        self.assertIsNone(runs["gone.jsonl"]["sweep"])
+        self.assertIsNone(runs["sample-stack-four.jsonl"]["structure"])
+        self.assertFalse(runs["sample-stack-four.jsonl"]["in_library"])
 
 
 if __name__ == "__main__":

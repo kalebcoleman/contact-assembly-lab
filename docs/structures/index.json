@@ -38,6 +38,7 @@
       "still": "media/dog_breakage_on_closeup.jpg",
       "video": "media/dog_breakage_on.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 3,
       "default_completed": 3,
       "latest": {
@@ -45,7 +46,16 @@
         "connected": 10,
         "total": 10,
         "stop": "",
-        "run": "20261108T174419340647Z"
+        "sweep": "2026-11-08-showcase-sweep",
+        "run": "20261108T174419340647Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 2,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -60,6 +70,7 @@
       "still": "media/bridge_closeup.jpg",
       "video": "media/bridge.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 1,
       "default_completed": 1,
       "latest": {
@@ -67,7 +78,16 @@
         "connected": 7,
         "total": 7,
         "stop": "",
-        "run": "20261108T173138184108Z"
+        "sweep": "2026-11-08-showcase-sweep",
+        "run": "20261108T173138184108Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 1,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -82,6 +102,7 @@
       "still": "media/house_closeup.jpg",
       "video": "media/house.mp4",
       "needs": "ease off 0.5 mm before letting go",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -89,7 +110,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261109T003045533041Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T003045533041Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 4,
+        "solver_warnings": {
+          "not_converged": 1,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": [
         {
@@ -98,7 +128,16 @@
           "connected": 2,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T173637057510Z"
+          "sweep": "2026-11-08-showcase-sweep",
+          "run": "20261108T173637057510Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release, no easing off (controller default)",
@@ -106,7 +145,16 @@
           "connected": 8,
           "total": 8,
           "stop": "",
-          "run": "20261108T175103453535Z"
+          "sweep": "2026-11-08-showcase-sweep",
+          "run": "20261108T175103453535Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 4,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 3
+          },
+          "event_log_complete": false
         },
         {
           "settings": "press 0.2 mm below seated, no easing off (controller default)",
@@ -114,7 +162,16 @@
           "connected": 2,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T175646896585Z"
+          "sweep": "2026-11-08-showcase-sweep",
+          "run": "20261108T175646896585Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release, no easing off (controller default)",
@@ -122,7 +179,16 @@
           "connected": 8,
           "total": 8,
           "stop": "",
-          "run": "20261108T221623741411Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T221623741411Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": false
         }
       ]
     },
@@ -137,6 +203,7 @@
       "still": "media/log_cabin_closeup.jpg",
       "video": "media/log_cabin.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 1,
       "default_completed": 1,
       "latest": {
@@ -144,7 +211,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261108T173910080438Z"
+        "sweep": "2026-11-08-showcase-sweep",
+        "run": "20261108T173910080438Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 0,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -159,6 +235,7 @@
       "still": "media/locomotive_closeup.jpg",
       "video": "media/locomotive.mp4",
       "needs": "0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -166,7 +243,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261109T020147942410Z"
+        "sweep": "2026-11-09-locomotive-config-check",
+        "run": "20261109T020147942410Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 1,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": [
         {
@@ -175,7 +261,16 @@
           "connected": 8,
           "total": 10,
           "stop": "a brick slipped from the grasp",
-          "run": "20261108T195810299956Z"
+          "sweep": "2026-11-08-showcase2-sweep",
+          "run": "20261108T195810299956Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         },
         {
           "settings": "one-brick smokestack, 1 s gripper release (controller default)",
@@ -183,7 +278,16 @@
           "connected": 8,
           "total": 9,
           "stop": "a joint broke",
-          "run": "20261108T224051076705Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T224051076705Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 5
+          },
+          "event_log_complete": true
         },
         {
           "settings": "one-brick smokestack, 1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -191,7 +295,16 @@
           "connected": 8,
           "total": 9,
           "stop": "a joint broke",
-          "run": "20261108T234120121381Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T234120121381Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "one-brick smokestack",
@@ -199,7 +312,16 @@
           "connected": 8,
           "total": 9,
           "stop": "a joint broke",
-          "run": "20261108T234733919652Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T234733919652Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 6
+          },
+          "event_log_complete": true
         },
         {
           "settings": "two-brick cab and two-brick smokestack (the first design), 1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -207,7 +329,16 @@
           "connected": 8,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T235309993968Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T235309993968Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 6
+          },
+          "event_log_complete": true
         },
         {
           "settings": "two-brick cab and two-brick smokestack (the first design)",
@@ -215,7 +346,16 @@
           "connected": 8,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T235911588320Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T235911588320Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 5
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -223,7 +363,16 @@
           "connected": 7,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261109T011127574622Z"
+          "sweep": "2026-11-09-verification-sweep",
+          "run": "20261109T011127574622Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 6,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -238,6 +387,7 @@
       "still": "media/lighthouse_closeup.jpg",
       "video": "media/lighthouse.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 1,
       "default_completed": 1,
       "latest": {
@@ -245,7 +395,16 @@
         "connected": 7,
         "total": 7,
         "stop": "",
-        "run": "20261108T200444481750Z"
+        "sweep": "2026-11-08-showcase2-sweep",
+        "run": "20261108T200444481750Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -260,6 +419,7 @@
       "still": "media/castle_gate_closeup.jpg",
       "video": "media/castle_gate.mp4",
       "needs": "ease off 0.5 mm before letting go, 0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -267,7 +427,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261109T010108729819Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T010108729819Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 2,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 4
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -276,7 +445,16 @@
           "connected": 7,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T200918091893Z"
+          "sweep": "2026-11-08-showcase2-sweep",
+          "run": "20261108T200918091893Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release, no easing off (controller default)",
@@ -284,7 +462,16 @@
           "connected": 3,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T201434592508Z"
+          "sweep": "2026-11-08-showcase2-sweep",
+          "run": "20261108T201434592508Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -292,7 +479,16 @@
           "connected": 7,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T214659571270Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T214659571270Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         },
         {
           "settings": "no easing off (controller default)",
@@ -300,7 +496,16 @@
           "connected": 2,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T222130700965Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T222130700965Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "battlements over the towers only, 1 s gripper release (controller default), no easing off (controller default)",
@@ -308,7 +513,16 @@
           "connected": 7,
           "total": 7,
           "stop": "",
-          "run": "20261108T224650078431Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T224650078431Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0
+          },
+          "event_log_complete": false
         }
       ]
     },
@@ -323,6 +537,7 @@
       "still": "media/tree_closeup.jpg",
       "video": "media/tree.mp4",
       "needs": "ease off 0.5 mm before letting go",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -330,7 +545,16 @@
         "connected": 6,
         "total": 6,
         "stop": "",
-        "run": "20261109T002225227866Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T002225227866Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 5,
+        "solver_warnings": {
+          "not_converged": 14,
+          "high_slack": 4
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -339,7 +563,16 @@
           "connected": 5,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T041311129876Z"
+          "sweep": "2026-11-08-capture-sweep",
+          "run": "20261108T041311129876Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 11,
+            "high_slack": 6
+          },
+          "event_log_complete": true
         },
         {
           "settings": "no easing off (controller default)",
@@ -347,7 +580,16 @@
           "connected": 5,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T184112276353Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T184112276353Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 11,
+            "high_slack": 6
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release, no easing off (controller default)",
@@ -355,7 +597,16 @@
           "connected": 4,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T203808941817Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T203808941817Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 9,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release, no easing off (controller default)",
@@ -363,7 +614,16 @@
           "connected": 1,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T220401879111Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T220401879111Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 3,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -378,6 +638,7 @@
       "still": "media/table_closeup.jpg",
       "video": "media/table.mp4",
       "needs": "",
+      "blocked": "no room for the RG2 fingers between legs 2 studs apart (C); the trestle table builds",
       "default_runs": 2,
       "default_completed": 0,
       "latest": {
@@ -385,7 +646,16 @@
         "connected": 4,
         "total": 10,
         "stop": "no room to release",
-        "run": "20261108T184747929394Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T184747929394Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 0,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -394,7 +664,16 @@
           "connected": 6,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T205519575411Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T205519575411Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 4,
+          "solver_warnings": {
+            "not_converged": 2,
+            "high_slack": 5
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -409,6 +688,7 @@
       "still": "media/table_grip_closeup.jpg",
       "video": "media/table_grip.mp4",
       "needs": "",
+      "blocked": "a 2x8 gripped end to end slips out of the fingers",
       "default_runs": 1,
       "default_completed": 0,
       "latest": {
@@ -416,7 +696,16 @@
         "connected": 8,
         "total": 10,
         "stop": "grasp failed",
-        "run": "20261108T205959462286Z"
+        "sweep": "2026-11-08-fix-attempts-1",
+        "run": "20261108T205959462286Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 2,
+          "high_slack": 3
+        },
+        "event_log_complete": true
       },
       "attempts": []
     },
@@ -431,6 +720,7 @@
       "still": "media/table_wide_closeup.jpg",
       "video": "media/table_wide.mp4",
       "needs": "",
+      "blocked": "the 4-stud leg joints break while the tops go on (B)",
       "default_runs": 1,
       "default_completed": 0,
       "latest": {
@@ -438,7 +728,16 @@
         "connected": 7,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T223522461166Z"
+        "sweep": "2026-11-08-fix-attempts-2",
+        "run": "20261108T223522461166Z",
+        "breakage": true,
+        "lasting_breaks": 1,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 1
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -447,7 +746,16 @@
           "connected": 8,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T233026412389Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T233026412389Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release",
@@ -455,7 +763,16 @@
           "connected": 6,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T233631674921Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T233631674921Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 11,
+            "high_slack": 4
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -470,6 +787,7 @@
       "still": "media/trestle_table_closeup.jpg",
       "video": "media/trestle_table.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 1,
       "default_completed": 1,
       "latest": {
@@ -477,7 +795,16 @@
         "connected": 5,
         "total": 5,
         "stop": "",
-        "run": "20261108T210518733717Z"
+        "sweep": "2026-11-08-fix-attempts-1",
+        "run": "20261108T210518733717Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 0,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -492,6 +819,7 @@
       "still": "media/mixed_tower_closeup.jpg",
       "video": "media/mixed_tower.mp4",
       "needs": "grip half-supported bricks over their support",
+      "blocked": null,
       "default_runs": 1,
       "default_completed": 1,
       "latest": {
@@ -499,7 +827,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261109T010612115750Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T010612115750Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 6,
+        "solver_warnings": {
+          "not_converged": 26,
+          "high_slack": 2
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -508,7 +845,16 @@
           "connected": 5,
           "total": 8,
           "stop": "a brick did not seat",
-          "run": "20261108T020446313605Z"
+          "sweep": "2026-11-08-failure-sweep",
+          "run": "20261108T020446313605Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 2,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         },
         {
           "settings": "gripped at the middle",
@@ -516,7 +862,16 @@
           "connected": 5,
           "total": 8,
           "stop": "a brick did not seat",
-          "run": "20261108T185044436772Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T185044436772Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 2,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         },
         {
           "settings": "grip over the supported part",
@@ -524,7 +879,16 @@
           "connected": 5,
           "total": 8,
           "stop": "a brick did not seat",
-          "run": "20261108T210846707501Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T210846707501Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 16,
+            "high_slack": 4
+          },
+          "event_log_complete": true
         },
         {
           "settings": "press 1 mm below seated, gripped at the middle",
@@ -532,7 +896,16 @@
           "connected": 7,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T211303404743Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T211303404743Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 8,
+          "solver_warnings": {
+            "not_converged": 10,
+            "high_slack": 9
+          },
+          "event_log_complete": true
         },
         {
           "settings": "press 1 mm below seated, ease off 0.5 mm before letting go, gripped at the middle",
@@ -540,7 +913,16 @@
           "connected": 2,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T222712740092Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T222712740092Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 5
+          },
+          "event_log_complete": true
         },
         {
           "settings": "grip 8 mm toward the support (fingertip over the brick end)",
@@ -548,7 +930,16 @@
           "connected": 8,
           "total": 8,
           "stop": "",
-          "run": "20261108T222950902011Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T222950902011Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 6,
+          "solver_warnings": {
+            "not_converged": 26,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -563,6 +954,7 @@
       "still": "media/cross_tower_closeup.jpg",
       "video": "media/cross_tower.mp4",
       "needs": "0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -570,7 +962,16 @@
         "connected": 10,
         "total": 10,
         "stop": "",
-        "run": "20261109T004255781633Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T004255781633Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 9,
+        "solver_warnings": {
+          "not_converged": 10,
+          "high_slack": 5
+        },
+        "event_log_complete": false
       },
       "attempts": [
         {
@@ -579,7 +980,16 @@
           "connected": 1,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T020816492637Z"
+          "sweep": "2026-11-08-failure-sweep",
+          "run": "20261108T020816492637Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -587,7 +997,16 @@
           "connected": 1,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T185501653596Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T185501653596Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release",
@@ -595,7 +1014,16 @@
           "connected": 1,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T204146615012Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T204146615012Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -603,7 +1031,16 @@
           "connected": 3,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T213840939162Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T213840939162Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 172
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -618,6 +1055,7 @@
       "still": "media/spiral_tower_closeup.jpg",
       "video": "media/spiral_tower.mp4",
       "needs": "",
+      "blocked": "its quarter-turned 4-stud joints break on release (E)",
       "default_runs": 2,
       "default_completed": 0,
       "latest": {
@@ -625,7 +1063,16 @@
         "connected": 1,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T185708780338Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T185708780338Z",
+        "breakage": true,
+        "lasting_breaks": 1,
+        "transient_breaks": 0,
+        "solver_warnings": {
+          "not_converged": 4,
+          "high_slack": 0
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -634,7 +1081,16 @@
           "connected": 1,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T204357958860Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T204357958860Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release",
@@ -642,7 +1098,16 @@
           "connected": 3,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T225956023946Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T225956023946Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 3,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -657,6 +1122,7 @@
       "still": "media/l_corner_closeup.jpg",
       "video": "media/l_corner.mp4",
       "needs": "0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -664,7 +1130,16 @@
         "connected": 4,
         "total": 4,
         "stop": "",
-        "run": "20261109T005817139893Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T005817139893Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 1,
+        "solver_warnings": {
+          "not_converged": 10,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": [
         {
@@ -673,7 +1148,16 @@
           "connected": 2,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T014343916915Z"
+          "sweep": "2026-11-08-failure-sweep",
+          "run": "20261108T014343916915Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 12,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -681,7 +1165,16 @@
           "connected": 2,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T185914824485Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T185914824485Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 12,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release",
@@ -689,7 +1182,16 @@
           "connected": 2,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T204613725870Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T204613725870Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 13,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -697,7 +1199,16 @@
           "connected": 2,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T232010504281Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T232010504281Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 10,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -712,6 +1223,7 @@
       "still": "media/tower_closeup.jpg",
       "video": "media/tower.mp4",
       "needs": "ease off 0.5 mm before letting go",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -719,7 +1231,16 @@
         "connected": 6,
         "total": 6,
         "stop": "",
-        "run": "20261109T002633591169Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T002633591169Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 4,
+        "solver_warnings": {
+          "not_converged": 5,
+          "high_slack": 3
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -728,7 +1249,16 @@
           "connected": 5,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T014800234866Z"
+          "sweep": "2026-11-08-failure-sweep",
+          "run": "20261108T014800234866Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 5,
+            "high_slack": 45
+          },
+          "event_log_complete": true
         },
         {
           "settings": "no easing off (controller default)",
@@ -736,7 +1266,16 @@
           "connected": 5,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T190139579488Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T190139579488Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 5,
+            "high_slack": 45
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release, no easing off (controller default)",
@@ -744,7 +1283,16 @@
           "connected": 2,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T201752758338Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T201752758338Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release, no easing off (controller default)",
@@ -752,7 +1300,16 @@
           "connected": 1,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T220557763037Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T220557763037Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -767,6 +1324,7 @@
       "still": "media/cantilever_failure_closeup.jpg",
       "video": "media/cantilever_failure.mp4",
       "needs": "",
+      "blocked": "the press on the overhang levers the column (A); needs building as a sub-assembly",
       "default_runs": 3,
       "default_completed": 0,
       "latest": {
@@ -774,7 +1332,16 @@
         "connected": 3,
         "total": 4,
         "stop": "a joint broke",
-        "run": "20261108T190539968195Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T190539968195Z",
+        "breakage": true,
+        "lasting_breaks": 1,
+        "transient_breaks": 1,
+        "solver_warnings": {
+          "not_converged": 1,
+          "high_slack": 14
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -783,7 +1350,16 @@
           "connected": 3,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T204856963798Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T204856963798Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 7
+          },
+          "event_log_complete": true
         },
         {
           "settings": "ease off 0.5 mm before letting go",
@@ -791,7 +1367,16 @@
           "connected": 3,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T215211606629Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T215211606629Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 169
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release",
@@ -799,7 +1384,16 @@
           "connected": 3,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T222409966625Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T222409966625Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 6,
+            "high_slack": 12
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release, ease off 0.5 mm before letting go",
@@ -807,7 +1401,16 @@
           "connected": 1,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261109T001246974986Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261109T001246974986Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -822,6 +1425,7 @@
       "still": "media/cantilever_tip2_closeup.jpg",
       "video": "media/cantilever_tip2.mp4",
       "needs": "",
+      "blocked": "the press on the overhang levers the column (A); needs building as a sub-assembly",
       "default_runs": 2,
       "default_completed": 0,
       "latest": {
@@ -829,7 +1433,16 @@
         "connected": 2,
         "total": 5,
         "stop": "a brick did not seat",
-        "run": "20261108T190847168351Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T190847168351Z",
+        "breakage": true,
+        "lasting_breaks": 1,
+        "transient_breaks": 1,
+        "solver_warnings": {
+          "not_converged": 1,
+          "high_slack": 7
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -838,7 +1451,16 @@
           "connected": 3,
           "total": 5,
           "stop": "a joint broke",
-          "run": "20261108T205214718396Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T205214718396Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 9
+          },
+          "event_log_complete": true
         },
         {
           "settings": "ease off 0.5 mm before letting go",
@@ -846,7 +1468,16 @@
           "connected": 2,
           "total": 5,
           "stop": "a joint broke",
-          "run": "20261108T232546767592Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T232546767592Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 5
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release",
@@ -854,7 +1485,16 @@
           "connected": 1,
           "total": 5,
           "stop": "a joint broke",
-          "run": "20261108T232823516305Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T232823516305Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -869,6 +1509,7 @@
       "still": "media/cantilever_root2_closeup.jpg",
       "video": "media/cantilever_root2.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -876,7 +1517,16 @@
         "connected": 5,
         "total": 5,
         "stop": "",
-        "run": "20261108T191200809471Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T191200809471Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 6,
+          "high_slack": 1
+        },
+        "event_log_complete": true
       },
       "attempts": []
     },
@@ -891,6 +1541,7 @@
       "still": "media/lean_ladder_closeup.jpg",
       "video": "media/lean_ladder.mp4",
       "needs": "0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -898,7 +1549,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261109T005323253550Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T005323253550Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 4,
+        "solver_warnings": {
+          "not_converged": 1,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": [
         {
@@ -907,7 +1567,16 @@
           "connected": 6,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T041742925499Z"
+          "sweep": "2026-11-08-capture-sweep",
+          "run": "20261108T041742925499Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 15
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -915,7 +1584,16 @@
           "connected": 6,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T191534021908Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T191534021908Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 15
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release",
@@ -923,7 +1601,16 @@
           "connected": 5,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T202748845868Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T202748845868Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 14
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -931,7 +1618,16 @@
           "connected": 6,
           "total": 8,
           "stop": "a joint broke",
-          "run": "20261108T231003548642Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T231003548642Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 4,
+            "high_slack": 19
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -946,6 +1642,7 @@
       "still": "media/tower_2x2_closeup.jpg",
       "video": "media/tower_2x2.mp4",
       "needs": "",
+      "blocked": "ten stacked 4-stud joints; the base breaks on a release (B)",
       "default_runs": 2,
       "default_completed": 0,
       "latest": {
@@ -953,7 +1650,16 @@
         "connected": 3,
         "total": 10,
         "stop": "a joint broke",
-        "run": "20261108T192010810827Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T192010810827Z",
+        "breakage": true,
+        "lasting_breaks": 1,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 4,
+          "high_slack": 2
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -962,7 +1668,16 @@
           "connected": 3,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T203207115954Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T203207115954Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 2,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         },
         {
           "settings": "ease off 0.5 mm before letting go",
@@ -970,7 +1685,16 @@
           "connected": 3,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T212413447811Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T212413447811Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 13,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release",
@@ -978,7 +1702,16 @@
           "connected": 2,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T220131259220Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T220131259220Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 9,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release, ease off 0.5 mm before letting go",
@@ -986,7 +1719,16 @@
           "connected": 3,
           "total": 10,
           "stop": "a brick slipped from the grasp",
-          "run": "20261109T000537628236Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261109T000537628236Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 3,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -1001,6 +1743,7 @@
       "still": "media/lean_6_closeup.jpg",
       "video": "media/lean_6.mp4",
       "needs": "",
+      "blocked": "2-stud shifts leave 4-stud joints that break on release (B)",
       "default_runs": 2,
       "default_completed": 0,
       "latest": {
@@ -1008,7 +1751,16 @@
         "connected": 3,
         "total": 6,
         "stop": "a joint broke",
-        "run": "20261108T192318113077Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T192318113077Z",
+        "breakage": true,
+        "lasting_breaks": 1,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 2,
+          "high_slack": 8
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -1017,7 +1769,16 @@
           "connected": 2,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T202028624545Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T202028624545Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 3,
+            "high_slack": 8
+          },
+          "event_log_complete": true
         },
         {
           "settings": "ease off 0.5 mm before letting go",
@@ -1025,7 +1786,16 @@
           "connected": 4,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T213515302016Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T213515302016Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 8
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release",
@@ -1033,7 +1803,16 @@
           "connected": 2,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T220753756617Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T220753756617Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 7,
+            "high_slack": 8
+          },
+          "event_log_complete": true
         },
         {
           "settings": "0.5 s gripper release, ease off 0.5 mm before letting go",
@@ -1041,7 +1820,16 @@
           "connected": 4,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261109T000908390292Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261109T000908390292Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 9
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -1056,6 +1844,7 @@
       "still": "media/zigzag_6_closeup.jpg",
       "video": "media/zigzag_6.mp4",
       "needs": "0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -1063,7 +1852,16 @@
         "connected": 6,
         "total": 6,
         "stop": "",
-        "run": "20261109T004918193894Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T004918193894Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 5,
+        "solver_warnings": {
+          "not_converged": 6,
+          "high_slack": 4
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -1072,7 +1870,16 @@
           "connected": 3,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T015336517997Z"
+          "sweep": "2026-11-08-failure-sweep",
+          "run": "20261108T015336517997Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 8,
+            "high_slack": 85
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -1080,7 +1887,16 @@
           "connected": 3,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T192615039503Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T192615039503Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 2,
+          "solver_warnings": {
+            "not_converged": 8,
+            "high_slack": 85
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release",
@@ -1088,7 +1904,16 @@
           "connected": 5,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T202314842401Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T202314842401Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 7,
+          "solver_warnings": {
+            "not_converged": 13,
+            "high_slack": 9
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -1096,7 +1921,16 @@
           "connected": 2,
           "total": 6,
           "stop": "a joint broke",
-          "run": "20261108T230317017510Z"
+          "sweep": "2026-11-08-fix-attempts-3",
+          "run": "20261108T230317017510Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 7,
+            "high_slack": 3
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -1111,6 +1945,7 @@
       "still": "media/column_10_closeup.jpg",
       "video": "media/column_10.mp4",
       "needs": "0.5 s gripper release",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -1118,7 +1953,16 @@
         "connected": 10,
         "total": 10,
         "stop": "",
-        "run": "20261109T003626663454Z"
+        "sweep": "2026-11-09-verification-sweep",
+        "run": "20261109T003626663454Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 5,
+        "solver_warnings": {
+          "not_converged": 6,
+          "high_slack": 2
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -1127,7 +1971,16 @@
           "connected": 9,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T021134129623Z"
+          "sweep": "2026-11-08-failure-sweep",
+          "run": "20261108T021134129623Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 7,
+          "solver_warnings": {
+            "not_converged": 12,
+            "high_slack": 12
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default)",
@@ -1135,7 +1988,16 @@
           "connected": 9,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T192913259579Z"
+          "sweep": "2026-11-08-catalog-sweep",
+          "run": "20261108T192913259579Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 7,
+          "solver_warnings": {
+            "not_converged": 12,
+            "high_slack": 12
+          },
+          "event_log_complete": true
         },
         {
           "settings": "2 s gripper release",
@@ -1143,7 +2005,16 @@
           "connected": 2,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T203524069238Z"
+          "sweep": "2026-11-08-fix-attempts-1",
+          "run": "20261108T203524069238Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 1,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         },
         {
           "settings": "1 s gripper release (controller default), ease off 0.5 mm before letting go",
@@ -1151,7 +2022,16 @@
           "connected": 6,
           "total": 10,
           "stop": "a joint broke",
-          "run": "20261108T211933906586Z"
+          "sweep": "2026-11-08-fix-attempts-2",
+          "run": "20261108T211933906586Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 5,
+          "solver_warnings": {
+            "not_converged": 3,
+            "high_slack": 5
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -1166,6 +2046,7 @@
       "still": "media/column_turned_closeup.jpg",
       "video": "media/column_turned.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -1173,7 +2054,16 @@
         "connected": 4,
         "total": 4,
         "stop": "",
-        "run": "20261108T193537021742Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T193537021742Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 3,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -1188,6 +2078,7 @@
       "still": "media/single_closeup.jpg",
       "video": "media/single.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -1195,7 +2086,16 @@
         "connected": 1,
         "total": 1,
         "stop": "",
-        "run": "20261108T193835858082Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T193835858082Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 0,
+        "solver_warnings": {
+          "not_converged": 0,
+          "high_slack": 0
+        },
+        "event_log_complete": false
       },
       "attempts": []
     },
@@ -1210,6 +2110,7 @@
       "still": "media/column_closeup.jpg",
       "video": "media/column.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 3,
       "default_completed": 3,
       "latest": {
@@ -1217,7 +2118,16 @@
         "connected": 4,
         "total": 4,
         "stop": "",
-        "run": "20261108T194006643378Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T194006643378Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 2,
+        "solver_warnings": {
+          "not_converged": 1,
+          "high_slack": 0
+        },
+        "event_log_complete": true
       },
       "attempts": [
         {
@@ -1226,7 +2136,16 @@
           "connected": 4,
           "total": 4,
           "stop": "",
-          "run": "20261108T043836377949Z"
+          "sweep": "2026-11-08-capture-sweep",
+          "run": "20261108T043836377949Z",
+          "breakage": true,
+          "lasting_breaks": 0,
+          "transient_breaks": 3,
+          "solver_warnings": {
+            "not_converged": 1,
+            "high_slack": 0
+          },
+          "event_log_complete": true
         },
         {
           "settings": "3 N press",
@@ -1234,7 +2153,16 @@
           "connected": 1,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T044224574750Z"
+          "sweep": "2026-11-08-capture-sweep",
+          "run": "20261108T044224574750Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 1
+          },
+          "event_log_complete": true
         },
         {
           "settings": "5 N press",
@@ -1242,7 +2170,16 @@
           "connected": 2,
           "total": 4,
           "stop": "a joint broke",
-          "run": "20261108T044451774358Z"
+          "sweep": "2026-11-08-capture-sweep",
+          "run": "20261108T044451774358Z",
+          "breakage": true,
+          "lasting_breaks": 1,
+          "transient_breaks": 0,
+          "solver_warnings": {
+            "not_converged": 0,
+            "high_slack": 2
+          },
+          "event_log_complete": true
         }
       ]
     },
@@ -1257,6 +2194,7 @@
       "still": "media/stairs_closeup.jpg",
       "video": "media/stairs.mp4",
       "needs": "",
+      "blocked": null,
       "default_runs": 2,
       "default_completed": 2,
       "latest": {
@@ -1264,7 +2202,16 @@
         "connected": 8,
         "total": 8,
         "stop": "",
-        "run": "20261108T194303296410Z"
+        "sweep": "2026-11-08-catalog-sweep",
+        "run": "20261108T194303296410Z",
+        "breakage": true,
+        "lasting_breaks": 0,
+        "transient_breaks": 4,
+        "solver_warnings": {
+          "not_converged": 4,
+          "high_slack": 4
+        },
+        "event_log_complete": false
       },
       "attempts": []
     }

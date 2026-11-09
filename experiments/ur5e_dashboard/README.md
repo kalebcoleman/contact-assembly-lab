@@ -49,12 +49,26 @@ is labeled either as this run's recording or as a representative recording of
 another case.
 
 The **Structures** filter lists every structure config in
-`experiments/ur5e_structures/`. A structure page draws each layer on the 20 × 20 stud baseplate
-from above, lists the structure's trials from
-`experiments/ur5e_structures/trials.json` (simulation and real robot), opens a
-trial's run when its recording is in the library, and shows the latest result
-per setting for all structures. See
+`experiments/ur5e_structures/`. Results come from the catalog index
+`docs/structures/index.json`, generated from the committed sweep summaries by
+`.venv/bin/python -m experiments.ur5e_structures.catalog`. A structure page
+shows its standard settings (the controller defaults plus its saved config),
+why it does not build yet if it does not, how many simulation runs at those
+settings completed, and the latest one with its sweep, breakage setting,
+lasting and transient joint breaks and breakage-solver warnings. Runs at other
+settings are listed as attempts, not as the current result. A completed run is
+one run, not evidence of robustness. The page also draws each layer on the
+20 × 20 stud baseplate from above and, collapsed, the development trials in
+`experiments/ur5e_structures/trials.json`, which sweeps do not update. No
+real-robot trials have been run. See
 [the structures README](../ur5e_structures/README.md) for adding trials.
+
+A recording that a sweep summary lists is tagged with its sweep in the run
+list, and its run page shows that summary: breakage on or off, what stopped
+the controller, lasting and transient joint breaks, solver warnings, and each
+removed joint. When the console event log was incomplete, breaks and warnings
+are lower bounds. A recording of a structure that is no longer in the catalog
+is tagged historical and is not a current result.
 
 All current logs are simulation data. Tool and part poses are in the world
 frame, placement errors are in the support frame, joint angles are radians,

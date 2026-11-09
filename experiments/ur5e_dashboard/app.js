@@ -62,6 +62,22 @@ function outcomeName(outcome) {
     : String(outcome || "Not recorded").replaceAll("_", " ");
 }
 
+/** Tell whether a run built a structure that is no longer in the library. */
+function isHistorical(run) {
+  return Boolean(run.structure) && !run.in_library;
+}
+
+/** Describe joint breaks as lasting / transient, flagging an incomplete log. */
+function breaksText(run) {
+  const text = `${run.lasting_breaks} lasting / ${run.transient_breaks} transient`;
+  return run.event_log_complete ? text : `${text} (log incomplete)`;
+}
+
+/** Describe breakage-solver warnings as non-convergence / high-slack counts. */
+function solverText(warnings) {
+  return `${warnings.not_converged} not converged / ${warnings.high_slack} high slack`;
+}
+
 /** Return the title shown for a run, preferring its test case. */
 function runTitle(run) {
   return run.case_id
@@ -137,7 +153,7 @@ function renderRuns() {
       activeFilter === category ||
       (activeFilter === "cases" && Boolean(run.case_id));
     const text =
-      `${runTitle(run)} ${run.case_category || ""} ${run.filename} ${run.status} ${isControlledRejection(run.experiment, run.created_utc) ? "intentional test" : ""}`.toLowerCase();
+      `${runTitle(run)} ${run.case_category || ""} ${run.filename} ${run.status} ${run.sweep || ""} ${isHistorical(run) ? "historical" : ""} ${isControlledRejection(run.experiment, run.created_utc) ? "intentional test" : ""}`.toLowerCase();
     return matchesFilter && text.includes(term);
   });
   byId("run-count").textContent = String(runs.length);
@@ -170,7 +186,9 @@ function renderRuns() {
       <span class="run-date">${escapeText(formatDate(run.created_utc))}</span>
       <span class="run-status"><i class="run-dot ${escapeText(category)}"></i>${escapeText(label)} <span>·</span> ${escapeText(formatTime(run.duration_s))}</span>
       ${intentional ? '<span class="run-purpose">Intentional test</span>' : ""}
-      ${run.case_id ? `<span class="run-purpose">${escapeText(predictionLabel(run.case_as_predicted))}</span>` : ""}`;
+      ${run.case_id ? `<span class="run-purpose">${escapeText(predictionLabel(run.case_as_predicted))}</span>` : ""}
+      ${isHistorical(run) ? '<span class="run-purpose">Historical · not in the current library</span>' : ""}
+      ${run.sweep ? `<span class="run-purpose">Sweep ${escapeText(run.sweep)}</span>` : ""}`;
     button.addEventListener("click", () => selectRun(run.id));
     list.append(button);
   }
@@ -434,6 +452,43 @@ async function selectRun(id) {
       byId("status").className = `status ${category}`;
       byId("scenario-badge").hidden = !intentional;
       byId("scenario-notice").hidden = !intentional;
+      byId("run-historical").hidden = !isHistorical(run);
+      byId("run-historical").textContent = isHistorical(run)
+        ? `Historical run: "${run.structure}" is not in the current structure library. This is not a current result.`
+        : "";
+      const sweep = run.sweep;
+      byId("sweep-panel").hidden = !sweep;
+      if (sweep) {
+        byId("sweep-title").textContent = `${sweep.sweep} · ${sweep.label}`;
+        byId("sweep-badge").textContent = String(sweep.outcome).toUpperCase();
+        byId("sweep-note").textContent =
+          "From the committed sweep summary. One simulation run; a completion is not evidence of robustness." +
+          (sweep.event_log_complete
+            ? ""
+            : " The console event log is incomplete, so breaks and solver warnings are lower bounds.");
+        fillRows("sweep-rows", [
+          ["Run", sweep.run],
+          ["Breakage model", sweep.breakage_enabled ? "on" : "off"],
+          [
+            "Connected at end",
+            `${sweep.bricks_connected_end} / ${sweep.bricks_total}`,
+          ],
+          ["Stopped by", sweep.failure || "nothing (no controller failure)"],
+          ["Joint breaks", breaksText(sweep)],
+          ["Solver warnings", solverText(sweep.solver_warnings)],
+          ["Gripper contacts", `${sweep.contact_mode} mode`],
+        ]);
+        byId("sweep-breaks").innerHTML = sweep.breaks.length
+          ? "<thead><tr><th>Joint (support → brick)</th><th>Phase</th><th>Break</th><th>Before the break</th><th>Peak utilization</th></tr></thead><tbody>" +
+            sweep.breaks
+              .map(
+                (item) =>
+                  `<tr><td>${escapeText(`${item.parent} → ${item.child}`)}</td><td>${escapeText(item.phase || "—")}</td><td>${item.rejoined ? "transient (re-formed)" : "lasting"}</td><td>${escapeText(item.cause)}</td><td>${escapeText(formatNumber(item.peak_utilization_before_break))}</td></tr>`,
+              )
+              .join("") +
+            "</tbody>"
+          : "";
+      }
       byId("metric-outcome").textContent = result
         ? outcomeName(result.observed_outcome)
         : status;
@@ -721,18 +776,18 @@ function trialLabel(trial) {
   return `${trial.bricks_connected}/${trial.bricks_total} ${mark}`;
 }
 
-/** Short label of a structure's results at the default settings. */
+/** Short label of a structure's results at its standard settings. */
 function defaultLabel(structure) {
   const entry = structure.catalog;
   if (!entry) return trialLabel(latestTrial(structure, "simulation", null));
-  if (!entry.default_runs) return "not run";
+  if (!entry.default_runs) return "sim not run";
   const mark =
     entry.default_completed === entry.default_runs
       ? "✓"
       : entry.default_completed
         ? "partly"
         : "✗";
-  return `${entry.default_completed}/${entry.default_runs} runs built ${mark}`;
+  return `sim ${entry.default_completed}/${entry.default_runs} runs completed ${mark}`;
 }
 
 /** Title of a structure: the catalog title, else its file name. */
@@ -812,15 +867,29 @@ function showCatalog(structure) {
     media.append(image);
   }
   const result = byId("structure-result");
+  const paragraphs = [];
   if (!entry) {
-    result.textContent = "No catalog entry for this structure.";
-  } else if (!entry.default_runs) {
-    result.textContent = "Not run at the default settings yet.";
+    paragraphs.push("No catalog entry for this structure.");
   } else {
-    result.textContent =
-      `${entry.default_completed} of ${entry.default_runs} runs at the default settings completed. ` +
-      `Latest: ${runText(entry.latest)}.`;
+    paragraphs.push(
+      `Standard settings: ${entry.needs || "the controller defaults"}.`,
+    );
+    if (entry.blocked) paragraphs.push(`Not buildable yet: ${entry.blocked}.`);
+    if (!entry.default_runs) {
+      paragraphs.push("Not run at its standard settings yet.");
+    } else {
+      const latest = entry.latest;
+      paragraphs.push(
+        `${entry.default_completed} of ${entry.default_runs} simulation runs at these settings completed. ` +
+          `Latest: ${runText(latest)}.`,
+        `Latest run ${latest.run} (sweep ${latest.sweep}): breakage ${latest.breakage ? "on" : "off"}; ` +
+          `joint breaks ${breaksText(latest)}; solver warnings ${solverText(latest.solver_warnings)}.`,
+      );
+    }
   }
+  result.innerHTML = paragraphs
+    .map((text) => `<p>${escapeText(text)}</p>`)
+    .join("");
   const explanation = byId("structure-explanation");
   const lines = [];
   if (entry && entry.mechanism) lines.push(`Failure mechanism ${entry.mechanism}.`);
@@ -830,11 +899,11 @@ function showCatalog(structure) {
   const attempts = entry ? entry.attempts : [];
   byId("structure-attempts-wrap").hidden = !attempts.length;
   byId("structure-attempts").innerHTML =
-    "<thead><tr><th>Changed setting</th><th>Result</th></tr></thead><tbody>" +
+    "<thead><tr><th>Changed setting</th><th>Result</th><th>Breakage</th><th>Joint breaks</th><th>Solver warnings</th></tr></thead><tbody>" +
     attempts
       .map(
         (attempt) =>
-          `<tr><td>${escapeText(attempt.settings)}</td><td>${escapeText(runText(attempt))}</td></tr>`,
+          `<tr><td>${escapeText(attempt.settings)}</td><td>${escapeText(runText(attempt))}</td><td>${attempt.breakage ? "on" : "off"}</td><td>${escapeText(breaksText(attempt))}</td><td>${escapeText(solverText(attempt.solver_warnings))}</td></tr>`,
       )
       .join("") +
     "</tbody>";
@@ -916,7 +985,7 @@ function showStructure(name) {
     button.addEventListener("click", () => openRun(button.dataset.run));
   let overviewSection = null;
   byId("structure-overview").innerHTML =
-    "<thead><tr><th>Structure</th><th>Bricks</th><th>Default settings</th><th>Real robot</th></tr></thead><tbody>" +
+    "<thead><tr><th>Structure</th><th>Bricks</th><th>Simulation, standard settings</th><th>Real robot</th></tr></thead><tbody>" +
     structures
       .map((item) => {
         const section = sectionTitle(item);

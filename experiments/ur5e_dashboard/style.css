@@ -653,6 +653,9 @@ h2 {
 .motion-header {
   margin-bottom: 9px;
 }
+div.panel-copy p {
+  margin: 0 0 6px;
+}
 .motion-header .panel-copy {
   margin-bottom: 0;
 }

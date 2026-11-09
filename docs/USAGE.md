@@ -208,9 +208,12 @@ before it runs; see
 python3 experiments/ur5e_dashboard/server.py
 ```
 
-Open http://127.0.0.1:8765. The read-only viewer shows recorded runs, the
-structures with their trials, and the case suite; Isaac Sim need not be
-running. See
+Open http://127.0.0.1:8765. The read-only viewer shows recorded runs with
+their sweep evidence, the structures with their results at standard settings
+(from `docs/structures/index.json`), and the case suite; Isaac Sim need not be
+running. The first load of the run list parses every recording under
+`outputs/ur5e_lego/` (about 21 GB here) and took several minutes. Screenshots
+are in the [README](../README.md#dashboard). See
 [experiments/ur5e_dashboard/README.md](../experiments/ur5e_dashboard/README.md).
 
 ## Development
