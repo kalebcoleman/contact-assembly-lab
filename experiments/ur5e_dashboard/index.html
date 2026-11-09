@@ -148,8 +148,11 @@
           <div class="notice">
             <span class="notice-icon">i</span
             ><span
-              >Simulation, judged by simulator ground truth. Default settings:
-              breakage on, 1 N press, 1 s gripper release.</span
+              >Simulation only, judged by simulator ground truth; no
+              real-robot trials have been run. Standard settings: the controller
+              defaults (breakage on, 1 N press, 1 s gripper release) plus the
+              structure's saved config. A completed run is one run, not
+              evidence of robustness.</span
             >
           </div>
           <p id="structure-error" class="case-failure" hidden></p>
@@ -171,12 +174,16 @@
             <div class="panel-header">
               <div>
                 <span class="section-label">RESULTS</span>
-                <h2 id="results-title">Default settings and attempts</h2>
+                <h2 id="results-title">Standard settings and attempts</h2>
               </div>
             </div>
-            <p id="structure-result" class="panel-copy"></p>
+            <div id="structure-result" class="panel-copy"></div>
             <p id="structure-explanation" class="panel-copy" hidden></p>
             <div id="structure-attempts-wrap" class="case-table-wrap" hidden>
+              <p class="panel-copy">
+                Runs at other settings. These are attempts, not the current
+                result.
+              </p>
               <table id="structure-attempts" class="case-table"></table>
             </div>
           </section>
@@ -197,13 +204,15 @@
             <details class="trials-details">
               <summary>
                 <span class="section-label">HISTORY</span>
-                <span id="trials-title">All recorded trials</span>
+                <span id="trials-title">Development trials (trials.json)</span>
                 <span id="structure-trial-count" class="count"></span>
               </summary>
               <p class="panel-copy">
-                Every recorded attempt, including development runs and runs at
-                other settings. Real-robot trials are entered by hand in
-                <code>experiments/ur5e_structures/trials.json</code>.
+                Development trials in
+                <code>experiments/ur5e_structures/trials.json</code>, added
+                from recordings by <code>record_trials.py</code>. Sweeps do not
+                update it, so it can predate the results above. Real-robot
+                trials would be entered there by hand; none have been run.
               </p>
               <div class="case-table-wrap">
                 <table id="structure-trials" class="case-table"></table>
@@ -214,7 +223,9 @@
             <div class="panel-header">
               <div>
                 <span class="section-label">ALL STRUCTURES</span>
-                <h2 id="structure-overview-title">Results at the default settings</h2>
+                <h2 id="structure-overview-title">
+                  Results at each structure's standard settings
+                </h2>
               </div>
             </div>
             <div class="case-table-wrap">
@@ -273,6 +284,28 @@
               recorded controller outcome. This test does not model physical
               brick breakage.
             </p>
+          </section>
+
+          <p id="run-historical" class="case-failure" hidden></p>
+
+          <section
+            id="sweep-panel"
+            class="panel"
+            hidden
+            aria-labelledby="sweep-title"
+          >
+            <div class="panel-header">
+              <div>
+                <p class="section-label">SWEEP EVIDENCE</p>
+                <h2 id="sweep-title">Sweep run</h2>
+              </div>
+              <span id="sweep-badge" class="small-badge">—</span>
+            </div>
+            <p id="sweep-note" class="panel-copy"></p>
+            <dl id="sweep-rows" class="settings"></dl>
+            <div class="case-table-wrap">
+              <table id="sweep-breaks" class="case-table"></table>
+            </div>
           </section>
 
           <section

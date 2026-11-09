@@ -431,7 +431,9 @@ def sweep_runs() -> dict[str, list[dict]]:
 
     Returns:
         Structure name to its runs (oldest first). Each run has the sweep, label,
-        run id, outcome, connected/total, failure class, and `changed`: how the
+        run id, outcome, connected/total, failure class, breakage on or off,
+        lasting and transient breaks, solver warnings, whether the event log
+        was complete, and `changed`: how the
         run differs from the structure's standard settings (the controller
         defaults with its config's "controller" block and grip), empty if not.
     """
@@ -478,6 +480,11 @@ def sweep_runs() -> dict[str, list[dict]]:
                     "connected": run["bricks_connected_end"],
                     "total": run["bricks_total"],
                     "failure_class": run["failure_class"],
+                    "breakage": run["breakage_enabled"],
+                    "lasting_breaks": run["lasting_breaks"],
+                    "transient_breaks": run["transient_breaks"],
+                    "solver_warnings": run["solver_warnings"],
+                    "event_log_complete": run["event_log_complete"],
                     "changed": changed,
                     "plain_defaults": plain,
                 }
@@ -704,14 +711,24 @@ def run_summary(run: dict) -> dict[str, object]:
         run: A run from `sweep_runs`.
 
     Returns:
-        Outcome, connected and total bricks, and the stop reason in words.
+        Outcome, connected and total bricks, the stop reason in words, the
+        sweep and run id, whether breakage was on, lasting and transient joint
+        breaks, breakage-solver warnings (non-convergence / high-slack counts),
+        and whether the console event log was complete (if not, breaks and
+        warnings are lower bounds).
     """
     return {
         "outcome": run["outcome"],
         "connected": run["connected"],
         "total": run["total"],
         "stop": STOP[run["failure_class"]],
+        "sweep": run["sweep"],
         "run": run["run"],
+        "breakage": run["breakage"],
+        "lasting_breaks": run["lasting_breaks"],
+        "transient_breaks": run["transient_breaks"],
+        "solver_warnings": run["solver_warnings"],
+        "event_log_complete": run["event_log_complete"],
     }
 
 
@@ -722,8 +739,9 @@ def index(all_runs: dict[str, list[dict]]) -> dict[str, object]:
         all_runs: Runs by structure from `sweep_runs`.
 
     Returns:
-        Sections in order, and per structure its catalog text, media and
-        results at the default settings and at other settings.
+        Sections in order, and per structure its catalog text, media, why it
+        does not build yet (or None), and results at its standard settings and
+        at other settings.
     """
     items = {}
     for name, (section, title, description, mechanism) in ENTRIES.items():
@@ -741,6 +759,7 @@ def index(all_runs: dict[str, list[dict]]) -> dict[str, object]:
             "still": still,
             "video": video,
             "needs": needs_text(name),
+            "blocked": BLOCKED.get(name),
             "default_runs": found["runs"],
             "default_completed": found["completed"],
             "latest": run_summary(latest) if latest else None,

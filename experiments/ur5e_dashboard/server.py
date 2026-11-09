@@ -21,6 +21,24 @@ STRUCTURES = "experiments/ur5e_structures"
 TRIALS = "trials.json"
 # Catalog index written by experiments/ur5e_structures/catalog.py.
 CATALOG_INDEX = "docs/structures/index.json"
+# Sweep summaries written by experiments/ur5e_structures/summarize_sweep.py.
+SWEEP_SUMMARIES = "experiments/ur5e_structures/sweeps"
+# Fields of a summarized sweep run that the run view shows.
+SWEEP_FIELDS = (
+    "label",
+    "run",
+    "breakage_enabled",
+    "contact_mode",
+    "outcome",
+    "failure",
+    "bricks_connected_end",
+    "bricks_total",
+    "lasting_breaks",
+    "transient_breaks",
+    "solver_warnings",
+    "event_log_complete",
+    "breaks",
+)
 # Committed media the dashboard may serve: folder -> allowed content types.
 DOC_MEDIA = {
     "docs/media": {
@@ -449,6 +467,23 @@ class RunCollection:
         except (OSError, ValueError, KeyError, TypeError):
             suite = {}
             suite_cases = []
+        # Committed sweep evidence by recording file name.
+        sweep_evidence = {}
+        for summary_path in sorted(
+            (self.root / SWEEP_SUMMARIES).glob("*.summary.json")
+        ):
+            summary = loads(summary_path.read_text(encoding="utf-8"))
+            for item in summary["runs"]:
+                sweep_evidence[item["recording"]] = {
+                    "sweep": summary["sweep"],
+                    **{field: item[field] for field in SWEEP_FIELDS},
+                }
+        index_path = self.root / CATALOG_INDEX
+        library = (
+            loads(index_path.read_text(encoding="utf-8"))["structures"]
+            if index_path.is_file()
+            else {}
+        )
         for identity, (path, metadata) in selected.items():
             run_id = sha256(fsencode(path)).hexdigest()[:20]
             try:
@@ -597,10 +632,20 @@ class RunCollection:
                         f"Representative video from case {source}; "
                         "it does not show this run."
                     )
+            experiment = str(metadata.get("experiment") or "")
+            structure = (
+                experiment.removeprefix("structure_")
+                if experiment.startswith("structure_")
+                else None
+            )
+            recording = path.with_suffix("").name if path.suffix == ".gz" else path.name
             run = dict(summary)
             run.update(
                 {
                     "id": run_id,
+                    "structure": structure,
+                    "in_library": structure is not None and structure in library,
+                    "sweep": sweep_evidence.get(recording),
                     "filename": path.name,
                     "video": video is not None,
                     "poster": poster_available,
@@ -804,6 +849,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
                         "case_as_predicted": (run["case_result"] or {}).get(
                             "as_predicted"
                         ),
+                        "structure": run["structure"],
+                        "in_library": run["in_library"],
+                        "sweep": (run["sweep"] or {}).get("sweep"),
                     }
                     for run in runs
                 ],

@@ -84,14 +84,28 @@ Where each structure fails, every attempt and how many runs it took are in
 
 ## Dashboard
 
-A local, read-only viewer for every run: each structure layer by layer, every
-trial, and per-step recordings. Isaac Sim need not be running.
+A local, read-only viewer for every run: each structure layer by layer, its
+sweep results, and per-step recordings. Isaac Sim need not be running.
 
 ```bash
 python3 experiments/ur5e_dashboard/server.py   # then open http://127.0.0.1:8765
 ```
 
-![Dashboard structures view](docs/media/dashboard_structures.png)
+All results are simulation; no real-robot trials have been run. A completed run
+is one run, not evidence of robustness. Screenshots were captured on 2026-11-08
+in Chromium at 1440 px wide, from the committed sweep summaries at `e00e603`.
+Times are shown in the viewer's local time (MST).
+
+| | |
+|---|---|
+| ![Structures overview](docs/media/dashboard_structures_overview.png) | ![Mixed tower](docs/media/dashboard_structure_mixed_tower.jpg) |
+| All 29 catalog structures with their simulation runs at standard settings (controller defaults plus each structure's saved config). | Mixed tower: 1/1 completed, verification run `20261109T010612115750Z`, 0 lasting / 6 transient breaks, 26 non-converged / 2 high-slack solver warnings. Earlier failures are listed as attempts. |
+| ![Locomotive](docs/media/dashboard_structure_locomotive.jpg) | ![Table](docs/media/dashboard_structure_table.jpg) |
+| Locomotive: 2/2 completed with its saved 0.5 s release; latest is the config-check run `20261109T020147942410Z` (0 lasting / 1 transient break, 0 solver warnings, event log incomplete). The 1 s default failed 7/8. | Table: not buildable yet (no room for the RG2 fingers between legs 2 studs apart); 0/2 completed. |
+| ![Run list and sweep evidence](docs/media/dashboard_overview.png) | ![Failed run detail](docs/media/dashboard_run_detail.png) |
+| Run library: each recording tagged with its sweep; the locomotive config-check run with its sweep evidence. | Locomotive at the 1 s default release (`20261109T011127574622Z`): failed 7/8, 1 lasting / 6 transient breaks, 4 non-converged / 1 high-slack warnings, each removed joint. The recording reads "Incomplete" because the run raised before writing its end record. |
+| ![Historical run](docs/media/dashboard_run_historical.png) | |
+| Runs of removed structures (giraffe, cat, duck, human, robot) are tagged historical, not current results. | |
 
 ## Reproducibility
 
