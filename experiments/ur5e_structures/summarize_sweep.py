@@ -1,14 +1,14 @@
 """Summarize a structure sweep from its definition and the raw run outputs.
 
 A sweep definition (`sweeps/<name>.json`) lists each run's label, config,
-environment overrides, run id (the `outputs/ur5e_dog/<run>/` folder) and video.
+environment overrides, run id (the `outputs/ur5e_assembly/<run>/` folder) and video.
 This script reads, per run:
 
 - the console log (`attempt-1.txt`): first failure, gripper contacts, BrickSim
   joint events and breakage-solver warnings, in log order;
 - the recording it names (`outputs/ur5e_lego/*.jsonl`): the assembly and breakage
   settings applied, bricks connected at the end, simulated time;
-- the utilization CSV written beside it (`outputs/ur5e_dog/utilization-*.csv`):
+- the utilization CSV written beside it (`outputs/ur5e_assembly/utilization-*.csv`):
   the breakage solver's load over capacity per joint before each break.
 
 It writes `sweeps/<name>.summary.json` and `sweeps/<name>.summary.md`. The raw
@@ -46,18 +46,33 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Controller settings read from the environment, with the defaults in
-# experiments/ur5e_dog/controller.py and run.py (checked by test_summarize_sweep).
+# Controller settings and their defaults, as in experiments/ur5e_assembly/controller.py
+# (its SETTINGS table) and run.py (checked by test_summarize_sweep).
 CONTROLLER_DEFAULTS = {
-    "DOG_BREAKAGE": "1",
-    "DOG_GRIPPER_CONTACT": "fail",
-    "DOG_REQUIRED_FORCE_N": "1.0",
-    "DOG_PRESS_DEPTH_M": "0.0005",
-    "DOG_PRESS_HOLD_S": "0.05",
-    "DOG_FREEZE_ON_CONNECTION": "1",
-    "DOG_RELEASE_RAMP_S": "1.0",
-    "DOG_TIP_CLEARANCE_M": "0.003",
-    "DOG_HOLD_S": "10",
+    "ASSEMBLY_BREAKAGE": "1",
+    "ASSEMBLY_GRIPPER_CONTACT": "fail",
+    "ASSEMBLY_REQUIRED_FORCE_N": "1.0",
+    "ASSEMBLY_PRESS_DEPTH_M": "0.0005",
+    "ASSEMBLY_PRESS_HOLD_S": "0.05",
+    "ASSEMBLY_FREEZE_ON_CONNECTION": "1",
+    "ASSEMBLY_RELEASE_RAMP_S": "1.0",
+    "ASSEMBLY_TIP_CLEARANCE_M": "0.003",
+    "ASSEMBLY_HOLD_S": "10",
+    "ASSEMBLY_RELEASE_MARGIN_M": "0.002",
+    "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": "0.001",
+    "ASSEMBLY_RELEASE_LIFT_M": "0.0",
+}
+# Keys of the "controller settings" line the controller prints (and of a
+# structure config's "controller" block), by environment variable.
+SETTING_KEYS = {
+    "ASSEMBLY_REQUIRED_FORCE_N": "required_force_n",
+    "ASSEMBLY_PRESS_DEPTH_M": "press_depth_m",
+    "ASSEMBLY_PRESS_HOLD_S": "press_hold_s",
+    "ASSEMBLY_RELEASE_RAMP_S": "release_ramp_s",
+    "ASSEMBLY_TIP_CLEARANCE_M": "tip_clearance_m",
+    "ASSEMBLY_RELEASE_MARGIN_M": "release_margin_m",
+    "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": "release_min_clearance_m",
+    "ASSEMBLY_RELEASE_LIFT_M": "release_lift_m",
 }
 
 # (class, pattern on the first failure message), first match wins.
@@ -157,6 +172,7 @@ def read_console(path: Path) -> dict:
                 }
             )
             pending = {"not_converged": 0, "high_slack": 0, "max_slack_pct": 0.0}
+    applied = re.search(r"UR5e baseplate: controller settings (\{.*\})", text)
     monitored = "finger profile" in text
     # Kit flushes its log asynchronously and the process exits with os._exit,
     # so the last BrickSim lines can be missing. Every brick the controller saw
@@ -173,6 +189,8 @@ def read_console(path: Path) -> dict:
         "events": events,
         "solver_warnings": totals,
         "event_log_complete": complete,
+        "applied_settings": json.loads(applied[1]) if applied else None,
+        "grasp_offsets_used": "grasp offset m=" in text,
     }
 
 
@@ -308,7 +326,7 @@ def find_utilization(experiment: str, created_utc: str) -> Path | None:
         The CSV stamped within 3 s of the recording, or None.
     """
     created = datetime.fromisoformat(created_utc).replace(tzinfo=None)
-    for csv in (ROOT / "outputs/ur5e_dog").glob(f"utilization-{experiment}-*.csv"):
+    for csv in (ROOT / "outputs/ur5e_assembly").glob(f"utilization-{experiment}-*.csv"):
         stamp = datetime.strptime(csv.stem.rsplit("-", 1)[1], "%Y%m%dT%H%M%S")
         if abs((stamp - created).total_seconds()) <= 3:
             return csv
@@ -402,7 +420,7 @@ def summarize_run(sweep: dict, run: dict) -> dict:
         The run's settings (with where each came from), outcome, failure class,
         contacts, joint breaks, solver warnings and evidence paths.
     """
-    run_dir = ROOT / "outputs/ur5e_dog" / run["run"]
+    run_dir = ROOT / "outputs/ur5e_assembly" / run["run"]
     manifest = json.loads((run_dir / "manifest.json").read_text())[0]
     console = read_console(run_dir / "attempt-1.txt")
     recording = read_recording(console["recording"]) if console["recording"] else {}
@@ -423,12 +441,20 @@ def summarize_run(sweep: dict, run: dict) -> dict:
     assembly = recording.get("assembly_settings", {})
     # The recording is the ground truth for what the simulator applied.
     if breakage:
-        settings["DOG_BREAKAGE"] = {
+        settings["ASSEMBLY_BREAKAGE"] = {
             "value": "1" if breakage["enabled"] else "0",
             "source": "recording",
         }
+    # The controller prints the settings it used (newer runs): ground truth.
+    if console["applied_settings"]:
+        for name, key in SETTING_KEYS.items():
+            if key in console["applied_settings"]:
+                settings[name] = {
+                    "value": str(console["applied_settings"][key]),
+                    "source": "console",
+                }
     if assembly:
-        settings["DOG_REQUIRED_FORCE_N"] = {
+        settings["ASSEMBLY_REQUIRED_FORCE_N"] = {
             "value": str(assembly["required_force_n"]),
             "source": "recording",
         }
@@ -446,8 +472,8 @@ def summarize_run(sweep: dict, run: dict) -> dict:
         "video": run.get("video"),
         "media": run.get("media"),
         "settings": settings,
-        "breakage_enabled": settings["DOG_BREAKAGE"]["value"] == "1",
-        "contact_mode": settings["DOG_GRIPPER_CONTACT"]["value"],
+        "breakage_enabled": settings["ASSEMBLY_BREAKAGE"]["value"] == "1",
+        "contact_mode": settings["ASSEMBLY_GRIPPER_CONTACT"]["value"],
         "outcome": manifest["outcome"],
         "bricks_total": recording.get("bricks_total"),
         "bricks_connected_end": recording.get("bricks_connected_end"),
@@ -458,6 +484,7 @@ def summarize_run(sweep: dict, run: dict) -> dict:
         "contact_stopped_run": failure_class == "gripper_contact_abort",
         "solver_warnings": console["solver_warnings"],
         "event_log_complete": console["event_log_complete"] and recording_agrees,
+        "grasp_offsets_used": console["grasp_offsets_used"],
         "breaks": breaks,
         "lasting_breaks": sum(not b["rejoined"] for b in breaks),
         "transient_breaks": sum(b["rejoined"] for b in breaks),
@@ -518,7 +545,7 @@ def markdown(sweep: dict, runs: list[dict]) -> str:
         overrides = definitions[run["label"]].get("environment", {})
         breaks = "<br>".join(describe_break(b) for b in run["breaks"])
         evidence = []
-        if run["media"]:
+        if run["media"] and (ROOT / f"{run['media']}.mp4").exists():
             evidence.append(f"[media](../../../{run['media']}.mp4)")
         if run["video"]:
             evidence.append(f"`{run['video']}`")

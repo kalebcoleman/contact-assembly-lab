@@ -1,0 +1,127 @@
+{
+  "experiment_name": "structure_trestle_table",
+  "baseplate_xy_m": [
+    -0.25,
+    -0.33
+  ],
+  "part_names": [
+    "trestle_table_0",
+    "trestle_table_1",
+    "trestle_table_2",
+    "trestle_table_3",
+    "trestle_table_4"
+  ],
+  "brick_dimensions": [
+    [
+      4,
+      2,
+      3
+    ],
+    [
+      4,
+      2,
+      3
+    ],
+    [
+      4,
+      2,
+      3
+    ],
+    [
+      4,
+      2,
+      3
+    ],
+    [
+      6,
+      4,
+      3
+    ]
+  ],
+  "brick_colors": [
+    [
+      150,
+      95,
+      50
+    ],
+    [
+      150,
+      95,
+      50
+    ],
+    [
+      150,
+      95,
+      50
+    ],
+    [
+      150,
+      95,
+      50
+    ],
+    [
+      120,
+      75,
+      40
+    ]
+  ],
+  "brick_positions_xy_m": [
+    [
+      -0.47,
+      -0.45
+    ],
+    [
+      -0.47,
+      -0.5
+    ],
+    [
+      -0.47,
+      -0.4
+    ],
+    [
+      -0.47,
+      -0.55
+    ],
+    [
+      -0.47,
+      -0.345
+    ]
+  ],
+  "support_bricks": [
+    null,
+    null,
+    0,
+    1,
+    2
+  ],
+  "placement_offsets": [
+    [
+      8,
+      6
+    ],
+    [
+      12,
+      6
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "placement_yaws": [
+    1,
+    1,
+    0,
+    0,
+    3
+  ],
+  "min_same_layer_gap_studs": 2
+}

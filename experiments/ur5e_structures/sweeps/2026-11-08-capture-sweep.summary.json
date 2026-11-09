@@ -3,48 +3,60 @@
   "runs": [
     {
       "label": "dog",
-      "config": "experiments/ur5e_dog/dog.json",
+      "config": "experiments/ur5e_structures/dog.json",
       "run": "20261108T033948981553Z",
       "recording": "20261108T034007.554393Z-dog_ten.jsonl",
       "utilization_csv": "utilization-dog_ten-20261108T034007.csv",
       "video": ".cache/videos/dog.mp4",
       "media": "docs/media/dog_breakage_on",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -62,6 +74,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_7",
@@ -134,41 +147,53 @@
       "video": ".cache/videos/human.mp4",
       "media": "docs/media/human_breakage_on",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -186,6 +211,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -240,41 +266,53 @@
       "video": ".cache/videos/cantilever.mp4",
       "media": "docs/media/cantilever_failure",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -292,6 +330,7 @@
         "high_slack": 14
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -364,41 +403,53 @@
       "video": ".cache/videos/giraffe.mp4",
       "media": "docs/media/giraffe",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -416,6 +467,7 @@
         "high_slack": 1
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -488,41 +540,53 @@
       "video": ".cache/videos/duck.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -540,6 +604,7 @@
         "high_slack": 0
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [],
       "lasting_breaks": 0,
       "transient_breaks": 0,
@@ -575,41 +640,53 @@
       "video": ".cache/videos/robot.mp4",
       "media": "docs/media/robot",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -627,6 +704,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_1",
@@ -717,41 +795,53 @@
       "video": ".cache/videos/cat.mp4",
       "media": "docs/media/cat",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -769,6 +859,7 @@
         "high_slack": 0
       },
       "event_log_complete": false,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_1",
@@ -823,41 +914,53 @@
       "video": ".cache/videos/tree.mp4",
       "media": "docs/media/tree",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -875,6 +978,7 @@
         "high_slack": 6
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1019,41 +1123,53 @@
       "video": ".cache/videos/lean_ladder.mp4",
       "media": "docs/media/lean_ladder",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1071,6 +1187,7 @@
         "high_slack": 15
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_1",
@@ -1179,41 +1296,53 @@
       "video": ".cache/videos/cantilever_tip2.mp4",
       "media": "docs/media/cantilever_tip2",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1231,6 +1360,7 @@
         "high_slack": 7
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1303,41 +1433,53 @@
       "video": ".cache/videos/cantilever_root2.mp4",
       "media": "docs/media/cantilever_root2",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1355,6 +1497,7 @@
         "high_slack": 1
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1445,41 +1588,53 @@
       "video": ".cache/videos/tower_2x2.mp4",
       "media": "docs/media/tower_2x2",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1497,6 +1652,7 @@
         "high_slack": 2
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1605,41 +1761,53 @@
       "video": ".cache/videos/column_press_1N.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "1.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1657,6 +1825,7 @@
         "high_slack": 0
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1729,41 +1898,53 @@
       "video": ".cache/videos/column_press_2N.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "2.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1781,6 +1962,7 @@
         "high_slack": 0
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1871,41 +2053,53 @@
       "video": ".cache/videos/column_press_3N.mp4",
       "media": "docs/media/column_press_3N",
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "3.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -1923,6 +2117,7 @@
         "high_slack": 1
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",
@@ -1977,41 +2172,53 @@
       "video": ".cache/videos/column_press_5N.mp4",
       "media": null,
       "settings": {
-        "DOG_BREAKAGE": {
+        "ASSEMBLY_BREAKAGE": {
           "value": "1",
           "source": "recording"
         },
-        "DOG_GRIPPER_CONTACT": {
+        "ASSEMBLY_GRIPPER_CONTACT": {
           "value": "log",
           "source": "sweep definition"
         },
-        "DOG_REQUIRED_FORCE_N": {
+        "ASSEMBLY_REQUIRED_FORCE_N": {
           "value": "5.0",
           "source": "recording"
         },
-        "DOG_PRESS_DEPTH_M": {
+        "ASSEMBLY_PRESS_DEPTH_M": {
           "value": "0.0005",
           "source": "default"
         },
-        "DOG_PRESS_HOLD_S": {
+        "ASSEMBLY_PRESS_HOLD_S": {
           "value": "0.05",
           "source": "default"
         },
-        "DOG_FREEZE_ON_CONNECTION": {
+        "ASSEMBLY_FREEZE_ON_CONNECTION": {
           "value": "1",
           "source": "default"
         },
-        "DOG_RELEASE_RAMP_S": {
+        "ASSEMBLY_RELEASE_RAMP_S": {
           "value": "1.0",
           "source": "default"
         },
-        "DOG_TIP_CLEARANCE_M": {
+        "ASSEMBLY_TIP_CLEARANCE_M": {
           "value": "0.003",
           "source": "default"
         },
-        "DOG_HOLD_S": {
+        "ASSEMBLY_HOLD_S": {
           "value": "8",
           "source": "sweep definition"
+        },
+        "ASSEMBLY_RELEASE_MARGIN_M": {
+          "value": "0.002",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_MIN_CLEARANCE_M": {
+          "value": "0.001",
+          "source": "default"
+        },
+        "ASSEMBLY_RELEASE_LIFT_M": {
+          "value": "0.0",
+          "source": "default"
         }
       },
       "breakage_enabled": true,
@@ -2029,6 +2236,7 @@
         "high_slack": 2
       },
       "event_log_complete": true,
+      "grasp_offsets_used": false,
       "breaks": [
         {
           "parent": "Part_0",

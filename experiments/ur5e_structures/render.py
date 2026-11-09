@@ -18,7 +18,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from experiments.ur5e_dog.validate import validate
+from experiments.ur5e_assembly.validate import validate
 from matplotlib.patches import Polygon
 
 # One brick is 9.6 mm tall and one stud 8 mm: height in stud units per layer.

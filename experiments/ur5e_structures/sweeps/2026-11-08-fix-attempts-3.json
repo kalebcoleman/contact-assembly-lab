@@ -1,0 +1,225 @@
+{
+  "name": "2026-11-08-fix-attempts-3",
+  "description": "Round 3 of fix attempts. Round 2 found two release fixes: easing off the press before letting go (tree, offset tower, house) and a faster 0.5 s release (column of ten, cross-bonded tower, house). This round tries both on the failing structures not yet tried, the fast release on the spiral tower, and both together on the structures neither fixed. Breakage on; gripper contacts logged, not fatal.",
+  "controller_commit": "1fec04f",
+  "invocation": "OMNI_KIT_ACCEPT_EULA=YES python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-fix-attempts-3.json --capture",
+  "environment": {
+    "ASSEMBLY_GRIPPER_CONTACT": "log",
+    "ASSEMBLY_HOLD_S": "8"
+  },
+  "runs": [
+    {
+      "label": "spiral_tower_release_fast",
+      "config": "experiments/ur5e_structures/spiral_tower.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T225956023946Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/spiral_tower_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "zigzag_6_ease_off",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T230317017510Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/zigzag_6_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "zigzag_6_release_fast",
+      "config": "experiments/ur5e_structures/zigzag_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T230555597333Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/zigzag_6_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "lean_ladder_ease_off",
+      "config": "experiments/ur5e_structures/lean_ladder.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T231003548642Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/lean_ladder_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "lean_ladder_release_fast",
+      "config": "experiments/ur5e_structures/lean_ladder.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T231454001007Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/lean_ladder_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "l_corner_ease_off",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T232010504281Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/l_corner_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "l_corner_release_fast",
+      "config": "experiments/ur5e_structures/l_corner.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T232244081543Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/l_corner_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "cantilever_tip2_ease_off",
+      "config": "experiments/ur5e_structures/cantilever_tip2.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T232546767592Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/cantilever_tip2_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "cantilever_tip2_release_fast",
+      "config": "experiments/ur5e_structures/cantilever_tip2.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T232823516305Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/cantilever_tip2_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "table_wide_ease_off",
+      "config": "experiments/ur5e_structures/table_wide.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T233026412389Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/table_wide_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "table_wide_release_fast",
+      "config": "experiments/ur5e_structures/table_wide.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T233631674921Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/table_wide_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "locomotive_short_stack_ease_off",
+      "config": "experiments/ur5e_structures/attempts/locomotive_short_stack.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T234120121381Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/locomotive_short_stack_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "locomotive_short_stack_release_fast",
+      "config": "experiments/ur5e_structures/attempts/locomotive_short_stack.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T234733919652Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/locomotive_short_stack_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "locomotive_ease_off",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005"
+      },
+      "run": "20261108T235309993968Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/locomotive_ease_off.mp4",
+      "media": null
+    },
+    {
+      "label": "locomotive_release_fast",
+      "config": "experiments/ur5e_structures/attempts/locomotive_tall_cab.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261108T235911588320Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/locomotive_release_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "tower_2x2_ease_off_fast",
+      "config": "experiments/ur5e_structures/tower_2x2.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261109T000537628236Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/tower_2x2_ease_off_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "lean_6_ease_off_fast",
+      "config": "experiments/ur5e_structures/lean_6.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261109T000908390292Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/lean_6_ease_off_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "cantilever_ease_off_fast",
+      "config": "experiments/ur5e_structures/cantilever.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261109T001246974986Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/cantilever_ease_off_fast.mp4",
+      "media": null
+    },
+    {
+      "label": "castle_gate_ease_off_fast",
+      "config": "experiments/ur5e_structures/castle_gate.json",
+      "environment": {
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_RELEASE_LIFT_M": "0.0005",
+        "ASSEMBLY_RELEASE_RAMP_S": "0.5"
+      },
+      "run": "20261109T001444356771Z",
+      "video": ".cache/videos/2026-11-08-fix-attempts-3/castle_gate_ease_off_fast.mp4",
+      "media": null
+    }
+  ]
+}

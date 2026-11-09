@@ -642,9 +642,9 @@ class ResultsViewerTests(TestCase):
 
     def test_structures_report_layout_and_link_trials_to_runs(self) -> None:
         """Recipes become stud-grid layouts; trials link to their recordings."""
-        dog = self.root / "experiments/ur5e_dog"
+        dog = self.root / "experiments/ur5e_assembly"
         dog.mkdir(parents=True)
-        source = Path(__file__).resolve().parents[1] / "ur5e_dog/validate.py"
+        source = Path(__file__).resolve().parents[1] / "ur5e_assembly/validate.py"
         (dog / "validate.py").write_text(source.read_text())
         structures = self.root / "experiments/ur5e_structures"
         structures.mkdir(parents=True)
@@ -689,6 +689,74 @@ class ResultsViewerTests(TestCase):
         self.assertIn("Solid collision", by_name["broken"]["error"])
         self.assertEqual(by_name["broken"]["bricks"], [])
         self.assertNotIn("trials", by_name)
+        self.assertIsNone(turn["catalog"])
+
+    def test_catalog_entries_order_structures_and_media_is_restricted(self) -> None:
+        """Catalog text joins its structure; only committed media is served."""
+        dog = self.root / "experiments/ur5e_assembly"
+        dog.mkdir(parents=True)
+        source = Path(__file__).resolve().parents[1] / "ur5e_assembly/validate.py"
+        (dog / "validate.py").write_text(source.read_text())
+        structures = self.root / "experiments/ur5e_structures"
+        structures.mkdir(parents=True)
+        recipe = {
+            "baseplate_xy_m": [-0.25, -0.33],
+            "part_names": ["a"],
+            "brick_dimensions": [[2, 4, 3]],
+            "brick_colors": [[200, 30, 30]],
+            "brick_positions_xy_m": [[-0.52, -0.55]],
+            "support_bricks": [None],
+            "placement_offsets": [[9, 8]],
+        }
+        for name in ("alpha", "beta"):
+            (structures / f"{name}.json").write_text(dumps(recipe))
+        docs = self.root / "docs"
+        (docs / "structures").mkdir(parents=True)
+        (docs / "media").mkdir()
+        (docs / "media" / "beta.mp4").write_bytes(b"video")
+        (docs / "media" / "notes.txt").write_text("not media")
+        (docs / "secret.png").write_bytes(b"outside")
+        index = {
+            "sections": [{"key": "showcase", "title": "Showcase", "blurb": ""}],
+            "structures": {
+                "beta": {
+                    "title": "Beta",
+                    "section": "showcase",
+                    "video": "media/beta.mp4",
+                },
+                "alpha": {"title": "Alpha", "section": "showcase", "video": None},
+            },
+        }
+        (docs / "structures" / "index.json").write_text(dumps(index))
+        self.collection.refresh()
+        ordered = self.collection.structures()
+        self.assertEqual([item["name"] for item in ordered], ["beta", "alpha"])
+        self.assertEqual(ordered[0]["catalog"]["title"], "Beta")
+        server = DashboardServer(0, self.collection)
+        worker = Thread(target=server.serve_forever, daemon=True)
+        worker.start()
+        connection = HTTPConnection("127.0.0.1", server.server_port, timeout=5)
+        try:
+            connection.request("GET", "/docs/media/beta.mp4")
+            response = connection.getresponse()
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.getheader("Content-Type"), "video/mp4")
+            self.assertEqual(response.read(), b"video")
+            for path in (
+                "/docs/media/notes.txt",
+                "/docs/secret.png",
+                "/docs/media/../secret.png",
+                "/docs/media/missing.mp4",
+            ):
+                connection.request("GET", path)
+                response = connection.getresponse()
+                self.assertEqual(response.status, 404, path)
+                response.read()
+        finally:
+            connection.close()
+            server.shutdown()
+            worker.join(timeout=5)
+            server.server_close()
 
 
 if __name__ == "__main__":

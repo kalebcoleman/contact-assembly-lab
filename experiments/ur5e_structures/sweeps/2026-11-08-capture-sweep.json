@@ -4,15 +4,15 @@
   "controller_commit": "45717a8",
   "invocation": "python3 -m experiments.ur5e_structures.run_sweep experiments/ur5e_structures/sweeps/2026-11-08-capture-sweep.json --capture (originally run with an equivalent shell loop)",
   "environment": {
-    "DOG_GRIPPER_CONTACT": "log",
-    "DOG_HOLD_S": "8"
+    "ASSEMBLY_GRIPPER_CONTACT": "log",
+    "ASSEMBLY_HOLD_S": "8"
   },
   "runs": [
     {
       "label": "dog",
-      "config": "experiments/ur5e_dog/dog.json",
+      "config": "experiments/ur5e_structures/dog.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T033948981553Z",
       "video": ".cache/videos/dog.mp4",
@@ -22,7 +22,7 @@
       "label": "human",
       "config": "experiments/ur5e_structures/human.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T034850200680Z",
       "video": ".cache/videos/human.mp4",
@@ -32,7 +32,7 @@
       "label": "cantilever",
       "config": "experiments/ur5e_structures/cantilever.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T035554030267Z",
       "video": ".cache/videos/cantilever.mp4",
@@ -42,7 +42,7 @@
       "label": "giraffe",
       "config": "experiments/ur5e_structures/giraffe.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T035931062811Z",
       "video": ".cache/videos/giraffe.mp4",
@@ -52,7 +52,7 @@
       "label": "duck",
       "config": "experiments/ur5e_structures/duck.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T040221207914Z",
       "video": ".cache/videos/duck.mp4",
@@ -62,7 +62,7 @@
       "label": "robot",
       "config": "experiments/ur5e_structures/robot.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T040517632863Z",
       "video": ".cache/videos/robot.mp4",
@@ -72,7 +72,7 @@
       "label": "cat",
       "config": "experiments/ur5e_structures/cat.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T040913237183Z",
       "video": ".cache/videos/cat.mp4",
@@ -82,7 +82,7 @@
       "label": "tree",
       "config": "experiments/ur5e_structures/tree.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T041311129876Z",
       "video": ".cache/videos/tree.mp4",
@@ -92,7 +92,7 @@
       "label": "lean_ladder",
       "config": "experiments/ur5e_structures/lean_ladder.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T041742925499Z",
       "video": ".cache/videos/lean_ladder.mp4",
@@ -102,7 +102,7 @@
       "label": "cantilever_tip2",
       "config": "experiments/ur5e_structures/cantilever_tip2.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T042248279292Z",
       "video": ".cache/videos/cantilever_tip2.mp4",
@@ -112,7 +112,7 @@
       "label": "cantilever_root2",
       "config": "experiments/ur5e_structures/cantilever_root2.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T042635983255Z",
       "video": ".cache/videos/cantilever_root2.mp4",
@@ -122,7 +122,7 @@
       "label": "tower_2x2",
       "config": "experiments/ur5e_structures/tower_2x2.json",
       "environment": {
-        "DOG_BREAKAGE": "1"
+        "ASSEMBLY_BREAKAGE": "1"
       },
       "run": "20261108T043058804924Z",
       "video": ".cache/videos/tower_2x2.mp4",
@@ -132,8 +132,8 @@
       "label": "column_press_1N",
       "config": "experiments/ur5e_structures/column.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_REQUIRED_FORCE_N": "1.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_REQUIRED_FORCE_N": "1.0"
       },
       "run": "20261108T043449477385Z",
       "video": ".cache/videos/column_press_1N.mp4",
@@ -143,8 +143,8 @@
       "label": "column_press_2N",
       "config": "experiments/ur5e_structures/column.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_REQUIRED_FORCE_N": "2.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_REQUIRED_FORCE_N": "2.0"
       },
       "run": "20261108T043836377949Z",
       "video": ".cache/videos/column_press_2N.mp4",
@@ -154,8 +154,8 @@
       "label": "column_press_3N",
       "config": "experiments/ur5e_structures/column.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_REQUIRED_FORCE_N": "3.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_REQUIRED_FORCE_N": "3.0"
       },
       "run": "20261108T044224574750Z",
       "video": ".cache/videos/column_press_3N.mp4",
@@ -165,8 +165,8 @@
       "label": "column_press_5N",
       "config": "experiments/ur5e_structures/column.json",
       "environment": {
-        "DOG_BREAKAGE": "1",
-        "DOG_REQUIRED_FORCE_N": "5.0"
+        "ASSEMBLY_BREAKAGE": "1",
+        "ASSEMBLY_REQUIRED_FORCE_N": "5.0"
       },
       "run": "20261108T044451774358Z",
       "video": ".cache/videos/column_press_5N.mp4",

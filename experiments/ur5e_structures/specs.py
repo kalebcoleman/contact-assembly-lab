@@ -9,7 +9,7 @@ placing.
 import json
 from pathlib import Path
 
-from experiments.ur5e_dog.validate import validate
+from experiments.ur5e_assembly.validate import validate
 
 A = [2, 4, 3]  # 2x4 brick, long side along y
 B = [4, 2, 3]  # 2x4 brick, long side along x (unrotated, a separate source part)
@@ -65,17 +65,6 @@ SPECS = {
         (W, 4, (0, 0), 0),
         (W, 6, (0, 0), 0),
     ],
-    # Legs two bricks high, then full-width 2x6 hips, torso and shoulders, 2x2 head.
-    "human": [
-        (A, None, (8, 8), 0),
-        (A, None, (12, 8), 0),
-        (A, 0, (0, 0), 0),
-        (A, 1, (0, 0), 0),
-        (W, 2, (0, 1), 0),
-        (W, 4, (0, 0), 0),
-        (W, 5, (0, 0), 0),
-        (D, 6, (2, 0), 0),
-    ],
     # Ten 2x4 bricks stacked aligned: joint load grows with height.
     "column_10": [(A, None, (9, 8), 0)] + [(A, i, (0, 0), 0) for i in range(9)],
     # Each 2x4 shifted 2 studs along y (4-stud joints): the overturning moment on
@@ -95,38 +84,6 @@ SPECS = {
     "mixed_tower": [(D, None, (9, 9), 0)]
     + [(size, i, None, 0) for i, size in enumerate([A, W, B, D, A, W, D])],
     # Figures, one brick per layer (side profiles), so no finger meets a neighbour.
-    # Giraffe: two-high leg, body reaching forward, two-high neck, head with snout.
-    "giraffe": [
-        (D, None, (8, 9), 0),
-        (D, 0, (0, 0), 0),
-        (B, 1, (0, 0), 0),
-        (D, 2, (2, 0), 0),
-        (D, 3, (0, 0), 0),
-        (B, 4, (0, 0), 0),
-    ],
-    # Duck: foot, long body, neck at the front, head with a beak.
-    "duck": [
-        (D, None, (9, 9), 0),
-        (W, 0, (-2, 0), 0),
-        (D, 1, (4, 0), 0),
-        (B, 2, (0, 0), 0),
-    ],
-    # Robot: wide feet, body across them, shoulders, head, hat.
-    "robot": [
-        (W, None, (7, 9), 0),
-        (A, 0, (2, -1), 0),
-        (W, 1, (-2, 1), 0),
-        (D, 2, (2, 0), 0),
-        (B, 3, (-1, 0), 0),
-    ],
-    # Sitting cat: two-high body, chest, head, one ear.
-    "cat": [
-        (B, None, (8, 9), 0),
-        (B, 0, (0, 0), 0),
-        (B, 1, (1, 0), 0),
-        (D, 2, (2, 0), 0),
-        (D, 3, (0, 0), 0),
-    ],
     # Tree: three-high 2x2 trunk, crown of 2x6, 4x2 and 2x2.
     "tree": [
         (D, None, (9, 9), 0),
@@ -168,6 +125,8 @@ SPECS = {
 L6 = [2, 6, 3]  # 2x6 brick, gripped across its 2-stud width
 L8 = [2, 8, 3]  # 2x8 brick
 L10 = [2, 10, 3]  # 2x10 brick
+Q = [6, 4, 3]  # 4x6 brick, as in the dog
+L8X = [8, 2, 3]  # 2x8 brick gripped end to end (fingers on its short ends)
 STONE = [150, 150, 158]
 # (dimensions, support index or None, footprint corner, turns, RGB color)
 AbsolutePart = tuple[list[int], int | None, tuple[int, int], int, list[int]]
@@ -195,6 +154,79 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (A, 5, (6, 9), 1, [160, 30, 30]),
         (D, 6, (8, 9), 0, [110, 110, 115]),
     ],
+    # Steam locomotive: three wheels, a 2x10 chassis resting on all three, a cab
+    # under an overhanging roof, a boiler and a smokestack.
+    "locomotive": [
+        (D, None, (3, 9), 1, [60, 60, 66]),
+        (D, None, (7, 9), 1, [60, 60, 66]),
+        (D, None, (11, 9), 1, [60, 60, 66]),
+        (L10, 0, (3, 9), 1, [170, 30, 30]),
+        (A, 3, (3, 9), 1, [30, 95, 55]),
+        (A, 3, (9, 9), 1, [30, 95, 55]),
+        (L6, 4, (2, 9), 1, [170, 30, 30]),
+        (D, 5, (11, 9), 1, [45, 45, 50]),
+    ],
+    # Lighthouse: a 4x6 rock, a tower striped red and white, a lamp and a cap.
+    "lighthouse": [
+        (Q, None, (7, 8), 0, [110, 105, 100]),
+        (A, 0, (8, 9), 1, [190, 30, 30]),
+        (A, 1, (8, 9), 1, [240, 240, 235]),
+        (A, 2, (8, 9), 1, [190, 30, 30]),
+        (A, 3, (8, 9), 1, [240, 240, 235]),
+        (D, 4, (9, 9), 1, [245, 200, 40]),
+        (A, 5, (8, 9), 1, [190, 30, 30]),
+    ],
+    # Castle gate: two towers two courses high, a 2x10 lintel over the gate and
+    # three battlements along the top.
+    "castle_gate": [
+        (A, None, (3, 9), 1, STONE),
+        (A, None, (11, 9), 1, STONE),
+        (A, 0, (3, 9), 1, STONE),
+        (A, 1, (11, 9), 1, STONE),
+        (L10, 2, (4, 9), 1, [95, 95, 102]),
+        (D, 4, (4, 9), 1, STONE),
+        (D, 4, (8, 9), 1, STONE),
+        (D, 4, (12, 9), 1, STONE),
+    ],
+    # Four-legged table built with grip directions chosen for room: each 2x2 leg
+    # is gripped across x, where the legs are 4 studs apart, and each 2x8 top is
+    # gripped end to end, on its free ends. (The original table has 2-stud gaps
+    # on both axes, so its last leg has no free grip axis.)
+    "table_grip": [
+        (D, None, (5, 6), 0, [150, 95, 50]),
+        (D, None, (11, 6), 0, [150, 95, 50]),
+        (D, None, (5, 10), 0, [150, 95, 50]),
+        (D, None, (11, 10), 0, [150, 95, 50]),
+        (D, 0, (5, 6), 0, [150, 95, 50]),
+        (D, 1, (11, 6), 0, [150, 95, 50]),
+        (D, 2, (5, 10), 0, [150, 95, 50]),
+        (D, 3, (11, 10), 0, [150, 95, 50]),
+        (L8X, 4, (5, 6), 0, [120, 75, 40]),
+        (L8X, 6, (5, 10), 0, [120, 75, 40]),
+    ],
+    # Four-legged table with 4-stud gaps on both axes, every brick gripped across
+    # its width: no finger has to fit a 2-stud gap, and no grip spans a 2x8.
+    "table_wide": [
+        (D, None, (5, 6), 0, [150, 95, 50]),
+        (D, None, (11, 6), 0, [150, 95, 50]),
+        (D, None, (5, 12), 0, [150, 95, 50]),
+        (D, None, (11, 12), 0, [150, 95, 50]),
+        (D, 0, (5, 6), 0, [150, 95, 50]),
+        (D, 1, (11, 6), 0, [150, 95, 50]),
+        (D, 2, (5, 12), 0, [150, 95, 50]),
+        (D, 3, (11, 12), 0, [150, 95, 50]),
+        (L8, 4, (5, 6), 1, [120, 75, 40]),
+        (L8, 6, (5, 12), 1, [120, 75, 40]),
+    ],
+    # Trestle table: two slab legs of 2x4 bricks gripped end to end, so no finger
+    # enters the gap between the legs, under a 4x6 top.
+    "trestle_table": [
+        (B, None, (6, 6), 1, [150, 95, 50]),
+        (B, None, (10, 6), 1, [150, 95, 50]),
+        (B, 0, (6, 6), 1, [150, 95, 50]),
+        (B, 1, (10, 6), 1, [150, 95, 50]),
+        (Q, 2, (6, 6), 0, [120, 75, 40]),
+    ],
     # The 4-brick column with every brick turned to lie along x: the same 8-stud
     # joints, with the gripper rotated 90 degrees (a control for the house wall).
     "column_turned": [
@@ -216,6 +248,22 @@ SHOWCASE: dict[str, list[AbsolutePart]] = {
         (L8, 4, (6, 12), 1, [150, 100, 55]),
     ],
 }
+
+
+# The first locomotive design: a two-brick cab and a two-brick smokestack. It
+# places 9 of 10 bricks, then the cab or stack loses a 4-stud joint (FAILURES.md).
+LOCOMOTIVE_TALL: list[AbsolutePart] = [
+    (D, None, (3, 9), 1, [60, 60, 66]),
+    (D, None, (7, 9), 1, [60, 60, 66]),
+    (D, None, (11, 9), 1, [60, 60, 66]),
+    (L10, 0, (3, 9), 1, [170, 30, 30]),
+    (A, 3, (3, 9), 1, [30, 95, 55]),
+    (A, 3, (9, 9), 1, [30, 95, 55]),
+    (A, 4, (3, 9), 1, [30, 95, 55]),
+    (D, 5, (11, 9), 1, [45, 45, 50]),
+    (L6, 6, (2, 9), 1, [170, 30, 30]),
+    (D, 7, (11, 9), 1, [45, 45, 50]),
+]
 
 
 def rotate(quarter_turns: int, x: int, y: int) -> tuple[int, int]:
@@ -310,6 +358,165 @@ def packed_sources(sizes: list[list[int]], plate: list[float]) -> list[list[floa
     return [[x, y] for x, y, _ in placed]
 
 
+def grip_over_support(
+    config: dict, finger_half_width_m: float = 0.010, margin_m: float = 0.002
+) -> list[list[float]]:
+    """Grasp offsets that put the grip (and so the press) over each support.
+
+    The grip moves along the brick's own y axis (the fingers close across x)
+    toward the centre of the area the brick shares with its support, as far as
+    the fingers stay on the brick.
+
+    Args:
+        config: Assembly config.
+        finger_half_width_m: Half the RG2 finger width along the brick (m).
+        margin_m: Distance kept between a finger edge and the brick end (m).
+
+    Returns:
+        Per brick, [x, y] in meters in the brick's own frame at the source.
+    """
+    from experiments.ur5e_structures.render import footprints
+
+    prints = footprints(config)
+    yaws = config.get("placement_yaws", [0] * len(prints))
+    turns: list[int] = []
+    offsets = []
+    for i, (x0, y0, x1, y1, _) in enumerate(prints):
+        support = config["support_bricks"][i]
+        turn = ((0 if support is None else turns[support]) + yaws[i]) % 4
+        turns.append(turn)
+        if support is None:
+            offsets.append([0.0, 0.0])
+            continue
+        a0, b0, a1, b1, _ = prints[support]
+        cx = (max(x0, a0) + min(x1, a1)) / 2 - (x0 + x1) / 2
+        cy = (max(y0, b0) + min(y1, b1)) / 2 - (y0 + y1) / 2
+        dx, dy = cx, cy
+        for _ in range((4 - turn) % 4):
+            dx, dy = -dy, dx
+        half = 0.004 * config["brick_dimensions"][i][1]
+        limit = max(0.0, half - finger_half_width_m - margin_m)
+        offsets.append([0.0, round(max(-limit, min(limit, 0.008 * dy)), 4)])
+    return offsets
+
+
+# What a structure needs to build, found by the fix-attempt sweeps (see
+# FAILURES.md): controller settings written into its config's "controller"
+# block, and whether its half-supported bricks are gripped over their support.
+NEEDS: dict[str, dict] = {
+    "tree": {"controller": {"release_lift_m": 0.0005}},
+    "tower": {"controller": {"release_lift_m": 0.0005}},
+    "house": {"controller": {"release_lift_m": 0.0005}},
+    "column_10": {"controller": {"release_ramp_s": 0.5}},
+    "cross_tower": {"controller": {"release_ramp_s": 0.5}},
+    "zigzag_6": {"controller": {"release_ramp_s": 0.5}},
+    "lean_ladder": {"controller": {"release_ramp_s": 0.5}},
+    "l_corner": {"controller": {"release_ramp_s": 0.5}},
+    "castle_gate": {"controller": {"release_lift_m": 0.0005, "release_ramp_s": 0.5}},
+    "locomotive": {"controller": {"release_ramp_s": 0.5}},
+    "mixed_tower": {"grip_over_support": True},
+}
+
+
+def apply_needs(name: str, config: dict) -> dict:
+    """Add a structure's needed controller settings and grasp offsets.
+
+    Args:
+        name: Structure name.
+        config: Its validated config.
+
+    Returns:
+        The config with its "controller" block and grasp offsets, if any.
+    """
+    needs = NEEDS.get(name, {})
+    if "controller" in needs:
+        config["controller"] = needs["controller"]
+    if needs.get("grip_over_support"):
+        config["grasp_offsets_m"] = grip_over_support(
+            config, finger_half_width_m=0.004, margin_m=0.0
+        )
+    return config
+
+
+def absolute_config(name: str, parts: list[AbsolutePart]) -> dict:
+    """Build a validated config from absolute parts, as `main` does for showcases.
+
+    Args:
+        name: Structure name (sets the experiment name).
+        parts: Absolute parts as in `SHOWCASE`.
+
+    Returns:
+        The assembly config.
+    """
+    relative = from_absolute(parts)
+    config = {
+        "experiment_name": f"structure_{name}",
+        "baseplate_xy_m": [-0.25, -0.33],
+        "part_names": [f"{name}_{i}" for i in range(len(parts))],
+        "brick_dimensions": [p[0] for p in parts],
+        "brick_colors": [p[4] for p in parts],
+        "brick_positions_xy_m": packed_sources([p[0] for p in parts], [-0.25, -0.33]),
+        "support_bricks": [p[1] for p in parts],
+        "placement_offsets": [list(p[2]) for p in relative],
+        "placement_yaws": [p[3] for p in relative],
+        "min_same_layer_gap_studs": 2,
+    }
+    validate(config)
+    return config
+
+
+# Variant configs for fix attempts: name -> (structure, description, change).
+ATTEMPTS = {
+    "mixed_tower_grip_support": (
+        "mixed_tower",
+        "grip over the supported part",
+        lambda config: {**config, "grasp_offsets_m": grip_over_support(config)},
+    ),
+    "mixed_tower_grip_support_full": (
+        "mixed_tower",
+        "grip 8 mm toward the support (fingertip over the brick end)",
+        lambda config: {
+            **config,
+            "grasp_offsets_m": grip_over_support(
+                config, finger_half_width_m=0.004, margin_m=0.0
+            ),
+        },
+    ),
+    "locomotive_short_stack": (
+        "locomotive",
+        "one-brick smokestack",
+        lambda _: absolute_config("locomotive", LOCOMOTIVE_TALL[:-1]),
+    ),
+    "locomotive_tall_cab": (
+        "locomotive",
+        "two-brick cab and two-brick smokestack (the first design)",
+        lambda _: absolute_config("locomotive", LOCOMOTIVE_TALL),
+    ),
+    "castle_gate_two_battlements": (
+        "castle_gate",
+        "battlements over the towers only",
+        lambda _: absolute_config(
+            "castle_gate",
+            SHOWCASE["castle_gate"][:6] + SHOWCASE["castle_gate"][7:],
+        ),
+    ),
+}
+
+
+def write_attempts() -> None:
+    """Write each attempt's variant config to `attempts/<name>.json`."""
+    folder = Path(__file__).with_name("attempts")
+    folder.mkdir(exist_ok=True)
+    for name, (structure, description, change) in ATTEMPTS.items():
+        base = json.loads(Path(__file__).with_name(f"{structure}.json").read_text())
+        variant = change(base)
+        variant["variant_of"] = structure
+        variant["variant"] = description
+        validate(variant)
+        (folder / f"{name}.json").write_text(json.dumps(variant, indent=2) + "\n")
+        print(f"attempt {name}: {description}")
+
+
 def main() -> None:
     """Resolve offsets, validate every spec and write one JSON recipe per structure.
 
@@ -370,6 +577,7 @@ def main() -> None:
                 offset = best[1]
             config["placement_offsets"].append(list(offset))
         origins = validate(config)
+        config = apply_needs(name, config)
         Path(__file__).with_name(f"{name}.json").write_text(
             json.dumps(config, indent=2) + "\n"
         )
@@ -379,3 +587,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    write_attempts()

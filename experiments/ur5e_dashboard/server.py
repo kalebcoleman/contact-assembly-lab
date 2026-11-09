@@ -11,6 +11,7 @@ from math import ceil, isfinite
 from os import fsencode
 from pathlib import Path
 from runpy import run_path
+from threading import Lock
 from urllib.parse import parse_qs, quote, urlsplit
 
 ASSETS = Path(__file__).resolve().parent
@@ -18,6 +19,18 @@ NONFINITE_VALUES = {"NaN": None, "Infinity": None, "-Infinity": None}
 CASE_SUITE = "ur5e-cases-suite.json"
 STRUCTURES = "experiments/ur5e_structures"
 TRIALS = "trials.json"
+# Catalog index written by experiments/ur5e_structures/catalog.py.
+CATALOG_INDEX = "docs/structures/index.json"
+# Committed media the dashboard may serve: folder -> allowed content types.
+DOC_MEDIA = {
+    "docs/media": {
+        ".jpg": "image/jpeg",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".mp4": "video/mp4",
+    },
+    "docs/structures": {".png": "image/png"},
+}
 VIDEO_EVIDENCE = (
     (
         "stack_four",
@@ -69,6 +82,9 @@ class RunCollection:
         self.root = root.resolve()
         self.evidence = self.root / "experiments/ur5e_lego/docs/evidence"
         self.cache = {}
+        # One refresh at a time: concurrent requests wait for it instead of
+        # each re-reading every recording.
+        self.refresh_lock = Lock()
         self.runs = {}
         self.paths = {}
         self.videos = {}
@@ -366,6 +382,33 @@ class RunCollection:
         Returns:
             Distinct run summaries, most recent first.
         """
+        with self.refresh_lock:
+            return self._refresh()
+
+    def run_id_for(self, recording: str) -> str | None:
+        """Return the run id of a recording file name without reading it.
+
+        Run ids are a hash of the recording path, so trials can link to runs
+        before the run library has been read.
+
+        Args:
+            recording: Recording file name from a trial.
+
+        Returns:
+            The run id, or None if no such recording exists.
+        """
+        for folder in (self.root / "outputs/ur5e_lego", self.evidence):
+            path = folder / recording
+            if path.is_file():
+                return sha256(fsencode(path)).hexdigest()[:20]
+        return None
+
+    def _refresh(self) -> list[dict]:
+        """Discover recordings and summarize them (call `refresh`).
+
+        Returns:
+            Distinct run summaries, most recent first.
+        """
         output_directory = self.root / "outputs/ur5e_lego"
         candidates = list(output_directory.glob("*.jsonl"))
         candidates += list(output_directory.glob("*.jsonl.gz"))
@@ -592,26 +635,26 @@ class RunCollection:
     def structures(self) -> list[dict]:
         """Describe every structure recipe with its layout and recorded trials.
 
-        Bricks are placed on the 20 x 20 stud baseplate grid by the dog validator:
+        Bricks are placed on the 20 x 20 stud baseplate grid by the recipe validator:
         `x`, `y`, `width` and `depth` are in studs (8 mm), `layer` counts brick
         heights above the plate. A simulation trial links to the run library
-        when its recording is there. Call `refresh` first.
+        when its recording is there. The run library need not be read first.
 
         Returns:
             Structures sorted by brick count, then name. A recipe that fails
             validation is reported with an `error` and no bricks.
         """
-        validate = run_path(str(self.root / "experiments/ur5e_dog/validate.py"))[
+        validate = run_path(str(self.root / "experiments/ur5e_assembly/validate.py"))[
             "validate"
         ]
         recipes = sorted((self.root / STRUCTURES).glob("*.json"))
         recipes = [path for path in recipes if path.name != TRIALS]
-        dog = self.root / "experiments/ur5e_dog/dog.json"
-        if dog.is_file():
-            recipes.append(dog)
         trials_path = self.root / STRUCTURES / TRIALS
         trials = loads(trials_path.read_text()) if trials_path.is_file() else []
-        run_ids = {run["filename"]: run_id for run_id, run in self.runs.items()}
+        index_path = self.root / CATALOG_INDEX
+        catalog = loads(index_path.read_text()) if index_path.is_file() else {}
+        entries = catalog.get("structures", {})
+        sections = [section["key"] for section in catalog.get("sections", [])]
         structures = []
         for path in recipes:
             name = path.stem
@@ -643,7 +686,12 @@ class RunCollection:
                     }
                 )
             structure_trials = [
-                {**trial, "run_id": run_ids.get(trial.get("recording"))}
+                {
+                    **trial,
+                    "run_id": self.run_id_for(trial["recording"])
+                    if trial.get("recording")
+                    else None,
+                }
                 for trial in trials
                 if trial.get("structure") == name
             ]
@@ -656,9 +704,52 @@ class RunCollection:
                     "layers": max((b["layer"] for b in bricks), default=-1) + 1,
                     "error": error,
                     "trials": structure_trials,
+                    "catalog": entries.get(name),
                 }
             )
-        return sorted(structures, key=lambda s: (s["brick_count"], s["name"]))
+
+        def order(item: dict) -> tuple:
+            """Sort key: catalog sections in order, then catalog order, then the rest.
+
+            Args:
+                item: One structure from the list being built.
+
+            Returns:
+                A tuple that sorts catalog structures first, in catalog order.
+            """
+            entry = item["catalog"]
+            if entry is None:
+                return (len(sections), len(entries), item["brick_count"], item["name"])
+            section = entry["section"]
+            return (
+                sections.index(section) if section in sections else len(sections),
+                list(entries).index(item["name"]),
+                0,
+                "",
+            )
+
+        return sorted(structures, key=order)
+
+    def doc_media(self, relative: str) -> tuple[Path, str] | None:
+        """Resolve a committed picture or video under docs/ for the dashboard.
+
+        Args:
+            relative: Path below docs/, e.g. "media/bridge.mp4".
+
+        Returns:
+            (file, content type), or None if the path is outside the allowed
+            folders, has another type, or does not exist.
+        """
+        candidate = (self.root / "docs" / relative).resolve()
+        for folder, types in DOC_MEDIA.items():
+            base = (self.root / folder).resolve()
+            if (
+                candidate.parent == base
+                and candidate.suffix.lower() in types
+                and candidate.is_file()
+            ):
+                return candidate, types[candidate.suffix.lower()]
+        return None
 
 
 class DashboardServer(ThreadingHTTPServer):
@@ -726,7 +817,6 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.wfile.write(body)
             return
         if route.path == "/api/structures":
-            server.collection.refresh()
             body = dumps(server.collection.structures(), allow_nan=False).encode()
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -756,6 +846,10 @@ class DashboardHandler(BaseHTTPRequestHandler):
         }
         if route.path in assets:
             path, content_type = assets[route.path]
+        elif route.path.startswith("/docs/") and (
+            media := server.collection.doc_media(route.path.removeprefix("/docs/"))
+        ):
+            path, content_type = media
         elif route.path == "/video" and run_id in server.collection.videos:
             path = server.collection.videos[run_id]
             content_type = "video/mp4"

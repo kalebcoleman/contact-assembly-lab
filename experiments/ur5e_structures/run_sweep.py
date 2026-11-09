@@ -3,12 +3,12 @@
 A sweep definition (`sweeps/<name>.json`) holds the sweep `environment` (applied
 to every run) and `runs`, each with a `label`, a `config` and its own
 `environment` overrides. Runs without a `run` id are pending. Each one goes
-through `experiments/ur5e_dog/run_loop.sh --attempts 1`, then its run id (the new
-`outputs/ur5e_dog/<run>/` folder) is written back into the definition, so the
+through `experiments/ur5e_assembly/run_loop.sh --attempts 1`, then its run id (the new
+`outputs/ur5e_assembly/<run>/` folder) is written back into the definition, so the
 file records exactly which output belongs to which settings.
 
 With `--capture`, the viewport is rendered to frames during the run
-(`DOG_CAPTURE_DIR`) and encoded to `.cache/videos/<sweep>/<label>.mp4` (1080p,
+(`ASSEMBLY_CAPTURE_DIR`) and encoded to `.cache/videos/<sweep>/<label>.mp4` (1080p,
 30 fps of simulated time); the frames are then deleted. The close-up stills
 taken at the end of the run are kept beside the video as
 `<label>_closeup_*.png`.
@@ -34,7 +34,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNS = ROOT / "outputs/ur5e_dog"
+RUNS = ROOT / "outputs/ur5e_assembly"
 # The GPU is shared: wait for this much free memory before starting a run.
 MIN_FREE_GPU_MB = 14000
 
@@ -51,7 +51,7 @@ def free_gpu_mb() -> int:
 
 
 def run_folders() -> set[str]:
-    """Return the names of the run folders under `outputs/ur5e_dog/`."""
+    """Return the names of the run folders under `outputs/ur5e_assembly/`."""
     return {p.name for p in RUNS.iterdir() if p.is_dir()} if RUNS.exists() else set()
 
 
@@ -75,7 +75,7 @@ def run_once(config: str, environment: dict[str, str], log: Path) -> str:
         process = subprocess.Popen(
             [
                 "bash",
-                "experiments/ur5e_dog/run_loop.sh",
+                "experiments/ur5e_assembly/run_loop.sh",
                 "--attempts",
                 "1",
                 "--timeout",
@@ -173,7 +173,7 @@ def main() -> None:
         if args.capture:
             shutil.rmtree(frames, ignore_errors=True)
             shutil.rmtree(frames.with_name(f"{frames.name}_stills"), ignore_errors=True)
-            environment["DOG_CAPTURE_DIR"] = str(frames)
+            environment["ASSEMBLY_CAPTURE_DIR"] = str(frames)
         while free_gpu_mb() < MIN_FREE_GPU_MB:
             print("waiting for GPU memory", flush=True)
             time.sleep(30)

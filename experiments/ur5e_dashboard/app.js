@@ -721,6 +721,30 @@ function trialLabel(trial) {
   return `${trial.bricks_connected}/${trial.bricks_total} ${mark}`;
 }
 
+/** Short label of a structure's results at the default settings. */
+function defaultLabel(structure) {
+  const entry = structure.catalog;
+  if (!entry) return trialLabel(latestTrial(structure, "simulation", null));
+  if (!entry.default_runs) return "not run";
+  const mark =
+    entry.default_completed === entry.default_runs
+      ? "✓"
+      : entry.default_completed
+        ? "partly"
+        : "✗";
+  return `${entry.default_completed}/${entry.default_runs} runs built ${mark}`;
+}
+
+/** Title of a structure: the catalog title, else its file name. */
+function structureTitle(structure) {
+  return structure.catalog ? structure.catalog.title : structure.name;
+}
+
+/** Title of the catalog section a structure belongs to. */
+function sectionTitle(structure) {
+  return structure.catalog ? structure.catalog.section_title : "Other";
+}
+
 /** Render the sidebar list of structures matching the search term. */
 function renderStructureList() {
   const term = byId("search").value.trim().toLowerCase();
@@ -728,7 +752,7 @@ function renderStructureList() {
   list.replaceChildren();
   byId("run-count").textContent = String(structures.length);
   const filtered = structures.filter((structure) =>
-    structure.name.toLowerCase().includes(term),
+    `${structure.name} ${structureTitle(structure)}`.toLowerCase().includes(term),
   );
   if (!filtered.length) {
     const message = document.createElement("p");
@@ -737,20 +761,83 @@ function renderStructureList() {
     list.append(message);
     return;
   }
+  let heading = null;
   for (const structure of filtered) {
+    const section = sectionTitle(structure);
+    if (section !== heading) {
+      heading = section;
+      const label = document.createElement("p");
+      label.className = "side-section";
+      label.textContent = section;
+      list.append(label);
+    }
     const button = document.createElement("button");
     button.type = "button";
     const active = structure.name === selectedStructure;
     button.className = `run${active ? " active" : ""}`;
     button.setAttribute("aria-current", active ? "true" : "false");
-    const sim = latestTrial(structure, "simulation", null);
-    const real = latestTrial(structure, "real", null);
-    button.innerHTML = `<span class="run-top"><span class="run-title">${escapeText(structure.name)}</span></span>
-      <span class="run-date">${structure.brick_count} bricks · ${structure.layers} layers</span>
-      <span class="run-status">Sim ${escapeText(trialLabel(sim))} <span>·</span> Real ${escapeText(trialLabel(real))}</span>`;
+    button.className += " structure-item";
+    button.innerHTML = `<span class="run-top"><span class="run-title">${escapeText(structureTitle(structure))}</span></span>
+      <span class="run-status">${structure.brick_count} bricks <span>·</span> ${escapeText(defaultLabel(structure))}</span>`;
     button.addEventListener("click", () => showStructure(structure.name));
     list.append(button);
   }
+}
+
+/** One run's outcome in words, e.g. "completed, 7/7 connected". */
+function runText(run) {
+  if (!run) return "not run";
+  if (run.outcome === "completed")
+    return `completed, ${run.connected}/${run.total} connected`;
+  return `failed (${run.stop}), ${run.connected}/${run.total} connected at the end`;
+}
+
+/** Fill the simulation, results and attempts panels from the catalog. */
+function showCatalog(structure) {
+  const entry = structure.catalog;
+  const media = byId("structure-media");
+  media.replaceChildren();
+  byId("structure-media-panel").hidden = !(entry && (entry.still || entry.video));
+  if (entry && entry.video) {
+    const video = document.createElement("video");
+    video.controls = true;
+    video.preload = "none";
+    video.src = `/docs/${entry.video}`;
+    if (entry.still) video.poster = `/docs/${entry.still}`;
+    media.append(video);
+  } else if (entry && entry.still) {
+    const image = document.createElement("img");
+    image.src = `/docs/${entry.still}`;
+    image.alt = `${entry.title} in simulation`;
+    media.append(image);
+  }
+  const result = byId("structure-result");
+  if (!entry) {
+    result.textContent = "No catalog entry for this structure.";
+  } else if (!entry.default_runs) {
+    result.textContent = "Not run at the default settings yet.";
+  } else {
+    result.textContent =
+      `${entry.default_completed} of ${entry.default_runs} runs at the default settings completed. ` +
+      `Latest: ${runText(entry.latest)}.`;
+  }
+  const explanation = byId("structure-explanation");
+  const lines = [];
+  if (entry && entry.mechanism) lines.push(`Failure mechanism ${entry.mechanism}.`);
+  if (entry && entry.note) lines.push(entry.note);
+  explanation.textContent = lines.join(" ");
+  explanation.hidden = !lines.length;
+  const attempts = entry ? entry.attempts : [];
+  byId("structure-attempts-wrap").hidden = !attempts.length;
+  byId("structure-attempts").innerHTML =
+    "<thead><tr><th>Changed setting</th><th>Result</th></tr></thead><tbody>" +
+    attempts
+      .map(
+        (attempt) =>
+          `<tr><td>${escapeText(attempt.settings)}</td><td>${escapeText(runText(attempt))}</td></tr>`,
+      )
+      .join("") +
+    "</tbody>";
 }
 
 /** Draw one top-view square per layer: this layer filled, lower layers outlined. */
@@ -795,12 +882,13 @@ function showStructure(name) {
   for (const id of ["content", "loading", "empty", "error"])
     byId(id).hidden = true;
   byId("structure-view").hidden = false;
-  byId("structure-breadcrumb").textContent = name.toUpperCase();
-  byId("structure-name").textContent = name;
-  const sim = latestTrial(structure, "simulation", null);
-  byId("structure-status").textContent = `LATEST SIM ${trialLabel(sim)}`;
+  byId("structure-breadcrumb").textContent = sectionTitle(structure).toUpperCase();
+  byId("structure-name").textContent = structureTitle(structure);
+  byId("structure-status").textContent = defaultLabel(structure).toUpperCase();
   byId("structure-subheading").textContent =
+    `${structure.catalog ? `${structure.catalog.description} ` : ""}` +
     `${structure.brick_count} bricks · ${structure.layers} layers · ${structure.recipe}`;
+  showCatalog(structure);
   byId("structure-error").hidden = !structure.error;
   byId("structure-error").textContent = structure.error
     ? `Recipe does not validate: ${structure.error}`
@@ -813,33 +901,37 @@ function showStructure(name) {
       (trial) => `<tr>
         <td>${escapeText(formatDate(trial.date_utc))}</td>
         <td>${escapeText(trial.kind)}</td>
-        <td>${escapeText(trial.platform)}</td>
         <td>${trial.breakage === null || trial.breakage === undefined ? "—" : trial.breakage ? "on" : "off"}</td>
         <td>${escapeText(trialLabel(trial))}</td>
-        <td>${escapeText(trial.outcome)}</td>
-        <td>${trial.gripper_contacts ?? "—"}</td>
         <td title="${escapeText(trial.failure || "")}">${escapeText((trial.failure || "").replace(/: connected=[\s\S]*$/, ""))}</td>
-        <td>${escapeText(trial.notes || "")}</td>
+        <td>${escapeText(Object.entries(trial.controller_settings || {}).map(([key, value]) => `${key}=${value}`).join(", "))}</td>
         <td>${trial.run_id ? `<button class="case-link" type="button" data-run="${escapeText(trial.run_id)}">Open run</button>` : ""}</td>
       </tr>`,
     );
+  byId("structure-trial-count").textContent = String(structure.trials.length);
   byId("structure-trials").innerHTML =
-    "<thead><tr><th>Date</th><th>Kind</th><th>Platform</th><th>Breakage</th><th>Connected</th><th>Outcome</th><th>Gripper contacts</th><th>First failure</th><th>Notes</th><th></th></tr></thead>" +
-    `<tbody>${rows.join("") || '<tr><td colspan="10">No trials recorded yet.</td></tr>'}</tbody>`;
+    "<thead><tr><th>Date</th><th>Kind</th><th>Breakage</th><th>Connected</th><th>First failure</th><th>Changed settings</th><th></th></tr></thead>" +
+    `<tbody>${rows.join("") || '<tr><td colspan="7">No trials recorded yet.</td></tr>'}</tbody>`;
   for (const button of byId("structure-trials").querySelectorAll("[data-run]"))
     button.addEventListener("click", () => openRun(button.dataset.run));
+  let overviewSection = null;
   byId("structure-overview").innerHTML =
-    "<thead><tr><th>Structure</th><th>Bricks</th><th>Layers</th><th>Sim, breakage off</th><th>Sim, breakage on</th><th>Real</th></tr></thead><tbody>" +
+    "<thead><tr><th>Structure</th><th>Bricks</th><th>Default settings</th><th>Real robot</th></tr></thead><tbody>" +
     structures
-      .map(
-        (item) => `<tr class="${item.name === name ? "active" : ""}">
-          <td><button class="case-link" type="button" data-structure="${escapeText(item.name)}">${escapeText(item.name)}</button></td>
-          <td>${item.brick_count}</td><td>${item.layers}</td>
-          <td>${escapeText(trialLabel(latestTrial(item, "simulation", false)))}</td>
-          <td>${escapeText(trialLabel(latestTrial(item, "simulation", true)))}</td>
+      .map((item) => {
+        const section = sectionTitle(item);
+        const header =
+          section !== overviewSection
+            ? `<tr class="section-row"><td colspan="4">${escapeText(section)}</td></tr>`
+            : "";
+        overviewSection = section;
+        return `${header}<tr class="${item.name === name ? "active" : ""}">
+          <td><button class="case-link" type="button" data-structure="${escapeText(item.name)}">${escapeText(structureTitle(item))}</button></td>
+          <td>${item.brick_count}</td>
+          <td>${escapeText(defaultLabel(item))}</td>
           <td>${escapeText(trialLabel(latestTrial(item, "real", null)))}</td>
-        </tr>`,
-      )
+        </tr>`;
+      })
       .join("") +
     "</tbody>";
   for (const button of byId("structure-overview").querySelectorAll(

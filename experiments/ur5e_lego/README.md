@@ -1,8 +1,10 @@
 # UR5e brick experiments
 
-This folder contains the RISE lab UR5e brick work: the scripts, workstation
-scene, settings, launchers, experiment notes, and recorded evidence. The
-existing project demos and other experiments remain outside this folder.
+This folder holds the RISE lab UR5e scene and its first brick experiments: the
+scripts, workstation scene, settings, launchers, experiment notes and recorded
+evidence, all in simulation. Multi-brick structures are built by the
+[assembly controller](../ur5e_assembly/README.md), which reuses its motion
+helpers and recording format.
 
 [Review recorded experiments](../ur5e_dashboard/README.md) in a local results
 dashboard.

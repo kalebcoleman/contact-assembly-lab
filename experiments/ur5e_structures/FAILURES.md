@@ -1,268 +1,192 @@
-# Failure catalogue (simulation, breakage on)
+# Failure analysis (simulation)
 
-Three sweeps built every structure in Isaac Sim 6.2 with the full breakage
-model on 2026-11-08:
+Every structure was built by the UR5e in Isaac Sim 6.2 with BrickSim's
+joint-strength model on.
 
-- The **failure sweep**: 15 structures, controller `92af9bd`.
-- The **capture sweep**: 16 runs, recorded at 1080p. It covers:
-  - re-records of dog, human and cantilever;
-  - five figures;
-  - four break tests;
-  - a press-force sweep.
+**Controller defaults** are:
+- breakage on;
+- a 1 N press, 0.5 mm below the seat;
+- a 1 s gripper release;
+- the brick gripped at its middle;
+- gripper contacts logged rather than fatal.
 
-  Commit `45717a8` has the same controller logic plus video capture.
-- The **showcase sweep**: 7 runs, recorded at 1080p with close-up stills. It
-  covers:
-  - the arch bridge, house and log cabin;
-  - the dog again;
-  - two house variants;
-  - a turned column.
+When a structure failed at the defaults, it was tried again with other
+settings, grips or small design changes. Anything that made it build is
+written into its config, so it now builds with its own settings and no
+special commands. See [docs/USAGE.md](../../docs/USAGE.md) for how a config
+carries settings.
 
-  Commits `00f9ab4` and `a9b1349` add these structures and the close-ups; the
-  controller logic is unchanged.
+The simulation is deterministic: repeating a run gives the same result. Every
+run, with the settings it used, is in the [sweep summaries](sweeps/README.md);
+every structure is pictured, with each attempt listed, in the
+[structure catalog](../../docs/STRUCTURES.md). Nothing here ran on hardware.
 
-Settings shared by all three sweeps:
-- release opens as wide as neighbouring bricks allow;
-- the arm is held still while the fingers open;
-- gripper contacts are logged, not fatal (`DOG_GRIPPER_CONTACT=log`).
+## What we tested, and what fixed it
 
-Everything here is simulation, judged by simulator ground truth, one run per
-setting; the 6.2 runs are deterministic. No hardware was used. The "Real test"
-notes are proposals for later and have not been run.
+Generated from the sweep summaries by `catalog.py`. "Other attempts" counts the
+runs at any other setting, grip or design variant.
 
-Per-run details are generated from the raw outputs, with the settings, the
-joint breaks and the solver warnings of each run:
-- [sweeps/2026-11-08-failure-sweep.summary.md](sweeps/2026-11-08-failure-sweep.summary.md)
-- [sweeps/2026-11-08-capture-sweep.summary.md](sweeps/2026-11-08-capture-sweep.summary.md)
-- [sweeps/2026-11-08-showcase-sweep.summary.md](sweeps/2026-11-08-showcase-sweep.summary.md)
-
-The [structure catalog](../../docs/STRUCTURES.md) shows every structure's design,
-picture, latest result and video.
-
-[sweeps/README.md](sweeps/README.md) defines each term. The trials are also in
-[trials.json](trials.json) and the dashboard's **Structures** view.
-
-## Reading a failure
-
-Three things are kept apart:
-
-- **What stopped the controller.** This is the first failure the controller
-  detects, for example "brick 2 detached from its support" or "did not complete
-  the press".
-- **What the physics model did.** BrickSim removes a joint when a converged
-  breakage solve reaches utilization 1. A removed joint is often re-formed at
-  once (a *transient* break, invisible to the controller). A *lasting* break
-  is one the joint does not recover from.
-- **Numerical health.** The breakage solver may fail to converge or report high
-  slack before a break. A non-converged step breaks nothing, but a break that
-  follows several of them rests on numerically suspect solves.
-
-Gripper contacts are a separate, policy-level matter. In both sweeps they were
-logged and never stopped a run.
-
-## Results
-
-Breaks are counted as lasting / transient. "Warnings before" counts the
-breakage-solver non-convergence warnings logged just before the lasting break.
-
-### Failure sweep (controller `92af9bd`)
-
-| Structure | Connected at end | Stopped by | Breaks | Lasting break: cause, warnings before | Mechanism | Contacts |
-|---|---|---|---|---|---|---|
-| single | 1/1 | — | 0 / 0 † | | | 0 |
-| column | 4/4 | — | 0 / 2 | | | 0 |
-| human | 8/8 | — | 0 / 1 † | | | 3 (retreat drag) |
-| stairs | 8/8 | — | 0 / 4 † | | | 0 |
-| dog | 10/10 | — | 0 / 2 † | | | 2 (retreat drag) |
-| cantilever | 3/4 | brick 2 joint lost | 1 / 1 | overload seen (u 4.5), 1 | A: press on the overhang | 0 |
-| l_corner | 2/4 | brick 3 joint lost | 1 / 0 | overload seen (capacity exhausted), 12 | A | 0 |
-| zigzag_6 | 3/6 | brick 2 joint lost | 1 / 2 | overload seen (exhausted), 1 | A | 0 |
-| tower | 5/6 | brick 2 joint lost | 1 / 5 | overload seen (exhausted), 4 | B: release load on a 4-stud joint | 0 |
-| lean_6 | 3/6 | brick 3 joint lost | 1 / 3 | overload seen (exhausted), 0 | B | 0 |
-| column_10 | 9/10 | brick 1 joint lost | 1 / 7 | not sampled, 6 | B, repeated | 1 |
-| table | 4/10 | no release clearance (16.2 mm) | 0 / 0 | | C: no room for the fingers | 1 |
-| mixed_tower | 5/8 | brick 6 did not seat | 0 / 3 | | D: press stops on the studs | 0 |
-| cross_tower | 1/10 | brick 2 joint lost | 1 / 0 | sudden (u 0.80 sampled), 4 | E: break after solver non-convergence | 0 |
-| spiral_tower | 1/10 | brick 2 joint lost | 1 / 0 | sudden (u 0.80 sampled), 4 | E | 0 |
-
-† The console log of this run lost some or all of its BrickSim events (see
-[sweeps/README.md](sweeps/README.md)). The breaks shown come from the recording,
-which samples each brick's joint to its planned support. Breaks of other
-joints may be missing. For example, the dog's last joint broke at release and
-re-formed 16 ms later.
-
-### Capture sweep: figures and break tests (commit `45717a8`)
-
-| Run | Connected at end | Stopped by | Breaks | Lasting break: cause, warnings before | Mechanism | Video |
-|---|---|---|---|---|---|---|
-| dog | 10/10 | — | 0 / 2 † | | (completed; the last brick's joint re-formed 16 ms after breaking) | [mp4](../../docs/media/dog_breakage_on.mp4) |
-| human | 8/8 | — | 0 / 1 † | | (completed) | [mp4](../../docs/media/human_breakage_on.mp4) |
-| robot | 5/5 | — | 0 / 3 † | | (completed) | [mp4](../../docs/media/robot.mp4) |
-| cat | 5/5 | — | 0 / 1 † | | (completed) | [mp4](../../docs/media/cat.mp4) |
-| cantilever | 3/4 | brick 2 joint lost | 1 / 1 | overload seen (u 4.5), 1 | A | [mp4](../../docs/media/cantilever_failure.mp4) |
-| giraffe | 2/6 | brick 1 joint lost | 1 / 1 | overload seen (u 3.5), 6 | A: neck pressed on the end of the body | [mp4](../../docs/media/giraffe.mp4) |
-| tree | 5/6 | brick 1 joint lost | 1 / 5 | overload seen (u 2.5), 5 | B: release load on the 4-stud trunk base, repeated | [mp4](../../docs/media/tree.mp4) |
-| duck | 2/4 | brick 3 lost from the grasp | 0 / 0 | | F: grasp lost during transfer | (local only) |
-| lean_ladder | 6/8 | brick 2 joint lost | 1 / 3 | overload seen (exhausted), 0 | B: growing overturning moment | [mp4](../../docs/media/lean_ladder.mp4) |
-| cantilever_tip2 | 2/5 | brick 4 did not seat | 1 / 1 | sudden, 1 (the column base, during the press) | A | [mp4](../../docs/media/cantilever_tip2.mp4) |
-| cantilever_root2 | 5/5 | — | 0 / 3 | | (control: completed) | [mp4](../../docs/media/cantilever_root2.mp4) |
-| tower_2x2 | 3/10 | brick 1 joint lost | 1 / 3 | overload seen (exhausted), 2 | B | [mp4](../../docs/media/tower_2x2.mp4) |
-
-The duck's full-resolution video stays local. The capture sweep summary links
-every run's video.
-
-### Press-force sweep (column of four aligned 2×4, `DOG_REQUIRED_FORCE_N`)
-
-The press force is the force the controller must reach before it counts a
-connection. The peak is the largest contact force measured.
-
-| Press force | Peak force | Result | Lasting break |
-|---|---|---|---|
-| 1 N (default) | 1.15 N | 4/4, completed (2 transient breaks) | |
-| 2 N | 2.22 N | 4/4, completed (3 transient breaks) | |
-| 3 N | 3.92 N | failed, brick 1 joint lost | baseplate joint (8 studs), during the release after brick 2, sudden (u 0.89 sampled) |
-| 5 N | 5.37 N | failed, brick 1 joint lost | baseplate joint, during a release, sudden (u 0.81 sampled) |
-
-In this model, an aligned 8-stud joint survives presses peaking at 2.2 N and
-loses its base joint at 3.9 N, on the gripper release that follows the press.
-That makes it a clean dose-response test for mechanism B. See the
-[3 N video](../../docs/media/column_press_3N.mp4).
-
-### Showcase sweep: bridge, house and log cabin (commits `00f9ab4`, `a9b1349`)
-
-These builds need steps the earlier structures do not have:
-- a deck or lintel that lands on two supports at once;
-- courses that alternate direction and interlock two corners each.
-
-| Run | Settings | Connected at end | Result | Breaks | Video |
+<!-- results:start -->
+| Structure | What it tests | At the controller defaults | What it needs | With it | Other attempts |
 |---|---|---|---|---|---|
-| bridge | default | 7/7 | completed: the 2x10 deck lands on both piers | 0 / 1 | [mp4](../../docs/media/bridge.mp4) |
-| log_cabin | default | 8/8 | completed: 6 bricks each interlock two corners | 0 / 0 | [mp4](../../docs/media/log_cabin.mp4) |
-| dog | default | 10/10 | completed; same breaks as the capture-sweep dog | 0 / 2 | [mp4](../../docs/media/dog_breakage_on.mp4) |
-| house | default (1 s release) | 2/8 | failed: brick 1 joint lost during brick 3's release (B) | 1 / 0 | (local only) |
-| house_press_shallow | press 0.2 mm below seated (default 0.5) | 2/8 | failed the same way | 1 / 0 | (local only) |
-| house_release_2s | 2 s gripper release | 8/8 | completed | 0 / 4 | [mp4](../../docs/media/house.mp4) |
-| column_turned | default | 4/4 | completed: the same 8-stud joints, bricks laid along x | 0 / 3 | (local only) |
+| [Dog](../../docs/STRUCTURES.md#dog) | wide bricks bridging legs; ten-brick figure | 3 of 3 built | nothing | — | 0 |
+| [Arch bridge](../../docs/STRUCTURES.md#bridge) | a deck landing on two piers (corbel arch) | 1 of 1 built | nothing | — | 0 |
+| [House](../../docs/STRUCTURES.md#house) | a lintel over a doorway; stepped roof | 0 of 1 built | ease off 0.5 mm before letting go | 2 of 2 built | 3 |
+| [Log cabin](../../docs/STRUCTURES.md#log_cabin) | courses alternating direction; interlocking corners | 1 of 1 built | nothing | — | 0 |
+| [Steam locomotive](../../docs/STRUCTURES.md#locomotive) | a chassis resting on three wheels | 0 of 1 built | 0.5 s gripper release | 2 of 2 built | 6 |
+| [Lighthouse](../../docs/STRUCTURES.md#lighthouse) | a seven-layer tower on a wide base | 1 of 1 built | nothing | — | 0 |
+| [Castle gate](../../docs/STRUCTURES.md#castle_gate) | a lintel over a gate; battlements | 0 of 1 built | ease off 0.5 mm before letting go, 0.5 s gripper release | 2 of 2 built | 4 |
+| [Tree](../../docs/STRUCTURES.md#tree) | a crown on a 2x2 trunk (4-stud joints) | 0 of 2 built | ease off 0.5 mm before letting go | 2 of 2 built | 2 |
+| [Table](../../docs/STRUCTURES.md#table) | four legs, then tops spanning them | 0 of 2 built | not buildable yet: no room for the RG2 fingers between legs 2 studs apart (C); the trestle table builds | — | 1 |
+| [Table, grip-aware](../../docs/STRUCTURES.md#table_grip) | the table with grips chosen for room | 0 of 1 built | not buildable yet: a 2x8 gripped end to end slips out of the fingers | — | 0 |
+| [Table, wide gaps](../../docs/STRUCTURES.md#table_wide) | 4-stud gaps on both axes | 0 of 1 built | not buildable yet: the 4-stud leg joints break while the tops go on (B) | — | 2 |
+| [Trestle table](../../docs/STRUCTURES.md#trestle_table) | slab legs gripped end to end | 1 of 1 built | nothing | — | 0 |
+| [Mixed tower](../../docs/STRUCTURES.md#mixed_tower) | three brick sizes with offsets | 0 of 2 built | grip half-supported bricks over their support | 1 of 1 built | 4 |
+| [Cross-bonded tower](../../docs/STRUCTURES.md#cross_tower) | alternating quarter turns (4-stud overlaps) | 0 of 2 built | 0.5 s gripper release | 2 of 2 built | 2 |
+| [Spiral tower](../../docs/STRUCTURES.md#spiral_tower) | repeated quarter turns (4-stud overlaps) | 0 of 2 built | not buildable yet: its quarter-turned 4-stud joints break on release (E) | — | 2 |
+| [L corner](../../docs/STRUCTURES.md#l_corner) | a corner brick joining two posts | 0 of 2 built | 0.5 s gripper release | 2 of 2 built | 2 |
+| [Offset tower](../../docs/STRUCTURES.md#tower) | alternating directions with 1-stud shifts | 0 of 2 built | ease off 0.5 mm before letting go | 2 of 2 built | 2 |
+| [Cantilever](../../docs/STRUCTURES.md#cantilever) | a press on a cantilever tip | 0 of 3 built | not buildable yet: the press on the overhang levers the column (A); needs building as a sub-assembly | — | 4 |
+| [Cantilever, two bricks at the tip](../../docs/STRUCTURES.md#cantilever_tip2) | two bricks at a cantilever tip | 0 of 2 built | not buildable yet: the press on the overhang levers the column (A); needs building as a sub-assembly | — | 3 |
+| [Cantilever, two bricks over the support (control)](../../docs/STRUCTURES.md#cantilever_root2) | the same bricks over the support (control) | 2 of 2 built | nothing | — | 0 |
+| [Leaning ladder](../../docs/STRUCTURES.md#lean_ladder) | a lean that grows every layer | 0 of 2 built | 0.5 s gripper release | 2 of 2 built | 2 |
+| [2x2 tower](../../docs/STRUCTURES.md#tower_2x2) | ten 4-stud joints | 0 of 2 built | not buildable yet: ten stacked 4-stud joints; the base breaks on a release (B) | — | 4 |
+| [Lean 6](../../docs/STRUCTURES.md#lean_6) | 2-stud shifts (4-stud joints) | 0 of 2 built | not buildable yet: 2-stud shifts leave 4-stud joints that break on release (B) | — | 4 |
+| [Zigzag 6](../../docs/STRUCTURES.md#zigzag_6) | shear at every joint | 0 of 2 built | 0.5 s gripper release | 2 of 2 built | 2 |
+| [Column of ten](../../docs/STRUCTURES.md#column_10) | load on the base growing with height | 0 of 2 built | 0.5 s gripper release | 2 of 2 built | 2 |
+| [Column, turned 90 degrees](../../docs/STRUCTURES.md#column_turned) | the column with bricks turned 90 degrees | 2 of 2 built | nothing | — | 0 |
+| [Single brick](../../docs/STRUCTURES.md#single) | one brick (sanity check) | 2 of 2 built | nothing | — | 0 |
+| [Column](../../docs/STRUCTURES.md#column) | aligned 8-stud joints | 3 of 3 built | nothing | — | 3 |
+| [Stairs](../../docs/STRUCTURES.md#stairs) | mixed sizes stepping up | 2 of 2 built | nothing | — | 0 |
+<!-- results:end -->
 
-The house's first wall course is an 8-stud joint on the baseplate. During the
-release of the brick above it, the joint's utilization rose from 0.02 to 0.94
-in 0.05 s, then the joint broke. Nothing moved visibly: the wall stayed seated.
-A slower release completes the house, while a shallower press does not help.
-The turned column completes, so turning the bricks alone is not the cause.
-The four transient breaks of the completed house show that it remains close to
-the limit.
+## What fixed failures
 
-## Mechanisms
+**1. Ease off before letting go.**
+- After the press, the arm is still pushing down when the fingers start to
+  open, and that stored push loads the joint below.
+- Holding the tool 0.5 mm higher while the fingers open removes the push.
+- It fixed the tree, the offset tower and the house.
 
-**A. Press load overloads a weak joint below.**
-- The press of a later brick runs through the structure. Joints with 4 studs
-  of contact, or that carry an overhang, exceed utilization 1.
-- The cantilever pair isolates the load position. Two 2×2 bricks pressed onto
-  the free tip of a 2×6 that rests by one end on a 2×2 column:
-  - pry the column's base joint loose during the press;
-  - tip the 2×6, so the new brick never seats (`cantilever_tip2`).
-- The same bricks pressed over the support complete (`cantilever_root2`).
-- The giraffe shows the same lever: its neck is pressed onto the far end of
-  the body, and the 4-stud base joint fails.
-- *Real test:* build the cantilever pair and the giraffe, and press each brick
-  with a force gauge, or the robot's force/torque reading, at 1 N and 2 N.
-  Check whether the lower joint lifts or pops.
+**2. Let go faster.**
+- Opening the gripper over 0.5 s instead of 1 s lets go before the load builds
+  up in the joint below.
+- It fixed the column of ten, the cross-bonded tower, zigzag, the leaning
+  ladder, the L corner and the steam locomotive.
+- The castle gate needs both fixes together.
+- The opposite, a slower 2 s release, made most structures worse; it fixed
+  only the house.
 
-**B. Release load on a joint.**
-- The joint's utilization rises while the fingers open on the brick just
-  placed, then the joint breaks. No gripper contact is involved.
-- The pads let go of a brick that the arm was pressing, so the stored press
-  load reaches the new joint.
-- Evidence:
-  - tree, tower_2x2 and column_10: a 4-stud (or deep) base joint breaks
-    transiently on one release after another, then for good;
-  - lean_ladder: the joint fails as the lean grows;
-  - press-force sweep: a harder press makes even an 8-stud joint fail on
-    release;
-  - house: an 8-stud wall joint fails on a 1 s release and survives a 2 s
-    release, with a shallower press making no difference. In this model the
-    opening speed matters more than the press depth.
-- *Real test:* place a 2×4 on a 2×4 shifted 2 studs, then a 2×2 column. Watch
-  whether the lower joint lifts when the gripper opens, at two press forces
-  and two opening speeds.
+**3. Press where the brick is supported.**
+- A 2x4 resting on a 2x2 is half unsupported. Gripped and pressed at its
+  middle, it tips and never seats.
+- Gripping it 8 mm toward its support, so the press goes straight down,
+  fixed the mixed tower.
+- A 4 mm shift was not enough.
 
-**C. No room for the fingers.**
-- The RG2 fingertip is about 11 mm thick and opens outward.
-- Bricks 2 studs (16 mm) apart leave no opening that frees the held brick while
-  keeping 2 mm from its neighbour, so the controller stops instead of hitting it.
-- This is a gripper limit, not a physics one.
-- *Real test:* find the smallest gap at which the RG2 can let go without
-  touching the neighbour.
+**4. Grip so the fingers have room.**
+- The RG2 fingertips are about 11 mm thick and open outward, so they need
+  room beside the brick.
+- Gripping a 2x4 end to end, by its short faces, keeps the fingers out of a
+  narrow gap. The trestle table builds this way.
+- Gripping a 2x8 end to end does not hold: it slipped out during the lift.
 
-**D. Press stops on the studs.**
-- The brick slides a little inside the gripper at first stud contact, then
-  rests 1–1.3 mm above its seat.
-- The arm reaches its press target without pushing it home (mixed_tower).
-- *Real test:* does a real brick seat, or does it need a deeper press or a
-  wiggle?
+**5. Change the design slightly.**
+- The castle gate also builds with its battlements over the towers only,
+  without the one over the middle of the lintel.
+- The steam locomotive's first design, with a two-brick cab and a two-brick
+  smokestack, never built: every variant lost the cab's joint to the
+  chassis on a release (B). With a one-brick cab under the roof and a
+  one-brick smokestack it builds, with the faster release (fix 2).
 
-**E. Break after breakage-solver non-convergence.**
-- On cross_tower and spiral_tower, a quarter-turned 2×4 on a 4-stud overlap
-  is sampled at utilization 0.80 at most.
-- The breakage solver then fails to converge four times, and the joint breaks
-  at the end of the release: on the next converged solve, which the telemetry
-  does not sample.
-- The RG2 records no contact.
-- This was "unexplained" in the first catalogue. It is now attributed to a
-  sudden break that follows numerically suspect solves. Whether the real joint
-  is overloaded there is open.
-- *Next step in simulation:* log the breaking solve's utilization and slack
-  in BrickSim. Rerun with a tighter solver tolerance.
-- *Real test:* a quarter-turned 2×4 on a 2×4 (4 studs): does it survive the
-  release and retreat?
+## What still does not build
 
-**F. Grasp lost during transfer.**
-- The duck's 2×2 passed the lift check, then slipped out of the fingers as
-  the arm accelerated into the transfer. It fell to the table while the
-  gripper closed to its stop.
-- The controller has no grasp check during transfer, so it went on to "correct"
-  its placement by 15 cm toward the fallen brick before the press failed.
-- This is a controller and grasp gap, not joint physics. A gripper-width check
-  during transfer and a bound on the prepress correction would catch it.
-- *Real test:* hold a 2×2 with the RG2 at the same grip force and transfer
-  speed.
+Each of these failed at the defaults and with every fix that applied. They
+are documented results, not dead ends.
 
-**Transient breaks.**
-- 69 of the 87 joint breaks across the three sweeps were re-formed within 1 s.
-- They occur in every completed run except single and the log cabin.
-- The controller only sees lasting breaks.
-- A joint that breaks transiently on every release (tree, tower_2x2,
-  column_10) is the clearest warning sign of a later lasting break.
+- **Table (original):** the legs are 2 studs apart on both axes, so the last
+  leg has no side where a finger fits. This is a gripper limit.
+- **Table, wide gaps:** the fingers fit, but the legs' 4-stud joints break
+  while the tops go on. The trestle table builds instead.
+- **Spiral tower, 2x2 tower, lean 6:** all rest on 4-stud joints. In this
+  model those break on a release however the gripper lets go.
+- **Cantilever, and two bricks at the tip:** pressing on the overhang levers
+  the column below. The fix is to build the top as a sub-assembly first
+  (attach the load to the 2x6, then place the pair); that needs controller
+  support for moving a built part and is future work.
 
-**Gripper contacts (logged, not fatal).**
-- human, dog, table, column_10 and cantilever_tip2 record a finger touching
-  another brick (impulse 0.03–6.4 mN·s).
-- On human, dog and table it is a finger dragging a brick while the arm lifts,
-  where a neighbour limited the opening to a few millimetres.
-- On column_10 a finger touches the brick below during release. On
-  cantilever_tip2 it touches the tipping 2×6 during the press.
-- None of these contacts detached a brick.
+<a id="mechanisms"></a>
 
-## Simulation gaps these runs expose
+## How builds fail
 
-- The breakage model's capacity μF₀ = 0.7 N per contact point, from the
-  BrickSim paper, has not been checked against these press and release loads.
-  Mechanisms A and B are where real joints may hold and simulated ones break,
-  or the reverse.
-- The breakage solver often struggles:
-  - 26 of the 38 runs logged at least one non-convergence or high-slack warning;
-  - 12 of the 18 lasting breaks came after such warnings;
-  - BrickSim treats a non-converged step as "no information" and keeps the
-    previous utilization.
-- The breaking solve is not sampled, so a `sudden` break cannot be explained
-  from the telemetry. The utilization 1e6 is a sentinel for exhausted
-  capacity, not a load.
-- The console log loses some or all of its BrickSim events in 13 of 38 runs,
-  all of them completed runs (both human runs lost every one). Solver warnings
-  and breaks of secondary joints counted from it are lower bounds there. For
-  each brick's joint to its planned support, the recording fills the gap.
-- The breakage load is computed from weld forces PhysX reports. On CPU TGS,
-  PhysX misreports their torque; this repository corrects it
-  (`TestWeldConstraintForce`).
-- Poses come from simulator ground truth, with no perception, and the pickup
+The letters in the catalog refer to these mechanisms.
+
+- **A. Pressing a brick breaks a joint below.** Pushing a new brick down loads
+  everything under it; joints with only 4 studs, or carrying an overhang,
+  give way.
+- **B. Letting go breaks a joint below.** The press stores load in the new
+  joint, and opening the fingers releases it into the joint below. Nothing
+  visibly moves. Fixes 1 and 2 address this.
+- **C. No room for the fingers.** The gripper cannot open without touching a
+  neighbour, so the controller stops. Fix 4 addresses this.
+- **D. A brick does not seat.** It tips on the studs. Fix 3 addresses this.
+- **E. The breakage solver struggles, then a joint breaks.** A numerical
+  weakness of the simulator on 4-stud quarter-turn joints. The fast release
+  avoids it on the cross-bonded tower but not on the spiral tower.
+- **F. A brick slips out of the grasp.** Seen once, in a small duck figure
+  since removed from the library. A gripper-width check during transfer would
+  catch it.
+
+## Controlled comparisons
+
+Each comparison changes one thing and keeps everything else the same.
+
+**Where the load sits (cantilever, two 2x2 bricks).**
+
+| Pressed… | Result |
+|---|---|
+| at the free tip | fails: the column's base joint pries loose (A) |
+| over the support | completes |
+
+**How hard the robot presses (column of four 2x4 bricks).**
+
+| Press force | Peak force | Result |
+|---|---|---|
+| 1 N (default) | 1.2 N | completes |
+| 2 N | 2.2 N | completes |
+| 3 N | 3.9 N | base joint breaks on the next release (B) |
+| 5 N | 5.4 N | base joint breaks on a release (B) |
+
+**How the gripper lets go (house).**
+
+| Setting | Result |
+|---|---|
+| 1 s release (default) | a wall joint breaks on a release (B) |
+| shallower press (0.2 mm) | the same break |
+| 2 s release | completes |
+| 0.5 s release | completes |
+| ease off 0.5 mm, 1 s release | completes (the house's setting) |
+
+## What the simulator cannot tell us yet
+
+- **The breaking moment is not recorded.** BrickSim breaks a joint inside the
+  physics step, before any load is sampled, so some breaks look sudden.
+- **Most breaks heal invisibly.** Most joint breaks re-form within a second,
+  and the controller never sees them. The sweep summaries count them per run.
+- **The solver often struggles.** Breakage-solver warnings appear in most runs,
+  and most lasting breaks follow them.
+- **Joint strength is unverified.** The capacity per stud contact comes from
+  the BrickSim paper and has not been checked against real bricks under these
+  loads.
+- **Perfect perception.** Poses come from simulator ground truth, and pickup
   positions are known exactly.
+
+## Proposed real-robot tests (not yet run)
+
+| Question | Test on the real UR5e |
+|---|---|
+| Do the release fixes matter on real bricks? | Build the column of ten and the tree with each release setting; does the base lift when the gripper opens? |
+| Does the press lever break real cantilevers? | Build the cantilever pair; press at 1 N and 2 N with a force gauge. |
+| How much room do the fingers need? | Find the smallest gap at which the RG2 can let go without touching the neighbour. |
+| Does pressing over the support seat real bricks? | Build the mixed tower with centred and off-centre grips. |
+| Are 4-stud quarter-turn joints really this weak? | Build a quarter-turned 2x4 on a 2x4 (4 studs); does it survive the release? |

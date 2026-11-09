@@ -2,7 +2,8 @@
 
 This repository's UR5e brick assembly is a demo and a contact-physics testbed.
 The main research direction is Jenga with MPC and RL, in its own projects.
-This note lists practices that the brick sweeps of 2026-11-08 showed to matter,
+This note lists practices that the brick sweeps of 2026-11-08 (failure, capture
+and showcase; 38 runs) showed to matter,
 so the Jenga work can adopt the ones that fit. It is not a proposal to share
 code, schemas or a common architecture: each project keeps its own recorder,
 formats and tools. Everything below comes from simulation runs; no hardware
@@ -17,8 +18,9 @@ and the generated sweep summaries in
 
 **Seen here.** Each recording stores breakage and assembly settings at every
 step. The gripper-contact mode, press depth and timing, however, were only
-environment variables. For the existing runs they had to be recovered from
-the sweep definitions.
+environment variables. For the early runs they had to be recovered from the
+sweep definitions; the controller now prints the settings it used
+(`controller settings {...}`) at the start of every run.
 
 **For Jenga.** Write the settings actually used into the episode header, after
 defaults are resolved:
@@ -148,10 +150,9 @@ Keep everything else identical.
 
 ## 9. Check determinism, then measure variance on purpose
 
-**Seen here.** Paired runs in the two sweeps match exactly: outcome, contacts,
-solver warnings, joint breaks and the simulator step of every logged joint
-event. One run per
-setting is therefore reproducible. It still says nothing about sensitivity to
+**Seen here.** Paired runs in the failure and capture sweeps match exactly:
+outcome, contacts, solver warnings, joint breaks and the simulator step of
+every logged joint event. One run per setting is therefore reproducible. It still says nothing about sensitivity to
 initial conditions.
 
 **For Jenga.** Rerun a few episodes to confirm determinism for a fixed seed.

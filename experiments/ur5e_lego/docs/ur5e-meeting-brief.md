@@ -9,7 +9,7 @@ Run `python3 experiments/ur5e_dashboard/server.py`, open `http://127.0.0.1:8765`
 choose **Test cases**. Each case shows its inputs, written prediction, outcome,
 measurements, assistance, limits and logs.
 
-- Videos of real runs: [nominal](evidence/ur5e-case-C01-run.mp4),
+- Videos of recorded simulation runs: [nominal](evidence/ur5e-case-C01-run.mp4),
   [rejection](evidence/ur5e-case-C05-run.mp4), [unreachable](evidence/ur5e-case-C12-run.mp4).
   Other cases link one of these, labeled as representative.
 - [Suite manifest](evidence/ur5e-cases-suite.json) with commits, environment and asset hashes.
