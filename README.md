@@ -1,6 +1,6 @@
 # Contact Assembly Lab
 
-### Robotic brick assembly with joint-strength physics in Isaac Sim 6.2
+### A contact-rich robotic assembly digital-twin testbed in Isaac Sim 6.2
 
 **Kaleb Coleman**
 
@@ -18,11 +18,13 @@
 
 ![The UR5e building the arch bridge in simulation](docs/media/bridge.gif)
 
-A UR5e arm with an RG2 gripper builds interlocking-brick structures in NVIDIA
-Isaac Sim 6.2. BrickSim's joint-strength model decides, at every physics step,
-whether each stud connection holds. The project asks what a robot can build
-reliably and why builds fail, and it is the contact-physics testbed for my
-research on Jenga with MPC and RL. All results are simulation.
+Contact Assembly Lab is a digital-twin testbed for contact-rich robotic assembly
+in NVIDIA Isaac Sim 6.2. A UR5e arm with an RG2 gripper assembles structures
+from interlocking parts, and BrickSim's joint-strength model decides, at every
+physics step, whether each stud connection holds. The project asks what a robot
+can assemble reliably and why builds fail, and it is the contact-physics testbed
+for my research on Jenga with MPC and RL. All results are simulation; no
+real-robot trials have been run.
 
 ## Showcase
 
@@ -153,7 +155,7 @@ simulator UI are theirs. This version adds:
 
 1. Grip bricks in more ways (across the long side, re-grasping) to remove the
    gripper limits found so far.
-2. Use more LEGO elements, such as plates, 1-wide bricks and offsets, for more
+2. Add more part types, such as plates, 1-wide parts and offsets, for more
    complex builds.
 3. Build the same structures on the real UR5e and compare what fails.
 4. Carry the evaluation methods over to Jenga
@@ -165,7 +167,7 @@ If you use this work, please cite it and BrickSim, which it builds on.
 
 ```bibtex
 @software{coleman2026contactassemblylab,
-    title = {Contact Assembly Lab: Robotic Brick Assembly with Joint-Strength Physics in Isaac Sim 6.2},
+    title = {Contact Assembly Lab: A Contact-Rich Robotic Assembly Testbed with Joint-Strength Physics in Isaac Sim 6.2},
     author = {Coleman, Kaleb},
     year = {2026},
     url = {https://github.com/kalebcoleman/contact-assembly-lab}

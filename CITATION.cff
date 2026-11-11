@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it and BrickSim, which it builds on."
-title: "Contact Assembly Lab: Robotic Brick Assembly with Joint-Strength Physics in Isaac Sim 6.2"
+title: "Contact Assembly Lab: A Contact-Rich Robotic Assembly Testbed with Joint-Strength Physics in Isaac Sim 6.2"
 type: software
 authors:
   - family-names: Coleman
@@ -13,6 +13,7 @@ keywords:
   - assembly
   - Isaac Sim
   - contact physics
+  - digital twin
   - UR5e
 references:
   - type: article
