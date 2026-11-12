@@ -1,0 +1,38 @@
+# Known-pose assembly rehearsal config. Poses are TCP in the robot `base`
+# frame (not base_link), translation in meters, rotation in degrees (extrinsic
+# XYZ). These are uncalibrated mock-rehearsal values, not a validated cell.
+baseplate:
+  # Bottom-face centre of the 20x20x1 baseplate; brick layers start on its top.
+  origin_xyz_m: [0.25, 0.40, 0.0]
+  yaw_deg: 0.0
+  stud_pitch_m: 0.008
+  brick_height_m: 0.0096
+pickup:
+  # Absolute fixture TCP pose in base; not a stage coordinate and not an offset.
+  xyz_m: [0.25, 0.18, 0.0048]
+  rpy_deg: [180.0, 0.0, 0.0]
+  # Commanded width, millimeters.
+  gripper_width_mm: 20.0
+calibration:
+  # Brick-to-TCP transform. Translation is in brick axes from the brick's
+  # bottom-face centre; with zero TCP offset it places the tool point at the
+  # brick's geometric centre. Replace with measured values before hardware use.
+  brick_to_tcp_xyz_m: [0.0, 0.0, 0.0048]
+  brick_to_tcp_rpy_deg: [180.0, 0.0, 0.0]
+limits:
+  # Base-frame AABB for every planned TCP pose, meters.
+  workspace_min_m: [0.05, 0.05, -0.01]
+  workspace_max_m: [0.55, 0.60, 0.35]
+  max_speed_m_s: 0.05
+  # Dimensionless speed scale applied to configured speeds; must be in (0, 1].
+  max_speed_scale: 1.0
+motion:
+  hover_m: 0.04
+  travel_speed_m_s: 0.05
+  descend_speed_m_s: 0.01
+seating:
+  # Commanded force for the force-mode controller, newtons; not a measured
+  # force limit. Hardware seating is blocked pending sensing and force limits.
+  force_n: 20.0
+  max_travel_m: 0.002
+  timeout_s: 5.0
