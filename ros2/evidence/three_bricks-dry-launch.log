@@ -1,0 +1,159 @@
+[INFO] [launch]: All log files can be found below /home/kaleb/.t3/scratch/2026-11-12-you-are-the-coordinator-for-6155d58b/.agents/private-plans/runtime-logs/2026-11-12-09-05-36-646866-kaleb-Latitude-7430-76420
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [assembly_executor-1]: process started with pid [76422]
+[INFO] [ros2_control_node-2]: process started with pid [76424]
+[INFO] [robot_state_publisher-3]: process started with pid [76426]
+[INFO] [trajectory_until_node-4]: process started with pid [76428]
+[INFO] [spawner-5]: process started with pid [76430]
+[INFO] [spawner-6]: process started with pid [76432]
+[INFO] [record_joint_states-7]: process started with pid [76434]
+[INFO] [fake_gripper-8]: process started with pid [76436]
+[robot_state_publisher-3] [INFO] [1794499536.867525759] [robot_state_publisher]: got segment base
+[robot_state_publisher-3] [INFO] [1794499536.867622103] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-3] [INFO] [1794499536.867626417] [robot_state_publisher]: got segment base_link_inertia
+[robot_state_publisher-3] [INFO] [1794499536.867629247] [robot_state_publisher]: got segment flange
+[robot_state_publisher-3] [INFO] [1794499536.867631646] [robot_state_publisher]: got segment forearm_link
+[robot_state_publisher-3] [INFO] [1794499536.867633984] [robot_state_publisher]: got segment ft_frame
+[robot_state_publisher-3] [INFO] [1794499536.867636292] [robot_state_publisher]: got segment shoulder_link
+[robot_state_publisher-3] [INFO] [1794499536.867638596] [robot_state_publisher]: got segment tool0
+[robot_state_publisher-3] [INFO] [1794499536.867640836] [robot_state_publisher]: got segment upper_arm_link
+[robot_state_publisher-3] [INFO] [1794499536.867643350] [robot_state_publisher]: got segment world
+[robot_state_publisher-3] [INFO] [1794499536.867645738] [robot_state_publisher]: got segment wrist_1_link
+[robot_state_publisher-3] [INFO] [1794499536.867647948] [robot_state_publisher]: got segment wrist_2_link
+[robot_state_publisher-3] [INFO] [1794499536.867650101] [robot_state_publisher]: got segment wrist_3_link
+[ros2_control_node-2] [WARN] [1794499536.878949728] [controller_manager]: [Deprecated] Passing the robot description parameter directly to the control_manager node is deprecated. Use '~/robot_description' topic from 'robot_state_publisher' instead.
+[ros2_control_node-2] [INFO] [1794499536.879474513] [resource_manager]: Loading hardware 'ur5e' 
+[ros2_control_node-2] [INFO] [1794499536.879810957] [resource_manager]: Initialize hardware 'ur5e' 
+[ros2_control_node-2] [WARN] [1794499536.879844425] [mock_generic_system]: Parameter 'fake_sensor_commands' has been deprecated from usage. Use'mock_sensor_commands' instead.
+[ros2_control_node-2] [WARN] [1794499536.879955519] [mock_generic_system]: Parsing of optional initial interface values failed or uses a deprecated format. Add initial values for every state interface in the ros2_control.xacro. For example: 
+[ros2_control_node-2] <state_interface name="velocity"> 
+[ros2_control_node-2]   <param name="initial_value">0.0</param> 
+[ros2_control_node-2] </state_interface>
+[ros2_control_node-2] [INFO] [1794499536.879964855] [resource_manager]: Successful initialization of hardware 'ur5e'
+[ros2_control_node-2] [INFO] [1794499536.880260419] [resource_manager]: 'configure' hardware 'ur5e' 
+[ros2_control_node-2] [INFO] [1794499536.880271954] [resource_manager]: Successful 'configure' of hardware 'ur5e'
+[ros2_control_node-2] [INFO] [1794499536.880314679] [resource_manager]: 'activate' hardware 'ur5e' 
+[ros2_control_node-2] [INFO] [1794499536.880319610] [resource_manager]: Successful 'activate' of hardware 'ur5e'
+[ros2_control_node-2] [INFO] [1794499536.884360299] [controller_manager]: update rate is 500 Hz
+[ros2_control_node-2] [INFO] [1794499536.884395707] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-2] [WARN] [1794499536.884477934] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <1>(Operation not permitted). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[ros2_control_node-2] [INFO] [1794499537.055848220] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[spawner-5] [INFO] [1794499537.078783054] [spawner_joint_state_broadcaster]: [94mLoaded [1mjoint_state_broadcaster[0m
+[ros2_control_node-2] [INFO] [1794499537.079454832] [controller_manager]: Configuring controller 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499537.079555976] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[spawner-6] [INFO] [1794499537.087016527] [spawner_joint_trajectory_controller]: waiting for service /controller_manager/list_controllers to become available...
+[spawner-5] [INFO] [1794499537.089454107] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mjoint_state_broadcaster[0m
+[ros2_control_node-2] [INFO] [1794499537.090199629] [controller_manager]: Loading controller 'io_and_status_controller'
+[spawner-5] [INFO] [1794499537.101507939] [spawner_joint_state_broadcaster]: [94mLoaded [1mio_and_status_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.101905231] [controller_manager]: Configuring controller 'io_and_status_controller'
+[spawner-5] [INFO] [1794499537.117565512] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mio_and_status_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.118500709] [controller_manager]: Loading controller 'speed_scaling_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499537.123245316] [speed_scaling_state_broadcaster]: Loading UR SpeedScalingStateBroadcaster with tf_prefix: 
+[spawner-5] [INFO] [1794499537.125495991] [spawner_joint_state_broadcaster]: [94mLoaded [1mspeed_scaling_state_broadcaster[0m
+[ros2_control_node-2] [INFO] [1794499537.125690719] [controller_manager]: Configuring controller 'speed_scaling_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499537.125749516] [speed_scaling_state_broadcaster]: Publisher rate set to : 100.0 Hz
+[spawner-5] [INFO] [1794499537.131330216] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mspeed_scaling_state_broadcaster[0m
+[ros2_control_node-2] [INFO] [1794499537.132236034] [controller_manager]: Loading controller 'force_torque_sensor_broadcaster'
+[spawner-5] [INFO] [1794499537.139495558] [spawner_joint_state_broadcaster]: [94mLoaded [1mforce_torque_sensor_broadcaster[0m
+[ros2_control_node-2] [INFO] [1794499537.139726370] [controller_manager]: Configuring controller 'force_torque_sensor_broadcaster'
+[spawner-5] [INFO] [1794499537.147335567] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mforce_torque_sensor_broadcaster[0m
+[ros2_control_node-2] [INFO] [1794499537.148277981] [controller_manager]: Loading controller 'ur_configuration_controller'
+[spawner-5] [INFO] [1794499537.155521288] [spawner_joint_state_broadcaster]: [94mLoaded [1mur_configuration_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.155737559] [controller_manager]: Configuring controller 'ur_configuration_controller'
+[record_joint_states-7] [INFO] [1794499537.159530436] [record_joint_states]: Recording joint states to /home/kaleb/.t3/scratch/2026-11-12-you-are-the-coordinator-for-6155d58b/.agents/private-plans/three_bricks-dry-joints.jsonl
+[spawner-5] [INFO] [1794499537.161440088] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mur_configuration_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.162520980] [controller_manager]: Loading controller 'friction_model_controller'
+[spawner-5] [INFO] [1794499537.167481746] [spawner_joint_state_broadcaster]: [94mLoaded [1mfriction_model_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.167687150] [controller_manager]: Configuring controller 'friction_model_controller'
+[spawner-5] [INFO] [1794499537.175312610] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mfriction_model_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.176285034] [controller_manager]: Loading controller 'scaled_joint_trajectory_controller'
+[assembly_executor-1] [INFO] [1794499537.181771304] [risl_contact_assembly_executor]: assembly planned: dry run: plan validated and logged; no control endpoint or message created; no physical insertion validated
+[ros2_control_node-2] [INFO] [1794499537.183181281] [scaled_joint_trajectory_controller]: Using scaling state from the hardware from interface speed_scaling/speed_scaling_factor.
+[ros2_control_node-2] [WARN] [1794499537.185445663] [scaled_joint_trajectory_controller]: [Deprecated]: "allow_nonzero_velocity_at_trajectory_end" is set to true. The default behavior will change to false.
+[spawner-5] [INFO] [1794499537.187549894] [spawner_joint_state_broadcaster]: [94mLoaded [1mscaled_joint_trajectory_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.187805431] [controller_manager]: Configuring controller 'scaled_joint_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499537.188000753] [scaled_joint_trajectory_controller]: No specific joint names are used for command interfaces. Using 'joints' parameter.
+[ros2_control_node-2] [INFO] [1794499537.188023962] [scaled_joint_trajectory_controller]: Command interfaces are [position] and state interfaces are [position velocity].
+[ros2_control_node-2] [INFO] [1794499537.188108391] [scaled_joint_trajectory_controller]: Using 'splines' interpolation method.
+[ros2_control_node-2] [INFO] [1794499537.189015326] [scaled_joint_trajectory_controller]: Controller state will be published at 100.00 Hz.
+[ros2_control_node-2] [INFO] [1794499537.190820669] [scaled_joint_trajectory_controller]: Action status changes will be monitored at 20.00 Hz.
+[spawner-5] [INFO] [1794499537.201348873] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mscaled_joint_trajectory_controller[0m
+[INFO] [assembly_executor-1]: process has finished cleanly [pid 76422]
+[INFO] [spawner-5]: process has finished cleanly [pid 76430]
+[ros2_control_node-2] [INFO] [1794499537.339448309] [controller_manager]: Loading controller 'joint_trajectory_controller'
+[ros2_control_node-2] [WARN] [1794499537.347576098] [joint_trajectory_controller]: [Deprecated]: "allow_nonzero_velocity_at_trajectory_end" is set to true. The default behavior will change to false.
+[spawner-6] [INFO] [1794499537.349339146] [spawner_joint_trajectory_controller]: [94mLoaded [1mjoint_trajectory_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.350127708] [controller_manager]: Configuring controller 'joint_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499537.350286587] [joint_trajectory_controller]: No specific joint names are used for command interfaces. Using 'joints' parameter.
+[ros2_control_node-2] [INFO] [1794499537.350304020] [joint_trajectory_controller]: Command interfaces are [position] and state interfaces are [position velocity].
+[ros2_control_node-2] [INFO] [1794499537.350319327] [joint_trajectory_controller]: Using 'splines' interpolation method.
+[ros2_control_node-2] [INFO] [1794499537.350654878] [joint_trajectory_controller]: Controller state will be published at 100.00 Hz.
+[ros2_control_node-2] [INFO] [1794499537.351959768] [joint_trajectory_controller]: Action status changes will be monitored at 20.00 Hz.
+[ros2_control_node-2] [INFO] [1794499537.356031058] [controller_manager]: Loading controller 'forward_velocity_controller'
+[spawner-6] [INFO] [1794499537.363491181] [spawner_joint_trajectory_controller]: [94mLoaded [1mforward_velocity_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.363746828] [controller_manager]: Configuring controller 'forward_velocity_controller'
+[ros2_control_node-2] [INFO] [1794499537.364430685] [forward_velocity_controller]: configure successful
+[ros2_control_node-2] [INFO] [1794499537.367912454] [controller_manager]: Loading controller 'forward_position_controller'
+[spawner-6] [INFO] [1794499537.375486715] [spawner_joint_trajectory_controller]: [94mLoaded [1mforward_position_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.375755885] [controller_manager]: Configuring controller 'forward_position_controller'
+[ros2_control_node-2] [INFO] [1794499537.376237422] [forward_position_controller]: configure successful
+[ros2_control_node-2] [INFO] [1794499537.378024520] [controller_manager]: Loading controller 'forward_effort_controller'
+[spawner-6] [INFO] [1794499537.385413681] [spawner_joint_trajectory_controller]: [94mLoaded [1mforward_effort_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.385693444] [controller_manager]: Configuring controller 'forward_effort_controller'
+[ros2_control_node-2] [INFO] [1794499537.386153761] [forward_effort_controller]: configure successful
+[ros2_control_node-2] [INFO] [1794499537.388011814] [controller_manager]: Loading controller 'force_mode_controller'
+[spawner-6] [INFO] [1794499537.395386330] [spawner_joint_trajectory_controller]: [94mLoaded [1mforce_mode_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.395638972] [controller_manager]: Configuring controller 'force_mode_controller'
+[ros2_control_node-2] [INFO] [1794499537.402398041] [controller_manager]: Loading controller 'passthrough_trajectory_controller'
+[spawner-6] [INFO] [1794499537.409548501] [spawner_joint_trajectory_controller]: [94mLoaded [1mpassthrough_trajectory_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.409826367] [controller_manager]: Configuring controller 'passthrough_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499537.414344469] [controller_manager]: Loading controller 'freedrive_mode_controller'
+[spawner-6] [INFO] [1794499537.421540652] [spawner_joint_trajectory_controller]: [94mLoaded [1mfreedrive_mode_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.421836261] [controller_manager]: Configuring controller 'freedrive_mode_controller'
+[ros2_control_node-2] [INFO] [1794499537.424238026] [controller_manager]: Loading controller 'tool_contact_controller'
+[spawner-6] [INFO] [1794499537.431441498] [spawner_joint_trajectory_controller]: [94mLoaded [1mtool_contact_controller[0m
+[ros2_control_node-2] [INFO] [1794499537.431707996] [controller_manager]: Configuring controller 'tool_contact_controller'
+[INFO] [spawner-6]: process has finished cleanly [pid 76432]
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [fake_gripper-8]: sending signal 'SIGINT' to process[fake_gripper-8]
+[INFO] [record_joint_states-7]: sending signal 'SIGINT' to process[record_joint_states-7]
+[INFO] [trajectory_until_node-4]: sending signal 'SIGINT' to process[trajectory_until_node-4]
+[INFO] [robot_state_publisher-3]: sending signal 'SIGINT' to process[robot_state_publisher-3]
+[INFO] [ros2_control_node-2]: sending signal 'SIGINT' to process[ros2_control_node-2]
+[trajectory_until_node-4] [INFO] [1794499539.978467061] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[robot_state_publisher-3] [INFO] [1794499539.980231274] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-2] [INFO] [1794499539.982064549] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-2] [INFO] [1794499539.982214263] [controller_manager]: Shutdown request received....
+[ros2_control_node-2] [INFO] [1794499539.982405343] [controller_manager]: Shutting down all controllers in the controller manager.
+[ros2_control_node-2] [INFO] [1794499539.982518904] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499539.982604759] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499539.982691864] [controller_manager]: Deactivating controller 'io_and_status_controller'
+[ros2_control_node-2] [INFO] [1794499539.982802692] [controller_manager]: Shutting down controller 'io_and_status_controller'
+[ros2_control_node-2] [INFO] [1794499539.983197622] [controller_manager]: Deactivating controller 'speed_scaling_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499539.983253734] [controller_manager]: Shutting down controller 'speed_scaling_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794499539.983276081] [controller_manager]: Deactivating controller 'force_torque_sensor_broadcaster'
+[ros2_control_node-2] [INFO] [1794499539.983331092] [controller_manager]: Shutting down controller 'force_torque_sensor_broadcaster'
+[ros2_control_node-2] [INFO] [1794499539.983350276] [controller_manager]: Deactivating controller 'ur_configuration_controller'
+[ros2_control_node-2] [INFO] [1794499539.983366788] [controller_manager]: Shutting down controller 'ur_configuration_controller'
+[ros2_control_node-2] [INFO] [1794499539.983384074] [controller_manager]: Deactivating controller 'friction_model_controller'
+[ros2_control_node-2] [INFO] [1794499539.983407747] [controller_manager]: Shutting down controller 'friction_model_controller'
+[ros2_control_node-2] [INFO] [1794499539.983426665] [controller_manager]: Deactivating controller 'scaled_joint_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499539.983462028] [controller_manager]: Shutting down controller 'scaled_joint_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499539.983490802] [controller_manager]: Shutting down controller 'joint_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499539.983520557] [controller_manager]: Shutting down controller 'forward_velocity_controller'
+[ros2_control_node-2] [INFO] [1794499539.983566785] [controller_manager]: Shutting down controller 'forward_position_controller'
+[ros2_control_node-2] [INFO] [1794499539.983606280] [controller_manager]: Shutting down controller 'forward_effort_controller'
+[ros2_control_node-2] [INFO] [1794499539.983636375] [controller_manager]: Shutting down controller 'force_mode_controller'
+[ros2_control_node-2] [INFO] [1794499539.983673019] [controller_manager]: Shutting down controller 'passthrough_trajectory_controller'
+[ros2_control_node-2] [INFO] [1794499539.983853922] [controller_manager]: Shutting down controller 'freedrive_mode_controller'
+[ros2_control_node-2] [INFO] [1794499539.983997308] [controller_manager]: Shutting down controller 'tool_contact_controller'
+[ros2_control_node-2] [INFO] [1794499539.997012010] [resource_manager]: 'deactivate' hardware 'ur5e' 
+[ros2_control_node-2] [INFO] [1794499539.997044102] [resource_manager]: Successful 'deactivate' of hardware 'ur5e'
+[ros2_control_node-2] [INFO] [1794499539.997049914] [resource_manager]: 'shutdown' hardware 'ur5e' 
+[ros2_control_node-2] [INFO] [1794499539.997054978] [resource_manager]: Successful 'shutdown' of hardware 'ur5e'
+[ros2_control_node-2] [INFO] [1794499539.997059690] [controller_manager]: Shutting down the controller manager.
+[INFO] [trajectory_until_node-4]: process has finished cleanly [pid 76428]
+[INFO] [robot_state_publisher-3]: process has finished cleanly [pid 76426]
+[INFO] [fake_gripper-8]: process has finished cleanly [pid 76436]
+[INFO] [record_joint_states-7]: process has finished cleanly [pid 76434]
+[INFO] [ros2_control_node-2]: process has finished cleanly [pid 76424]

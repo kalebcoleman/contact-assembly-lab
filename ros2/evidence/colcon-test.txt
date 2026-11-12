@@ -1,0 +1,5 @@
+Starting >>> risl_contact_assembly
+[0.188s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/kaleb/.t3/scratch/2026-11-12-you-are-the-coordinator-for-6155d58b/.agents/private-plans/ros-overlay/prefix/opt/ros/humble' in the environment variable AMENT_PREFIX_PATH doesn't contain any 'local_setup.*' files.
+Finished <<< risl_contact_assembly [0.76s]
+
+Summary: 1 package finished [0.90s]

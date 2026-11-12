@@ -219,11 +219,13 @@ def test_invalid_structure_is_rejected() -> None:
     with pytest.raises(ValueError, match="equal"):
         plan_structure(structure, config)
     structure = copy.deepcopy(load_structure(THREE_PATH))
-    structure["brick_dimensions"] = [[2, 4, 3], [4.0, 2, 3], [2, 4, 3]]
+    # Deliberately violate the annotation to test runtime input rejection.
+    structure["brick_dimensions"] = [[2, 4, 3], [4.0, 2, 3], [2, 4, 3]]  # ty: ignore[invalid-assignment]
     with pytest.raises(ValueError, match="brick_dimensions"):
         plan_structure(structure, config)
     structure = copy.deepcopy(load_structure(THREE_PATH))
-    structure["placement_offsets"] = [[9, 8], [-1.0, 1], [1, -1]]
+    # Deliberately violate the annotation to test runtime input rejection.
+    structure["placement_offsets"] = [[9, 8], [-1.0, 1], [1, -1]]  # ty: ignore[invalid-assignment]
     with pytest.raises(ValueError, match="placement_offsets"):
         plan_structure(structure, config)
     structure = copy.deepcopy(load_structure(THREE_PATH))

@@ -1,0 +1,22 @@
+{
+  "fixture": "three_bricks",
+  "planned_steps": 30,
+  "executed_steps": 0,
+  "hardware_plugin": "mock_components/GenericSystem",
+  "gripper_command_publishers_observed": 0,
+  "joint_samples": 1417,
+  "max_joint_displacement_rad": 0.0,
+  "process_exit_code": 0,
+  "command": [
+    "ros2",
+    "launch",
+    "risl_contact_assembly",
+    "mock_assembly.launch.py",
+    "structure_file:=/home/kaleb/.t3/scratch/2026-11-12-you-are-the-coordinator-for-6155d58b/ros2/risl_contact_assembly/fixtures/three_bricks.json",
+    "step_log:=/home/kaleb/.t3/scratch/2026-11-12-you-are-the-coordinator-for-6155d58b/ros2/evidence/three_bricks-dry-steps.jsonl",
+    "joint_states_file:=/home/kaleb/.t3/scratch/2026-11-12-you-are-the-coordinator-for-6155d58b/.agents/private-plans/three_bricks-dry-joints.jsonl",
+    "dry_run:=true"
+  ],
+  "joint_trace": "three_bricks-dry-joints.jsonl.gz",
+  "joint_trace_uncompressed_sha256": "0315c8a322f46a29d286772cd291430ff7a846686deb9e7732463ac9723efa68"
+}
