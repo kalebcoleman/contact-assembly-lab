@@ -74,3 +74,5 @@ Revision 2026-11-12 executor recovery: user reported inaccessible child. Thread 
 User scope update: no questions-for-Max sections in docs, PR or final response. Keep unresolved lab calibration facts beside technical requirements. Final three-brick rerun exposed subtractive float error at the exact travel cap; compare approach_z > target_z + cap without widening cap, regression checks three layers and rejects1e-10m excess.
 
 Final validation:46 tests pass, scoped Ruff/ty pass. Final dry traces contain133/1417 samples, zero displacement and10/30 planned steps, zero executed. One mock controller required launch SIGTERM escalation after5s; final process inventory empty. Preparing one draft PR because moving-trajectory execution remains unverified, with incident disclosure and no questions-for-Max section per user.
+
+PR outcome: opened https://github.com/kalebcoleman/contact-assembly-lab/pull/12 from ros2-contact-assembly to main as the single draft PR and linked it to this thread. No merge. Independent build and 46 tests pass; official fake-hardware dry rehearsals are recorded. Moving trajectory execution and physical calibration/contact remain unverified.
