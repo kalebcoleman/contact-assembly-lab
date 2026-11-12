@@ -15,13 +15,16 @@ from std_msgs.msg import Float64, String
 PACKAGE = Path(__file__).resolve().parents[1]
 
 
-def launch_entities() -> list:
-    """Load the launch description.
+def launch_entities(name: str = "assembly.launch.py") -> list:
+    """Load a launch description.
+
+    Args:
+        name: Launch file in the package's launch directory.
 
     Returns:
         Top-level launch entities.
     """
-    launch_file = run_path(str(PACKAGE / "launch" / "assembly.launch.py"))
+    launch_file = run_path(str(PACKAGE / "launch" / name))
     return launch_file["generate_launch_description"]().entities
 
 
@@ -101,3 +104,30 @@ def test_fake_gripper_reports_millimetres_for_tenths(
         assert [report.data for report in reports] == [expected_mm, expected_mm]
     finally:
         rclpy.shutdown()
+
+
+def test_mock_viewer_launch_is_pinned_to_fake_hardware() -> None:
+    """The viewer rehearsal cannot reach a robot whatever is passed to it."""
+    (assembly,) = (
+        entity
+        for entity in launch_entities("mock_viewer.launch.py")
+        if isinstance(entity, IncludeLaunchDescription)
+    )
+    context = LaunchContext()
+    context.launch_configurations["execute"] = "true"
+    arguments = {
+        name: perform_substitutions(context, normalize_to_list_of_substitutions(value))
+        for name, value in assembly.launch_arguments
+    }
+    assert arguments == {
+        "robot_ip": "unused",
+        "use_fake_hardware": "true",
+        "viewer": "true",
+        "execute": "true",
+    }
+    viewer_default = {
+        entity.name: entity
+        for entity in launch_entities()
+        if isinstance(entity, DeclareLaunchArgument)
+    }["viewer"].default_value
+    assert perform_substitutions(context, viewer_default) == "false"

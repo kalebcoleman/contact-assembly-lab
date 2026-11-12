@@ -1,29 +1,29 @@
   1. tower_0: open gripper: gripper to 23.8 mm, must report 23.8 mm
-  2. tower_0: move above pick: to [-200.0, -300.0, 284.2] mm in 9.3 s
-  3. tower_0: descend to pick: to [-200.0, -300.0, 162.0] mm in 5.7 s
+  2. tower_0: move above pick: to [-200.0, -300.0, 189.2] mm in 10.1 s
+  3. tower_0: descend to pick: to [-200.0, -300.0, 67.0] mm in 5.7 s
   4. tower_0: grasp: gripper to 11.8 mm, must report 15.8 mm
-  5. tower_0: lift: to [-200.0, -300.0, 284.2] mm in 5.7 s
-  6. tower_0: move above place: to [36.0, -372.0, 284.2] mm in 6.5 s
-  7. tower_0: descend and seat: to [36.0, -372.0, 164.5] mm in 5.7 s
+  5. tower_0: lift: to [-200.0, -300.0, 189.2] mm in 5.7 s
+  6. tower_0: move above place: to [36.0, -372.0, 189.2] mm in 6.5 s
+  7. tower_0: descend and seat: to [36.0, -372.0, 69.5] mm in 5.7 s
   8. tower_0: release: gripper to 23.8 mm, must report 23.8 mm
-  9. tower_0: retreat: to [36.0, -372.0, 284.2] mm in 5.7 s
+  9. tower_0: retreat: to [36.0, -372.0, 189.2] mm in 5.7 s
  10. tower_1: open gripper: gripper to 23.8 mm, must report 23.8 mm
- 11. tower_1: move above pick: to [-200.0, -360.0, 284.2] mm in 6.5 s
- 12. tower_1: descend to pick: to [-200.0, -360.0, 162.0] mm in 5.7 s
+ 11. tower_1: move above pick: to [-200.0, -360.0, 189.2] mm in 6.5 s
+ 12. tower_1: descend to pick: to [-200.0, -360.0, 67.0] mm in 5.7 s
  13. tower_1: grasp: gripper to 11.8 mm, must report 15.8 mm
- 14. tower_1: lift: to [-200.0, -360.0, 284.2] mm in 5.7 s
- 15. tower_1: move above place: to [36.0, -372.0, 284.2] mm in 5.2 s
- 16. tower_1: descend and seat: to [36.0, -372.0, 174.1] mm in 5.5 s
+ 14. tower_1: lift: to [-200.0, -360.0, 189.2] mm in 5.7 s
+ 15. tower_1: move above place: to [36.0, -372.0, 189.2] mm in 5.2 s
+ 16. tower_1: descend and seat: to [36.0, -372.0, 79.1] mm in 5.5 s
  17. tower_1: release: gripper to 23.8 mm, must report 23.8 mm
- 18. tower_1: retreat: to [36.0, -372.0, 284.2] mm in 5.5 s
+ 18. tower_1: retreat: to [36.0, -372.0, 189.2] mm in 5.5 s
  19. tower_2: open gripper: gripper to 23.8 mm, must report 23.8 mm
- 20. tower_2: move above pick: to [-200.0, -420.0, 284.2] mm in 5.3 s
- 21. tower_2: descend to pick: to [-200.0, -420.0, 162.0] mm in 5.7 s
+ 20. tower_2: move above pick: to [-200.0, -420.0, 189.2] mm in 5.3 s
+ 21. tower_2: descend to pick: to [-200.0, -420.0, 67.0] mm in 5.7 s
  22. tower_2: grasp: gripper to 11.8 mm, must report 15.8 mm
- 23. tower_2: lift: to [-200.0, -420.0, 284.2] mm in 5.7 s
- 24. tower_2: move above place: to [36.0, -372.0, 284.2] mm in 6.5 s
- 25. tower_2: descend and seat: to [36.0, -372.0, 183.7] mm in 5.4 s
+ 23. tower_2: lift: to [-200.0, -420.0, 189.2] mm in 5.7 s
+ 24. tower_2: move above place: to [36.0, -372.0, 189.2] mm in 6.5 s
+ 25. tower_2: descend and seat: to [36.0, -372.0, 88.7] mm in 5.4 s
  26. tower_2: release: gripper to 23.8 mm, must report 23.8 mm
- 27. tower_2: retreat: to [36.0, -372.0, 284.2] mm in 5.3 s
-27 steps, 107 s of motion, travel height z = 0.284 m; every move is reachable
+ 27. tower_2: retreat: to [36.0, -372.0, 189.2] mm in 5.3 s
+27 steps, 108 s of motion, travel height z = 0.189 m; every move is reachable
 DRY RUN: nothing was commanded. Add execute:=true to move.

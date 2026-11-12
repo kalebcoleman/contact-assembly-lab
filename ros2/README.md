@@ -26,6 +26,7 @@ ros2 launch risl_contact_assembly assembly.launch.py robot_ip:=<ip>   # dry run
 | `use_fake_hardware` | `false` | Driver mock hardware and `fake_gripper` |
 | `camera` | `false` | Pickup XY from `risl_camera_localizer` |
 | `step_log` | none | JSON Lines record of each executed step |
+| `viewer` | `false` | Read-only MuJoCo cell viewer with contact warnings |
 
 ## Conventions
 
@@ -65,9 +66,19 @@ the pose on `/vision/object_poses/<brick name>` (frame `base`), refusing shifts
 over 30 mm. Height and orientation stay as taught. The localizer has no LEGO
 brick model yet, so this path is untested.
 
+## Cell viewer
+
+`viewer:=true`, or `mock_viewer.launch.py` for fake hardware, runs Max's
+`risl_simulation` viewer with the Vention bench from `scene/cell.xml` and
+reports contacts between the arm and the cell. `scene/convert_cell.py`
+regenerates the cell from the lab's `vention.usd` (one box per part; the USD
+and its meshes are not redistributable and are not in this repository).
+The bench pose is taken from the Isaac twin and has not been measured.
+
 ## Build and test
 
 Needs `ur_robot_driver`, `risl_ur`, NumPy, SciPy and PyYAML on Python 3.10.
+The viewer and its tests also need `risl_simulation`, `mujoco` and `trimesh`.
 
 ```bash
 colcon build --base-paths ros2

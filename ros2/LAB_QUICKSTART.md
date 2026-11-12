@@ -133,3 +133,32 @@ ros2 launch risl_contact_assembly assembly.launch.py robot_ip:=0.0.0.0 \
 ```
 
 Nothing connects to `robot_ip` on fake hardware.
+
+## Watch it in the work cell (MuJoCo)
+
+Once: `python3 -m pip install --user mujoco 'trimesh<4'`, and add
+`risl_camera_msgs risl_camera_localizer risl_simulation` to the `colcon build`
+in section 0.
+
+```bash
+ros2 launch risl_contact_assembly mock_viewer.launch.py $P $S   # fake hardware, arm moves
+$L $P $S viewer:=true                                           # real robot, read-only mirror
+```
+
+Max's viewer opens with the Vention bench around the arm. It warns `CONTACT`
+whenever the arm or gripper body comes within 10 mm of the cell or a finger
+touches it, prints a summary at the end and exits with status 1 if there was
+any. `contact_report:=<file>` saves the summary.
+
+The bench pose comes from the lab's Isaac twin CAD, not from a measurement.
+Check two things before trusting a clean report:
+
+- The green baseplate (drawn from your recorded poses) must rest on the
+  tabletop. The CAD puts the tabletop 85.5 mm below the robot base. If the
+  plate floats or sinks, correct it with `bench_offset_m:="[0.0, 0.0, <dz>]"`.
+- The robot rides the Vention linear axis and the CAD has it mid-rail. With
+  the carriage `d` metres along `base` +X from there, pass
+  `bench_offset_m:="[<-d>, 0.0, 0.0]"`.
+
+Each Vention part is a bounding box, the RG2 is schematic and the carried
+brick is not drawn.

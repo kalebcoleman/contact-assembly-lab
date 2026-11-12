@@ -162,7 +162,7 @@ def test_tower_stacks_and_turns_the_tool(tmp_path: Path) -> None:
         # Centre is stud (10, 10); the reference centre is stud (2, 1); the
         # example plate runs along base -X and -Y.
         assert pose[:3, 3] == pytest.approx(
-            [0.10 - 8 * 0.008, -0.30 - 9 * 0.008, 0.165 + layer * 0.0096]
+            [0.10 - 8 * 0.008, -0.30 - 9 * 0.008, 0.070 + layer * 0.0096]
         )
     quarter = Rotation.from_euler("z", 90, degrees=True).as_matrix()
     assert poses[0][:3, :3] == pytest.approx(quarter @ positions.origin[:3, :3])
@@ -224,7 +224,7 @@ def test_quarter_turn_placement_pivots_about_the_offset_stud(tmp_path: Path) -> 
         write_structure(tmp_path, brick_dimensions=[[2, 4, 3]], placement_yaws=[1])
     )
     pose = place_poses(structure, positions)[0]
-    assert pose[:3, 3] == pytest.approx([0.10 + 4 * 0.008, -0.30, 0.165])
+    assert pose[:3, 3] == pytest.approx([0.10 + 4 * 0.008, -0.30, 0.070])
     assert pose[:3, :3] == pytest.approx(positions.origin[:3, :3])
 
 
@@ -244,13 +244,13 @@ def test_quarter_turn_placement_pivots_about_the_offset_stud(tmp_path: Path) -> 
         (
             "baseplate",
             "y_corner",
-            {"xyz_m": [0.10, -0.156, 0.165], "rpy_deg": [0.0, 180.0, 0.0]},
+            {"xyz_m": [0.10, -0.156, 0.070], "rpy_deg": [0.0, 180.0, 0.0]},
             "mirrored",
         ),
         (
             "baseplate",
             "x_corner",
-            {"xyz_m": [-0.028, -0.30, 0.165], "rpy_deg": [0.0, 180.0, 5.0]},
+            {"xyz_m": [-0.028, -0.30, 0.070], "rpy_deg": [0.0, 180.0, 5.0]},
             "tool orientation",
         ),
     ],
@@ -270,7 +270,7 @@ def test_target_outside_workspace_is_rejected(tmp_path: Path) -> None:
             tmp_path,
             "pickups",
             "tower_0",
-            {"xyz_m": [-0.20, -0.30, 0.150], "rpy_deg": [0.0, 180.0, 0.0]},
+            {"xyz_m": [-0.20, -0.30, 0.055], "rpy_deg": [0.0, 180.0, 0.0]},
         )
     )
     with pytest.raises(ValueError, match="outside the workspace box"):
@@ -284,7 +284,7 @@ def test_tilted_tool_is_rejected(tmp_path: Path) -> None:
             tmp_path,
             "pickups",
             "tower_0",
-            {"xyz_m": [-0.20, -0.30, 0.162], "rpy_deg": [0.0, 170.0, 0.0]},
+            {"xyz_m": [-0.20, -0.30, 0.067], "rpy_deg": [0.0, 170.0, 0.0]},
         )
     )
     with pytest.raises(ValueError, match="tilted 10.0 deg"):

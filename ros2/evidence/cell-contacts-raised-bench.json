@@ -1,0 +1,16 @@
+{
+ "clearance_mm": 10.0,
+ "poses_checked": 1622,
+ "contacts": [
+  {
+   "robot": "rg2_left_finger",
+   "cell": "imported_PANEL_B2F52AEB2A0D_804849_271",
+   "closest_mm": -18.23
+  },
+  {
+   "robot": "rg2_right_finger",
+   "cell": "imported_PANEL_B2F52AEB2A0D_804849_271",
+   "closest_mm": -18.23
+  }
+ ]
+}

@@ -260,7 +260,7 @@ def test_start_below_travel_height_rises_vertically_first(tmp_path: Path) -> Non
     """A low start adds a vertical raise before any sideways motion."""
     run = Run(tmp_path)
     low = forward_kinematics(dh_params, START_JOINTS)
-    low[2, 3] = 0.20
+    low[2, 3] = 0.12
     _, positions, _ = plan_move(START_JOINTS, Move(low, 0.05), run.positions.motion)
     run.robot.joint_angles = positions[-1]
     start_xy = run.tool_xyz()[:2].copy()

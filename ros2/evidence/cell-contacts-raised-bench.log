@@ -1,0 +1,8 @@
+# mock_viewer.launch.py with bench_offset_m:=[0.0, 0.0, 0.02] (table raised into the fingers)
+CONTACT: rg2_left_finger is -0.0 mm from cell part imported_PANEL_B2F52AEB2A0D_804849_271 (negative is penetration)
+CONTACT: rg2_left_finger is -10.4 mm from cell part imported_PANEL_B2F52AEB2A0D_804849_271 (negative is penetration)
+CONTACT: rg2_left_finger is -18.2 mm from cell part imported_PANEL_B2F52AEB2A0D_804849_271 (negative is penetration)
+CONTACT: rg2_left_finger is -12.8 mm from cell part imported_PANEL_B2F52AEB2A0D_804849_271 (negative is penetration)
+CONTACT SUMMARY: 2 contact pairs in 1622 checked poses (clearance 10 mm)
+  rg2_left_finger - imported_PANEL_B2F52AEB2A0D_804849_271: -18.23 mm
+  rg2_right_finger - imported_PANEL_B2F52AEB2A0D_804849_271: -18.23 mm

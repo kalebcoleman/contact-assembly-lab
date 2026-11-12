@@ -16,6 +16,7 @@ setup(
         ("share/" + package_name + "/launch", glob("launch/*.launch.py")),
         ("share/" + package_name + "/config", glob("config/*.yaml")),
         ("share/" + package_name + "/structures", glob("structures/*.json")),
+        ("share/" + package_name + "/scene", ["scene/cell.xml"]),
     ],
     install_requires=["setuptools"],
     zip_safe=True,
@@ -29,6 +30,7 @@ setup(
             "assembly_executor = risl_contact_assembly.executor:main",
             "record_poses = risl_contact_assembly.record_poses:main",
             "fake_gripper = risl_contact_assembly.fake_gripper:main",
+            "cell_viewer = risl_contact_assembly.cell_viewer:main",
         ],
     },
 )

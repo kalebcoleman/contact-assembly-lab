@@ -6,6 +6,9 @@ One command per task; the launch exits when the task ends:
 - ``execute:=true``: run the assembly with per-step confirmation;
 - ``record:=true``: record taught tool poses.
 
+``viewer:=true`` adds the read-only MuJoCo cell viewer, which reports contacts
+between the arm and the cell; it needs ``risl_simulation`` and ``mujoco``.
+
 ``use_fake_hardware:=true`` replaces the robot with the driver's mock hardware
 and the RG2 with ``fake_gripper``; nothing then connects to ``robot_ip``. The
 mock arm starts straight up, so it is first driven to ``FAKE_START_JOINTS_RAD``,
@@ -139,6 +142,21 @@ def generate_launch_description() -> LaunchDescription:
             ),
             DeclareLaunchArgument("step_log", default_value=""),
             DeclareLaunchArgument(
+                "viewer",
+                default_value="false",
+                description="Show the arm in the MuJoCo cell and report contacts.",
+            ),
+            DeclareLaunchArgument(
+                "bench_offset_m",
+                default_value="[0.0, 0.0, 0.0]",
+                description="Viewer: bench shift from its CAD pose, [x, y, z] in base.",
+            ),
+            DeclareLaunchArgument(
+                "contact_report",
+                default_value="",
+                description="Viewer: JSON file for the contact summary.",
+            ),
+            DeclareLaunchArgument(
                 "recorded_poses_file", default_value="recorded_poses.yaml"
             ),
             DeclareLaunchArgument(
@@ -200,6 +218,23 @@ def generate_launch_description() -> LaunchDescription:
                 executable="localize",
                 output="screen",
                 condition=IfCondition(LaunchConfiguration("camera")),
+            ),
+            Node(
+                package="risl_contact_assembly",
+                executable="cell_viewer",
+                output="screen",
+                condition=IfCondition(LaunchConfiguration("viewer")),
+                parameters=[
+                    {
+                        "positions_file": LaunchConfiguration("positions_file"),
+                        "contact_report": LaunchConfiguration("contact_report"),
+                        "bench_offset_m": ParameterValue(
+                            LaunchConfiguration("bench_offset_m")
+                        ),
+                        "camera_lookat": [0.0, -0.3, 0.0],
+                        "camera_distance": 1.8,
+                    }
+                ],
             ),
             GroupAction([executor, recorder], condition=UnlessCondition(fake)),
             fake_start,
