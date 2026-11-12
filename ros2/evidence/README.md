@@ -6,7 +6,8 @@ No robot, gripper or network setting was touched. `mujoco` and `trimesh` were
 installed to a scratch directory, not the system. The mock has no force signal,
 so the force-limited place and guarded pick are covered by unit tests only.
 
-- `colcon build` and `colcon test`: 94 tests, 0 failures.
+- `colcon build` and `colcon test`: 94 tests, 0 failures, also from a fresh
+  workspace made with `vcs import src < risl.repos` as in the README.
 - Dry run, three-brick tower ([dry-run.log](dry-run.log)): 27 steps planned.
   An independent `/joint_states` and `/gripper_command` listener saw no motion
   and no gripper command ([dry-run-observed.json](dry-run-observed.json)).

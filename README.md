@@ -9,6 +9,7 @@
 [Assembly controller](experiments/ur5e_assembly/README.md) ·
 [Usage and reproduction](docs/USAGE.md) ·
 [Isaac Sim 6.2 port](docs/ISAACSIM_6.2_PORT.md) ·
+[ROS 2 real-robot package](ros2/README.md) ·
 [Citation](#citation)
 
 [![Isaac Sim 6.2](https://img.shields.io/badge/Isaac%20Sim-6.2-76B900?logo=nvidia&logoColor=white)](https://docs.isaacsim.omniverse.nvidia.com/6.2.0/index.html)

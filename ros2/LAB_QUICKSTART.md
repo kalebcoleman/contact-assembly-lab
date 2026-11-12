@@ -8,14 +8,11 @@ keep a hand on the e-stop for every first.
 The UR driver, `socat` and `pymodbus` are not installed system-wide yet.
 
 ```bash
-sudo apt install ros-humble-ur-robot-driver socat
+sudo apt install ros-humble-ur-robot-driver python3-vcstool socat
 python3 -m pip install --user pymodbus==2.5.3   # risl_onrobot_ros needs exactly 2.5.3
-ln -s <this repo>/ros2/risl_contact_assembly ~/ros2_ws/src/
-cd ~/ros2_ws && source /opt/ros/humble/setup.bash
-colcon build --packages-select risl_ur risl_onrobot_ros risl_contact_assembly
 ```
 
-Use the system Python 3.10, not the simulator's virtual environment.
+Then set up and build the workspace as in [README.md](README.md#set-up-build-test).
 
 ## 1. Network
 
@@ -136,9 +133,7 @@ Nothing connects to `robot_ip` on fake hardware.
 
 ## Watch it in the work cell (MuJoCo)
 
-Once: `python3 -m pip install --user mujoco 'trimesh<4'`, and add
-`risl_camera_msgs risl_camera_localizer risl_simulation` to the `colcon build`
-in section 0.
+Once: `python3 -m pip install --user mujoco 'trimesh<4'`.
 
 ```bash
 ros2 launch risl_contact_assembly mock_viewer.launch.py $P $S   # fake hardware, arm moves
