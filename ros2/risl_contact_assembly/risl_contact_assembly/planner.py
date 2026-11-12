@@ -437,9 +437,10 @@ def plan_structure(structure: Structure, config: AssemblyConfig) -> list[PlanSte
             not isinstance(dimension, list)
             or len(dimension) != 3
             or any(type(stud) is not int or stud <= 0 for stud in dimension)
+            or dimension[2] != BRICK_HEIGHT_PLATE_UNITS
         ):
             raise ValueError(
-                f"brick_dimensions[{index}] must be three positive integer stud counts"
+                f"brick_dimensions[{index}] must be three positive integers with height 3 plate units"
             )
 
     for index, parent in enumerate(support_bricks):

@@ -1,0 +1,77 @@
+{
+  "hardware": [
+    {
+      "name": "ur5e",
+      "plugin": "mock_components/GenericSystem",
+      "state": "active"
+    }
+  ],
+  "controllers": [
+    {
+      "name": "joint_state_broadcaster",
+      "state": "active"
+    },
+    {
+      "name": "io_and_status_controller",
+      "state": "active"
+    },
+    {
+      "name": "joint_trajectory_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "forward_velocity_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "speed_scaling_state_broadcaster",
+      "state": "active"
+    },
+    {
+      "name": "forward_position_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "force_torque_sensor_broadcaster",
+      "state": "active"
+    },
+    {
+      "name": "forward_effort_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "force_mode_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "ur_configuration_controller",
+      "state": "active"
+    },
+    {
+      "name": "passthrough_trajectory_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "friction_model_controller",
+      "state": "active"
+    },
+    {
+      "name": "freedrive_mode_controller",
+      "state": "inactive"
+    },
+    {
+      "name": "scaled_joint_trajectory_controller",
+      "state": "active"
+    },
+    {
+      "name": "tool_contact_controller",
+      "state": "inactive"
+    }
+  ],
+  "live_description_generic_system_only": true,
+  "gripper_command_publishers_before_probe": 0,
+  "fake_gripper_query_width_mm": 110.0,
+  "joint_samples": 35277,
+  "max_joint_displacement_rad": 0.0,
+  "scope": "Infrastructure only; no executor or trajectory command. Fake gripper query probe only."
+}

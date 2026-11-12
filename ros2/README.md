@@ -97,9 +97,9 @@ pickup:
   xyz_m: [x, y, z]             # absolute fixture TCP pose in base, not an offset
   rpy_deg: [r, p, y]
   gripper_width_mm: <opening>
-  brick_to_tcp:                # calibrated brick frame to TCP transform
-    translation_m: [tx, ty, tz]  # brick origin to TCP, in brick axes
-    rpy_deg: [r, p, y]           # brick axes to TCP axes, extrinsic xyz
+calibration:
+  brick_to_tcp_xyz_m: [tx, ty, tz]  # brick origin to TCP, in brick axes
+  brick_to_tcp_rpy_deg: [r, p, y]   # brick axes to TCP axes, extrinsic xyz
 limits:
   workspace_min_m: [x, y, z]   # measured workspace AABB
   workspace_max_m: [x, y, z]
@@ -115,8 +115,7 @@ seating:
   timeout_s: <timeout>
 ```
 
-`brick_to_tcp` is an authorized package field; the planner fixtures own the
-exact schema. `rpy_deg` follows `risl_ur`'s `rpy_to_matrix` (SciPy extrinsic
+`calibration` explicitly defines the brick-to-TCP transform. `rpy_deg` follows `risl_ur`'s `rpy_to_matrix` (SciPy extrinsic
 `xyz`, degrees). `seating.force_n` is the commanded wrench, not a measured force
 limit; `max_travel_m` is a hard cap and exceeding it stops the step.
 

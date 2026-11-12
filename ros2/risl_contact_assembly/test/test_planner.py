@@ -249,3 +249,12 @@ def test_fixtures_use_simulator_structure_schema() -> None:
         } <= set(structure)
         plan = plan_structure(structure, config)
         assert len(plan) == 10 * len(structure["part_names"])
+
+
+@pytest.mark.parametrize("height", [1, 2, 4])
+def test_unsupported_brick_height_is_rejected(height: int) -> None:
+    """Reject heights unsupported by the source assembly structure contract."""
+    structure = load_structure(SINGLE_PATH)
+    structure["brick_dimensions"][0][2] = height
+    with pytest.raises(ValueError, match="height 3"):
+        plan_structure(structure, load_config(CONFIG_PATH))

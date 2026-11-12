@@ -43,7 +43,12 @@ def main(args: list[str] | None = None) -> None:
     """Record joint states until the process stops."""
     rclpy.init(args=args)
     node = JointStateRecorder()
-    rclpy.spin(node)
-    node.samples_file.close()
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.samples_file.close()
+        node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
