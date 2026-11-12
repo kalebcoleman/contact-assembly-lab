@@ -1,626 +1,511 @@
-"""Known-pose pick-and-place planning for a two-finger brick gripper.
+"""Plan a known-position brick assembly from taught tool poses.
 
-All plan poses are TCP poses in the robot ``base`` frame, SI meters and degrees.
-``base`` is not ``base_link``; the two frames differ by a 180-degree rotation
-about Z, and this module never emits ``base_link`` poses. A zero TCP offset is
-assumed, so the tool point is the configured TCP.
+Conventions used throughout the package:
 
-The pickup pose is an absolute TCP pose of the fixture in ``base``. Target
-poses come from the brick's stud-grid pose on the 20x20 baseplate composed with
-an explicit calibrated brick-to-TCP transform. Simulator stage coordinates
-(``baseplate_xy_m``, ``brick_positions_xy_m``) are never treated as ``base``.
+- Frame: every pose is ``tool0`` (the UR flange) in the UR controller ``base``
+  frame. ``base`` is ``base_link`` rotated pi about Z; ``base_link`` is never used.
+- Units: metres, seconds and newtons. YAML angles are degrees and gripper widths
+  are millimetres.
+- Poses in code are 4x4 homogeneous transforms ``T_base_tool0`` (NumPy arrays,
+  column-vector convention ``p_base = T @ p_tool``).
+- ``rpy_deg`` is extrinsic XYZ, ``R = Rz(yaw) @ Ry(pitch) @ Rx(roll)``, the
+  SciPy ``"xyz"`` convention also used by ``risl_ur``.
 
-Rotation convention: ``rpy_deg`` is extrinsic XYZ, i.e. the rotation matrix is
-``Rz(yaw) @ Ry(pitch) @ Rx(roll)``. Brick orientations are yaw-only, so the
-calibrated target orientation is ``[roll, pitch, brick_yaw + calibration_yaw]``.
-
-``seating.force_n`` is the commanded force sent to the force-mode controller;
-it is not a measured force limit. Seating poses are nominal and physical
-insertion is unvalidated and blocked pending contact sensing and force limits.
+Poses are taught with the brick in the gripper, so no TCP offset or
+brick-to-tool calibration enters the plan.
 """
 
 import json
-from math import cos, degrees, isfinite, pi, radians, remainder, sin
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Final, Literal, TypeAlias, TypedDict
 
+import numpy as np
 import yaml
+from scipy.spatial.transform import Rotation
 
-PlanAction: TypeAlias = Literal[
-    "approach",
-    "descend",
-    "close",
-    "lift",
-    "transfer",
-    "approach_target",
-    "slow_descend",
-    "seat",
-    "open",
-    "retreat",
-]
+STUD_PITCH_M = 0.008
+BRICK_HEIGHT_M = 0.0096
+BRICK_HEIGHT_PLATES = 3
+# A brick is this much narrower than its stud count times the stud pitch.
+BRICK_SIDE_GAP_MM = 0.2
+# The plate corners are taught with a 2x4 brick, long side along plate +X.
+REFERENCE_BRICK_STUDS = (4, 2)
+# The grasp command closes this far past the brick so the fingers clamp it.
+GRASP_SQUEEZE_MM = 4.0
+GRIPPER_MAX_WIDTH_MM = 110.0
 
-PLATE_STUDS: Final = 20
-PLATE_HEIGHT_PLATE_UNITS: Final = 1
-BRICK_HEIGHT_PLATE_UNITS: Final = 3
+# Hard caps. A positions file may ask for less, never for more.
+MAX_TRAVEL_SPEED_M_S = 0.05
+MAX_CONTACT_SPEED_M_S = 0.01
+MAX_ACCELERATION_M_S2 = 0.25
+MAX_ROTATION_SPEED_DEG_S = 30.0
+MAX_TILT_DEG = 15.0
+MAX_PRESS_FORCE_N = 40.0
+MAX_PRESS_OVERTRAVEL_M = 0.002
+MAX_WIDTH_OFFSET_MM = 5.0
 
-
-class BaseplateConfig(TypedDict):
-    """Baseplate pose in ``base``; ``origin_xyz_m`` is the bottom-face centre."""
-
-    origin_xyz_m: list[float]
-    yaw_deg: float
-    stud_pitch_m: float
-    brick_height_m: float
-
-
-class PickupConfig(TypedDict):
-    """Absolute fixture TCP pose and commanded gripper width."""
-
-    xyz_m: list[float]
-    rpy_deg: list[float]
-    gripper_width_mm: float
+# Accepted disagreement between the taught plate corners and the stud grid.
+CORNER_DISTANCE_TOLERANCE_M = 0.0015
+CORNER_ANGLE_TOLERANCE_DEG = 1.0
+PLATE_LEVEL_TOLERANCE_DEG = 2.0
 
 
-class CalibrationConfig(TypedDict):
-    """Calibrated brick-to-TCP transform, translation in brick axes."""
+@dataclass(frozen=True)
+class Motion:
+    """Speeds and heights of the pick-and-place path.
 
-    brick_to_tcp_xyz_m: list[float]
-    brick_to_tcp_rpy_deg: list[float]
+    Sideways moves happen ``travel_clearance_m`` above the highest pick or
+    place pose. ``contact_speed_m_s`` applies within ``contact_zone_m`` above
+    every pick and place pose.
+    """
 
-
-class LimitsConfig(TypedDict):
-    """Base-frame workspace AABB and speed caps."""
-
-    workspace_min_m: list[float]
-    workspace_max_m: list[float]
-    max_speed_m_s: float
-    max_speed_scale: float
-
-
-class MotionConfig(TypedDict):
-    """Hover height and configured travel and descent speeds."""
-
-    hover_m: float
+    travel_clearance_m: float
     travel_speed_m_s: float
-    descend_speed_m_s: float
+    contact_speed_m_s: float
+    contact_zone_m: float
+    acceleration_m_s2: float
+    rotation_speed_deg_s: float
 
 
-class SeatingConfig(TypedDict):
-    """Force-seating parameters; ``force_n`` is commanded, not measured."""
+@dataclass(frozen=True)
+class Safety:
+    """Workspace box for the ``tool0`` origin in ``base`` and contact limits.
 
-    force_n: float
-    max_travel_m: float
-    timeout_s: float
-
-
-class AssemblyConfig(TypedDict):
-    """Validated assembly config with every contract field present."""
-
-    baseplate: BaseplateConfig
-    pickup: PickupConfig
-    calibration: CalibrationConfig
-    limits: LimitsConfig
-    motion: MotionConfig
-    seating: SeatingConfig
-
-
-class StructureRequired(TypedDict):
-    """Fields every simulator stud-grid structure document must carry."""
-
-    experiment_name: str
-    baseplate_xy_m: list[float]
-    part_names: list[str]
-    brick_dimensions: list[list[int]]
-    brick_colors: list[list[int]]
-    brick_positions_xy_m: list[list[float]]
-    support_bricks: list[int | None]
-    placement_offsets: list[list[int]]
-
-
-class Structure(StructureRequired, total=False):
-    """Simulator stud-grid structure document.
-
-    ``placement_offsets`` are stud offsets from the support's footprint corner,
-    ``placement_yaws`` are optional quarter turns about +Z relative to the
-    support, and ``brick_dimensions`` are ``[x, y, z]`` stud and plate-unit
-    counts.
+    ``press_force_n`` is the change in measured tool force that stops a place
+    and aborts a pick. ``press_overtravel_m`` is how far below the taught seat
+    height a place may push.
     """
 
-    placement_yaws: list[int]
-    min_same_layer_gap_studs: int
+    workspace_min_m: np.ndarray
+    workspace_max_m: np.ndarray
+    max_tilt_deg: float
+    press_force_n: float
+    press_overtravel_m: float
 
 
-class PlanStepRequired(TypedDict):
-    """Fields present on every plan step."""
+@dataclass(frozen=True)
+class Gripper:
+    """Gripper opening and width check, millimetres.
 
-    action: PlanAction
-    brick_id: str
-    xyz_m: list[float]
-    rpy_deg: list[float]
+    The fingers open ``clearance_mm`` beyond each side of a brick.
+    ``width_tolerance_mm`` is the accepted error of the reported width.
+    ``width_offset_mm`` is the width the gripper reports minus the true width;
+    it is added to every commanded and expected width.
+    """
+
+    clearance_mm: float
+    width_tolerance_mm: float
+    width_offset_mm: float
+
+
+@dataclass(frozen=True)
+class Positions:
+    """One cell setup: taught plate corners, taught pickups and limits.
+
+    ``origin``, ``x_corner`` and ``y_corner`` are tool poses gripping the
+    reference brick seated at plate stud ``[0, 0]``, ``[x_corner_studs, 0]``
+    and ``[0, y_corner_studs]``. ``pickups`` maps each brick name to the tool
+    pose gripping it where it waits.
+    """
+
+    origin: np.ndarray
+    x_corner: np.ndarray
+    y_corner: np.ndarray
+    x_corner_studs: int
+    y_corner_studs: int
+    pickups: dict[str, np.ndarray]
+    motion: Motion
+    safety: Safety
+    gripper: Gripper
+
+
+@dataclass(frozen=True)
+class Move:
+    """One straight-line tool move ending at rest.
+
+    ``contact`` is ``"free"``, ``"guard"`` (abort on contact force) or
+    ``"seat"`` (stop on contact force and carry on).
+    """
+
+    pose: np.ndarray
     speed_m_s: float
+    contact: str = "free"
 
 
-class PlanStep(PlanStepRequired, total=False):
-    """One TCP motion or gripper command in execution order."""
+@dataclass(frozen=True)
+class Step:
+    """One operator-confirmed action: tool moves or a gripper command.
 
-    gripper_width_mm: float
+    ``gripper_mm`` is the commanded opening. ``expected_mm`` is the width the
+    gripper must report: after the command when there is one, otherwise before
+    the moves start.
+    """
+
+    label: str
+    moves: tuple[Move, ...] = ()
+    gripper_mm: float | None = None
+    expected_mm: float | None = None
 
 
-def _mapping(value: object, name: str) -> dict[str, object]:
-    """Return a string-keyed mapping for a YAML config value.
+@dataclass(frozen=True)
+class Plan:
+    """Steps in execution order and the ``base`` Z of all sideways motion."""
+
+    steps: list[Step]
+    travel_z_m: float
+
+
+def pose_matrix(entry: dict[str, list[float]]) -> np.ndarray:
+    """Convert a YAML pose entry to a transform.
 
     Args:
-        value: Parsed YAML value to check.
-        name: Field name used in the error message.
+        entry: Mapping with ``xyz_m`` (metres) and ``rpy_deg`` (extrinsic XYZ).
 
     Returns:
-        The value as a string-keyed dict.
+        4x4 ``T_base_tool0``.
+    """
+    pose = np.eye(4)
+    pose[:3, :3] = Rotation.from_euler(
+        "xyz", entry["rpy_deg"], degrees=True
+    ).as_matrix()
+    pose[:3, 3] = entry["xyz_m"]
+    return pose
+
+
+def load_positions(path: str | Path) -> Positions:
+    """Load and validate a positions YAML.
+
+    Args:
+        path: Positions file; see ``config/demo_positions.yaml``.
+
+    Returns:
+        Validated positions.
 
     Raises:
-        ValueError: If the value is not a mapping with string keys.
+        ValueError: If a limit exceeds its hard cap or the taught plate
+            corners disagree with the stud grid.
     """
-    if not isinstance(value, dict) or not all(isinstance(key, str) for key in value):
-        raise ValueError(f"{name} must be a mapping with string keys")
-    return {str(key): item for key, item in value.items()}
-
-
-def _finite_float(value: object, name: str) -> float:
-    """Return a finite float from a config value.
-
-    Args:
-        value: Parsed YAML value to check.
-        name: Field name used in the error message.
-
-    Returns:
-        The value as a finite float.
-
-    Raises:
-        ValueError: If the value is boolean, non-numeric or non-finite.
-    """
-    if isinstance(value, bool) or not isinstance(value, (int, float)):
-        raise ValueError(f"{name} must be a finite number")
-    number = float(value)
-    if not isfinite(number):
-        raise ValueError(f"{name} must be finite")
-    return number
-
-
-def _vector3(value: object, name: str) -> list[float]:
-    """Return a finite three-component vector from a config value.
-
-    Args:
-        value: Parsed YAML value to check.
-        name: Field name used in the error message.
-
-    Returns:
-        Three finite floats.
-
-    Raises:
-        ValueError: If the value is not a list of three finite numbers.
-    """
-    if not isinstance(value, list) or len(value) != 3:
-        raise ValueError(f"{name} must be a list of three numbers")
-    return [_finite_float(item, f"{name}[{index}]") for index, item in enumerate(value)]
-
-
-def _rotate_xy(angle_rad: float, x: float, y: float) -> tuple[float, float]:
-    """Rotate a vector about +Z.
-
-    Args:
-        angle_rad: Counter-clockwise rotation about +Z, radians.
-        x: X component, meters.
-        y: Y component, meters.
-
-    Returns:
-        Rotated ``(x, y)`` components in meters.
-    """
-    return (
-        x * cos(angle_rad) - y * sin(angle_rad),
-        x * sin(angle_rad) + y * cos(angle_rad),
-    )
-
-
-def load_config(path: str | Path) -> AssemblyConfig:
-    """Load and validate the assembly config YAML.
-
-    Poses are TCP in ``base``, SI meters and degrees; gripper widths are mm.
-    The calibrated brick-to-TCP translation is expressed in brick axes from the
-    brick's bottom-centre reference. ``seating.force_n`` is a commanded force,
-    not a measured limit.
-
-    Args:
-        path: YAML config path.
-
-    Returns:
-        Validated config with every contract field present.
-
-    Raises:
-        ValueError: If the document is not a mapping or a field is missing,
-            wrong typed, non-finite or outside its allowed range.
-    """
-    document = _mapping(
-        yaml.safe_load(Path(path).read_text(encoding="utf-8")), "config"
-    )
-
-    baseplate = _mapping(document.get("baseplate"), "baseplate")
-    stud_pitch_m = _finite_float(
-        baseplate.get("stud_pitch_m"), "baseplate.stud_pitch_m"
-    )
-    brick_height_m = _finite_float(
-        baseplate.get("brick_height_m"), "baseplate.brick_height_m"
-    )
-    if stud_pitch_m <= 0:
-        raise ValueError("baseplate.stud_pitch_m must be positive")
-    if brick_height_m <= 0:
-        raise ValueError("baseplate.brick_height_m must be positive")
-
-    pickup = _mapping(document.get("pickup"), "pickup")
-    gripper_width_mm = _finite_float(
-        pickup.get("gripper_width_mm"), "pickup.gripper_width_mm"
-    )
-    if not 0 <= gripper_width_mm <= 110:
-        raise ValueError("pickup.gripper_width_mm must be within [0, 110]")
-
-    calibration = _mapping(document.get("calibration"), "calibration")
-
-    limits = _mapping(document.get("limits"), "limits")
-    workspace_min_m = _vector3(limits.get("workspace_min_m"), "limits.workspace_min_m")
-    workspace_max_m = _vector3(limits.get("workspace_max_m"), "limits.workspace_max_m")
-    if any(low >= high for low, high in zip(workspace_min_m, workspace_max_m)):
-        raise ValueError("limits.workspace_min_m must be below workspace_max_m")
-    max_speed_m_s = _finite_float(limits.get("max_speed_m_s"), "limits.max_speed_m_s")
-    if max_speed_m_s <= 0:
-        raise ValueError("limits.max_speed_m_s must be positive")
-    max_speed_scale = _finite_float(
-        limits.get("max_speed_scale"), "limits.max_speed_scale"
-    )
-    if not 0 < max_speed_scale <= 1:
-        raise ValueError("limits.max_speed_scale must be within (0, 1]")
-
-    motion = _mapping(document.get("motion"), "motion")
-    hover_m = _finite_float(motion.get("hover_m"), "motion.hover_m")
-    travel_speed_m_s = _finite_float(
-        motion.get("travel_speed_m_s"), "motion.travel_speed_m_s"
-    )
-    descend_speed_m_s = _finite_float(
-        motion.get("descend_speed_m_s"), "motion.descend_speed_m_s"
-    )
-    if hover_m <= 0:
-        raise ValueError("motion.hover_m must be positive")
-    if travel_speed_m_s <= 0:
-        raise ValueError("motion.travel_speed_m_s must be positive")
-    if descend_speed_m_s <= 0:
-        raise ValueError("motion.descend_speed_m_s must be positive")
-
-    seating = _mapping(document.get("seating"), "seating")
-    force_n = _finite_float(seating.get("force_n"), "seating.force_n")
-    max_travel_m = _finite_float(seating.get("max_travel_m"), "seating.max_travel_m")
-    timeout_s = _finite_float(seating.get("timeout_s"), "seating.timeout_s")
-    if force_n <= 0:
-        raise ValueError("seating.force_n must be positive")
-    if max_travel_m < 0:
-        raise ValueError("seating.max_travel_m must not be negative")
-    if timeout_s <= 0:
-        raise ValueError("seating.timeout_s must be positive")
-
-    return {
-        "baseplate": {
-            "origin_xyz_m": _vector3(
-                baseplate.get("origin_xyz_m"), "baseplate.origin_xyz_m"
-            ),
-            "yaw_deg": _finite_float(baseplate.get("yaw_deg"), "baseplate.yaw_deg"),
-            "stud_pitch_m": stud_pitch_m,
-            "brick_height_m": brick_height_m,
+    document = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    plate = document["baseplate"]
+    safety = document["safety"]
+    positions = Positions(
+        origin=pose_matrix(plate["origin"]),
+        x_corner=pose_matrix(plate["x_corner"]),
+        y_corner=pose_matrix(plate["y_corner"]),
+        x_corner_studs=plate["x_corner_studs"],
+        y_corner_studs=plate["y_corner_studs"],
+        pickups={
+            name: pose_matrix(entry) for name, entry in document["pickups"].items()
         },
-        "pickup": {
-            "xyz_m": _vector3(pickup.get("xyz_m"), "pickup.xyz_m"),
-            "rpy_deg": _vector3(pickup.get("rpy_deg"), "pickup.rpy_deg"),
-            "gripper_width_mm": gripper_width_mm,
-        },
-        "calibration": {
-            "brick_to_tcp_xyz_m": _vector3(
-                calibration.get("brick_to_tcp_xyz_m"),
-                "calibration.brick_to_tcp_xyz_m",
-            ),
-            "brick_to_tcp_rpy_deg": _vector3(
-                calibration.get("brick_to_tcp_rpy_deg"),
-                "calibration.brick_to_tcp_rpy_deg",
-            ),
-        },
-        "limits": {
-            "workspace_min_m": workspace_min_m,
-            "workspace_max_m": workspace_max_m,
-            "max_speed_m_s": max_speed_m_s,
-            "max_speed_scale": max_speed_scale,
-        },
-        "motion": {
-            "hover_m": hover_m,
-            "travel_speed_m_s": travel_speed_m_s,
-            "descend_speed_m_s": descend_speed_m_s,
-        },
-        "seating": {
-            "force_n": force_n,
-            "max_travel_m": max_travel_m,
-            "timeout_s": timeout_s,
-        },
-    }
-
-
-def load_structure(path: str | Path) -> Structure:
-    """Load a simulator stud-grid structure JSON document.
-
-    The schema is the simulator's actual structure document, not the docs
-    catalog. ``baseplate_xy_m`` and ``brick_positions_xy_m`` are simulator stage
-    coordinates, not ``base``; the config supplies the ``base`` plate pose and
-    fixture TCP pose instead. Optional simulator hints such as
-    ``grasp_offsets_m`` and ``controller`` are not hardware-validated and are
-    ignored by planning.
-
-    Args:
-        path: Structure JSON path.
-
-    Returns:
-        Parsed structure document; ``plan_structure`` validates its fields.
-
-    Raises:
-        ValueError: If the file is not a JSON object.
-    """
-    document = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(document, dict):
-        raise ValueError("structure must be a JSON object")
-    return document
-
-
-def plan_structure(structure: Structure, config: AssemblyConfig) -> list[PlanStep]:
-    """Plan one ten-step cycle per brick in structure build order.
-
-    Step order is ``approach``, ``descend``, ``close``, ``lift``, ``transfer``,
-    ``approach_target``, ``slow_descend``, ``seat``, ``open``, ``retreat``.
-    Grasp-side steps use the absolute fixture TCP pose. Target steps compose the
-    brick bottom-centre from the native stud-grid formula with the calibrated
-    brick-to-TCP transform. ``approach_target`` is ``seating.max_travel_m``
-    above the target, ``transfer`` and ``retreat`` are ``motion.hover_m`` above
-    it, and ``seat`` is the nominal target itself.
-
-    Speeds are the configured speeds times ``limits.max_speed_scale``. They are
-    validated against ``limits.max_speed_m_s`` and never silently clamped.
-
-    Args:
-        structure: Structure document, as returned by ``load_structure``.
-        config: Assembly config, as returned by ``load_config``.
-
-    Returns:
-        Plan steps in execution order.
-
-    Raises:
-        ValueError: If the structure is inconsistent, the config or a derived
-            pose is outside its limits, or a derived pose is non-finite.
-    """
-    baseplate = config["baseplate"]
-    pickup = config["pickup"]
-    calibration = config["calibration"]
-    limits = config["limits"]
-    motion = config["motion"]
-    seating = config["seating"]
-
-    part_names = structure.get("part_names")
-    brick_dimensions = structure.get("brick_dimensions")
-    support_bricks = structure.get("support_bricks")
-    placement_offsets = structure.get("placement_offsets")
-    if (
-        not isinstance(part_names, list)
-        or not isinstance(brick_dimensions, list)
-        or not isinstance(support_bricks, list)
-        or not isinstance(placement_offsets, list)
-        or not part_names
+        motion=Motion(**document["motion"]),
+        safety=Safety(
+            workspace_min_m=np.array(safety["workspace_min_m"], dtype=float),
+            workspace_max_m=np.array(safety["workspace_max_m"], dtype=float),
+            max_tilt_deg=safety["max_tilt_deg"],
+            press_force_n=safety["press_force_n"],
+            press_overtravel_m=safety["press_overtravel_m"],
+        ),
+        gripper=Gripper(**document["gripper"]),
+    )
+    motion = positions.motion
+    for name, value, cap in (
+        ("motion.travel_clearance_m", motion.travel_clearance_m, 1.0),
+        ("motion.travel_speed_m_s", motion.travel_speed_m_s, MAX_TRAVEL_SPEED_M_S),
+        ("motion.contact_speed_m_s", motion.contact_speed_m_s, MAX_CONTACT_SPEED_M_S),
+        ("motion.contact_zone_m", motion.contact_zone_m, motion.travel_clearance_m),
+        ("motion.acceleration_m_s2", motion.acceleration_m_s2, MAX_ACCELERATION_M_S2),
+        (
+            "motion.rotation_speed_deg_s",
+            motion.rotation_speed_deg_s,
+            MAX_ROTATION_SPEED_DEG_S,
+        ),
+        ("safety.max_tilt_deg", positions.safety.max_tilt_deg, MAX_TILT_DEG),
+        ("safety.press_force_n", positions.safety.press_force_n, MAX_PRESS_FORCE_N),
+        ("gripper.clearance_mm", positions.gripper.clearance_mm, GRIPPER_MAX_WIDTH_MM),
+        (
+            "gripper.width_tolerance_mm",
+            positions.gripper.width_tolerance_mm,
+            GRASP_SQUEEZE_MM / 2,
+        ),
     ):
+        if not 0 < value <= cap:
+            raise ValueError(f"{name} = {value} must be in (0, {cap}]")
+    if not abs(positions.gripper.width_offset_mm) <= MAX_WIDTH_OFFSET_MM:
         raise ValueError(
-            "structure must provide non-empty part_names, brick_dimensions, "
-            "support_bricks and placement_offsets lists"
+            f"gripper.width_offset_mm must be within {MAX_WIDTH_OFFSET_MM} mm of zero"
         )
-    count = len(part_names)
-    if (
-        len(brick_dimensions) != count
-        or len(support_bricks) != count
-        or len(placement_offsets) != count
-    ):
-        raise ValueError("structure list lengths must be equal")
+    if not 0 <= positions.safety.press_overtravel_m <= MAX_PRESS_OVERTRAVEL_M:
+        raise ValueError(
+            f"safety.press_overtravel_m must be in [0, {MAX_PRESS_OVERTRAVEL_M}]"
+        )
+    if not np.all(positions.safety.workspace_min_m < positions.safety.workspace_max_m):
+        raise ValueError("safety.workspace_min_m must be below workspace_max_m")
 
-    for index, name in enumerate(part_names):
-        if not isinstance(name, str) or not name:
-            raise ValueError(f"part_names[{index}] must be a non-empty string")
-    if len(set(part_names)) != count:
+    # The taught corners must reproduce the stud grid they were seated on.
+    x_edge = positions.x_corner[:3, 3] - positions.origin[:3, 3]
+    y_edge = positions.y_corner[:3, 3] - positions.origin[:3, 3]
+    for name, edge, studs in (
+        ("x_corner", x_edge, positions.x_corner_studs),
+        ("y_corner", y_edge, positions.y_corner_studs),
+    ):
+        error_m = abs(float(np.linalg.norm(edge)) - studs * STUD_PITCH_M)
+        if error_m > CORNER_DISTANCE_TOLERANCE_M:
+            raise ValueError(
+                f"baseplate.{name} is {np.linalg.norm(edge) * 1000:.2f} mm from "
+                f"origin, expected {studs * STUD_PITCH_M * 1000:.1f} mm for "
+                f"{studs} studs; re-record the corners"
+            )
+    normal = np.cross(x_edge, y_edge)
+    normal /= np.linalg.norm(normal)
+    skew_deg = abs(
+        90.0
+        - np.degrees(
+            np.arccos(
+                x_edge @ y_edge / (np.linalg.norm(x_edge) * np.linalg.norm(y_edge))
+            )
+        )
+    )
+    if skew_deg > CORNER_ANGLE_TOLERANCE_DEG:
+        raise ValueError(f"baseplate corners are {skew_deg:.2f} deg off square")
+    if np.degrees(np.arccos(min(normal[2], 1.0))) > PLATE_LEVEL_TOLERANCE_DEG:
+        raise ValueError(
+            "baseplate +X cross +Y must point up in base: the corners are "
+            "mirrored or the plate is not level"
+        )
+    for name, corner in (
+        ("x_corner", positions.x_corner),
+        ("y_corner", positions.y_corner),
+    ):
+        twist_deg = np.degrees(
+            Rotation.from_matrix(
+                positions.origin[:3, :3].T @ corner[:3, :3]
+            ).magnitude()
+        )
+        if twist_deg > CORNER_ANGLE_TOLERANCE_DEG:
+            raise ValueError(
+                f"baseplate.{name} tool orientation differs from origin by "
+                f"{twist_deg:.2f} deg; seat the reference brick the same way"
+            )
+    return positions
+
+
+def load_structure(path: str | Path) -> dict[str, list]:
+    """Load and validate a simulator structure JSON.
+
+    Only ``part_names``, ``brick_dimensions`` (``[x, y]`` studs and height in
+    plates), ``support_bricks``, ``placement_offsets`` (studs) and optional
+    ``placement_yaws`` (quarter turns) are used. The simulator stage
+    coordinates in the file are ignored.
+
+    Args:
+        path: Structure file, for example ``experiments/ur5e_structures/*.json``.
+
+    Returns:
+        The structure document with ``placement_yaws`` filled in.
+
+    Raises:
+        ValueError: If the build description is inconsistent.
+    """
+    structure = json.loads(Path(path).read_text(encoding="utf-8"))
+    names = structure["part_names"]
+    structure.setdefault("placement_yaws", [0] * len(names))
+    if len(set(names)) != len(names):
         raise ValueError("part_names must be unique")
+    for key in (
+        "brick_dimensions",
+        "support_bricks",
+        "placement_offsets",
+        "placement_yaws",
+    ):
+        if len(structure[key]) != len(names):
+            raise ValueError(f"{key} must have one entry per part")
+    for index, name in enumerate(names):
+        length, width, height = structure["brick_dimensions"][index]
+        support = structure["support_bricks"][index]
+        if min(length, width) < 1 or height != BRICK_HEIGHT_PLATES:
+            raise ValueError(f"{name}: only bricks {BRICK_HEIGHT_PLATES} plates tall")
+        if support is not None and not 0 <= support < index:
+            raise ValueError(f"{name}: support must be an earlier brick or null")
+        if structure["placement_yaws"][index] not in (0, 1, 2, 3):
+            raise ValueError(f"{name}: placement yaw must be a quarter turn 0..3")
+    return structure
 
-    for index, dimension in enumerate(brick_dimensions):
-        if (
-            not isinstance(dimension, list)
-            or len(dimension) != 3
-            or any(type(stud) is not int or stud <= 0 for stud in dimension)
-            or dimension[2] != BRICK_HEIGHT_PLATE_UNITS
-        ):
-            raise ValueError(
-                f"brick_dimensions[{index}] must be three positive integers "
-                "with height 3 plate units"
-            )
 
-    for index, parent in enumerate(support_bricks):
-        if parent is not None and (type(parent) is not int or not 0 <= parent < index):
-            raise ValueError(
-                f"support_bricks[{index}] must be null or an earlier brick index"
-            )
+def place_poses(structure: dict[str, list], positions: Positions) -> list[np.ndarray]:
+    """Compute the tool pose that seats each brick, in build order.
 
-    for index, offset in enumerate(placement_offsets):
-        if (
-            not isinstance(offset, list)
-            or len(offset) != 2
-            or any(type(stud) is not int for stud in offset)
-        ):
-            raise ValueError(
-                f"placement_offsets[{index}] must be two integer stud offsets"
-            )
+    Brick centres follow the simulator stud-grid rule, in studs from the plate
+    origin corner, with ``R(k)`` a rotation by ``k`` quarter turns about +Z::
 
-    placement_yaws = structure.get("placement_yaws", [0] * count)
-    if not isinstance(placement_yaws, list) or len(placement_yaws) != count:
-        raise ValueError("placement_yaws must hold one value per part")
-    for index, yaw in enumerate(placement_yaws):
-        if type(yaw) is not int or not 0 <= yaw <= 3:
-            raise ValueError(
-                f"placement_yaws[{index}] must be an integer quarter turn in 0..3"
-            )
+        centre = support_corner + R(support_yaw) @ (offset + R(yaw) @ size / 2)
 
-    stud_pitch_m = baseplate["stud_pitch_m"]
-    plate_unit_m = baseplate["brick_height_m"] / BRICK_HEIGHT_PLATE_UNITS
-    plate_origin = baseplate["origin_xyz_m"]
-    plate_yaw = radians(baseplate["yaw_deg"])
-    position: list[tuple[float, float, float]] = []
-    yaw: list[float] = []
-    for index in range(count):
-        parent = support_bricks[index]
-        dimension = brick_dimensions[index]
-        offset = placement_offsets[index]
-        local_yaw = placement_yaws[index] * pi / 2
-        if parent is None:
-            parent_position = (plate_origin[0], plate_origin[1], plate_origin[2])
-            parent_yaw = plate_yaw
-            parent_size = (PLATE_STUDS, PLATE_STUDS)
-            parent_height_m = PLATE_HEIGHT_PLATE_UNITS * plate_unit_m
+    The plate is a support with its corner at the origin and yaw 0. The tool
+    position is interpolated between the taught corners, which absorbs the
+    plate position, yaw and tilt::
+
+        p = p_origin + (p_x - p_origin) * dx / x_corner_studs
+                     + (p_y - p_origin) * dy / y_corner_studs + normal * height
+
+    with ``(dx, dy)`` the brick centre minus the reference brick centre. The
+    fingers always span the short side of a brick, so the tool is the origin
+    orientation turned a quarter about the plate normal when the short side
+    lies along plate +X.
+
+    Args:
+        structure: Document from ``load_structure``.
+        positions: Taught poses from ``load_positions``.
+
+    Returns:
+        One 4x4 ``T_base_tool0`` per brick.
+    """
+    quarter_turns = (
+        np.array([[1, 0], [0, 1]]),
+        np.array([[0, -1], [1, 0]]),
+        np.array([[-1, 0], [0, -1]]),
+        np.array([[0, 1], [-1, 0]]),
+    )
+    origin = positions.origin[:3, 3]
+    x_step = (positions.x_corner[:3, 3] - origin) / positions.x_corner_studs
+    y_step = (positions.y_corner[:3, 3] - origin) / positions.y_corner_studs
+    normal = np.cross(x_step, y_step)
+    normal /= np.linalg.norm(normal)
+    quarter_about_normal = Rotation.from_rotvec(normal * np.pi / 2).as_matrix()
+
+    centres: list[np.ndarray] = []
+    yaws: list[int] = []
+    layers: list[int] = []
+    poses: list[np.ndarray] = []
+    for index, size in enumerate(structure["brick_dimensions"]):
+        support = structure["support_bricks"][index]
+        if support is None:
+            support_corner = np.zeros(2)
+            support_yaw = 0
+            layer = 0
         else:
-            parent_position = position[parent]
-            parent_yaw = yaw[parent]
-            parent_size = (brick_dimensions[parent][0], brick_dimensions[parent][1])
-            parent_height_m = brick_dimensions[parent][2] * plate_unit_m
-        half_shift = _rotate_xy(
-            local_yaw,
-            dimension[0] * stud_pitch_m / 2,
-            dimension[1] * stud_pitch_m / 2,
-        )
-        parent_shift = _rotate_xy(
-            parent_yaw,
-            (offset[0] - parent_size[0] / 2) * stud_pitch_m + half_shift[0],
-            (offset[1] - parent_size[1] / 2) * stud_pitch_m + half_shift[1],
-        )
-        position.append(
-            (
-                parent_position[0] + parent_shift[0],
-                parent_position[1] + parent_shift[1],
-                parent_position[2] + parent_height_m,
+            support_yaw = yaws[support]
+            support_corner = (
+                centres[support]
+                - quarter_turns[support_yaw]
+                @ np.array(structure["brick_dimensions"][support][:2])
+                / 2
             )
+            layer = layers[support] + 1
+        yaw = structure["placement_yaws"][index]
+        centre = support_corner + quarter_turns[support_yaw] @ (
+            np.array(structure["placement_offsets"][index])
+            + quarter_turns[yaw] @ np.array(size[:2]) / 2
         )
-        yaw.append(parent_yaw + local_yaw)
+        centres.append(centre)
+        yaws.append((support_yaw + yaw) % 4)
+        layers.append(layer)
 
-    speed_scale = limits["max_speed_scale"]
-    travel_speed_m_s = motion["travel_speed_m_s"] * speed_scale
-    descend_speed_m_s = motion["descend_speed_m_s"] * speed_scale
-    if max(travel_speed_m_s, descend_speed_m_s) > limits["max_speed_m_s"]:
-        raise ValueError(
-            "scaled motion speeds exceed limits.max_speed_m_s; lower the "
-            "configured speeds or the speed scale"
+        shift = centre - np.array(REFERENCE_BRICK_STUDS) / 2
+        pose = np.eye(4)
+        pose[:3, 3] = (
+            origin
+            + x_step * shift[0]
+            + y_step * shift[1]
+            + normal * layer * BRICK_HEIGHT_M
         )
+        long_side_along_x = (size[0] > size[1]) == (yaws[index] % 2 == 0)
+        pose[:3, :3] = positions.origin[:3, :3]
+        if size[0] != size[1] and not long_side_along_x:
+            pose[:3, :3] = quarter_about_normal @ positions.origin[:3, :3]
+        poses.append(pose)
+    return poses
 
-    hover_m = motion["hover_m"]
-    seat_gap_m = seating["max_travel_m"]
-    pickup_xyz = pickup["xyz_m"]
-    pickup_rpy = pickup["rpy_deg"]
-    calibration_xyz = calibration["brick_to_tcp_xyz_m"]
-    calibration_rpy = calibration["brick_to_tcp_rpy_deg"]
-    workspace_min_m = limits["workspace_min_m"]
-    workspace_max_m = limits["workspace_max_m"]
-    steps: list[PlanStep] = []
-    for index, brick_id in enumerate(part_names):
-        target_shift = _rotate_xy(yaw[index], calibration_xyz[0], calibration_xyz[1])
-        target_xyz = (
-            position[index][0] + target_shift[0],
-            position[index][1] + target_shift[1],
-            position[index][2] + calibration_xyz[2],
+
+def plan_assembly(structure: dict[str, list], positions: Positions) -> Plan:
+    """Plan the pick and place of every brick, in build order.
+
+    Every sideways move happens at one travel height; every approach and
+    retreat is a vertical line in ``base``. The last ``contact_zone_m`` above
+    each pick and place runs at the contact speed.
+
+    Args:
+        structure: Document from ``load_structure``.
+        positions: Taught poses and limits from ``load_positions``.
+
+    Returns:
+        Nine steps per brick and the travel height.
+
+    Raises:
+        ValueError: If any target leaves the workspace box or tilts the tool
+            beyond ``safety.max_tilt_deg``.
+    """
+    motion = positions.motion
+    picks = [positions.pickups[name] for name in structure["part_names"]]
+    places = place_poses(structure, positions)
+    travel_z_m = max(pose[2, 3] for pose in picks + places) + motion.travel_clearance_m
+    steps: list[Step] = []
+    for name, size, pick, place in zip(
+        structure["part_names"], structure["brick_dimensions"], picks, places
+    ):
+        grasp_mm = (
+            min(size[:2]) * STUD_PITCH_M * 1000
+            - BRICK_SIDE_GAP_MM
+            + positions.gripper.width_offset_mm
         )
-        target_rpy = [
-            calibration_rpy[0],
-            calibration_rpy[1],
-            remainder(degrees(yaw[index]) + calibration_rpy[2], 360.0),
-        ]
-        brick_steps: list[
-            tuple[
-                PlanAction,
-                tuple[float, float, float],
-                list[float],
-                float,
-                float | None,
-            ]
-        ] = [
-            (
-                "approach",
-                (pickup_xyz[0], pickup_xyz[1], pickup_xyz[2] + hover_m),
-                pickup_rpy,
-                travel_speed_m_s,
-                None,
+        open_mm = grasp_mm + 2 * positions.gripper.clearance_mm
+        if open_mm > GRIPPER_MAX_WIDTH_MM:
+            raise ValueError(f"{name}: opening {open_mm:.1f} mm exceeds the gripper")
+        above_pick, near_pick, above_place, near_place, seat = (
+            pick.copy(),
+            pick.copy(),
+            place.copy(),
+            place.copy(),
+            place.copy(),
+        )
+        above_pick[2, 3] = above_place[2, 3] = travel_z_m
+        near_pick[2, 3] += motion.contact_zone_m
+        near_place[2, 3] += motion.contact_zone_m
+        seat[2, 3] -= positions.safety.press_overtravel_m
+        travel, contact = motion.travel_speed_m_s, motion.contact_speed_m_s
+        steps += [
+            Step(f"{name}: open gripper", gripper_mm=open_mm, expected_mm=open_mm),
+            Step(f"{name}: move above pick", moves=(Move(above_pick, travel),)),
+            Step(
+                f"{name}: descend to pick",
+                moves=(Move(near_pick, travel), Move(pick, contact, "guard")),
             ),
-            (
-                "descend",
-                (pickup_xyz[0], pickup_xyz[1], pickup_xyz[2]),
-                pickup_rpy,
-                descend_speed_m_s,
-                None,
+            Step(
+                f"{name}: grasp",
+                gripper_mm=grasp_mm - GRASP_SQUEEZE_MM,
+                expected_mm=grasp_mm,
             ),
-            (
-                "close",
-                (pickup_xyz[0], pickup_xyz[1], pickup_xyz[2]),
-                pickup_rpy,
-                descend_speed_m_s,
-                pickup["gripper_width_mm"],
+            Step(
+                f"{name}: lift",
+                moves=(Move(near_pick, contact), Move(above_pick, travel)),
             ),
-            (
-                "lift",
-                (pickup_xyz[0], pickup_xyz[1], pickup_xyz[2] + hover_m),
-                pickup_rpy,
-                descend_speed_m_s,
-                None,
+            Step(
+                f"{name}: move above place",
+                moves=(Move(above_place, travel),),
+                expected_mm=grasp_mm,
             ),
-            (
-                "transfer",
-                (target_xyz[0], target_xyz[1], target_xyz[2] + hover_m),
-                target_rpy,
-                travel_speed_m_s,
-                None,
+            Step(
+                f"{name}: descend and seat",
+                moves=(Move(near_place, travel), Move(seat, contact, "seat")),
+                expected_mm=grasp_mm,
             ),
-            (
-                "approach_target",
-                (target_xyz[0], target_xyz[1], target_xyz[2] + seat_gap_m),
-                target_rpy,
-                descend_speed_m_s,
-                None,
-            ),
-            ("slow_descend", target_xyz, target_rpy, descend_speed_m_s, None),
-            ("seat", target_xyz, target_rpy, descend_speed_m_s, None),
-            ("open", target_xyz, target_rpy, descend_speed_m_s, None),
-            (
-                "retreat",
-                (target_xyz[0], target_xyz[1], target_xyz[2] + hover_m),
-                target_rpy,
-                descend_speed_m_s,
-                None,
+            Step(f"{name}: release", gripper_mm=open_mm, expected_mm=open_mm),
+            Step(
+                f"{name}: retreat",
+                moves=(Move(near_place, contact), Move(above_place, travel)),
             ),
         ]
-        for action, xyz_m, rpy_deg, speed_m_s, gripper_width_mm in brick_steps:
-            if not all(isfinite(value) for value in (*xyz_m, *rpy_deg, speed_m_s)):
-                raise ValueError(f"{action} pose for {brick_id} is not finite")
-            if speed_m_s <= 0:
-                raise ValueError(f"{action} speed for {brick_id} must be positive")
-            if not all(
-                workspace_min_m[axis] <= xyz_m[axis] <= workspace_max_m[axis]
-                for axis in range(3)
+    for step in steps:
+        for move in step.moves:
+            position = move.pose[:3, 3]
+            if np.any(position < positions.safety.workspace_min_m) or np.any(
+                position > positions.safety.workspace_max_m
             ):
                 raise ValueError(
-                    f"{action} pose for {brick_id} is outside the workspace bounds"
+                    f"{step.label}: target {np.round(position, 4).tolist()} m is "
+                    "outside the workspace box"
                 )
-            step: PlanStep = {
-                "action": action,
-                "brick_id": brick_id,
-                "xyz_m": [xyz_m[0], xyz_m[1], xyz_m[2]],
-                "rpy_deg": [rpy_deg[0], rpy_deg[1], rpy_deg[2]],
-                "speed_m_s": speed_m_s,
-            }
-            if gripper_width_mm is not None:
-                step["gripper_width_mm"] = gripper_width_mm
-            steps.append(step)
-    return steps
+            tilt_deg = np.degrees(np.arccos(np.clip(-move.pose[2, 2], -1.0, 1.0)))
+            if tilt_deg > positions.safety.max_tilt_deg:
+                raise ValueError(
+                    f"{step.label}: tool tilted {tilt_deg:.1f} deg from straight down"
+                )
+    return Plan(steps, travel_z_m)

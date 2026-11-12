@@ -1,0 +1,27 @@
+{"step": "tower_0: open gripper", "tool_xyz_m": [0.1333, -0.55973, 0.41335], "peak_speed_m_s": 0.0, "gripper_mm": 23.8}
+{"step": "tower_0: move above pick", "tool_xyz_m": [-0.2, -0.3, 0.2842], "peak_speed_m_s": 0.0506, "gripper_mm": null}
+{"step": "tower_0: descend to pick", "tool_xyz_m": [-0.2, -0.3, 0.162], "peak_speed_m_s": 0.0508, "gripper_mm": null}
+{"step": "tower_0: grasp", "tool_xyz_m": [-0.2, -0.3, 0.162], "peak_speed_m_s": 0.0, "gripper_mm": 15.8}
+{"step": "tower_0: lift", "tool_xyz_m": [-0.2, -0.3, 0.2842], "peak_speed_m_s": 0.0506, "gripper_mm": null}
+{"step": "tower_0: move above place", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.042, "gripper_mm": 15.8}
+{"step": "tower_0: descend and seat", "tool_xyz_m": [0.036, -0.372, 0.1645], "peak_speed_m_s": 0.0505, "gripper_mm": 15.8}
+{"step": "tower_0: release", "tool_xyz_m": [0.036, -0.372, 0.1645], "peak_speed_m_s": 0.0, "gripper_mm": 23.8}
+{"step": "tower_0: retreat", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.0505, "gripper_mm": null}
+{"step": "tower_1: open gripper", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.0, "gripper_mm": 23.8}
+{"step": "tower_1: move above pick", "tool_xyz_m": [-0.2, -0.36, 0.2842], "peak_speed_m_s": 0.0399, "gripper_mm": null}
+{"step": "tower_1: descend to pick", "tool_xyz_m": [-0.2, -0.36, 0.162], "peak_speed_m_s": 0.051, "gripper_mm": null}
+{"step": "tower_1: grasp", "tool_xyz_m": [-0.2, -0.36, 0.162], "peak_speed_m_s": 0.0, "gripper_mm": 15.8}
+{"step": "tower_1: lift", "tool_xyz_m": [-0.2, -0.36, 0.2842], "peak_speed_m_s": 0.0503, "gripper_mm": null}
+{"step": "tower_1: move above place", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.051, "gripper_mm": 15.8}
+{"step": "tower_1: descend and seat", "tool_xyz_m": [0.036, -0.372, 0.1741], "peak_speed_m_s": 0.0508, "gripper_mm": 15.8}
+{"step": "tower_1: release", "tool_xyz_m": [0.036, -0.372, 0.1741], "peak_speed_m_s": 0.0, "gripper_mm": 23.8}
+{"step": "tower_1: retreat", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.0513, "gripper_mm": null}
+{"step": "tower_2: open gripper", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.0, "gripper_mm": 23.8}
+{"step": "tower_2: move above pick", "tool_xyz_m": [-0.2, -0.42, 0.2842], "peak_speed_m_s": 0.051, "gripper_mm": null}
+{"step": "tower_2: descend to pick", "tool_xyz_m": [-0.2, -0.42, 0.162], "peak_speed_m_s": 0.0505, "gripper_mm": null}
+{"step": "tower_2: grasp", "tool_xyz_m": [-0.2, -0.42, 0.162], "peak_speed_m_s": 0.0, "gripper_mm": 15.8}
+{"step": "tower_2: lift", "tool_xyz_m": [-0.2, -0.42, 0.2842], "peak_speed_m_s": 0.0507, "gripper_mm": null}
+{"step": "tower_2: move above place", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.0406, "gripper_mm": 15.8}
+{"step": "tower_2: descend and seat", "tool_xyz_m": [0.036, -0.372, 0.1837], "peak_speed_m_s": 0.0504, "gripper_mm": 15.8}
+{"step": "tower_2: release", "tool_xyz_m": [0.036, -0.372, 0.1837], "peak_speed_m_s": 0.0, "gripper_mm": 23.8}
+{"step": "tower_2: retreat", "tool_xyz_m": [0.036, -0.372, 0.2842], "peak_speed_m_s": 0.0505, "gripper_mm": null}

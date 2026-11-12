@@ -1,0 +1,25 @@
+{
+ "joint_state_samples": 1916,
+ "duration_s": 3.8,
+ "max_tool_speed_m_s": 0.0,
+ "max_joint_speed_rad_s": 0.0,
+ "tool_path_length_m": 0.0,
+ "tool_min_xyz_m": [
+  0.1333,
+  -0.5597,
+  0.4134
+ ],
+ "tool_max_xyz_m": [
+  0.1333,
+  -0.5597,
+  0.4134
+ ],
+ "max_tool_tilt_deg": 0.0,
+ "seconds_moving": 0.0,
+ "final_tool_xyz_m": [
+  0.1333,
+  -0.5597,
+  0.4134
+ ],
+ "gripper_commands_tenths_mm": []
+}

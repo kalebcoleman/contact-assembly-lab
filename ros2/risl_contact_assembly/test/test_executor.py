@@ -1,647 +1,459 @@
-"""Unit tests for the assembly executor.
-
-Tests never create a ROS node, never construct the Max motion stack, and never
-touch hardware.  Feedback and motion are injected fakes; every fake that reacts
-to a command records it so tests can prove which endpoint was used.
-"""
+"""Tests for the executor against a simulated arm and gripper."""
 
 import json
-import time
-from collections.abc import Callable, Mapping, Sequence
-from dataclasses import replace
 from pathlib import Path
 
+import numpy as np
 import pytest
-from geometry_msgs.msg import PoseStamped
-from risl_contact_assembly.executor import (
-    JOINT_NAMES,
-    AssemblyExecutor,
-    ExecutionRefusedError,
-    ExecutorOptions,
-    FeedbackError,
-    MotionFaultError,
-    PlanValidationError,
-    RosFeedback,
-    Step,
-    validate_plan,
+from risl_contact_assembly.executor import AbortError, Executor, camera_pickups
+from risl_contact_assembly.motion import plan_move
+from risl_contact_assembly.planner import (
+    Move,
+    Positions,
+    load_positions,
+    load_structure,
+    plan_assembly,
 )
-from sensor_msgs.msg import JointState
+from risl_contact_assembly.robot import RosRobot
+from risl_ur.custom_libraries.ik_solver import dh_params, forward_kinematics
+
+PACKAGE = Path(__file__).resolve().parents[1]
+START_JOINTS = np.radians([90.0, -80.0, 90.0, -100.0, -90.0, 0.0])
+STEPS = 9
 
 
-class FakeClock:
-    """Monotonic clock fake that advances on every read."""
+class SimulatedRobot(RosRobot):
+    """Arm that tracks trajectories exactly on a simulated clock.
 
-    def __init__(self, start_s: float = 0.0, step_s: float = 0.0) -> None:
-        """Store the initial time and the advance per read.
+    Attributes set by tests inject faults: ``stalled`` freezes the arm,
+    ``contact_below_z_m`` adds ``contact_force_n`` of tool force below a tool
+    height, ``brick_width_mm`` is what the fingers close on, and
+    ``joint_feedback`` and ``gripper_feedback`` switch feedback off.
+    """
 
-        Args:
-            start_s: First value returned.
-            step_s: Seconds added to the stored time on every read.
-        """
-        self.now_s = start_s
-        self.step_s = step_s
+    def __init__(self) -> None:
+        """Start at rest at ``START_JOINTS`` with an open, empty-handed gripper."""
+        self.time_s = 0.0
+        self.joint_angles = START_JOINTS.copy()
+        self.trajectory: tuple[float, np.ndarray, np.ndarray] | None = None
+        self.state = "idle"
+        self.sent: list[np.ndarray] = []
+        self.cancels = 0
+        self.commands: list[str] = []
+        self.width_mm = 110.0
+        self.brick_width_mm = 15.8
+        self.scaling = 1.0
+        self.running = True
+        self.stalled = False
+        self.joint_feedback = True
+        self.gripper_feedback = True
+        self.contact_below_z_m = -np.inf
+        self.contact_force_n = 0.0
+        self.objects: dict[str, np.ndarray] = {}
 
-    def __call__(self) -> float:
-        """Return the current fake time and advance it.
-
-        Returns:
-            Fake monotonic time in seconds.
-        """
-        value = self.now_s
-        self.now_s += self.step_s
-        return value
-
-
-class FakeFeedback:
-    """Feedback fake with switchable missing and stale faults."""
-
-    def __init__(
-        self,
-        position: tuple[float, float, float] = (0.0, 0.0, 0.0104),
-        missing: bool = False,
-        stale: bool = False,
-    ) -> None:
-        """Store the reported TCP position and fault flags.
-
-        Args:
-            position: TCP xyz in metres reported to the executor.
-            missing: Raise ``FeedbackError`` as for absent messages.
-            stale: Raise ``FeedbackError`` as for old messages.
-        """
-        self.position = position
-        self.missing = missing
-        self.stale = stale
-        self.joints: tuple[float, ...] = (0.0,) * len(JOINT_NAMES)
-
-    def require_fresh(self) -> None:
-        """Raise the configured feedback fault.
-
-        Raises:
-            FeedbackError: When ``missing`` or ``stale`` is set.
-        """
-        if self.missing:
-            raise FeedbackError("missing /joint_states feedback")
-        if self.stale:
-            raise FeedbackError("stale /tcp_pose_broadcaster/pose feedback")
-
-    def tcp_position(self) -> tuple[float, float, float]:
-        """Return the configured TCP position.
+    def now(self) -> float:
+        """Return simulated time.
 
         Returns:
-            TCP xyz in metres.
+            Seconds since construction.
         """
-        self.require_fresh()
-        return self.position
+        return self.time_s
 
-    def joint_positions(self) -> tuple[float, ...]:
-        """Return six zero joint angles.
+    def wait(self, seconds: float) -> None:
+        """Advance simulated time and move the arm along its trajectory.
+
+        Args:
+            seconds: Time step.
+        """
+        self.time_s += seconds
+        if self.trajectory is None or self.state != "active" or self.stalled:
+            return
+        start_s, times, positions = self.trajectory
+        elapsed_s = (self.time_s - start_s) * self.scaling
+        self.joint_angles = np.array(
+            [np.interp(elapsed_s, times, positions[:, joint]) for joint in range(6)]
+        )
+        if elapsed_s >= times[-1]:
+            self.state = "succeeded"
+
+    def joints(self) -> np.ndarray | None:
+        """Return the simulated joint angles.
 
         Returns:
-            Joint angles in radians.
+            Six angles, radians, or None while feedback is switched off.
         """
-        self.require_fresh()
-        return self.joints
+        return self.joint_angles if self.joint_feedback else None
 
+    def force(self) -> np.ndarray | None:
+        """Return gravity-like bias plus contact force below the contact height.
 
-class FakeBackend:
-    """Motion backend fake that records calls and optionally fails or drifts."""
-
-    def __init__(
-        self,
-        feedback: FakeFeedback | None = None,
-        fault: MotionFaultError | None = None,
-        z_delta_per_move_m: float | None = None,
-        drift_actions: tuple[str, ...] | None = None,
-    ) -> None:
-        """Configure the fake motion behaviour.
-
-        Args:
-            feedback: Feedback fake whose TCP position the fake may move.
-            fault: Raised on the first move when set.
-            z_delta_per_move_m: Simulated TCP z change per move; negative values
-                model a robot that descends further than commanded.
-            drift_actions: Actions that apply the z change; all actions when None.
+        Returns:
+            Tool force, newtons.
         """
-        self.calls: list[tuple[object, ...]] = []
-        self.feedback = feedback
-        self.fault = fault
-        self.z_delta_per_move_m = z_delta_per_move_m
-        self.drift_actions = drift_actions
+        tool_z_m = forward_kinematics(dh_params, self.joint_angles)[2, 3]
+        contact_n = self.contact_force_n if tool_z_m < self.contact_below_z_m else 0.0
+        return np.array([1.0, -2.0, 7.0 + contact_n])
 
-    def move(
-        self,
-        step: Step,
-        duration_s: float,
-        timeout_s: float,
-        limits: object,
-        start_joints: tuple[float, ...],
-    ) -> None:
-        """Record a move and apply the configured fault or drift.
+    def speed_fraction(self) -> float | None:
+        """Return the simulated speed scaling.
 
-        Args:
-            step: Requested target.
-            duration_s: Requested duration.
-            timeout_s: Requested deadline margin.
-            limits: Workspace and speed limits.
-            start_joints: Measured start joints.
+        Returns:
+            Fraction of programmed speed.
         """
-        del duration_s, timeout_s, limits, start_joints
-        self.calls.append(("move", step.action, step.xyz_m))
-        if self.fault is not None:
-            raise self.fault
-        if (
-            self.feedback is not None
-            and self.z_delta_per_move_m is not None
-            and (self.drift_actions is None or step.action in self.drift_actions)
-        ):
-            x, y, z = self.feedback.position
-            self.feedback.position = (x, y, z + self.z_delta_per_move_m)
+        return self.scaling
+
+    def gripper_width(self) -> float | None:
+        """Return the simulated finger width.
+
+        Returns:
+            Width, millimetres, or None while feedback is switched off.
+        """
+        return self.width_mm if self.gripper_feedback else None
+
+    def program_running(self) -> bool:
+        """Return the simulated pendant program state.
+
+        Returns:
+            True while External Control runs.
+        """
+        return self.running
+
+    def controller_ready(self) -> bool:
+        """Report the trajectory controller as available.
+
+        Returns:
+            True.
+        """
+        return True
 
     def gripper(self, command: str) -> None:
-        """Record a gripper command.
+        """Apply a width command in tenths of a millimetre, stopping on the brick.
 
         Args:
-            command: Command string sent to the gripper.
+            command: ``query`` or tenths of a millimetre.
         """
-        self.calls.append(("gripper", command))
+        if command != "query":
+            self.commands.append(command)
+            self.width_mm = max(int(command) / 10.0, self.brick_width_mm)
 
-    def stop(self) -> None:
-        """Record a stop request."""
-        self.calls.append(("stop",))
+    def send(
+        self, times: np.ndarray, positions: np.ndarray, velocities: np.ndarray
+    ) -> None:
+        """Start following a trajectory from the current joints.
 
+        Args:
+            times: Sample times, seconds.
+            positions: Joint samples, radians.
+            velocities: Joint velocities, rad/s; unused.
+        """
+        self.sent.append(positions)
+        self.trajectory = (
+            self.time_s,
+            np.concatenate([[0.0], times]),
+            np.vstack([self.joint_angles, positions]),
+        )
+        self.state = "active"
 
-def make_config(
-    max_travel_m: float = 0.002, timeout_s: float = 0.3
-) -> dict[str, object]:
-    """Build a config that satisfies the planner contract.
+    def motion_state(self) -> str:
+        """Report the simulated trajectory state.
 
-    Args:
-        max_travel_m: Hard seating travel cap in metres.
-        timeout_s: Seating guard timeout in seconds.
+        Returns:
+            ``active``, ``succeeded`` or ``canceled``.
+        """
+        return self.state
 
-    Returns:
-        Config mapping with limits, seating, motion and pickup sections.
-    """
-    return {
-        "baseplate": {
-            "origin_xyz_m": [0.0, 0.0, 0.0],
-            "yaw_deg": 0.0,
-            "stud_pitch_m": 0.008,
-            "brick_height_m": 0.0096,
-        },
-        "pickup": {
-            "xyz_m": [-0.2, -0.4, 0.02],
-            "rpy_deg": [0.0, 180.0, 0.0],
-            "gripper_width_mm": 40.0,
-        },
-        "limits": {
-            "workspace_min_m": [-0.6, -0.6, 0.0],
-            "workspace_max_m": [0.6, 0.6, 0.4],
-            "max_speed_m_s": 0.2,
-            "max_speed_scale": 1.0,
-        },
-        "motion": {
-            "hover_m": 0.05,
-            "travel_speed_m_s": 0.1,
-            "descend_speed_m_s": 0.02,
-        },
-        "seating": {
-            "force_n": 10.0,
-            "max_travel_m": max_travel_m,
-            "timeout_s": timeout_s,
-        },
-    }
+    def cancel(self) -> None:
+        """Stop where the arm is."""
+        self.cancels += 1
+        if self.state == "active":
+            self.state = "canceled"
+
+    def object_xy(self, name: str) -> np.ndarray | None:
+        """Return a simulated camera position.
+
+        Args:
+            name: Object name.
+
+        Returns:
+            ``[x, y]`` in ``base``, metres, or None when unseen.
+        """
+        return self.objects.get(name)
 
 
-def make_plan(seat_z_m: float = 0.0104) -> list[dict[str, object]]:
-    """Build one canonical ten-step brick plan.
+class Run:
+    """One executor wired to a simulated robot, recording prompts and logs."""
 
-    Args:
-        seat_z_m: Nominal target height used by slow_descend, seat and open;
-            approach_target is this value plus ``max_travel_m``.
+    def __init__(self, tmp_path: Path, **options: bool) -> None:
+        """Plan the single-brick structure with the demo positions.
 
-    Returns:
-        Ten planner-style step mappings for one brick.
-    """
-    approach_z = seat_z_m + 0.002
-    rpy = [0.0, 180.0, 0.0]
-    return [
-        {
-            "action": "approach",
-            "brick_id": "b1",
-            "xyz_m": [-0.2, -0.4, 0.05],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-        },
-        {
-            "action": "descend",
-            "brick_id": "b1",
-            "xyz_m": [-0.2, -0.4, 0.02],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-        },
-        {
-            "action": "close",
-            "brick_id": "b1",
-            "xyz_m": [-0.2, -0.4, 0.02],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-            "gripper_width_mm": 40.0,
-        },
-        {
-            "action": "lift",
-            "brick_id": "b1",
-            "xyz_m": [-0.2, -0.4, 0.05],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-        },
-        {
-            "action": "transfer",
-            "brick_id": "b1",
-            "xyz_m": [0.0, 0.0, 0.05],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-        },
-        {
-            "action": "approach_target",
-            "brick_id": "b1",
-            "xyz_m": [0.0, 0.0, approach_z],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-        },
-        {
-            "action": "slow_descend",
-            "brick_id": "b1",
-            "xyz_m": [0.0, 0.0, seat_z_m],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.02,
-        },
-        {
-            "action": "seat",
-            "brick_id": "b1",
-            "xyz_m": [0.0, 0.0, seat_z_m],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.02,
-        },
-        {
-            "action": "open",
-            "brick_id": "b1",
-            "xyz_m": [0.0, 0.0, seat_z_m],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-            "gripper_width_mm": 40.0,
-        },
-        {
-            "action": "retreat",
-            "brick_id": "b1",
-            "xyz_m": [0.0, 0.0, 0.05],
-            "rpy_deg": rpy,
-            "speed_m_s": 0.05,
-        },
+        Args:
+            tmp_path: Directory for the step log.
+            **options: Executor options overriding an executing fake-hardware run.
+        """
+        self.robot = SimulatedRobot()
+        self.positions = load_positions(PACKAGE / "config" / "demo_positions.yaml")
+        self.plan = plan_assembly(
+            load_structure(PACKAGE / "structures" / "single_brick.json"),
+            self.positions,
+        )
+        self.prompts: list[str] = []
+        self.messages: list[str] = []
+        self.step_log = tmp_path / "steps.jsonl"
+        settings = {
+            "execute": True,
+            "auto_continue": False,
+            "fake_hardware": True,
+        } | options
+        self.executor = Executor(
+            self.robot,
+            self.positions,
+            self.plan,
+            confirm=self.prompts.append,
+            log=self.messages.append,
+            step_log=str(self.step_log),
+            **settings,
+        )
+
+    def tool_xyz(self) -> np.ndarray:
+        """Return the simulated tool origin.
+
+        Returns:
+            Position in ``base``, metres.
+        """
+        return forward_kinematics(dh_params, self.robot.joint_angles)[:3, 3]
+
+
+def test_dry_run_commands_nothing(tmp_path: Path) -> None:
+    """The default mode previews every step and never sends a command."""
+    run = Run(tmp_path, execute=False)
+    run.executor.run()
+    assert run.robot.sent == []
+    assert run.robot.commands == []
+    assert run.prompts == []
+    assert any("DRY RUN" in message for message in run.messages)
+    assert sum("single_0" in message for message in run.messages) == STEPS
+    assert run.tool_xyz() == pytest.approx(
+        forward_kinematics(dh_params, START_JOINTS)[:3, 3]
+    )
+
+
+def test_confirmed_run_places_the_brick(tmp_path: Path) -> None:
+    """Every step is confirmed, widths go out in tenths of a millimetre."""
+    run = Run(tmp_path)
+    run.executor.run()
+    assert len(run.prompts) == STEPS
+    assert run.robot.commands == ["238", "118", "238"]
+    records = [json.loads(line) for line in run.step_log.read_text().splitlines()]
+    assert [record["step"] for record in records] == [
+        step.label for step in run.plan.steps
     ]
+    seat = run.plan.steps[6].moves[-1].pose[:3, 3]
+    assert records[6]["tool_xyz_m"] == pytest.approx(seat.tolist(), abs=1e-4)
+    assert records[3]["gripper_mm"] == pytest.approx(15.8)
+    assert max(record["peak_speed_m_s"] for record in records) <= 0.0505
+    assert max(records[i]["peak_speed_m_s"] for i in (2, 6)) > 0.04
+    assert run.tool_xyz()[2] == pytest.approx(run.plan.travel_z_m, abs=1e-4)
+    assert run.robot.cancels == 0
 
 
-def mock_options(tmp_path: Path, **overrides: object) -> ExecutorOptions:
-    """Build non-dry-run mock options with a valid hardware proof file.
-
-    Args:
-        tmp_path: Directory that receives the proof and step log.
-        overrides: Option fields replaced after the defaults.
-
-    Returns:
-        Options enabling proven mock execution.
-    """
-    proof_path = tmp_path / "mock_proof.json"
-    proof_path.write_text(json.dumps({"mock_hardware": True}), encoding="utf-8")
-    options = ExecutorOptions(
-        dry_run=False,
-        confirm_each_step=False,
-        step_log=str(tmp_path / "steps.jsonl"),
-        mock_execution=True,
-        mock_hardware_proof=str(proof_path),
-    )
-    return replace(options, **overrides)
+def test_start_below_travel_height_rises_vertically_first(tmp_path: Path) -> None:
+    """A low start adds a vertical raise before any sideways motion."""
+    run = Run(tmp_path)
+    low = forward_kinematics(dh_params, START_JOINTS)
+    low[2, 3] = 0.20
+    _, positions, _ = plan_move(START_JOINTS, Move(low, 0.05), run.positions.motion)
+    run.robot.joint_angles = positions[-1]
+    start_xy = run.tool_xyz()[:2].copy()
+    run.executor.run()
+    assert run.prompts[0] == f"[1/{STEPS + 1}] start: raise to travel height"
+    raised = forward_kinematics(dh_params, run.robot.sent[0][-1])[:3, 3]
+    assert raised[:2] == pytest.approx(start_xy, abs=1e-4)
+    assert raised[2] == pytest.approx(run.plan.travel_z_m, abs=1e-4)
 
 
-def run_case(
-    plan: Sequence[object],
-    config: Mapping[str, object],
-    options: ExecutorOptions,
-    feedback: FakeFeedback | None = None,
-    backend: FakeBackend | None = None,
-    clock: Callable[[], float] = time.monotonic,
-):
-    """Run one executor case with fakes and no ROS node.
-
-    Args:
-        plan: Planner-style steps.
-        config: Config mapping.
-        options: Executor options.
-        feedback: Injected feedback fake.
-        backend: Injected backend fake.
-        clock: Monotonic clock fake or ``time.monotonic``.
-
-    Returns:
-        The executor result.
-    """
-    executor = AssemblyExecutor(
-        None,
-        plan,
-        config,
-        options,
-        feedback=feedback,
-        backend=backend,
-        confirm=lambda step: True,
-        clock=clock,
-    )
-    return executor.run()
+def test_missed_grasp_aborts_before_lifting(tmp_path: Path) -> None:
+    """Fingers closing past the brick width stop the run at the grasp."""
+    run = Run(tmp_path)
+    run.robot.brick_width_mm = 0.0
+    with pytest.raises(
+        AbortError, match="grasp: gripper reports 11.8 mm, expected 15.8"
+    ):
+        run.executor.run()
+    assert len(run.prompts) == 4
+    assert len(run.robot.sent) == 3
 
 
-def log_records(path: Path) -> list[dict[str, object]]:
-    """Read a step log as parsed JSON records.
+def test_brick_lost_during_lift_aborts_before_placing(tmp_path: Path) -> None:
+    """A width change while carrying stops the run before the next move."""
+    run = Run(tmp_path)
 
-    Args:
-        path: JSONL step log path.
+    def confirm(prompt: str) -> None:
+        if "move above place" in prompt:
+            run.robot.width_mm = 11.8
 
-    Returns:
-        One mapping per logged line.
-    """
-    lines = path.read_text(encoding="utf-8").splitlines()
-    return [json.loads(line) for line in lines]
-
-
-def test_dry_run_creates_no_control_endpoint_or_message(tmp_path: Path) -> None:
-    """A dry run validates and logs all steps with no node, feedback or backend."""
-    log_path = tmp_path / "steps.jsonl"
-    options = ExecutorOptions(confirm_each_step=True, step_log=str(log_path))
-    result = run_case(make_plan(), make_config(), options)
-    assert result.status == "planned"
-    assert len(result.records) == 10
-    assert all(not record.executed for record in result.records)
-    assert all(record.status == "planned" for record in result.records)
-    assert all(record.force_mode == "not_started" for record in result.records)
-    records = log_records(log_path)
-    assert len(records) == 10
-    assert all(record["dry_run"] is True for record in records)
-    assert all(record["executed"] is False for record in records)
-    assert all(record["physical_insertion_validated"] is False for record in records)
+    run.executor.confirm = confirm
+    with pytest.raises(AbortError, match="move above place: gripper reports 11.8"):
+        run.executor.run()
+    assert len(run.robot.sent) == 5
 
 
-def test_missing_feedback_aborts_before_any_command(tmp_path: Path) -> None:
-    """Missing joint feedback aborts the run without a backend command."""
-    backend = FakeBackend()
-    result = run_case(
-        make_plan(),
-        make_config(),
-        mock_options(tmp_path),
-        feedback=FakeFeedback(missing=True),
-        backend=backend,
-    )
-    assert result.status == "aborted"
-    assert "missing /joint_states" in result.detail
-    assert backend.calls == []
-    assert result.records == []
+def test_missing_gripper_feedback_aborts(tmp_path: Path) -> None:
+    """No width report within the timeout stops the run before any motion."""
+    run = Run(tmp_path)
+    run.robot.gripper_feedback = False
+    with pytest.raises(AbortError, match="no steady gripper width"):
+        run.executor.run()
+    assert run.robot.sent == []
 
 
-def test_stale_feedback_aborts_before_any_command(tmp_path: Path) -> None:
-    """Stale TCP feedback aborts the run without a backend command."""
-    backend = FakeBackend()
-    result = run_case(
-        make_plan(),
-        make_config(),
-        mock_options(tmp_path),
-        feedback=FakeFeedback(stale=True),
-        backend=backend,
-    )
-    assert result.status == "aborted"
-    assert "stale" in result.detail
-    assert backend.calls == []
+def test_seating_stops_at_the_force_cap_and_continues(tmp_path: Path) -> None:
+    """Contact force during the seat move ends it early and the run goes on."""
+    run = Run(tmp_path, fake_hardware=False)
+    seat_z_m = run.plan.steps[6].moves[-1].pose[2, 3]
+    run.robot.contact_below_z_m = seat_z_m + 0.003
+
+    def confirm(prompt: str) -> None:
+        # Contact exists only while the carried brick meets the plate.
+        run.robot.contact_force_n = 25.0 if "descend and seat" in prompt else 0.0
+
+    run.executor.confirm = confirm
+    run.executor.run()
+    records = [json.loads(line) for line in run.step_log.read_text().splitlines()]
+    assert seat_z_m + 0.002 < records[6]["tool_xyz_m"][2] < seat_z_m + 0.003
+    assert any("stopped at the force limit" in message for message in run.messages)
+    assert run.robot.commands == ["238", "118", "238"]
+    assert run.robot.cancels == 1
 
 
-def test_tcp_pose_frame_must_declare_base() -> None:
-    """TCP feedback framed as base_link is rejected instead of reinterpreted."""
-    clock = FakeClock()
-    feedback = RosFeedback(None, 1.0, clock)
-    joints = JointState()
-    joints.name = list(JOINT_NAMES)
-    joints.position = [0.0] * len(JOINT_NAMES)
-    feedback.on_joint_state(joints)
-    pose = PoseStamped()
-    pose.header.frame_id = "base_link"
-    feedback.on_tcp_pose(pose)
-    with pytest.raises(FeedbackError, match="base_link"):
-        feedback.require_fresh()
-    pose.header.frame_id = "base"
-    feedback.on_tcp_pose(pose)
-    feedback.require_fresh()
+def test_force_below_the_cap_does_not_stop_seating(tmp_path: Path) -> None:
+    """A force change under the cap lets the seat move reach its target."""
+    run = Run(tmp_path, fake_hardware=False)
+    run.robot.contact_below_z_m = 1.0
+    run.robot.contact_force_n = 15.0
+    run.executor.run()
+    assert run.robot.cancels == 0
 
 
-def test_travel_timeout_fault_stops_and_aborts(tmp_path: Path) -> None:
-    """A motion deadline fault stops once and stops the remaining steps."""
-    backend = FakeBackend(fault=MotionFaultError("joint trajectory deadline exceeded"))
-    result = run_case(
-        make_plan(),
-        make_config(),
-        mock_options(tmp_path),
-        feedback=FakeFeedback(),
-        backend=backend,
-    )
-    assert result.status == "aborted"
-    assert "deadline" in result.detail
-    assert backend.calls == [("move", "approach", (-0.2, -0.4, 0.05)), ("stop",)]
-    assert result.records[-1].status == "aborted"
-    assert result.records[-1].executed is True
+def test_contact_while_descending_to_pick_aborts(tmp_path: Path) -> None:
+    """Contact force on the guarded pick approach cancels motion and aborts."""
+    run = Run(tmp_path, fake_hardware=False)
+    pick_z_m = run.plan.steps[2].moves[-1].pose[2, 3]
+    run.robot.contact_below_z_m = pick_z_m + 0.005
+    run.robot.contact_force_n = 25.0
+    with pytest.raises(AbortError, match="descend to pick: unexpected contact"):
+        run.executor.run()
+    assert run.robot.cancels >= 1
+    assert run.tool_xyz()[2] > pick_z_m + 0.004
 
 
-def test_hard_seat_travel_cap_refuses_before_seat_motion(tmp_path: Path) -> None:
-    """A seat descent beyond max_travel_m aborts with no seat move and no allowance."""
-    plan = make_plan(seat_z_m=0.0074)
-    backend = FakeBackend()
-    result = run_case(
-        plan,
-        make_config(),
-        mock_options(tmp_path),
-        feedback=FakeFeedback(),
-        backend=backend,
-    )
-    assert result.status == "aborted"
-    assert "hard cap" in result.detail
-    moves = [call for call in backend.calls if call[0] == "move"]
-    assert [call[1] for call in moves] == [
-        "approach",
-        "descend",
-        "lift",
-        "transfer",
-        "approach_target",
-        "slow_descend",
-    ]
-    assert ("move", "seat", (0.0, 0.0, 0.0074)) not in backend.calls
-    assert ("stop",) in backend.calls
+def test_stalled_arm_times_out_and_cancels(tmp_path: Path) -> None:
+    """A trajectory that never finishes aborts and is cancelled."""
+    run = Run(tmp_path)
+    run.robot.stalled = True
+    with pytest.raises(AbortError, match="timed out"):
+        run.executor.run()
+    assert run.robot.cancels == 1
+    assert run.robot.state == "canceled"
 
 
-def test_seat_overtravel_aborts_and_stops(tmp_path: Path) -> None:
-    """Measured descent beyond the hard cap aborts and stops motion."""
-    feedback = FakeFeedback()
-    backend = FakeBackend(
-        feedback=feedback,
-        z_delta_per_move_m=-0.0009,
-        drift_actions=("seat",),
-    )
-    result = run_case(
-        make_plan(seat_z_m=0.0089),
-        make_config(),
-        mock_options(tmp_path),
-        feedback=feedback,
-        backend=backend,
-    )
-    assert result.status == "aborted"
-    assert "overtravel" in result.detail
-    assert backend.calls[-1] == ("stop",)
+def test_slow_pendant_slider_extends_the_timeout(tmp_path: Path) -> None:
+    """Half speed scaling finishes without a timeout and stays under the cap."""
+    run = Run(tmp_path)
+    run.robot.scaling = 0.5
+    run.executor.run()
+    records = [json.loads(line) for line in run.step_log.read_text().splitlines()]
+    assert max(record["peak_speed_m_s"] for record in records) <= 0.026
 
 
-def test_seat_timeout_aborts_and_stops(tmp_path: Path) -> None:
-    """Measured descent that outlives seating.timeout_s aborts and stops."""
-    feedback = FakeFeedback()
-    backend = FakeBackend(feedback=feedback)
-    result = run_case(
-        make_plan(seat_z_m=0.0089),
-        make_config(timeout_s=0.03),
-        mock_options(tmp_path),
-        feedback=feedback,
-        backend=backend,
-        clock=FakeClock(step_s=0.02),
-    )
-    assert result.status == "aborted"
-    assert "exceeded timeout" in result.detail
-    assert backend.calls[-1] == ("stop",)
+def test_stopped_robot_is_refused(tmp_path: Path) -> None:
+    """Zero speed scaling (protective stop or paused program) aborts the move."""
+    run = Run(tmp_path)
+    run.robot.scaling = 0.0
+    with pytest.raises(AbortError, match="speed scaling is 0%"):
+        run.executor.run()
+    assert run.robot.sent == []
 
 
-def test_physical_seating_is_refused(tmp_path: Path) -> None:
-    """Physical mode refuses a plan containing seat before any command."""
-    backend = FakeBackend()
-    options = ExecutorOptions(
-        dry_run=False,
-        confirm_each_step=False,
-        step_log=str(tmp_path / "steps.jsonl"),
-        enable_physical_execution=True,
-    )
-    with pytest.raises(ExecutionRefusedError, match="hardware seating is blocked"):
-        run_case(
-            make_plan(),
-            make_config(),
-            options,
-            feedback=FakeFeedback(),
-            backend=backend,
-        )
-    assert backend.calls == []
+def test_ctrl_c_cancels_active_motion(tmp_path: Path) -> None:
+    """KeyboardInterrupt during a move cancels the trajectory and propagates."""
+    run = Run(tmp_path)
+    wait = run.robot.wait
+
+    def interrupted_wait(seconds: float) -> None:
+        wait(seconds)
+        if len(run.robot.sent) == 2 and run.robot.time_s > 12.0:
+            raise KeyboardInterrupt
+
+    run.robot.wait = interrupted_wait
+    with pytest.raises(KeyboardInterrupt):
+        run.executor.run()
+    assert run.robot.state == "canceled"
 
 
-def test_mock_execution_requires_proof(tmp_path: Path) -> None:
-    """Mock execution without a proof file is refused."""
-    options = ExecutorOptions(
-        dry_run=False,
-        confirm_each_step=False,
-        step_log=str(tmp_path / "steps.jsonl"),
-        mock_execution=True,
-    )
-    with pytest.raises(ExecutionRefusedError, match="mock_hardware_proof"):
-        run_case(
-            make_plan(),
-            make_config(),
-            options,
-            feedback=FakeFeedback(),
-            backend=FakeBackend(),
-        )
+def test_lost_joint_feedback_aborts_and_cancels(tmp_path: Path) -> None:
+    """Stale joint states during a move abort it."""
+    run = Run(tmp_path)
+    wait = run.robot.wait
+
+    def wait_then_lose_feedback(seconds: float) -> None:
+        wait(seconds)
+        run.robot.joint_feedback = len(run.robot.sent) < 2
+
+    run.robot.wait = wait_then_lose_feedback
+    with pytest.raises(AbortError, match="joint feedback lost"):
+        run.executor.run()
+    assert run.robot.state == "canceled"
 
 
-def test_vision_pose_source_fails_closed(tmp_path: Path) -> None:
-    """Unsupported vision poses are refused rather than replaced silently."""
-    options = ExecutorOptions(
-        dry_run=False,
-        confirm_each_step=False,
-        step_log=str(tmp_path / "steps.jsonl"),
-        pose_source="vision",
-        mock_execution=True,
-        mock_hardware_proof=str(tmp_path / "proof.json"),
-    )
-    (tmp_path / "proof.json").write_text(
-        json.dumps({"mock_hardware": True}), encoding="utf-8"
-    )
-    with pytest.raises(ExecutionRefusedError, match="vision"):
-        run_case(
-            make_plan(),
-            make_config(),
-            options,
-            feedback=FakeFeedback(),
-            backend=FakeBackend(),
-        )
+def test_start_outside_workspace_is_refused(tmp_path: Path) -> None:
+    """A start pose outside the box aborts before the preview."""
+    run = Run(tmp_path)
+    run.robot.joint_angles = np.radians([0.0, -90.0, 0.0, -90.0, 0.0, 0.0])
+    with pytest.raises(AbortError, match="outside the workspace box"):
+        run.executor.run()
+    assert run.robot.sent == []
 
 
-def test_speed_scale_above_one_is_rejected() -> None:
-    """Planner speeds already include max_speed_scale, so no double scaling."""
-    with pytest.raises(PlanValidationError, match="speed_scale"):
-        validate_plan(make_plan(), make_config(), speed_scale=2.0)
+def test_real_hardware_waits_for_external_control(tmp_path: Path) -> None:
+    """Without the pendant program running, a real run never starts."""
+    run = Run(tmp_path, fake_hardware=False)
+    run.robot.running = False
+    with pytest.raises(AbortError, match="press Play on the pendant"):
+        run.executor.run()
+    assert run.robot.sent == []
+    assert run.robot.commands == []
 
 
-def test_plan_travel_above_cap_is_rejected() -> None:
-    """Planned approach to seating descent above max_travel_m is rejected."""
-    plan = make_plan()
-    plan[5]["xyz_m"] = [0.0, 0.0, 0.02]
-    with pytest.raises(PlanValidationError, match="max_travel_m"):
-        validate_plan(plan, make_config())
+def test_auto_continue_repeats_only_after_a_confirmed_run(tmp_path: Path) -> None:
+    """The second run needs one confirmation; the first needs one per step."""
+    run = Run(tmp_path, auto_continue=True)
+
+    def confirm(prompt: str) -> None:
+        run.prompts.append(prompt)
+        if prompt.startswith("reset the bricks") and len(run.prompts) > STEPS + 1:
+            raise KeyboardInterrupt
+
+    run.executor.confirm = confirm
+    with pytest.raises(KeyboardInterrupt):
+        run.executor.run()
+    assert len(run.prompts) == STEPS + 2
+    assert run.prompts[STEPS].startswith("reset the bricks")
+    assert run.robot.commands == ["238", "118", "238"] * 2
 
 
-def test_plan_rejects_workspace_violation_and_wrong_order() -> None:
-    """Poses outside the workspace and non-canonical order are rejected."""
-    outside = make_plan()
-    outside[0]["xyz_m"] = [1.0, -0.4, 0.05]
-    with pytest.raises(PlanValidationError, match="outside workspace"):
-        validate_plan(outside, make_config())
-    shuffled = make_plan()
-    shuffled[0], shuffled[1] = shuffled[1], shuffled[0]
-    with pytest.raises(PlanValidationError, match="canonical"):
-        validate_plan(shuffled, make_config())
+def test_camera_shifts_pickup_xy_within_its_limit() -> None:
+    """Camera XY replaces the taught XY; height and orientation stay taught."""
+    robot = SimulatedRobot()
+    positions: Positions = load_positions(PACKAGE / "config" / "demo_positions.yaml")
+    taught = positions.pickups["single_0"]
+    robot.objects["single_0"] = taught[:2, 3] + [0.010, -0.005]
+    shifted = camera_pickups(robot, positions, ["single_0"]).pickups["single_0"]
+    assert shifted[:2, 3] == pytest.approx(taught[:2, 3] + [0.010, -0.005])
+    assert shifted[2, 3] == taught[2, 3]
+    assert shifted[:3, :3] == pytest.approx(taught[:3, :3])
 
-
-def test_mock_run_labels_seating_emulated_and_unvalidated(tmp_path: Path) -> None:
-    """A mock run completes, but seating is labelled emulated and unvalidated."""
-    feedback = FakeFeedback()
-    backend = FakeBackend(feedback=feedback)
-    result = run_case(
-        make_plan(),
-        make_config(),
-        mock_options(tmp_path),
-        feedback=feedback,
-        backend=backend,
-    )
-    assert result.status == "completed"
-    assert "mock rehearsal" in result.detail
-    assert "no physical force or contact evidence" in result.detail
-    seat_records = [record for record in result.records if record.action == "seat"]
-    assert len(seat_records) == 1
-    assert seat_records[0].status == "emulated"
-    assert seat_records[0].force_mode == "emulated"
-    assert "no force applied" in seat_records[0].detail
-    records = log_records(tmp_path / "steps.jsonl")
-    assert all(record["physical_insertion_validated"] is False for record in records)
-    assert all(record["mock_execution"] is True for record in records)
-    assert all(record["frame"] == "base" for record in records)
-
-
-def test_three_brick_planner_output_respects_exact_travel_cap() -> None:
-    """Planner and executor agree at the configured cap on every layer."""
-    from risl_contact_assembly.planner import (
-        load_config,
-        load_structure,
-        plan_structure,
-    )
-
-    package = Path(__file__).resolve().parents[1]
-    config = load_config(package / "config/assembly.yaml")
-    plan = plan_structure(
-        load_structure(package / "fixtures/three_bricks.json"), config
-    )
-    assert len(validate_plan(plan, config).steps) == 30
-    plan[15]["xyz_m"][2] += 1e-10
-    with pytest.raises(PlanValidationError, match="exceeds"):
-        validate_plan(plan, config)
+    robot.objects["single_0"] = taught[:2, 3] + [0.040, 0.0]
+    with pytest.raises(AbortError, match="40 mm from its taught pickup"):
+        camera_pickups(robot, positions, ["single_0"])
+    with pytest.raises(AbortError, match="no pose in base"):
+        camera_pickups(robot, positions, ["tower_0"])

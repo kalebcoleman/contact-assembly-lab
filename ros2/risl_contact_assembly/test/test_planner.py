@@ -1,262 +1,321 @@
-"""Tests for known-pose assembly planning."""
+"""Tests for positions loading, stud-grid targets and the step plan."""
 
-import copy
-from math import cos, nan, pi, sin
+import json
+from dataclasses import replace
 from pathlib import Path
 
+import numpy as np
 import pytest
 import yaml
-from risl_contact_assembly.planner import load_config, load_structure, plan_structure
+from risl_contact_assembly.planner import (
+    BRICK_HEIGHT_M,
+    STUD_PITCH_M,
+    Positions,
+    load_positions,
+    load_structure,
+    place_poses,
+    plan_assembly,
+)
+from scipy.spatial.transform import Rotation
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-CONFIG_PATH = PACKAGE_ROOT / "config/assembly.yaml"
-SINGLE_PATH = PACKAGE_ROOT / "fixtures/single_brick.json"
-THREE_PATH = PACKAGE_ROOT / "fixtures/three_bricks.json"
-
-BRICK_ACTIONS = [
-    "approach",
-    "descend",
-    "close",
-    "lift",
-    "transfer",
-    "approach_target",
-    "slow_descend",
-    "seat",
-    "open",
-    "retreat",
-]
-
-
-def test_single_brick_plan_has_contract_steps() -> None:
-    """One brick yields ten TCP steps with the fixture pose and target pose."""
-    steps = plan_structure(load_structure(SINGLE_PATH), load_config(CONFIG_PATH))
-    assert [step["action"] for step in steps] == BRICK_ACTIONS
-    assert {step["brick_id"] for step in steps} == {"single_0"}
-    for step in steps:
-        assert len(step["xyz_m"]) == 3
-        assert len(step["rpy_deg"]) == 3
-        assert step["speed_m_s"] > 0
-    assert steps[2]["gripper_width_mm"] == pytest.approx(20.0)
-    assert all("gripper_width_mm" not in step for step in steps[:2] + steps[3:])
-    # Absolute fixture TCP pose: approach and lift hover, descend/close at it.
-    assert steps[0]["xyz_m"] == pytest.approx([0.25, 0.18, 0.0448])
-    assert steps[1]["xyz_m"] == pytest.approx([0.25, 0.18, 0.0048])
-    assert steps[3]["xyz_m"] == pytest.approx([0.25, 0.18, 0.0448])
-    # The plate-centred brick bottom is at 0.0032 m; calibration lifts TCP by
-    # the half brick height, so the target TCP is at 0.008 m.
-    assert steps[4]["xyz_m"] == pytest.approx([0.25, 0.40, 0.048])
-    assert steps[5]["xyz_m"] == pytest.approx([0.25, 0.40, 0.010])
-    assert steps[6]["xyz_m"] == pytest.approx([0.25, 0.40, 0.008])
-    assert steps[7]["xyz_m"] == pytest.approx([0.25, 0.40, 0.008])
-    assert steps[8]["xyz_m"] == pytest.approx([0.25, 0.40, 0.008])
-    assert steps[9]["xyz_m"] == pytest.approx([0.25, 0.40, 0.048])
-    assert steps[0]["rpy_deg"] == pytest.approx([180.0, 0.0, 0.0])
-    assert steps[7]["rpy_deg"] == pytest.approx([180.0, 0.0, 0.0])
+PACKAGE = Path(__file__).resolve().parents[1]
+POSITIONS_FILE = PACKAGE / "config" / "demo_positions.yaml"
+SIMULATOR_STRUCTURES = sorted(
+    path
+    for path in (PACKAGE.parents[1] / "experiments" / "ur5e_structures").glob("*.json")
+    if path.name != "trials.json"
+)
 
 
-def test_three_bricks_stack_in_build_order() -> None:
-    """Three bricks are planned in order at one plate-centred stack."""
-    steps = plan_structure(load_structure(THREE_PATH), load_config(CONFIG_PATH))
-    assert len(steps) == 30
-    assert [step["action"] for step in steps] == BRICK_ACTIONS * 3
-    assert [steps[index * 10]["brick_id"] for index in range(3)] == [
-        "tower_0",
-        "tower_1",
-        "tower_2",
-    ]
-    for index in range(3):
-        seat = steps[index * 10 + 7]
-        assert seat["xyz_m"][:2] == pytest.approx([0.25, 0.40])
-        assert seat["xyz_m"][2] == pytest.approx(0.008 + 0.0096 * index)
+def write_structure(directory: Path, **fields: list) -> Path:
+    """Write a structure file with one entry per brick.
+
+    Args:
+        directory: Directory for the file.
+        **fields: Structure keys overriding a single 2x4 brick at stud [0, 0].
+
+    Returns:
+        Path of the written file.
+    """
+    structure = {
+        "part_names": ["tower_0"],
+        "brick_dimensions": [[4, 2, 3]],
+        "support_bricks": [None],
+        "placement_offsets": [[0, 0]],
+    } | fields
+    path = directory / "structure.json"
+    path.write_text(json.dumps(structure), encoding="utf-8")
+    return path
 
 
-def test_native_target_formula_matches_plan() -> None:
-    """Target poses reproduce the simulator's stud-grid child pose formula."""
-    structure = load_structure(THREE_PATH)
-    steps = plan_structure(structure, load_config(CONFIG_PATH))
-    stud_pitch_m = 0.008
-    plate_unit_m = 0.0096 / 3
-    parent_p = (0.25, 0.40, 0.0)
-    parent_yaw = 0.0
-    parent_size = (20, 20)
-    parent_height_m = plate_unit_m
-    for index in range(3):
-        dimension = structure["brick_dimensions"][index]
-        offset = structure["placement_offsets"][index]
-        local_yaw = (structure["placement_yaws"][index] * pi) / 2
-        # p_child = p_sup + R_sup * (corner + R_local * half_footprint).
-        corner_x = (offset[0] - parent_size[0] / 2) * stud_pitch_m
-        corner_y = (offset[1] - parent_size[1] / 2) * stud_pitch_m
-        corner_z = parent_height_m
-        half_x = dimension[0] * stud_pitch_m / 2
-        half_y = dimension[1] * stud_pitch_m / 2
-        local_x = cos(local_yaw) * half_x - sin(local_yaw) * half_y
-        local_y = sin(local_yaw) * half_x + cos(local_yaw) * half_y
-        shift_x = corner_x + local_x
-        shift_y = corner_y + local_y
-        child_x = parent_p[0] + cos(parent_yaw) * shift_x - sin(parent_yaw) * shift_y
-        child_y = parent_p[1] + sin(parent_yaw) * shift_x + cos(parent_yaw) * shift_y
-        child_z = parent_p[2] + corner_z
-        seat = steps[index * 10 + 7]
-        assert steps[index * 10 + 4]["xyz_m"] == pytest.approx(
-            [child_x, child_y, child_z + 0.0048 + 0.04]
+def edited_positions(directory: Path, section: str, key: str, value: object) -> Path:
+    """Copy the demo positions file with one value replaced.
+
+    Args:
+        directory: Directory for the copy.
+        section: Top-level YAML key.
+        key: Key inside the section.
+        value: Replacement value.
+
+    Returns:
+        Path of the copy.
+    """
+    document = yaml.safe_load(POSITIONS_FILE.read_text(encoding="utf-8"))
+    document[section][key] = value
+    path = directory / "positions.yaml"
+    path.write_text(yaml.safe_dump(document), encoding="utf-8")
+    return path
+
+
+def rotated_plate(positions: Positions) -> Positions:
+    """Return positions whose plate is yawed 37 degrees and tilted 1 degree.
+
+    Args:
+        positions: Demo positions.
+
+    Returns:
+        Positions with all three taught corners moved rigidly about the origin.
+    """
+    turn = Rotation.from_euler("xyz", [1.0, 0.0, 37.0], degrees=True).as_matrix()
+    corners = {}
+    for name in ("x_corner", "y_corner"):
+        corner = getattr(positions, name).copy()
+        corner[:3, 3] = positions.origin[:3, 3] + turn @ (
+            corner[:3, 3] - positions.origin[:3, 3]
         )
-        assert seat["xyz_m"] == pytest.approx([child_x, child_y, child_z + 0.0048])
-        assert seat["rpy_deg"][2] == pytest.approx(0.0)
-        parent_p = (child_x, child_y, child_z)
-        parent_yaw += local_yaw
-        parent_size = (dimension[0], dimension[1])
-        parent_height_m = dimension[2] * plate_unit_m
+        corners[name] = corner
+    return replace(positions, **corners)
 
 
-def test_baseplate_origin_and_yaw_transform() -> None:
-    """Base plate origin and yaw transform the target pose in base."""
-    config = load_config(CONFIG_PATH)
-    config["baseplate"]["origin_xyz_m"] = [0.10, 0.20, 0.01]
-    config["baseplate"]["yaw_deg"] = 90.0
-    config["calibration"]["brick_to_tcp_xyz_m"] = [0.001, 0.0, 0.0048]
-    steps = plan_structure(load_structure(SINGLE_PATH), config)
-    # The plate-centred brick target stays at the plate centre; the calibrated
-    # brick-axis X offset now points along base +Y.
-    assert steps[7]["xyz_m"] == pytest.approx([0.10, 0.201, 0.018])
-    assert steps[7]["rpy_deg"] == pytest.approx([180.0, 0.0, 90.0])
+def test_demo_files_plan_nine_steps_per_brick() -> None:
+    """The shipped example plans the three-brick tower inside its limits."""
+    positions = load_positions(POSITIONS_FILE)
+    plan = plan_assembly(
+        load_structure(PACKAGE / "structures" / "three_bricks.json"), positions
+    )
+    assert len(plan.steps) == 27
+    assert [step.label for step in plan.steps[:9]] == [
+        "tower_0: open gripper",
+        "tower_0: move above pick",
+        "tower_0: descend to pick",
+        "tower_0: grasp",
+        "tower_0: lift",
+        "tower_0: move above place",
+        "tower_0: descend and seat",
+        "tower_0: release",
+        "tower_0: retreat",
+    ]
+    # A 2-stud grasp is 15.8 mm; open 4 mm per side, squeeze 4 mm past it.
+    assert plan.steps[0].gripper_mm == pytest.approx(23.8)
+    assert plan.steps[3].gripper_mm == pytest.approx(11.8)
+    assert plan.steps[3].expected_mm == pytest.approx(15.8)
+    assert plan.steps[5].expected_mm == pytest.approx(15.8)
+    for step in plan.steps:
+        for move in step.moves:
+            assert move.speed_m_s <= 0.05
+            assert move.pose[2, 3] <= plan.travel_z_m + 1e-12
 
 
-def test_placement_yaw_rotates_target_pose() -> None:
-    """A quarter-turn placement rotates the brick footprint and TCP yaw."""
-    config = load_config(CONFIG_PATH)
-    structure = copy.deepcopy(load_structure(SINGLE_PATH))
-    structure["placement_offsets"] = [[0, 0]]
-    structure["placement_yaws"] = [1]
-    steps = plan_structure(structure, config)
-    assert steps[7]["xyz_m"] == pytest.approx([0.154, 0.328, 0.008])
-    assert steps[7]["rpy_deg"] == pytest.approx([180.0, 0.0, 90.0])
+def test_every_approach_and_retreat_is_vertical() -> None:
+    """Sideways motion only happens at the travel height."""
+    positions = load_positions(POSITIONS_FILE)
+    plan = plan_assembly(
+        load_structure(PACKAGE / "structures" / "three_bricks.json"), positions
+    )
+    previous = None
+    for step in plan.steps:
+        for move in step.moves:
+            if previous is not None:
+                sideways = np.linalg.norm(move.pose[:2, 3] - previous[:2, 3])
+                if sideways > 1e-9:
+                    assert previous[2, 3] == pytest.approx(plan.travel_z_m)
+                    assert move.pose[2, 3] == pytest.approx(plan.travel_z_m)
+            previous = move.pose
+    contact_moves = [
+        move for step in plan.steps for move in step.moves if move.contact != "free"
+    ]
+    assert len(contact_moves) == 6
+    assert all(move.speed_m_s == 0.005 for move in contact_moves)
 
 
-def test_pickup_pose_is_absolute_and_independent_of_target_orientation() -> None:
-    """Pickup yaw only affects grasp-side steps; targets use calibration."""
-    config = load_config(CONFIG_PATH)
-    config["pickup"]["rpy_deg"] = [180.0, 0.0, 90.0]
-    steps = plan_structure(load_structure(SINGLE_PATH), config)
-    assert steps[2]["xyz_m"] == pytest.approx([0.25, 0.18, 0.0048])
-    assert steps[2]["rpy_deg"] == pytest.approx([180.0, 0.0, 90.0])
-    assert steps[7]["rpy_deg"] == pytest.approx([180.0, 0.0, 0.0])
+def test_reference_brick_reproduces_taught_corners(tmp_path: Path) -> None:
+    """Seating the reference brick at a taught stud returns the taught pose."""
+    positions = rotated_plate(load_positions(POSITIONS_FILE))
+    for offset, taught in (
+        ([0, 0], positions.origin),
+        ([16, 0], positions.x_corner),
+        ([0, 18], positions.y_corner),
+    ):
+        structure = load_structure(
+            write_structure(tmp_path, placement_offsets=[offset])
+        )
+        assert place_poses(structure, positions)[0] == pytest.approx(taught)
 
 
-def test_stage_coordinates_are_ignored() -> None:
-    """Simulator stage staging coordinates never enter the base-frame plan."""
-    config = load_config(CONFIG_PATH)
-    structure = copy.deepcopy(load_structure(THREE_PATH))
-    expected = plan_structure(structure, config)
-    structure["baseplate_xy_m"] = [9.9, -9.9]
-    structure["brick_positions_xy_m"] = [[0.0, 0.0]] * 3
-    assert plan_structure(structure, config) == expected
+def test_tower_stacks_and_turns_the_tool(tmp_path: Path) -> None:
+    """Crossed bricks share one centre, rise 9.6 mm each and alternate grasp."""
+    positions = load_positions(POSITIONS_FILE)
+    poses = place_poses(
+        load_structure(PACKAGE / "structures" / "three_bricks.json"), positions
+    )
+    for layer, pose in enumerate(poses):
+        # Centre is stud (10, 10); the reference centre is stud (2, 1); the
+        # example plate runs along base -X and -Y.
+        assert pose[:3, 3] == pytest.approx(
+            [0.10 - 8 * 0.008, -0.30 - 9 * 0.008, 0.165 + layer * 0.0096]
+        )
+    quarter = Rotation.from_euler("z", 90, degrees=True).as_matrix()
+    assert poses[0][:3, :3] == pytest.approx(quarter @ positions.origin[:3, :3])
+    assert poses[1][:3, :3] == pytest.approx(positions.origin[:3, :3])
+    assert poses[2][:3, :3] == pytest.approx(poses[0][:3, :3])
 
 
-def test_speed_scale_applies_and_exceeding_limit_is_rejected() -> None:
-    """Speeds scale once and are validated instead of silently clamped."""
-    config = load_config(CONFIG_PATH)
-    config["limits"]["max_speed_scale"] = 0.5
-    steps = plan_structure(load_structure(SINGLE_PATH), config)
-    assert steps[0]["speed_m_s"] == pytest.approx(0.025)
-    assert steps[1]["speed_m_s"] == pytest.approx(0.005)
-    config["limits"]["max_speed_m_s"] = 0.02
-    with pytest.raises(ValueError, match="max_speed_m_s"):
-        plan_structure(load_structure(SINGLE_PATH), config)
+@pytest.mark.parametrize("path", SIMULATOR_STRUCTURES, ids=lambda path: path.stem)
+def test_targets_match_simulator_stud_grid_rule(path: Path) -> None:
+    """Brick centres equal an independent evaluation of the simulator rule.
+
+    ``centre = support_centre + R_support * (offset - support_size / 2
+    + R_yaw * size / 2)`` with complex numbers as plane rotations; the plate is
+    a zero-size support at the origin.
+    """
+    positions = rotated_plate(load_positions(POSITIONS_FILE))
+    structure = load_structure(path)
+    origin = positions.origin[:3, 3]
+    x_step = (positions.x_corner[:3, 3] - origin) / positions.x_corner_studs
+    y_step = (positions.y_corner[:3, 3] - origin) / positions.y_corner_studs
+    normal = np.cross(x_step, y_step) / STUD_PITCH_M**2
+    centres: list[complex] = []
+    turns: list[complex] = []
+    layers: list[int] = []
+    for size, support, offset, yaw in zip(
+        structure["brick_dimensions"],
+        structure["support_bricks"],
+        structure["placement_offsets"],
+        structure["placement_yaws"],
+    ):
+        support_centre = 0j if support is None else centres[support]
+        support_turn = 1 + 0j if support is None else turns[support]
+        support_size = (
+            0j
+            if support is None
+            else complex(*structure["brick_dimensions"][support][:2])
+        )
+        centres.append(
+            support_centre
+            + support_turn
+            * (complex(*offset) - support_size / 2 + 1j**yaw * complex(*size[:2]) / 2)
+        )
+        turns.append(support_turn * 1j**yaw)
+        layers.append(0 if support is None else layers[support] + 1)
+    for pose, centre, layer in zip(place_poses(structure, positions), centres, layers):
+        expected = (
+            origin
+            + x_step * (centre.real - 2)
+            + y_step * (centre.imag - 1)
+            + normal * layer * BRICK_HEIGHT_M
+        )
+        assert pose[:3, 3] == pytest.approx(expected, abs=1e-9)
 
 
-def test_workspace_bounds_reject_outside_pose() -> None:
-    """Every step pose must lie inside the configured base-frame AABB."""
-    config = load_config(CONFIG_PATH)
-    config["limits"]["workspace_max_m"] = [0.24, 0.60, 0.35]
-    with pytest.raises(ValueError, match="outside the workspace"):
-        plan_structure(load_structure(SINGLE_PATH), config)
+def test_quarter_turn_placement_pivots_about_the_offset_stud(tmp_path: Path) -> None:
+    """A 2x4 placed at [0, 0] with one quarter turn is centred at stud (-2, 1)."""
+    positions = load_positions(POSITIONS_FILE)
+    structure = load_structure(
+        write_structure(tmp_path, brick_dimensions=[[2, 4, 3]], placement_yaws=[1])
+    )
+    pose = place_poses(structure, positions)[0]
+    assert pose[:3, 3] == pytest.approx([0.10 + 4 * 0.008, -0.30, 0.165])
+    assert pose[:3, :3] == pytest.approx(positions.origin[:3, :3])
 
 
-def test_nonfinite_values_are_rejected(tmp_path: Path) -> None:
-    """Non-finite config values fail validation and non-finite poses fail."""
-    document = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
-    document["baseplate"]["origin_xyz_m"][0] = nan
-    path = tmp_path / "assembly.yaml"
-    path.write_text(yaml.safe_dump(document), encoding="utf-8")
-    with pytest.raises(ValueError, match="finite"):
-        load_config(path)
-    config = load_config(CONFIG_PATH)
-    config["motion"]["hover_m"] = nan
-    with pytest.raises(ValueError, match="not finite"):
-        plan_structure(load_structure(SINGLE_PATH), config)
+@pytest.mark.parametrize(
+    ("section", "key", "value", "message"),
+    [
+        ("motion", "travel_speed_m_s", 0.06, "travel_speed_m_s"),
+        ("motion", "contact_speed_m_s", 0.02, "contact_speed_m_s"),
+        ("motion", "acceleration_m_s2", 0.5, "acceleration_m_s2"),
+        ("motion", "travel_speed_m_s", float("nan"), "travel_speed_m_s"),
+        ("safety", "press_force_n", 60.0, "press_force_n"),
+        ("safety", "press_overtravel_m", 0.005, "press_overtravel_m"),
+        ("safety", "max_tilt_deg", 30.0, "max_tilt_deg"),
+        ("gripper", "width_tolerance_mm", 3.0, "width_tolerance_mm"),
+        ("gripper", "width_offset_mm", 8.0, "width_offset_mm"),
+        ("baseplate", "x_corner_studs", 15, "re-record the corners"),
+        (
+            "baseplate",
+            "y_corner",
+            {"xyz_m": [0.10, -0.156, 0.165], "rpy_deg": [0.0, 180.0, 0.0]},
+            "mirrored",
+        ),
+        (
+            "baseplate",
+            "x_corner",
+            {"xyz_m": [-0.028, -0.30, 0.165], "rpy_deg": [0.0, 180.0, 5.0]},
+            "tool orientation",
+        ),
+    ],
+)
+def test_positions_over_a_cap_or_off_the_grid_are_rejected(
+    tmp_path: Path, section: str, key: str, value: object, message: str
+) -> None:
+    """Limits above the code caps and inconsistent taught corners fail to load."""
+    with pytest.raises(ValueError, match=message):
+        load_positions(edited_positions(tmp_path, section, key, value))
 
 
-def test_invalid_config_limits_are_rejected(tmp_path: Path) -> None:
-    """Speed scale, speed and gripper width limits are enforced on load."""
-    document = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
-    path = tmp_path / "assembly.yaml"
-    document["limits"]["max_speed_scale"] = 1.5
-    path.write_text(yaml.safe_dump(document), encoding="utf-8")
-    with pytest.raises(ValueError, match="max_speed_scale"):
-        load_config(path)
-    document["limits"]["max_speed_scale"] = 1.0
-    document["motion"]["travel_speed_m_s"] = 0.0
-    path.write_text(yaml.safe_dump(document), encoding="utf-8")
-    with pytest.raises(ValueError, match="travel_speed_m_s"):
-        load_config(path)
-    document["motion"]["travel_speed_m_s"] = 0.05
-    document["pickup"]["gripper_width_mm"] = 111.0
-    path.write_text(yaml.safe_dump(document), encoding="utf-8")
-    with pytest.raises(ValueError, match="gripper_width_mm"):
-        load_config(path)
+def test_target_outside_workspace_is_rejected(tmp_path: Path) -> None:
+    """A pickup below the workspace floor fails before any motion is planned."""
+    positions = load_positions(
+        edited_positions(
+            tmp_path,
+            "pickups",
+            "tower_0",
+            {"xyz_m": [-0.20, -0.30, 0.150], "rpy_deg": [0.0, 180.0, 0.0]},
+        )
+    )
+    with pytest.raises(ValueError, match="outside the workspace box"):
+        plan_assembly(load_structure(write_structure(tmp_path)), positions)
 
 
-def test_invalid_structure_is_rejected() -> None:
-    """Forward supports, mismatched lengths, bogus dims and yaws fail."""
-    config = load_config(CONFIG_PATH)
-    structure = copy.deepcopy(load_structure(THREE_PATH))
-    structure["support_bricks"] = [1, 0, 1]
-    with pytest.raises(ValueError, match="support_bricks"):
-        plan_structure(structure, config)
-    structure = copy.deepcopy(load_structure(THREE_PATH))
-    structure["brick_dimensions"] = [[2, 4, 3], [4, 2, 3]]
-    with pytest.raises(ValueError, match="equal"):
-        plan_structure(structure, config)
-    structure = copy.deepcopy(load_structure(THREE_PATH))
-    # Deliberately violate the annotation to test runtime input rejection.
-    structure["brick_dimensions"] = [[2, 4, 3], [4.0, 2, 3], [2, 4, 3]]  # ty: ignore[invalid-assignment]
-    with pytest.raises(ValueError, match="brick_dimensions"):
-        plan_structure(structure, config)
-    structure = copy.deepcopy(load_structure(THREE_PATH))
-    # Deliberately violate the annotation to test runtime input rejection.
-    structure["placement_offsets"] = [[9, 8], [-1.0, 1], [1, -1]]  # ty: ignore[invalid-assignment]
-    with pytest.raises(ValueError, match="placement_offsets"):
-        plan_structure(structure, config)
-    structure = copy.deepcopy(load_structure(THREE_PATH))
-    structure["placement_yaws"] = [0, 0, 4]
-    with pytest.raises(ValueError, match="placement_yaws"):
-        plan_structure(structure, config)
+def test_tilted_tool_is_rejected(tmp_path: Path) -> None:
+    """A pickup recorded with the tool 10 degrees off vertical is refused."""
+    positions = load_positions(
+        edited_positions(
+            tmp_path,
+            "pickups",
+            "tower_0",
+            {"xyz_m": [-0.20, -0.30, 0.162], "rpy_deg": [0.0, 170.0, 0.0]},
+        )
+    )
+    with pytest.raises(ValueError, match="tilted 10.0 deg"):
+        plan_assembly(load_structure(write_structure(tmp_path)), positions)
 
 
-def test_fixtures_use_simulator_structure_schema() -> None:
-    """Fixtures carry the simulator structure keys, not the docs catalog."""
-    config = load_config(CONFIG_PATH)
-    for path in (SINGLE_PATH, THREE_PATH):
-        structure = load_structure(path)
-        assert {
-            "experiment_name",
-            "baseplate_xy_m",
-            "part_names",
-            "brick_dimensions",
-            "brick_colors",
-            "brick_positions_xy_m",
-            "support_bricks",
-            "placement_offsets",
-        } <= set(structure)
-        plan = plan_structure(structure, config)
-        assert len(plan) == 10 * len(structure["part_names"])
+@pytest.mark.parametrize(
+    ("fields", "message"),
+    [
+        ({"brick_dimensions": [[4, 2, 1]]}, "plates tall"),
+        ({"support_bricks": [0]}, "earlier brick"),
+        ({"placement_yaws": [4]}, "quarter turn"),
+        ({"placement_offsets": []}, "one entry per part"),
+    ],
+)
+def test_inconsistent_structure_is_rejected(
+    tmp_path: Path, fields: dict[str, list], message: str
+) -> None:
+    """Structures the planner cannot build fail to load."""
+    with pytest.raises(ValueError, match=message):
+        load_structure(write_structure(tmp_path, **fields))
 
 
-@pytest.mark.parametrize("height", [1, 2, 4])
-def test_unsupported_brick_height_is_rejected(height: int) -> None:
-    """Reject heights unsupported by the source assembly structure contract."""
-    structure = load_structure(SINGLE_PATH)
-    structure["brick_dimensions"][0][2] = height
-    with pytest.raises(ValueError, match="height 3"):
-        plan_structure(structure, load_config(CONFIG_PATH))
+def test_gripper_width_offset_shifts_commands_and_expectations(tmp_path: Path) -> None:
+    """A gripper reading 1 mm wide is commanded and checked 1 mm wider."""
+    positions = load_positions(
+        edited_positions(tmp_path, "gripper", "width_offset_mm", 1.0)
+    )
+    plan = plan_assembly(
+        load_structure(PACKAGE / "structures" / "single_brick.json"), positions
+    )
+    assert plan.steps[0].gripper_mm == pytest.approx(24.8)
+    assert plan.steps[3].gripper_mm == pytest.approx(12.8)
+    assert plan.steps[3].expected_mm == pytest.approx(16.8)

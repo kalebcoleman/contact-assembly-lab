@@ -1,84 +1,34 @@
-# Validation — 2026-11-12
+# Mock validation, 2026-11-12
 
-The coordinator independently ran these checks after integrating four DeepSeek
-workstreams. The executor child had uncommitted code; its run was cancelled and
-the coordinator finished the backend, live mock gates, launch integration and
-regression fixes. No child test claim was accepted as parent verification.
+Fake hardware only: `ur_robot_driver` 2.15.0 with `use_fake_hardware:=true`
+(`mock_components/GenericSystem`) and `fake_gripper`, on `ROS_LOCALHOST_ONLY=1`.
+No robot, gripper or network setting was touched. The mock has no force signal,
+so the force-limited place and guarded pick are covered by unit tests only.
 
-## Environment and commands
+- `colcon build` and `colcon test`: 87 tests, 0 failures.
+- Dry run, three-brick tower ([dry-run.log](dry-run.log)): 27 steps planned.
+  An independent `/joint_states` and `/gripper_command` listener saw no motion
+  and no gripper command ([dry-run-observed.json](dry-run-observed.json)).
 
-Ubuntu 22.04, Python 3.10.12, ROS Humble. Official extracted packages:
-UR driver 2.15.0, description 2.14.0, controller manager 2.54.3,
-control_msgs 4.9.0 and ur_msgs 2.6.0. The overlay excludes socat.
-Max risl_ur source at 011539abcacca4da7252227c6723f786e41317e3 was copied into
-private build storage and built without changing the original checkout.
+      ros2 launch risl_contact_assembly assembly.launch.py robot_ip:=0.0.0.0 use_fake_hardware:=true
 
-From the repository root, with the local dependency overlays sourced:
+- Execute, same tower, Enter pressed at each of the 27 prompts
+  ([execute-steps.jsonl](execute-steps.jsonl)). The independent listener
+  ([execute-observed.json](execute-observed.json)) measured a peak tool speed of
+  50.3 mm/s, peak joint speed 0.21 rad/s, tool tilt under 0.1 degree, and a tool
+  path inside the workspace box; final pose is the last retreat target.
 
-    colcon --log-base .agents/private-plans/ros-log build --base-paths ros2 --build-base .agents/private-plans/ros-build --install-base .agents/private-plans/ros-install
-    source .agents/private-plans/ros-install/local_setup.bash
-    colcon --log-base .agents/private-plans/ros-log test --base-paths ros2 --build-base .agents/private-plans/ros-build --install-base .agents/private-plans/ros-install
-    colcon --log-base .agents/private-plans/ros-log test-result --test-result-base .agents/private-plans/ros-build --verbose
-    uv tool run --offline ruff check ros2
+      ros2 launch risl_contact_assembly assembly.launch.py robot_ip:=0.0.0.0 use_fake_hardware:=true execute:=true
 
-Build passed; **46 tests, zero failures, errors or skips**. Logs:
-[colcon-build.txt](colcon-build.txt), [colcon-test.txt](colcon-test.txt).
-Ruff passed. Scoped ty passed using system Python 3.10 with the package, Humble
-Python directories, extracted control_msgs and installed risl_ur search paths.
-The simulator's Python 3.12 environment and native C++ were not changed or tested.
-
-Independent offline checks: all 206 targets across 29 repository structures
-matched the existing footprint validator at a 37-degree plate yaw. Max DH
-`base → tool0` matched the official URDF at two joint poses (position residuals
-below 7e-11 m). These establish nominal math agreement, not physical calibration.
-
-## Official mock dry runs
-
-Both launches used the package's hardcoded `use_fake_hardware=true`, loopback
-IP, disabled tool communication/dashboard and localhost domain 83. Live
-`list_hardware_components` reported `mock_components/GenericSystem`.
-Each run terminated its own launch processes after collecting the evidence.
-The final single-brick controller did not exit within the launch system's five-second
-SIGINT grace period and was terminated by its SIGTERM escalation (exit -15);
-that shutdown behavior is preserved in the launch log. No task process remains.
-
-The single-brick run wrote 10 planned steps, zero executed steps, 133 joint
-samples with zero displacement, and zero observed gripper-command publishers.
-See [summary](single_brick-dry-summary.json), [steps](single_brick-dry-steps.jsonl),
-[launch](single_brick-dry-launch.log), and the losslessly compressed
-[joint trace](single_brick-dry-joints.jsonl.gz).
-
-The three-brick run wrote 30 planned steps, zero executed steps, 1417 joint
-samples with zero displacement, and zero observed gripper-command publishers.
-See [summary](three_bricks-dry-summary.json), [steps](three_bricks-dry-steps.jsonl),
-[launch](three_bricks-dry-launch.log), and the compressed
-[joint trace](three_bricks-dry-joints.jsonl.gz).
-Summaries contain the exact launch arguments and uncompressed trace SHA256.
-Unit tests independently check dry-run command absence; sampled graph counts
-alone would not prove absence of transient messages.
-
-An earlier infrastructure-only probe verified the live robot description's sole
-hardware plugin, active standard trajectory controller and fake-gripper query
-response of 110 mm. Its [summary](initial-mock-verification.json) explicitly
-separates that query from the assembly dry runs. No trajectory was commanded.
-
-A final rerun exposed floating-point subtraction at the exact seating travel cap.
-The comparison now uses `approach_z > target_z + cap`, matching planner addition
-without enlarging the cap. The integration regression validates all three layers
-and rejects a 1e-10 m excess; the final evidence above is from the corrected code.
-
-## Limits and incident
-
-These are plan rehearsals on a running official mock stack. They do not validate
-moving trajectories, contact, force mode, physical seating, collision avoidance,
-or lab calibration. The optional moving executor path remains unverified against
-live action goals; hardware execution is disabled. Mock force requests are never
-sent. Physical TCP/payload, camera/baseplate transforms, force sensing/limits and
-release clearance remain unverified.
-
-The [incident note](research-launch-incident.md) and
-[recovered original log](research-launch-attempt.log) disclose the separate
-research child's unauthorized launch attempt, wrong flag and argument-validation
-failure. No historical socket audit exists; the report does not claim otherwise.
-No Max repository was pushed, no network settings were changed, and no merge was
-performed.
+- Aborts ([aborts.log](aborts.log)): empty grasp, Ctrl-C mid-move, and a start
+  outside the workspace box each stopped the run.
+- Recorder: a pose saved by `record:=true` matched `tf2_echo base tool0` to the
+  printed precision (`[0.2154, -0.5335, 0.4134]` m, yaw -171.411 degrees), so
+  recorded poses are in `base`, not `base_link`.
+- Cancelling a trajectory on the live mock controller stopped the arm and left
+  the controller running.
+- Launching without `robot_ip` fails with "Required launch argument".
+- Real-hardware launch branch, run with the driver include and the
+  `risl_onrobot_ros` node removed so nothing could reach a robot: the executor
+  started directly, aborted with "no /joint_states: is the driver running?"
+  and the launch shut down. The driver and gripper on real hardware are untested.
