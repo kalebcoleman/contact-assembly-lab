@@ -6,8 +6,9 @@ the robot. It reuses the Max stack conventions (`risl_ur` custom IK, RG2 gripper
 protocol, UR force-mode services) but adds no MoveIt dependency.
 
 This laptop is the robot-side machine, so "no hardware" is a hard constraint
-here, not a topology statement. Nothing in this directory may launch the UR
-driver, the RG2 node, the Vention controller or `cell.launch.py`. See
+here, not a topology statement. Only the official driver with verified fake
+hardware may run. The real RG2 node, Vention controller and `cell.launch.py`
+are prohibited. See
 [Compatibility inventory](#compatibility-inventory) and
 [Staged commissioning](#staged-commissioning-future).
 
@@ -91,7 +92,6 @@ baseplate:
   origin_xyz_m: [x, y, z]      # calibrated plate bottom centre in base
   yaw_deg: <deg>               # plate +x in base
   stud_pitch_m: 0.008          # fixed by the brick system
-  plate_height_m: 0.0032       # 20x20x1 baseplate
   brick_height_m: 0.0096       # H3 brick, 3 plate units
 pickup:
   xyz_m: [x, y, z]             # absolute fixture TCP pose in base, not an offset
@@ -149,7 +149,7 @@ in fixtures and tests is a mock value, not a validated hardware limit.
 | Name | Type | Direction |
 |---|---|---|
 | `/gripper_command` | `std_msgs/String` | command: `open`, `close`, `query`, or `0`–`1100` (tenths of a mm) |
-| `/gripper_width` | `std_msgs/Float64` | measured opening, mm (mock and package contract) |
+| `/gripper_queried_width` | `std_msgs/Float64` | measured opening, mm (mock and package contract) |
 | `/joint_states` | `sensor_msgs/JointState` | measured joints, six UR5e names |
 | `/tcp_pose_broadcaster/pose` | `geometry_msgs/PoseStamped` | measured TCP |
 | `/force_mode_controller/start_force_mode` | `ur_msgs/SetForceMode` | force mode start |
@@ -160,9 +160,9 @@ Controllers used by the Max stack: `scaled_joint_trajectory_controller`,
 `passthrough_trajectory_controller`; trajectory action
 `/scaled_joint_trajectory_controller/follow_joint_trajectory`.
 
-The real RG2 node publishes `/gripper_queried_width`, not `/gripper_width`;
-`/gripper_command` accepts up to `1100` but the geometry table only covers
-`0`–`1000` tenths of a mm. Reconcile before hardware use.
+Both the fake and real gripper use `/gripper_queried_width`. Commands accept
+up to `1100`, but the geometry table covers only `0`–`1000` tenths of a mm.
+Reconcile that range before hardware use.
 
 ## Frames and kinematics
 
@@ -223,8 +223,8 @@ colcon --log-base /tmp/opencode/ros2_colcon/log \
   test-result --verbose --test-result-base /tmp/opencode/ros2_colcon/build
 ```
 
-`colcon test` and `test-result` accept `--build-base`/`--install-base` and
-`--test-result-base` after the verb; `--log-base` only works before it. System
+`colcon test` accepts `--build-base`, `--install-base` and `--test-result-base`.
+`colcon test-result` accepts `--test-result-base`; `--log-base` goes before either verb. System
 `pytest` is 6.2.5 (`python3-pytest` 6.2.5-1ubuntu2). Tests must cover planner
 transforms, pitch, height, ordering, non-finite input, workspace limits, plus
 executor dry-run silence, stale or missing feedback, timeout, overtravel and
@@ -249,7 +249,7 @@ evidence.
 ## Mock execution
 
 Standalone launch only: `mock_assembly.launch.py` never includes
-`cell.launch.py` or any other launch file. Mock motion comes from the official
+`cell.launch.py`; it includes only the official `ur_control.launch.py`. Mock motion comes from the official
 UR driver's fake-hardware GenericSystem, so the standard
 `scaled_joint_trajectory_controller` `FollowJointTrajectory` action and
 `/joint_states` exist, plus `fake_gripper` for the String/Float64 gripper
@@ -283,13 +283,13 @@ ros2 launch risl_contact_assembly mock_assembly.launch.py \
 ```
 
 The launch log must state the fake-hardware configuration it selected. Verify
-only fake hardware nodes run, no `/tmp/ttyUR` exists, and nothing connects to
+only the intended mock processes run and no task process connects to
 `192.168.1.111` or `192.168.7.2`. Fake hardware starts
 `controller_manager/ros2_control_node` instead of `ur_ros2_control_node`, and
 `ur_control.launch.py` deliberately removes `tcp_pose_broadcaster` from the
 active controllers in that mode. Derive the pose from `/joint_states` by
 forward kinematics with the explicit pi-Z base convention and label it derived,
-never sensor evidence. `fake_gripper` answers with `/gripper_width` and reports
+never sensor evidence. `fake_gripper` answers with `/gripper_queried_width` and reports
 commanded geometry, not grasp force or contact.
 
 ## Staged commissioning (future)
@@ -318,8 +318,10 @@ seated brick.
 
 ## Compatibility inventory
 
-Recorded 2026-11-12 on the robot-side laptop with read-only inspection. No ROS
-node, mock or driver was launched.
+Recorded 2026-11-12 on the robot-side laptop. The documentation inspection
+started no nodes. A separate research child attempted a launch that failed
+argument validation; see the [incident note](evidence/research-launch-incident.md)
+and [original log](evidence/research-launch-attempt.log).
 
 - Ubuntu 22.04.5, Python 3.10.12, ROS Humble `ros-humble-ros-base`
   0.10.0-1jammy (278 packages), `python3-colcon-common-extensions` 0.3.0,
@@ -348,7 +350,8 @@ node, mock or driver was launched.
   `risl_assembly_workspace` 82b9a51 holds `risl_bringup` outside `src` and has
   no `.venv`; its committed `risl_ur` checkout also contains in-source
   `build/`, `install/` and `log/` artifacts.
-- `risl_ur`: `compute_ik(position, rpy_deg)` returns joints or `None`;
+- `risl_ur`: `compute_ik(position, rpy_deg)` returns an optimizer candidate even when
+  its residual is excessive; a non-None return does not prove success;
   `MotionExecutor` owns `/joint_states`, `/tcp_pose_broadcaster/pose`, the
   controller switch, velocity and force calls. Its IK is a bounded optimizer
   (`shoulder_pan` limited to 0..pi), so candidates need FK verification and a
@@ -360,7 +363,7 @@ node, mock or driver was launched.
 - `risl_onrobot_ros`: node entry `gripper_control`; `/gripper_command` plus
   `/gripper_queried_width`. Its constructor calls `ensure_socat`, which spawns
   `socat pty,link=/tmp/ttyUR ... tcp:192.168.1.111:54321`, so constructing it
-  touches the robot network. Never import or instantiate it outside the robot.
+  touches the robot network. Never instantiate it during this task.
 - `risl_vention_ros`: entry point names
   `risl_vention_ros.vention_socket_control_node`, but the module is
   `vention_socket_control.py`; the node also hardcodes `192.168.7.2:9999`.
@@ -409,7 +412,7 @@ match driver 2.15.
 - Force limits: the 5.0 N allocator cap is for planar pushing; a seating limit,
   deviation guard and timeout still need operator approval and FT validation.
 - Gripper width: contract range 0–1100 tenths of a mm versus the 0–1000
-  geometry table, and `/gripper_width` versus `/gripper_queried_width`.
+  geometry table, and the calibrated width-dependent fingertip reach.
 
 ## Current blockers
 
@@ -425,5 +428,4 @@ match driver 2.15.
 - Hardware seating remains blocked pending validated FT sensing and an
   operator-approved force limit.
 - Root CI runs `ruff check` and `ty check` over `**.py`, which will include
-  `ros2/**.py`; package code must satisfy `ruff.toml` (Google docstrings,
-  annotations, no `typing.Any`/`cast`) or the parent must exclude `ros2`.
+  `ros2/**.py`; package code must satisfy the applicable lint and type rules.
