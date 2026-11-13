@@ -1,0 +1,25 @@
+# Max Gao's repositories used by risl_contact_assembly, at the commits the mock
+# validation ran against. Import next to this package:
+#   vcs import src < risl.repos
+# Change a version to `main` to follow his latest.
+repositories:
+  risl_ur:
+    type: git
+    url: https://github.com/MaxlGao/RISL_ur.git
+    version: 011539abcacca4da7252227c6723f786e41317e3
+  risl_onrobot_ros:
+    type: git
+    url: https://github.com/MaxlGao/RISL_onrobot_ros.git
+    version: 7f86a05a8e2ba5266a2db91119b3ced6d720d2d9
+  risl_simulation:
+    type: git
+    url: https://github.com/MaxlGao/RISL_simulation.git
+    version: d659f7d4a3f79b26829d08cfe5b12f07a1b3806d
+  risl_camera_localizer:
+    type: git
+    url: https://github.com/MaxlGao/RISL_camera_localizer.git
+    version: 76b68e87b1ad69eec567c250b233eff94284f46a
+  risl_camera_msgs:
+    type: git
+    url: https://github.com/MaxlGao/RISL_camera_msgs.git
+    version: 91cc701ec916fdebc6f2a2ff18f11ff4928e78c2

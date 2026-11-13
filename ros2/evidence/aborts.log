@@ -1,0 +1,6 @@
+# fake_object_width_mm:=0.0 (empty grasp)
+ABORTED: single_0: grasp: gripper reports 11.8 mm, expected 15.8 mm (missed or dropped brick?)
+# Ctrl-C four seconds into 'move above pick'
+ABORTED: interrupted
+# executor started with the mock arm still at its upright power-on pose
+ABORTED: tool0 is at [-0.001, -0.233, 1.079] m, outside the workspace box: jog it inside first

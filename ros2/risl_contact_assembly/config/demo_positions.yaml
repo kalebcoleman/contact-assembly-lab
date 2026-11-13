@@ -1,0 +1,46 @@
+# Positions for one cell setup. EXAMPLE VALUES: re-record every pose in the lab.
+# The example heights put the fingertips on the tabletop of scene/cell.xml.
+#
+# Every pose is tool0 (the UR flange) in the UR `base` frame, in metres and
+# degrees (rpy = extrinsic XYZ), recorded with the gripper closed on a brick:
+#   ros2 launch risl_contact_assembly assembly.launch.py robot_ip:=<ip> record:=true
+
+baseplate:
+  # Grip a 2x4 brick across its short side and seat it on the plate with its
+  # long side along plate +X, then record. `origin` has the brick on the corner
+  # studs the structure counts from; the other two have it moved along +X and +Y.
+  origin: {xyz_m: [0.10, -0.30, 0.070], rpy_deg: [0.0, 180.0, 0.0]}
+  x_corner: {xyz_m: [-0.028, -0.30, 0.070], rpy_deg: [0.0, 180.0, 0.0]}
+  y_corner: {xyz_m: [0.10, -0.444, 0.070], rpy_deg: [0.0, 180.0, 0.0]}
+  x_corner_studs: 16  # studs from origin to x_corner
+  y_corner_studs: 18  # studs from origin to y_corner
+
+pickups:
+  # Tool pose gripping each brick across its short side where it waits.
+  # Names are the structure's part_names.
+  single_0: {xyz_m: [-0.20, -0.30, 0.067], rpy_deg: [0.0, 180.0, 0.0]}
+  tower_0: {xyz_m: [-0.20, -0.30, 0.067], rpy_deg: [0.0, 180.0, 0.0]}
+  tower_1: {xyz_m: [-0.20, -0.36, 0.067], rpy_deg: [0.0, 180.0, 0.0]}
+  tower_2: {xyz_m: [-0.20, -0.42, 0.067], rpy_deg: [0.0, 180.0, 0.0]}
+
+motion:
+  travel_clearance_m: 0.10    # sideways moves run this far above the highest pose
+  travel_speed_m_s: 0.05      # code cap 0.05
+  contact_zone_m: 0.015       # height above each pick and place run at contact speed
+  contact_speed_m_s: 0.005    # code cap 0.01
+  acceleration_m_s2: 0.10     # code cap 0.25
+  rotation_speed_deg_s: 15.0  # code cap 30
+
+safety:
+  # Box the tool0 origin must stay in. Its floor is the minimum flange height:
+  # set it just below the lowest recorded pose.
+  workspace_min_m: [-0.35, -0.60, 0.060]
+  workspace_max_m: [0.25, -0.20, 0.45]
+  max_tilt_deg: 5.0           # tool axis from straight down; code cap 15
+  press_force_n: 20.0         # force change that ends a place and aborts a pick; code cap 40
+  press_overtravel_m: 0.0005  # push at most this far below the taught seat height; code cap 0.002
+
+gripper:
+  clearance_mm: 4.0           # opening beyond each side of the brick
+  width_tolerance_mm: 1.5     # accepted error of the reported width; code cap 2
+  width_offset_mm: 0.0        # reported width holding a 2-stud brick, minus 15.8

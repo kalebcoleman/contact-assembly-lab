@@ -1,0 +1,35 @@
+{
+ "joint_state_samples": 65599,
+ "duration_s": 131.2,
+ "max_tool_speed_m_s": 0.0502,
+ "max_joint_speed_rad_s": 0.223,
+ "tool_path_length_m": 3.073,
+ "tool_min_xyz_m": [
+  -0.2,
+  -0.5597,
+  0.067
+ ],
+ "tool_max_xyz_m": [
+  0.1333,
+  -0.3,
+  0.4134
+ ],
+ "max_tool_tilt_deg": 0.0,
+ "seconds_moving": 108.4,
+ "final_tool_xyz_m": [
+  0.036,
+  -0.372,
+  0.1892
+ ],
+ "gripper_commands_tenths_mm": [
+  "238",
+  "118",
+  "238",
+  "238",
+  "118",
+  "238",
+  "238",
+  "118",
+  "238"
+ ]
+}
