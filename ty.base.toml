@@ -3,4 +3,9 @@ respect-ignore-files = true
 include = ["**/*.py"]
 exclude = [
     "experiments/ur5e_lego/scripts/verify_ros_graph.py",
+    # ROS 2 colcon package: rclpy, launch, the message packages and the risl_*
+    # stack resolve in its sourced ROS 2 workspace, not in this uv environment.
+    "ros2/",
+    # Vendored from upstream isaacsim-6.0; excluded from ruff for the same reason.
+    "scripts/resolve_isaacsim_deps.py",
 ]

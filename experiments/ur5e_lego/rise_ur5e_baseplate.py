@@ -11,6 +11,9 @@ import numpy as np
 from carb.events import IEvent
 from experiments.ur5e_lego.recording import RunRecorder
 from experiments.ur5e_lego.rise_ur5e_lego import move_to, set_gripper
+
+# Scene.add is annotated SingleXFormPrim but also registers SingleArticulation,
+# so those calls carry ty ignores.
 from isaacsim.core.api import World
 from isaacsim.core.prims import SingleArticulation, SingleXFormPrim
 from isaacsim.core.utils.numpy.rotations import (
@@ -27,6 +30,9 @@ from isaacsim.storage.native import get_assets_root_path
 from omni.timeline import TimelineEventType
 from omni.ui import Workspace
 from omni.usd import get_context
+
+# Kit's pxr.UsdPhysics has no type stubs (Tf adds its members at import time),
+# so its uses carry ty ignores.
 from pxr import Gf, Sdf, Usd, UsdGeom, UsdLux, UsdPhysics, UsdUtils
 
 from bricksim import kit_runner
@@ -106,10 +112,10 @@ async def main(
         if child.GetName().lower().startswith("table_low"):
             child.SetActive(False)
     for prim in Usd.PrimRange(room):
-        if prim.HasAPI(UsdPhysics.CollisionAPI):
-            UsdPhysics.CollisionAPI(prim).GetCollisionEnabledAttr().Set(False)
-        if prim.HasAPI(UsdPhysics.RigidBodyAPI):
-            UsdPhysics.RigidBodyAPI(prim).GetRigidBodyEnabledAttr().Set(False)
+        if prim.HasAPI(UsdPhysics.CollisionAPI):  # ty: ignore[unresolved-attribute]
+            UsdPhysics.CollisionAPI(prim).GetCollisionEnabledAttr().Set(False)  # ty: ignore[unresolved-attribute]
+        if prim.HasAPI(UsdPhysics.RigidBodyAPI):  # ty: ignore[unresolved-attribute]
+            UsdPhysics.RigidBodyAPI(prim).GetRigidBodyEnabledAttr().Set(False)  # ty: ignore[unresolved-attribute]
 
     table = stage.GetPrimAtPath(config["table_mesh"])
     if not table.IsValid():
@@ -126,7 +132,7 @@ async def main(
     support.AddTranslateOp().Set((low + high) / 2.0)
     support.AddScaleOp().Set(Gf.Vec3f(*(high - low)))
     support.CreateVisibilityAttr().Set(UsdGeom.Tokens.invisible)
-    UsdPhysics.CollisionAPI.Apply(support.GetPrim())
+    UsdPhysics.CollisionAPI.Apply(support.GetPrim())  # ty: ignore[unresolved-attribute]
     UsdLux.DomeLight.Define(stage, "/World/LegoFillLight").CreateIntensityAttr(600.0)
 
     world = World(
@@ -144,7 +150,7 @@ async def main(
     plate_path = allocate_brick_part(
         (20, 20, 1), (155, 161, 157), -1, pos=(*plate_xy, table_z)
     )
-    UsdPhysics.RigidBodyAPI(
+    UsdPhysics.RigidBodyAPI(  # ty: ignore[unresolved-attribute]
         stage.GetPrimAtPath(plate_path)
     ).GetKinematicEnabledAttr().Set(True)
     colors = [(201, 26, 9), (0, 85, 191), (35, 120, 65), (242, 205, 55)]
@@ -173,8 +179,8 @@ async def main(
     gripper = SingleArticulation(
         prim_path="/World/RG2_Gripper", name="rg2", reset_xform_properties=False
     )
-    world.scene.add(robot)
-    world.scene.add(gripper)
+    world.scene.add(robot)  # ty: ignore[invalid-argument-type]
+    world.scene.add(gripper)  # ty: ignore[invalid-argument-type]
     await world.reset_async()
     supports = assembly.get("support_bricks", [None] * len(brick_paths))
     for index, support_index in enumerate(supports, start=1):

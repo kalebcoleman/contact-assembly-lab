@@ -37,6 +37,8 @@ def acquire_debug_draw() -> DebugDraw:
             True,
         ):
             raise RuntimeError("Failed to enable isaacsim.util.debug_draw")
-    from isaacsim.util.debug_draw import _debug_draw  # ty: ignore[unresolved-import]
+    from isaacsim.util.debug_draw import _debug_draw
 
-    return _debug_draw.acquire_debug_draw_interface()
+    # The binding stub types draw_points as lists of carb.Float3/ColorRgba, but
+    # pybind11 also converts the tuples this Protocol passes.
+    return _debug_draw.acquire_debug_draw_interface()  # ty: ignore[invalid-return-type]

@@ -4,10 +4,10 @@ import os
 import subprocess
 from pathlib import Path
 
-from distutils.errors import DistutilsSetupError
 from setuptools import Extension, find_namespace_packages, setup
 from setuptools.command.build_ext import build_ext
 from setuptools.command.sdist import sdist
+from setuptools.errors import SetupError
 
 
 class BrickSimBuildExt(build_ext):
@@ -19,7 +19,7 @@ class BrickSimBuildExt(build_ext):
         repo_root = py_project_root.parent
         build_script = repo_root / "scripts" / "build.sh"
         if not build_script.is_file():
-            raise DistutilsSetupError(
+            raise SetupError(
                 "Building BrickSim from source requires the full BrickSim "
                 "repository checkout. Either install a wheel or clone the full "
                 "BrickSim repository to build from source."
@@ -42,7 +42,7 @@ class BrickSimSdist(sdist):
 
     def run(self):
         """Fail because source distributions cannot build standalone."""
-        raise DistutilsSetupError(
+        raise SetupError(
             "Standalone source distributions for BrickSim are unsupported. "
             "Either install a wheel or clone the full BrickSim repository to "
             "build from source."
