@@ -27,8 +27,11 @@ reported. After an intentional asset change, run it with `--record` and commit
 the hash file.
 
 The lab robot (with its `tool0` frame) and the Vention bench are not in Git.
-The experiments load the asset resolver from the `isaac-mcp` code checkout at
-`~/isaac-workspace/isaac-mcp` (`ISAAC_MCP_ROOT` overrides it). The resolver reads
+The experiments load the asset resolver
+(`exts/ur5e-dt/ur5e_dt/asset_cache.py`) from an isaac-mcp code checkout at
+`~/isaac-workspace/isaac-mcp` (`ISAAC_MCP_ROOT` overrides it). The project is
+now called twinsmith and removed that file on 2026-11-13 (commit `8c1b231`);
+use a checkout at `7e5de2c` or earlier. The resolver reads
 the separate asset store (here `~/isaac-workspace/isaac-mcp-assets`), which is not
 a Git checkout; `ISAAC_MCP_ASSET_PATH` selects it. The robot is `ur5e-dt/robot/ur5e.usd` and
 the bench is `ur5e-dt/workstation/vention.usd` inside the store. Set

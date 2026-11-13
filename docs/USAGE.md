@@ -12,7 +12,8 @@ Everything here runs in simulation; nothing drives a real robot.
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/) and
   [`pixi`](https://pixi.prefix.dev/latest/installation/).
 - The lab assets (UR5e with `tool0`, RG2 gripper, Vention bench) and an
-  `isaac-mcp` checkout; see [Lab assets](#lab-assets).
+  isaac-mcp (now twinsmith) checkout at commit `7e5de2c` or earlier; see
+  [Lab assets](#lab-assets).
 - A display for Kit, and ffmpeg for `scripts/make_media.sh`.
 
 ## Build
@@ -33,8 +34,11 @@ version changes and how the Isaac Sim SDK pins are regenerated.
 
 The UR5e model with its `tool0` frame, the RG2 gripper and the Vention bench
 are not in this repository. They come from a separate asset store loaded
-through the public [isaac-mcp](https://github.com/kalebcoleman/isaac-mcp)
-resolver; `ISAAC_MCP_ROOT` (default `~/isaac-workspace/isaac-mcp`) and
+through the resolver `exts/ur5e-dt/ur5e_dt/asset_cache.py` of the public
+isaac-mcp project, now [twinsmith](https://github.com/kalebcoleman/twinsmith).
+twinsmith removed that file on 2026-11-13 (commit `8c1b231`), so check out
+`7e5de2c` or earlier for these experiments. `ISAAC_MCP_ROOT` (default
+`~/isaac-workspace/isaac-mcp`) and
 `ISAAC_MCP_ASSET_PATH` (default `~/isaac-workspace/isaac-mcp-assets`) locate
 them. Their hashes are pinned in
 [`lab_assets_sha256.json`](../experiments/ur5e_lego/assets/lab_assets_sha256.json).
