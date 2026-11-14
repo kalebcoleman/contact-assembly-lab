@@ -26,7 +26,7 @@ the lab-rigged
 lacks. The Vention bench has no public source; supply
 `ur5e-dt/workstation/vention.usd` in the asset root.
 
-Earlier recorded runs used an older `isaac-mcp` revision
+Earlier recorded runs used an older twinsmith revision
 (`e93e06921ecef381dd62f8668c54c2137f850baa`, asset tree
 `af27b735d00ff25c0a861c74e96a5d9f3139ab79`) that bundled all assets; changed
 assets can alter the simulation.
@@ -84,9 +84,8 @@ runs the arm and gripper through the transfer. Its Stop handler reloads it.
 `python/bricksim/utils/physics_step.py` checks whether Isaac Sim already
 removed a physics callback before cleaning it up after an interruption.
 
-The separate `isaac-mcp` repository (now
-[twinsmith](https://github.com/kalebcoleman/twinsmith)) received documentation
-changes in
+The separate [twinsmith](https://github.com/kalebcoleman/twinsmith) repository
+received documentation changes in
 `README.md` and `docs/MCP-SERVER.md`. They explain how agents can inspect
 windows, distinguish host tools from the in-simulator bridge, select and verify
 the simulator process, and use the bridge client when tool discovery is stale.

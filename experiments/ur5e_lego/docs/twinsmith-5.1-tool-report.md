@@ -1,8 +1,9 @@
-# isaac-mcp on Isaac Sim 5.1.0: tool report
+# twinsmith on Isaac Sim 5.1.0: tool report
 
-Notes for the planned 5.1.0 support PR (expected #71) in `kalebcoleman/isaac-mcp`.
+Notes for the planned 5.1.0 support PR (expected #71) in `kalebcoleman/twinsmith`.
 No PR #71 existed when this was written; the latest was #70. Nothing here was posted
-to that repository and no isaac-mcp file was changed.
+to that repository and no twinsmith file was changed.
+Tool, file and variable names are as they were at the tested commit, `af85e6b`.
 
 ## What was tested
 
@@ -11,7 +12,7 @@ to that repository and no isaac-mcp file was changed.
 | Date | 2026-11-03 |
 | Simulator | Isaac Sim 5.1.0.0, build `5.1.0-rc.19+release.26219.9c81211b.gl`, Kit 107.3.3, USD 24.05 |
 | Bridge and sim-tools | Commit `af85e6b`, exported read-only with `git archive` |
-| Gateway | Installed tool, editable from the live `~/Desktop/isaac-mcp` checkout (uncommitted changes) |
+| Gateway | Installed tool, editable from the live local checkout (uncommitted changes) |
 | Scene | This project's UR5e baseplate experiment, launched from a shell, not `sim__launch` |
 | Physics | PhysX, CPU device, 120 Hz |
 
@@ -24,7 +25,7 @@ a result, the entry says so.
 ## Summary
 
 111 tools are listed: 24 built-in and host, 40 `sim__*`, 8 `assets__*`, 4 managed-session,
-12 `isaaclab__*` and 23 `ur5e_dt__*`. 62 were called (`status` only through `use_bridge`);
+12 `isaaclab__*` and 23 UR5e twin tools. 62 were called (`status` only through `use_bridge`);
 49 were not, mostly because they were out of scope or unsafe here.
 
 - **Authored USD work is solid on 5.1.** Inspection, edits, graphs, ROS 2 setup, UI
@@ -38,7 +39,7 @@ a result, the entry says so.
 
 | # | Problem | 5.1 reality | Locations | Tools affected | Shim tested? |
 |---|---|---|---|---|---|
-| 1 | `SimulationManager.get_active_physics_engine()` | Does not exist | `sim_tools/physics.py:28,82,138,219,243,263`; `advanced.py:147,159,160,435,596`; `ur5e_dt/physics_compat.py:69`. `runtime.py:81` already handles it | timeline control, physics configure, body state, joints state, joints command, simulation step, occupancy map | Yes: `physx` fallback worked |
+| 1 | `SimulationManager.get_active_physics_engine()` | Does not exist | `sim_tools/physics.py:28,82,138,219,243,263`; `advanced.py:147,159,160,435,596`; the UR5e twin's `physics_compat.py:69`. `runtime.py:81` already handles it | timeline control, physics configure, body state, joints state, joints command, simulation step, occupancy map | Yes: `physx` fallback worked |
 | 2 | `SimulationManager.get_physics_simulation_view()` | Named `get_physics_sim_view()` | `physics.py:113` | body state, joints state, joints command | Yes: alias worked |
 | 3 | `sm.step(steps=steps)` | Signature is `step(render=False)`, with no step count | `physics.py:220,233` | simulation step | No: gives `STEP_FAILED` after shims 1 and 2 |
 | 4 | `Stage.GetCompositionErrors()` | Absent in USD 24.05 | `stage_open.py:76`, `core.py:555,970`, `urdf.py:50`, `render_export.py:178` | stage open (confirmed); import tools (predicted, not run) | No |
@@ -111,7 +112,7 @@ above. Fails = failed on 5.1. Refused = clean refusal by design or setup. Not ru
 | `sim__stage__open` | Fails | **Misleading:** the stage opened, then the tool returned an error (#4). The result gives no new IDs |
 | `sim__camera__create`, `sim__lidar__create` | Refused | `SENSOR_BUILD_UNVERIFIED` (#5) |
 | `sim__camera__capture` | Refused | `NOT_OWNED` on an existing scene camera. The description mentions `adopt=true`, but the loaded schema has no `adopt` field |
-| `sim__controller__create` | Refused | `SCRIPT_DISABLED`; needs `ISAAC_MCP_ENABLE_SCENE_SCRIPTS=1` |
+| `sim__controller__create` | Refused | `SCRIPT_DISABLED`; needs scene scripts enabled at launch (now `TWINSMITH_ENABLE_SCENE_SCRIPTS=1`) |
 | `sim__controller__update`, `sim__lidar__read` | Not run | No controller or LiDAR could be created |
 
 ### Project assets (`assets__*`)
@@ -127,7 +128,7 @@ above. Fails = failed on 5.1. Refused = clean refusal by design or setup. Not ru
 | Tool | Status | Notes |
 |---|---|---|
 | `sim__list` | Works | Lists managed sessions only, so never showed the 5.1 session |
-| `sim__launch`, `sim__status`, `sim__stop` | Not run | They manage isaac-mcp 6.x sessions, and this project needs its own launcher. **Gap:** no managed way to launch this setup |
+| `sim__launch`, `sim__status`, `sim__stop` | Not run | They manage twinsmith 6.x sessions, and this project needs its own launcher. **Gap:** no managed way to launch this setup |
 
 ### Isaac Lab (`isaaclab__*`)
 
@@ -137,11 +138,11 @@ above. Fails = failed on 5.1. Refused = clean refusal by design or setup. Not ru
 | `isaaclab__runs_list` | Works | Long output, mostly old runs |
 | `envs_list`, `train`, `eval`, `play`, `runs_status`, `runs_tail`, `runs_cancel`, `metrics_summary`, `checkpoints_list`, `tensorboard_tail` | Not run | Out of scope, and would target the 6.2 environment |
 
-### UR5e twin (`ur5e_dt__*`, 23 tools)
+### UR5e twin (23 tools, since replaced by the `workcell__*` toolset)
 
 | Tool | Status | Notes |
 |---|---|---|
-| `ur5e_dt__stop_scene` | Refused | Clear error: the extension is not loaded. Used only to observe that message |
+| `stop_scene` | Refused | Clear error: the extension is not loaded. Used only to observe that message |
 | `start_ros_driver`, `sync_real_poses` | Not run | **Deliberately never called:** real-robot paths |
 | `add_objects`, `assemble_objects`, `delete_objects`, `get_recording_status`, `load_simple_room`, `load_workstation`, `new_stage`, `play_scene`, `quick_start`, `quick_start_with_workstation`, `quick_start_with_workstation_and_simple_room`, `randomize_object_poses`, `randomize_single_object`, `restore_scene_state`, `save_scene_state`, `set_object_pose`, `setup_camera_tf_graph`, `setup_pose_publisher`, `start_recording`, `stop_recording` | Not run | `ur5e-dt` was not enabled, and these experiments build their own scene. `physics_compat.py:69` shows it shares #1 |
 
@@ -171,7 +172,7 @@ Environment needed for Kit:
 ```bash
 export LD_LIBRARY_PATH="$PWD/.venv/lib/python3.11/site-packages/isaacsim/exts/isaacsim.ros2.bridge/jazzy/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export ROS_DISTRO=jazzy ROS_DOMAIN_ID=42 ROS_LOCALHOST_ONLY=1 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-export CYCLONEDDS_URI="file://<isaac-mcp>/config/cyclonedds.xml"
+export CYCLONEDDS_URI="file://<twinsmith>/config/cyclonedds.xml"
 ```
 
 ## What gave trouble, and the workaround
@@ -179,7 +180,7 @@ export CYCLONEDDS_URI="file://<isaac-mcp>/config/cyclonedds.xml"
 | Problem | Effect | Workaround |
 |---|---|---|
 | **Extension hot reload.** Editing the live checkout reloaded `sim-tools` inside running Kit | Session ID changed under the same PID (`STALE_TARGET`); unsafe for recorded runs | Ran from a `git archive` export of a pinned commit |
-| Export needed `mcp/` too | `No module named 'isaac_mcp'`: sim-tools imports the host package | Exported `exts config scripts mcp` |
+| Export needed `mcp/` too | Import error for the host package, which sim-tools imports | Exported `exts config scripts mcp` |
 | Gateway and bridge schemas differ | `sim__graph__node_types` and `sim__logs__tail` demanded IDs that their descriptions call unneeded | Passed IDs |
 | Runtime tools fail on 5.1 | No timeline or physics reads through tools | `run_python` with `omni.timeline` and `SingleArticulation` |
 | Experiment's Stop callback rebuilds the stage, while tools need a stopped timeline | Stop wiped the session layer | `World.instance().remove_timeline_callback(...)` before stopping |

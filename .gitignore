@@ -18,4 +18,3 @@ ty.toml
 /experiments/rise_dual_ur5e.py
 /experiments/tests/
 /scripts/run_rise_lab.sh
-/scripts/rise_isaac_mcp.sh

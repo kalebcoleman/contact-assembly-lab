@@ -10,7 +10,6 @@ from experiments.lab_assets import lab_asset, lab_asset_dir
 
 UNSET = {
     "TWINSMITH_ASSET_ROOT": "",
-    "ISAAC_MCP_ASSET_ROOT": "",
     "TWINSMITH_WORKSPACE": "",
 }
 
@@ -19,15 +18,10 @@ class LabAssetDirTest(TestCase):
     """The asset root follows twinsmith's order."""
 
     def test_twinsmith_root_wins(self) -> None:
-        """`TWINSMITH_ASSET_ROOT` is used before its alias."""
-        values = {**UNSET, "TWINSMITH_ASSET_ROOT": "/a", "ISAAC_MCP_ASSET_ROOT": "/b"}
+        """`TWINSMITH_ASSET_ROOT` is used before the workspace."""
+        values = {**UNSET, "TWINSMITH_ASSET_ROOT": "/a", "TWINSMITH_WORKSPACE": "/w"}
         with patch.dict(environ, values):
             self.assertEqual(lab_asset_dir(), Path("/a/ur5e-dt"))
-
-    def test_alias(self) -> None:
-        """`ISAAC_MCP_ASSET_ROOT` is still read."""
-        with patch.dict(environ, {**UNSET, "ISAAC_MCP_ASSET_ROOT": "/b"}):
-            self.assertEqual(lab_asset_dir(), Path("/b/ur5e-dt"))
 
     def test_workspace(self) -> None:
         """Without a root, the workspace's `assets/` folder is used."""

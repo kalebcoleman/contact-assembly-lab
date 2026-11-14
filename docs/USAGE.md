@@ -34,7 +34,7 @@ version changes and how the Isaac Sim SDK pins are regenerated.
 The UR5e model with its `tool0` frame, the RG2 gripper and the Vention bench
 are not in this repository. They are read from `ur5e-dt/` in the
 [twinsmith](https://github.com/kalebcoleman/twinsmith) asset root:
-`$TWINSMITH_ASSET_ROOT` (or `$ISAAC_MCP_ASSET_ROOT`), else
+`$TWINSMITH_ASSET_ROOT`, else
 `$TWINSMITH_WORKSPACE/assets`, else `~/robotics-workspace/assets`
 ([`experiments/lab_assets.py`](../experiments/lab_assets.py)). No twinsmith
 checkout is needed, and only local files are used. Their hashes are pinned in

@@ -1,10 +1,10 @@
 """Find the lab assets: the UR5e with its `tool0` frame, the RG2 gripper and the bench.
 
 They are not in Git. They live in `<asset root>/ur5e-dt/`, where the asset root is
-the one twinsmith uses: `$TWINSMITH_ASSET_ROOT` (or its alias
-`$ISAAC_MCP_ASSET_ROOT`), else `$TWINSMITH_WORKSPACE/assets`, else
-`~/robotics-workspace/assets`. Only local files are used; their hashes are pinned
-in `experiments/ur5e_lego/assets/lab_assets_sha256.json`.
+the one twinsmith uses: `$TWINSMITH_ASSET_ROOT`, else
+`$TWINSMITH_WORKSPACE/assets`, else `~/robotics-workspace/assets`. Only local
+files are used; their hashes are pinned in
+`experiments/ur5e_lego/assets/lab_assets_sha256.json`.
 """
 
 from os import environ
@@ -17,10 +17,7 @@ def lab_asset_dir() -> Path:
     Returns:
         `<asset root>/ur5e-dt`, whether or not it exists.
     """
-    root = (
-        environ.get("TWINSMITH_ASSET_ROOT", "").strip()
-        or environ.get("ISAAC_MCP_ASSET_ROOT", "").strip()
-    )
+    root = environ.get("TWINSMITH_ASSET_ROOT", "").strip()
     if not root:
         workspace = environ.get("TWINSMITH_WORKSPACE", "").strip()
         root = str(Path(workspace or "~/robotics-workspace") / "assets")

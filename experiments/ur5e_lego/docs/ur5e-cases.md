@@ -21,9 +21,9 @@ asset's path and SHA-256 against
 [dashboard](../../ur5e_dashboard/README.md) under **Test cases**.
 
 The published suite predates the lab's own asset lookup: it resolved the lab
-assets through a read-only export of the isaac-mcp resolver at `af85e6b6`
-(recorded as `isaac_mcp_commit` in its manifest), from the asset store then at
-`~/Desktop/isaac-mcp-assets`, with remote fallback refused. Cases ran with no
+assets through a read-only export of the twinsmith resolver (then named isaac-mcp)
+at `af85e6b6`, recorded as `isaac_mcp_commit` in its manifest, from a local asset
+store, with remote fallback refused. Cases ran with no
 launcher arguments, MCP bridge or ROS bridge. C01 to C12 ran at `5f7f411`, C13
 at `754f904`. Later commits changed only post-run behavior and viewers. The
 manifest's `run_notes` lists edits made after the runs.
