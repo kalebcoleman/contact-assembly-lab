@@ -10,8 +10,7 @@ Use the Isaac Sim 6.2 environment and lab assets described in
 
     ./experiments/ur5e_lego/scripts/run_ur5e_baseplate.sh
 
-If the MCP checkout is elsewhere, set `ISAAC_MCP_ROOT` to its path before
-running. Press Play after the scene loads. Press Stop to rebuild the initial
+If the lab assets are elsewhere, set `TWINSMITH_ASSET_ROOT` before running. Press Play after the scene loads. Press Stop to rebuild the initial
 scene; wait for `press Play to begin`, then press Play to repeat. The source
 brick positions come from `experiments/ur5e_lego/configs/ur5e_lego.json`. The baseplate
 position and the three stud-grid offsets are in

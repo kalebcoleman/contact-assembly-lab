@@ -4,12 +4,11 @@ import asyncio
 import json
 import math
 from datetime import datetime, timezone
-from os import environ
 from pathlib import Path
-from runpy import run_path
 
 import numpy as np
 from carb.events import IEvent
+from experiments.lab_assets import lab_asset, lab_asset_dir
 from experiments.ur5e_assembly.clearance import (
     FingerFaces,
     neighbours,
@@ -178,17 +177,10 @@ async def main(
     from experiments.ur5e_assembly.validate import validate
 
     validate(assembly)
-    mcp_root = (
-        root
-        / Path(environ.get("ISAAC_MCP_ROOT", config["isaac_mcp_root"])).expanduser()
-    ).resolve()
-    resolve_asset_uri = run_path(str(mcp_root / "exts/ur5e-dt/ur5e_dt/asset_cache.py"))[
-        "resolve_uri"
-    ]
     workstation = Sdf.Layer.OpenAsAnonymous(str(root / config["workstation_scene"]))
     if workstation is None:
         raise RuntimeError("Could not load the workstation scene")
-    UsdUtils.ModifyAssetPaths(workstation, resolve_asset_uri)
+    UsdUtils.ModifyAssetPaths(workstation, lambda reference: str(lab_asset(reference)))
 
     if World.instance() is not None:
         World.clear_instance()
@@ -320,7 +312,7 @@ async def main(
         {
             "scene": config,
             "assembly": assembly,
-            "resolved_lab_assets": str(mcp_root / "exts/ur5e-dt"),
+            "lab_asset_dir": str(lab_asset_dir()),
             "isaac_assets_root": assets_root,
         },
     )

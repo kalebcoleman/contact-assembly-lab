@@ -29,12 +29,13 @@ from datetime import datetime, timezone
 from hashlib import file_digest
 from importlib.metadata import version
 from pathlib import Path
-from runpy import run_path
-from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT))
+
+from experiments.lab_assets import lab_asset, lab_asset_dir  # noqa: E402
+
 CASES = ROOT / "experiments/ur5e_lego/configs/cases"
-LAB_CONFIG = ROOT / "experiments/ur5e_lego/configs/ur5e_lego.json"
 ASSET_REFERENCE = ROOT / "experiments/ur5e_lego/assets/lab_assets_sha256.json"
 EVIDENCE = ROOT / "experiments/ur5e_lego/docs/evidence"
 OUTPUT = ROOT / "outputs/ur5e_lego"
@@ -100,14 +101,6 @@ def main() -> None:
     directory = OUTPUT / "cases" / suite_id
     directory.mkdir(parents=True)
 
-    mcp_root = Path(
-        os.environ.get(
-            "ISAAC_MCP_ROOT", json.loads(LAB_CONFIG.read_text())["isaac_mcp_root"]
-        )
-    ).expanduser()
-    resolve_uri = run_path(str(mcp_root / "exts/ur5e-dt/ur5e_dt/asset_cache.py"))[
-        "resolve_uri"
-    ]
     reference = json.loads(ASSET_REFERENCE.read_text())
     assets = {}
     for name in (
@@ -116,7 +109,7 @@ def main() -> None:
         "gripper/QuickChanger.usd",
         "workstation/vention.usd",
     ):
-        path = Path(unquote(urlparse(resolve_uri(name)).path))
+        path = lab_asset(name)
         with path.open("rb") as stream:
             digest = file_digest(stream, "sha256").hexdigest()
         assets[name] = {
@@ -155,10 +148,8 @@ def main() -> None:
             "isaacsim": version("isaacsim"),
             "isaacsim_kernel": version("isaacsim-kernel"),
             "native_sha256": native_digest,
-            "isaac_mcp_root": str(mcp_root),
-            "isaac_mcp_commit": os.environ.get("ISAAC_MCP_COMMIT"),
+            "lab_asset_dir": str(lab_asset_dir()),
             "launcher_args": args.launcher_args,
-            "asset_strict": os.environ.get("ISAAC_MCP_ASSET_STRICT", "0"),
             "lab_assets": assets,
         },
         "evidence_classes": EVIDENCE_CLASSES,

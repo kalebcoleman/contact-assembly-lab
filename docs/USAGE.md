@@ -11,8 +11,8 @@ Everything here runs in simulation; nothing drives a real robot.
   [Isaac Sim 6.2 requirements](https://docs.isaacsim.omniverse.nvidia.com/6.2.0/installation/requirements.html#system-requirements).
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/) and
   [`pixi`](https://pixi.prefix.dev/latest/installation/).
-- The lab assets (UR5e with `tool0`, RG2 gripper, Vention bench) and an
-  `isaac-mcp` checkout; see [Lab assets](#lab-assets).
+- The lab assets (UR5e with `tool0`, RG2 gripper, Vention bench); see
+  [Lab assets](#lab-assets).
 - A display for Kit, and ffmpeg for `scripts/make_media.sh`.
 
 ## Build
@@ -32,11 +32,12 @@ version changes and how the Isaac Sim SDK pins are regenerated.
 ### Lab assets
 
 The UR5e model with its `tool0` frame, the RG2 gripper and the Vention bench
-are not in this repository. They come from a separate asset store loaded
-through the public [isaac-mcp](https://github.com/kalebcoleman/isaac-mcp)
-resolver; `ISAAC_MCP_ROOT` (default `~/isaac-workspace/isaac-mcp`) and
-`ISAAC_MCP_ASSET_PATH` (default `~/isaac-workspace/isaac-mcp-assets`) locate
-them. Their hashes are pinned in
+are not in this repository. They are read from `ur5e-dt/` in the
+[twinsmith](https://github.com/kalebcoleman/twinsmith) asset root:
+`$TWINSMITH_ASSET_ROOT`, else
+`$TWINSMITH_WORKSPACE/assets`, else `~/robotics-workspace/assets`
+([`experiments/lab_assets.py`](../experiments/lab_assets.py)). No twinsmith
+checkout is needed, and only local files are used. Their hashes are pinned in
 [`lab_assets_sha256.json`](../experiments/ur5e_lego/assets/lab_assets_sha256.json).
 `scripts/check_parity.py` checks the checkout, the locked packages, the native
 build and these assets. Details:

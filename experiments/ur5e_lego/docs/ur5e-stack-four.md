@@ -10,7 +10,7 @@ Use the Isaac Sim 6.2 environment and lab assets described in
 
     ./experiments/ur5e_lego/scripts/run_ur5e_stack_four.sh
 
-Set `ISAAC_MCP_ROOT` if the lab asset checkout is elsewhere. Press Play when
+Set `TWINSMITH_ASSET_ROOT` if the lab assets are elsewhere. Press Play when
 prompted; Stop rebuilds the scene. The source positions and support order are
 in `experiments/ur5e_lego/configs/ur5e_stack_four.json`. The existing
 [three-brick experiment](ur5e-stack.md) remains available separately.

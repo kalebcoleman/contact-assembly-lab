@@ -4,8 +4,8 @@ This checkout targets Isaac Sim 6.2.0.0 and Python 3.12. It started from the
 `isaacsim-6.0` branch of
 [BrickSim](https://github.com/intelligent-control-lab/BrickSim) (commits
 `03e1a5a`, `0b577ea`, `2dccda1`, by the BrickSim authors) and was then retargeted
-to the 6.2 builds. The code before the move is BrickSim at
-`kalebcoleman/BrickSim@4d7d629` (`feat/ur5e-dog-assembly`), on Isaac Sim 5.1.
+to the 6.2 builds. The code before the move was commit `4d7d629` on the `feat/ur5e-dog-assembly`
+branch of a BrickSim fork that has since been deleted, on Isaac Sim 5.1.
 
 > The commands below are as run during the port. The controller has since moved
 > from `experiments/ur5e_dog/` to

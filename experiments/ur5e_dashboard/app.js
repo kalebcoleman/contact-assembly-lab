@@ -555,7 +555,6 @@ async function selectRun(id) {
           ["Commit", result?.commit || suite.commit || "—"],
           ["Suite", result?.suite_id || suite.suite_id || "—"],
           ["Isaac Sim", environment.isaacsim || "—"],
-          ["isaac-mcp resolver", environment.isaac_mcp_commit || "—"],
           [
             "Lab assets match reference",
             Object.values(environment.lab_assets || {}).every(

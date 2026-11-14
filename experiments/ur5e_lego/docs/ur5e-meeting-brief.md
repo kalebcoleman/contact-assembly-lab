@@ -110,5 +110,5 @@ procedure are for Max and the lab to set. **Stop on anything unexpected.**
 - `check_parity.py` still fails on four unreferenced `robot/configuration/*` files. They
   are not in the robot's USD dependencies and were not recorded as a new baseline. The
   check should follow dependencies instead of listing the folder.
-- isaac-mcp runtime tools need fixes on 5.1: see the
-  [tool report](isaac-mcp-5.1-tool-report.md).
+- twinsmith runtime tools need fixes on 5.1: see the
+  [tool report](twinsmith-5.1-tool-report.md).
