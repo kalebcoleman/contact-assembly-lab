@@ -3,12 +3,11 @@
 import asyncio
 import json
 import math
-from os import environ
 from pathlib import Path
-from runpy import run_path
 
 import numpy as np
 from carb.events import IEvent
+from experiments.lab_assets import lab_asset, lab_asset_dir
 from experiments.ur5e_lego.recording import RunRecorder
 from experiments.ur5e_lego.rise_ur5e_lego import move_to, set_gripper
 
@@ -76,17 +75,10 @@ async def main(
         (root / "experiments/ur5e_lego/configs/ur5e_lego.json").read_text()
     )
     assembly = json.loads((root / assembly_config).read_text())
-    mcp_root = (
-        root
-        / Path(environ.get("ISAAC_MCP_ROOT", config["isaac_mcp_root"])).expanduser()
-    ).resolve()
-    resolve_asset_uri = run_path(str(mcp_root / "exts/ur5e-dt/ur5e_dt/asset_cache.py"))[
-        "resolve_uri"
-    ]
     workstation = Sdf.Layer.OpenAsAnonymous(str(root / config["workstation_scene"]))
     if workstation is None:
         raise RuntimeError("Could not load the workstation scene")
-    UsdUtils.ModifyAssetPaths(workstation, resolve_asset_uri)
+    UsdUtils.ModifyAssetPaths(workstation, lambda reference: str(lab_asset(reference)))
 
     if World.instance() is not None:
         World.clear_instance()
@@ -211,7 +203,7 @@ async def main(
         {
             "scene": config,
             "assembly": assembly,
-            "resolved_lab_assets": str(mcp_root / "exts/ur5e-dt"),
+            "lab_asset_dir": str(lab_asset_dir()),
             "isaac_assets_root": assets_root,
         },
     )

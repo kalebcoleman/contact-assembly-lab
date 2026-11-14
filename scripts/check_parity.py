@@ -20,14 +20,14 @@ import tomllib
 from argparse import ArgumentParser
 from hashlib import file_digest
 from importlib.metadata import PackageNotFoundError, version
-from os import environ
 from pathlib import Path
 from platform import node, python_version
-from runpy import run_path
-from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
-LAB_CONFIG = ROOT / "experiments/ur5e_lego/configs/ur5e_lego.json"
+sys.path.insert(0, str(ROOT))
+
+from experiments.lab_assets import lab_asset, lab_asset_dir  # noqa: E402
+
 SCENE = ROOT / "experiments/ur5e_lego/assets/ur5e_workstation.usda"
 REFERENCE = ROOT / "experiments/ur5e_lego/assets/lab_assets_sha256.json"
 PREBUILT_MANIFEST = ROOT / ".prebuilt-native/manifest.env"
@@ -72,34 +72,28 @@ def run(*command: str) -> str:
     return result.stdout.strip() if result.returncode == 0 else ""
 
 
-def resolve_lab_assets(mcp_root: Path) -> tuple[dict[str, Path], list[str]]:
-    """Resolve the scene's asset references with the isaac-mcp resolver.
-
-    Args:
-        mcp_root: isaac-mcp checkout that provides `asset_cache.py`.
+def resolve_lab_assets() -> tuple[dict[str, Path], list[str]]:
+    """Find the scene's asset references in the lab asset folder.
 
     Returns:
-        Local files keyed by path relative to the asset root (the four scene
-        references plus every file beside the resolved robot), and the
-        references that resolved to a remote URL instead of a local file.
+        Local files keyed by path relative to the lab asset folder (the four
+        scene references plus every file beside the robot), and the scene
+        references that are missing.
     """
-    resolve_uri = run_path(str(mcp_root / "exts/ur5e-dt/ur5e_dt/asset_cache.py"))[
-        "resolve_uri"
-    ]
     local: dict[str, Path] = {}
-    remote: list[str] = []
+    missing: list[str] = []
     for reference in sorted(set(re.findall(r"@([^@\n]+)@", SCENE.read_text()))):
-        uri = resolve_uri(reference)
-        if not uri.startswith("file://"):
-            remote.append(reference)
+        try:
+            path = lab_asset(reference)
+        except FileNotFoundError:
+            missing.append(reference)
             continue
-        path = Path(unquote(urlparse(uri).path))
         local[reference] = path
         if reference == "robot/ur5e.usd":
             for sibling in sorted(path.parent.rglob("*")):
                 if sibling.is_file():
                     local[f"robot/{sibling.relative_to(path.parent)}"] = sibling
-    return local, remote
+    return local, missing
 
 
 def main() -> None:
@@ -108,14 +102,11 @@ def main() -> None:
     parser.add_argument("--record", action="store_true")
     record = parser.parse_args().record
 
-    config = json.loads(LAB_CONFIG.read_text())
-    mcp_root = Path(environ.get("ISAAC_MCP_ROOT", config["isaac_mcp_root"]))
-    mcp_root = (ROOT / mcp_root.expanduser()).resolve()
-    local_assets, remote_assets = resolve_lab_assets(mcp_root)
+    local_assets, missing_assets = resolve_lab_assets()
 
     if record:
-        if remote_assets:
-            sys.exit(f"Cannot record; resolved remotely: {remote_assets}")
+        if missing_assets:
+            sys.exit(f"Cannot record; missing in {lab_asset_dir()}: {missing_assets}")
         hashes = {name: sha256(path) for name, path in sorted(local_assets.items())}
         REFERENCE.write_text(json.dumps(hashes, indent=2) + "\n")
         print(f"Recorded {len(hashes)} asset hashes in {REFERENCE.relative_to(ROOT)}")
@@ -179,23 +170,18 @@ def main() -> None:
             + ("" if actual == expected else f", manifest {expected[:12]}"),
         )
 
-    # Lab assets resolved through isaac-mcp.
-    mcp_commit = run("git", "-C", str(mcp_root), "rev-parse", "--short", "HEAD")
-    report(
-        "INFO",
-        "isaac-mcp",
-        f"{mcp_root} @ {mcp_commit}",
-    )
-    for name in remote_assets:
-        report("FAIL", f"asset {name}", "resolved to a remote URL, not a local file")
+    # Lab assets.
+    report("INFO", "lab assets", str(lab_asset_dir()))
     reference = json.loads(REFERENCE.read_text())
+    failures_before_assets = failures
     for name, expected in reference.items():
         path = local_assets.get(name)
         if path is None:
             report("FAIL", f"asset {name}", "missing")
         elif sha256(path) != expected:
             report("FAIL", f"asset {name}", f"hash differs ({path})")
-    report("PASS", "assets", f"{len(reference)} reference files checked")
+    if failures == failures_before_assets:
+        report("PASS", "assets", f"{len(reference)} reference files match")
     # Files the scene does not reference cannot change the simulation.
     extra = sorted(set(local_assets) - set(reference))
     if extra:
