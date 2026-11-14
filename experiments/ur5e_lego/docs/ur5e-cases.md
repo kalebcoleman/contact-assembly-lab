@@ -13,28 +13,20 @@ From the repository root, with the environment from the
     .venv/bin/python experiments/ur5e_lego/scripts/run_ur5e_cases.py
     .venv/bin/python experiments/ur5e_lego/scripts/run_ur5e_cases.py --case C01 C05
 
-`--publish` also copies results to `docs/evidence/`. Set `ISAAC_MCP_COMMIT` to
-record the resolver version. Results are written under
+`--publish` also copies results to `docs/evidence/`. Results are written under
 `outputs/ur5e_lego/cases/<suite id>/`. The command exits 1 if any outcome differs
-from its prediction. Review results in the
+from its prediction. The manifest records the lab asset folder and each lab
+asset's path and SHA-256 against
+[`lab_assets_sha256.json`](../assets/lab_assets_sha256.json). Review results in the
 [dashboard](../../ur5e_dashboard/README.md) under **Test cases**.
 
-The published suite used a read-only export of the resolver, since edits to a live
-checkout can reload extensions inside a running simulator:
-
-    mkdir -p outputs/ur5e_lego/isaac-mcp-af85e6b
-    git -C ~/Desktop/isaac-mcp archive af85e6b exts config scripts mcp \
-      | tar -x -C outputs/ur5e_lego/isaac-mcp-af85e6b
-    export ISAAC_MCP_ROOT="$PWD/outputs/ur5e_lego/isaac-mcp-af85e6b"
-    export ISAAC_MCP_ASSET_PATH="$HOME/Desktop/isaac-mcp-assets"
-    export ISAAC_MCP_ASSET_STRICT=1
-    export ISAAC_MCP_COMMIT=af85e6b6
-    .venv/bin/python experiments/ur5e_lego/scripts/run_ur5e_cases.py --publish
-
-Cases ran with no launcher arguments, MCP bridge or ROS bridge. `ISAAC_MCP_COMMIT` is a
-label you supply; the driver does not check it. C01 to C12 ran at `5f7f411`, C13 at
-`754f904`. Later commits changed only post-run behavior and viewers. The manifest's
-`run_notes` lists edits made after the runs.
+The published suite predates the lab's own asset lookup: it resolved the lab
+assets through a read-only export of the isaac-mcp resolver at `af85e6b6`
+(recorded as `isaac_mcp_commit` in its manifest), from the asset store then at
+`~/Desktop/isaac-mcp-assets`, with remote fallback refused. Cases ran with no
+launcher arguments, MCP bridge or ROS bridge. C01 to C12 ran at `5f7f411`, C13
+at `754f904`. Later commits changed only post-run behavior and viewers. The
+manifest's `run_notes` lists edits made after the runs.
 
 To run one case by hand, for recording or inspection:
 

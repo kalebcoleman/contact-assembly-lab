@@ -11,7 +11,7 @@ Use the Isaac Sim 6.2 environment and lab assets described in
 
     ./experiments/ur5e_lego/scripts/run_ur5e_stack.sh
 
-Set `ISAAC_MCP_ROOT` if the lab asset checkout is elsewhere. Press Play when
+Set `TWINSMITH_ASSET_ROOT` if the lab assets are elsewhere. Press Play when
 prompted; Stop rebuilds the initial scene. The stack settings are in
 `experiments/ur5e_lego/configs/ur5e_stack.json`. A `null` support means the baseplate; a
 number is the zero-based index of an earlier brick. The shared controller
@@ -69,12 +69,12 @@ artificial threshold; it does not model or measure physical brick breakage.
 [full run data](evidence/ur5e-stack-rejection-run.jsonl.gz) includes the
 active threshold at each step.
 
-To repeat this rejection test, start the stack with the generic bridge as in
+To repeat this rejection test, start the stack with the twinsmith bridge as in
 [`ur5e-lego.md`](ur5e-lego.md), verifying its process and port. After the log
 reports `1/3 bricks secured`, pause before the second connection forms. With
-`ISAAC_MCP_ROOT` set to the checkout and port 8766 selected, run:
+port 8766 selected, run the client from a twinsmith checkout:
 
-    PYTHONPATH="$ISAAC_MCP_ROOT/mcp" .venv/bin/python -m isaac_mcp.client --port 8766 run_python '{"code":"import omni.timeline\nfrom bricksim.core import get_assembly_thresholds, set_assembly_thresholds, lookup_physics_connection\nassert not omni.timeline.get_timeline_interface().is_playing()\nassert lookup_physics_connection(\"/World/managed/Parts/Part_1\", 1, \"/World/managed/Parts/Part_2\", 0) is None\nt = get_assembly_thresholds()\nt.required_force = 1000.0\nset_assembly_thresholds(t)\nresult = get_assembly_thresholds().required_force"}'
+    python3 /path/to/twinsmith/mcp/twinsmith/client.py --port 8766 run_python '{"code":"import omni.timeline\nfrom bricksim.core import get_assembly_thresholds, set_assembly_thresholds, lookup_physics_connection\nassert not omni.timeline.get_timeline_interface().is_playing()\nassert lookup_physics_connection(\"/World/managed/Parts/Part_1\", 1, \"/World/managed/Parts/Part_2\", 0) is None\nt = get_assembly_thresholds()\nt.required_force = 1000.0\nset_assembly_thresholds(t)\nresult = get_assembly_thresholds().required_force"}'
 
 Resume Play and expect the second press to report failure. Pause, then restore
 `required_force` to 1.0 with `get_assembly_thresholds()` and
