@@ -146,8 +146,21 @@ def _ensure_overlay_package(
     return package_dir
 
 
+def _is_placeholder_init(path: Path) -> bool:
+    return (
+        path.name == "__init__.py"
+        and path.is_file()
+        and not path.is_symlink()
+        and path.read_text(encoding="utf-8") == PACKAGE_MARKER
+    )
+
+
 def _symlink_if_absent(path: Path, target: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    # A child extension mirrored first leaves an empty parent __init__.py;
+    # the parent's real __init__.py must replace it to keep its exports.
+    if _is_placeholder_init(path):
+        path.unlink()
     if not path.exists():
         path.symlink_to(target)
 

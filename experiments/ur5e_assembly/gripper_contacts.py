@@ -2,7 +2,14 @@
 
 from experiments.ur5e_lego.recording import RunRecorder
 from omni.physx import get_physx_simulation_interface
-from omni.physx.bindings._physx import ContactEventType
+from omni.physx.bindings._physx import (
+    ContactDataVector,
+    ContactEventHeaderVector,
+    ContactEventType,
+)
+
+# Kit's pxr.UsdPhysics and PhysicsSchemaTools have no typed members (Tf adds
+# them at import time), so their uses carry ty ignores.
 from pxr import PhysicsSchemaTools, PhysxSchema, Usd, UsdPhysics
 
 
@@ -34,7 +41,7 @@ class GripperContactMonitor:
             brick_paths: Brick part paths in build order.
         """
         for prim in Usd.PrimRange(stage.GetPrimAtPath(gripper_root)):
-            if prim.HasAPI(UsdPhysics.RigidBodyAPI):
+            if prim.HasAPI(UsdPhysics.RigidBodyAPI):  # ty: ignore[unresolved-attribute]
                 PhysxSchema.PhysxContactReportAPI.Apply(prim).CreateThresholdAttr(0.0)
         self.gripper_root = gripper_root + "/"
         self.parts_root = parts_root + "/"
@@ -52,7 +59,9 @@ class GripperContactMonitor:
             )
         )
 
-    def on_contacts(self, headers: object, data: object) -> None:
+    def on_contacts(
+        self, headers: ContactEventHeaderVector, data: ContactDataVector
+    ) -> None:
         """Record new gripper-to-brick contacts from one simulation step.
 
         Args:
@@ -69,8 +78,8 @@ class GripperContactMonitor:
             if header.type == ContactEventType.CONTACT_LOST:
                 continue
             paths = (
-                str(PhysicsSchemaTools.intToSdfPath(header.actor0)),
-                str(PhysicsSchemaTools.intToSdfPath(header.actor1)),
+                str(PhysicsSchemaTools.intToSdfPath(header.actor0)),  # ty: ignore[unresolved-attribute]
+                str(PhysicsSchemaTools.intToSdfPath(header.actor1)),  # ty: ignore[unresolved-attribute]
             )
             for gripper_path, other in (paths, paths[::-1]):
                 if not (

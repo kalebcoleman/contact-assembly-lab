@@ -3,7 +3,7 @@
 import asyncio
 from pathlib import Path
 
-import carb.events
+from carb.eventdispatcher import Event
 from isaacsim.core.utils.stage import update_stage_async
 
 
@@ -25,7 +25,6 @@ def _patch_play_button_group():
 
     Place it beside Play/Stop on the left toolbar.
     """
-    import omni.timeline
     import omni.ui as ui
     from omni.kit.widget.toolbar.builtin_tools.play_button_group import (
         PlayButtonGroup,
@@ -37,7 +36,7 @@ def _patch_play_button_group():
     orig_clean = PlayButtonGroup.clean
     orig_get_style = PlayButtonGroup.get_style
     orig_create = PlayButtonGroup.create
-    orig_on_timeline_event = PlayButtonGroup._on_timeline_event
+    orig_on_director_changed = PlayButtonGroup._on_timeline_director_changed
 
     def _lego_clean(self: PlayButtonGroup):
         orig_clean(self)
@@ -76,16 +75,17 @@ def _patch_play_button_group():
 
     setattr(PlayButtonGroup, "create", _lego_create)
 
-    def _lego_on_timeline_event(self: PlayButtonGroup, e: carb.events.IEvent):
-        orig_on_timeline_event(self, e)
-        if hasattr(
-            omni.timeline.TimelineEventType, "DIRECTOR_CHANGED"
-        ) and e.type == int(omni.timeline.TimelineEventType.DIRECTOR_CHANGED):
-            step_button = getattr(self, "_lego_step_one_frame_button", None)
-            if step_button is not None:
-                step_button.visible = self._visible
+    def _lego_on_timeline_director_changed(self: PlayButtonGroup, e: Event):
+        orig_on_director_changed(self, e)
+        step_button = getattr(self, "_lego_step_one_frame_button", None)
+        if step_button is not None:
+            step_button.visible = self._visible
 
-    setattr(PlayButtonGroup, "_on_timeline_event", _lego_on_timeline_event)
+    setattr(
+        PlayButtonGroup,
+        "_on_timeline_director_changed",
+        _lego_on_timeline_director_changed,
+    )
     setattr(PlayButtonGroup, "_lego_step_one_frame_patched", True)
 
 

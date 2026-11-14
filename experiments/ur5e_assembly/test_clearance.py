@@ -51,15 +51,19 @@ class ReleaseOpeningTests(TestCase):
 
     def test_free_space_opens_to_target_clearance(self) -> None:
         """Without neighbours the fingers stop once 3 mm clear of the brick."""
-        angle, clearance = release_opening(PROFILE, -0.35, [])
+        release = release_opening(PROFILE, -0.35, [])
+        if release is None:
+            self.fail("release is blocked")
+        angle, clearance = release
         self.assertAlmostEqual(clearance, 0.003, delta=0.0002)
         self.assertAlmostEqual(angle, -0.35 + 0.15, delta=0.01)
 
     def test_neighbour_at_tip_height_limits_the_opening(self) -> None:
         """A neighbour 21.5 mm away at tip height allows 1.5 mm with 2 mm margin."""
-        angle, clearance = release_opening(
-            PROFILE, -0.35, [Neighbour(1, 0.0215, TIP)]
-        )
+        release = release_opening(PROFILE, -0.35, [Neighbour(1, 0.0215, TIP)])
+        if release is None:
+            self.fail("release is blocked")
+        angle, clearance = release
         self.assertAlmostEqual(clearance, 0.0015, delta=0.0002)
         self.assertLess(angle, -0.35 + 0.15)
 
